@@ -89,8 +89,11 @@ const rearOf = (input: Record<string, number>): boolean => input.rearToolPost ==
 
 /** 坐标格式：X/Z 固定 3 位小数（与 types.ts 契约示例同格式），-0 归一为 0 */
 function fmtCoord(v: number): string {
+  // I-1 统一（W2-G2 复审建议）：去尾零、整数不带点，与 arc-cases-b formatNum(minDecimals=0) 一致
   const rounded = Math.round(v * 1000) / 1000;
-  return (Object.is(rounded, -0) ? 0 : rounded).toFixed(3);
+  let text = (Object.is(rounded, -0) ? 0 : rounded).toFixed(3).replace(/0+$/, '');
+  if (text.endsWith('.')) text = text.slice(0, -1);
+  return text;
 }
 
 /** R 格式：≤3 位小数、去尾零并保留至少 1 位小数（契约示例 R5.0） */

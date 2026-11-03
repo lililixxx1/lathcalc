@@ -58,7 +58,7 @@ describe('AC01 直线—圆弧相切（R, angle, stepD）', () => {
     expectVec(out.tangent, 36, 0);
     expectVec(out.center, 28.928932188134524, 3.5355339059327378);
     expect(out.direction).toBe('G02');
-    expect(out.gcodeLine).toBe('G02 X36.000 Z0.000 R5.0');
+    expect(out.gcodeLine).toBe('G02 X36 Z0 R5.0');
 
     const c = rad(out.center);
     const t = rad(out.tangent);
@@ -80,7 +80,7 @@ describe('AC01 直线—圆弧相切（R, angle, stepD）', () => {
     expectVec(out.tangent, 20, 0);
     expectVec(out.center, 14.803847577293368, 1.5);
     expect(out.direction).toBe('G02');
-    expect(out.gcodeLine).toBe('G02 X20.000 Z0.000 R3.0');
+    expect(out.gcodeLine).toBe('G02 X20 Z0 R3.0');
 
     const c = rad(out.center);
     const t = rad(out.tangent);
@@ -101,7 +101,7 @@ describe('AC02 两圆弧外切（R1, R2, dZ）', () => {
     expectVec(out.tangent, 16, 6);
     expectVec(out.center, 0, 0);
     expect(out.direction).toBe('G02');
-    expect(out.gcodeLine).toBe('G02 X16.000 Z6.000 R10.0');
+    expect(out.gcodeLine).toBe('G02 X16 Z6 R10.0');
 
     const c1 = rad(out.center);
     const t = rad(out.tangent);
@@ -124,7 +124,7 @@ describe('AC02 两圆弧外切（R1, R2, dZ）', () => {
     expectVec(out.tangent, 10.392304845413264, 3);
     expectVec(out.center, 0, 0);
     expect(out.direction).toBe('G02');
-    expect(out.gcodeLine).toBe('G02 X10.392 Z3.000 R6.0');
+    expect(out.gcodeLine).toBe('G02 X10.392 Z3 R6.0');
 
     const t = rad(out.tangent);
     const c2: RP = { z: 8, r: Math.sqrt(3) * 8 };
@@ -145,7 +145,7 @@ describe('AC03 两圆弧内切（R1, R2, dZ）', () => {
     expectVec(out.tangent, 40, 15);
     expectVec(out.center, 0, 0);
     expect(out.direction).toBe('G02');
-    expect(out.gcodeLine).toBe('G02 X40.000 Z15.000 R25.0');
+    expect(out.gcodeLine).toBe('G02 X40 Z15 R25.0');
 
     const c1 = rad(out.center);
     const t = rad(out.tangent);
@@ -166,7 +166,7 @@ describe('AC03 两圆弧内切（R1, R2, dZ）', () => {
     expectVec(out.tangent, 34.64101615137755, 10);
     expectVec(out.center, 0, 0);
     expect(out.direction).toBe('G02');
-    expect(out.gcodeLine).toBe('G02 X34.641 Z10.000 R20.0');
+    expect(out.gcodeLine).toBe('G02 X34.641 Z10 R20.0');
 
     const t = rad(out.tangent);
     const c2: RP = { z: 6, r: 6 * Math.sqrt(3) };
@@ -216,7 +216,7 @@ describe('AC04 圆弧—斜线—圆弧（R1, R2, angle）', () => {
     expectVec(out.tangent, 10, 8.660254037844386);
     expectVec(out.center, 20.392304845413264, 5.660254037844386);
     expect(out.direction).toBe('G03');
-    expect(out.gcodeLine).toBe('G03 X10.000 Z8.660 R6.0');
+    expect(out.gcodeLine).toBe('G03 X10 Z8.66 R6.0');
 
     const c2 = rad(out.center);
     const t = rad(out.tangent);
@@ -236,7 +236,7 @@ describe('AC05 台阶倒圆（R, stepX, stepZ）', () => {
     expectVec(out.tangent, 28, -10);
     expectVec(out.center, 28, -14);
     expect(out.direction).toBe('G03');
-    expect(out.gcodeLine).toBe('G03 X28.000 Z-10.000 R4.0');
+    expect(out.gcodeLine).toBe('G03 X28 Z-10 R4.0');
 
     const c = rad(out.center);
     const t = rad(out.tangent);
@@ -256,7 +256,7 @@ describe('AC05 台阶倒圆（R, stepX, stepZ）', () => {
     expectVec(out.tangent, 52, -25);
     expectVec(out.center, 52, -31);
     expect(out.direction).toBe('G03');
-    expect(out.gcodeLine).toBe('G03 X52.000 Z-25.000 R6.0');
+    expect(out.gcodeLine).toBe('G03 X52 Z-25 R6.0');
 
     const c = rad(out.center);
     const t = rad(out.tangent);
@@ -281,7 +281,7 @@ describe('AC06 凹圆弧切入（R, dX, dZ）', () => {
     expectVec(out.tangent, 12, 8);
     expectVec(out.center, 19.856406460551020, -1.196152422706632);
     expect(out.direction).toBe('G03');
-    expect(out.gcodeLine).toBe('G03 X12.000 Z8.000 R10.0');
+    expect(out.gcodeLine).toBe('G03 X12 Z8 R10.0');
 
     const s: RP = { z: 0, r: 0 };
     const e = rad(out.tangent);
@@ -311,7 +311,7 @@ describe('AC06 凹圆弧切入（R, dX, dZ）', () => {
     expectVec(out.tangent, 10, 12);
     expectVec(out.center, 25.784609690826528, 1.669872981077807);
     expect(out.direction).toBe('G03');
-    expect(out.gcodeLine).toBe('G03 X10.000 Z12.000 R13.0');
+    expect(out.gcodeLine).toBe('G03 X10 Z12 R13.0');
 
     const s: RP = { z: 0, r: 0 };
     const e = rad(out.tangent);
