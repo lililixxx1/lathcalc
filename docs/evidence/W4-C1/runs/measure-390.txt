@@ -1,0 +1,19 @@
+$ CHROME="C:/Program Files/Google/Chrome/Application/chrome.exe" node docs/evidence/W4-C1/tools/measure-390.mjs "http://localhost:4173/" "docs/evidence/W4-C1/runs/p01-390x844.png" > docs/evidence/W4-C1/runs/measure-390.json 2> docs/evidence/W4-C1/runs/measure-390.stderr.txt
+REAL_EXIT=0
+
+tool=chrome-headless-cdp
+chromeVersion=Chrome/156.0.8078.76
+pagesMeasured=14
+p01.scrollWidth=390
+p01.clientWidth=390
+p01.scrollHeight=844
+p01.clientHeight=844
+p01.horizontalOverflow=false
+p01.verticalOverflow=false
+p01.gridColumns=174.5px 174.5px
+p01.gridWidth=358
+p01.tileCount=10
+p01.pageOverflow=hidden
+allPagesNoHorizontalOverflow=true
+exceptions=0
+consoleErrors=["http://localhost:4173/favicon.ico :: Failed to load resource: the server responded with a status of 404 (Not Found)"]
