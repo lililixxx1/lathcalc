@@ -1,0 +1,26 @@
+# cmd: npm run build
+
+
+> lathcalc@0.1.0 build
+> vite build
+
+[36mvite v7.3.7 [32mbuilding client environment for production...[36m[39m
+transforming...
+[32m✓[39m 4 modules transformed.
+rendering chunks...
+computing gzip size...
+[2mdist/[22m[32mregisterSW.js              [39m[1m[2m0.13 kB[22m[1m[22m
+[2mdist/[22m[32mmanifest.webmanifest       [39m[1m[2m0.35 kB[22m[1m[22m
+[2mdist/[22m[32mindex.html                 [39m[1m[2m0.66 kB[22m[1m[22m[2m │ gzip: 0.40 kB[22m
+[2mdist/[22m[35massets/index-BLh4fxfH.css  [39m[1m[2m1.15 kB[22m[1m[22m[2m │ gzip: 0.62 kB[22m
+[2mdist/[22m[36massets/index-dC0gczBG.js   [39m[1m[2m0.85 kB[22m[1m[22m[2m │ gzip: 0.54 kB[22m
+[32m✓ built in 71ms[39m
+
+PWA v1.3.0
+mode      generateSW
+precache  7 entries (3.02 KiB)
+files generated
+  dist/sw.js
+  dist/workbox-9c191d2f.js
+
+REAL_EXIT=0
