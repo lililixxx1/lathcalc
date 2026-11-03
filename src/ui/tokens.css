@@ -1,0 +1,65 @@
+/* 车工算 LathCalc · 设计 token（1:1 移植自设计稿 la- 体系，W4-C1 扩展组件层时禁止改值） */
+:root {
+  /* 色板 · 车间纸白 + 安全橙 */
+  --la-bg: #F7F5F0;          /* 车间纸白（页面底） */
+  --la-card: #FFFFFF;        /* 卡面白 */
+  --la-ink: #1B1D1F;         /* 机铁墨（主文字/logo 底） */
+  --la-ink-body: #3D4045;    /* 正文墨 */
+  --la-sub: #6A6E73;         /* 说明灰 */
+  --la-faint: #9A9DA2;       /* 弱化 */
+  --la-border: #E4E2DC;      /* 边线 */
+  --la-border-soft: #EFEEE9; /* 行分隔线 */
+  --la-well: #ECE9E2;        /* 输入井/搜索底 */
+  --la-well-soft: #EBE8E1;   /* 分段控件底 */
+  --la-chip-on-bg: #FBEFE6;  /* 选中 chip 底 */
+  --la-accent: #C74E0D;      /* 安全橙（主行动） */
+  --la-accent-bright: #F07424; /* 橙亮（暗底/图标） */
+  --la-accent-ink: #B54408;  /* 橙墨（选中文字） */
+  --la-code-bg: #24262A;     /* 机台面板（G 代码暗卡） */
+  --la-code-green: #7BD88F;  /* 代码绿 */
+  --la-warn-bg: #FBEFD7;     /* 警示底 */
+  --la-warn-border: #E8C987;
+  --la-warn-ink: #7A5300;
+  --la-ok: #1F7A44;          /* 成功绿 */
+
+  /* 字体 */
+  --la-font: 'MiSans', 'HarmonyOS Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --la-font-num: 'Bahnschrift', 'DIN Alternate', 'Avenir Next Condensed', 'Arial Narrow', sans-serif;
+  --la-font-mono: 'Cascadia Mono', 'SF Mono', ui-monospace, Consolas, monospace;
+
+  /* 半径：控件 10 / 卡片 14 / 大面 18 */
+  --la-r-ctl: 10px;
+  --la-r-card: 14px;
+  --la-r-lg: 18px;
+
+  /* 间距基数 4px */
+  --la-gap-1: 4px;
+  --la-gap-2: 8px;
+  --la-gap-3: 12px;
+  --la-gap-4: 16px;
+  --la-gap-5: 20px;
+  --la-gap-6: 32px;
+
+  /* 触控 */
+  --la-touch: 48px;   /* 触控目标最小值 */
+  --la-keycap: 44px;  /* 键帽 */
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--la-bg);
+  color: var(--la-ink);
+  font-family: var(--la-font);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.boot {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  color: var(--la-sub);
+  font-size: 13px;
+}

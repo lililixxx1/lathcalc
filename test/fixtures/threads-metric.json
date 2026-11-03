@@ -1,0 +1,5 @@
+[
+  {"family":"metric","designation":"M30×3.5","pitch":3.5,"major":30,"coarse":true,"source":"GB/T 196-2003 表1 夹具"},
+  {"family":"metric","designation":"M30×2.0","pitch":2.0,"major":30,"coarse":false,"source":"GB/T 196-2003 表2 夹具"},
+  {"family":"metric","designation":"M20×2.5","pitch":2.5,"major":20,"coarse":true,"source":"GB/T 196-2003 表1 夹具"}
+]
