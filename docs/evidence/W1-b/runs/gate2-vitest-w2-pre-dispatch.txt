@@ -1,0 +1,18 @@
+# cmd: npx vitest run --maxWorkers=2  (W2 派工前契约调整: skeleton.test.ts 拆分为按卡 panic 文件 + test/arc.test.ts)
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90mC:/Users/Administrator/Desktop/ccc/q-novel/CNC Machinist Calculator[39m
+
+ [32m✓[39m test/arc.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 2[2mms[22m[39m
+ [32m✓[39m test/lookup.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m test/panic-w2c5.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m test/panic-w2c1.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m test/panic-w2c2.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m test/panic-w2c3.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 2[2mms[22m[39m
+ [32m✓[39m test/panic-w2c4.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 3[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m7 passed[39m[22m[90m (7)[39m
+[2m      Tests [22m [1m[32m18 passed[39m[22m[90m (18)[39m
+[2m   Start at [22m 19:44:51
+[2m   Duration [22m 1.23s[2m (transform 82ms, setup 0ms, collect 231ms, tests 18ms, environment 1ms, prepare 603ms)[22m
+
+REAL_EXIT=0
