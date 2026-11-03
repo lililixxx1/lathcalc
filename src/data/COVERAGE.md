@@ -1,26 +1,35 @@
-# COVERAGE · 数据覆盖与待补清单（Lead 维护；W3 卡不写本文件）
+# COVERAGE · 覆盖与待补清单（Lead 维护）
 
-> 已覆盖规格逐表登记；待补项与 WAVE-PLAN §3.2 裁决一致。
+> 记录数据/功能覆盖现状与已披露裁剪项；"待补"= 用户共识裁决的 v0.2+ 范围（WAVE-PLAN §3 裁决 2）。
+> 位置口径（W3 波末迁移，2026-11-03）：数据表统一在 `src/data/`（WAVE-PLAN §1 冻结架构）；W3 期间 C1/C3/C4/C5 曾按派工单口径交付根 `data/`，波末已由 Lead 统一迁移归位。
 
-## 已覆盖（v0.1 目标，W3 落地后回填）
+## 螺纹族覆盖（v0.1）
 
-| 表 | 覆盖范围 | 状态 |
+| 族 | 表 | 状态 |
 | --- | --- | --- |
-| threads-metric | 粗牙 M1–M64 全系列 + 细牙常用 | W3-C1 |
-| threads-trapezoid | GB/T 5796 常用规格 | W3-C2 |
-| threads-pipe | 55° G 管 1/8–2英 常用 | W3-C2 |
-| threads-unified | UNC/UNF #4–1英 常用 | W3-C3 |
-| tolerance-it | GB/T 1800.1 常用尺寸段 × IT6–IT12 + H/h/g/k/p | W3-C4 |
-| morse | 0–6 号 | W3-C5 |
-| densities | 钢/不锈/铝/黄铜 常用 | W3-C5 |
-| materials | 9 材料 × 2 刀具（示例数据） | W3-C5 |
-| gcode-ref | 常用 G/M 速查行 | W3-C3 |
+| M 普通螺纹（粗牙 39 行 M1–M64 全系列 + 常用细牙 110 行，共 149 行） | src/data/threads-metric.json | 已入库（W3-C1） |
+| Tr 梯形螺纹（41 行，Tr8–Tr44 GB/DIN 交集） | src/data/threads-trapezoid.json | 已入库（W3-C2） |
+| G 非密封管螺纹（55°，13 行 G1/8–G2） | src/data/threads-pipe.json | 已入库（W3-C2） |
+| UNC/UNF 统一螺纹（20 行，1/4″–1″） | src/data/threads-unified.json | 已入库（W3-C3） |
 
-## 待补（v0.2+，WAVE-PLAN §3.2 冻结裁决）
+## 已披露待补（v0.2+，非缺陷）
 
-- 蜗杆（GB/T 10095 类）
-- NPT / NPTF 锥管（1:16 锥）
-- R / Rc / Rp 55° 锥管与圆柱管螺纹（报告 P0 #2 原列，v0.1 裁剪）
-- G92 单循环程序生成（v0.2）
-- 宏程序库：椭圆/网纹/油槽/切槽（v0.3）
-- GSK / KND / 华中 G76 模板（v0.2）
+| 项 | 去向 |
+| --- | --- |
+| 蜗杆螺纹 | v0.2（DEFERRED #2） |
+| NPT | v0.2（DEFERRED #2） |
+| R/Rc/Rp 锥管螺纹（55°密封） | v0.2（DEFERRED #2；W3-C2 已甄别零混入） |
+| Tr 最大螺距 12 行（Tr22×8…Tr44×12，GB/T 5796.3 表1 每直径最大螺距档） | v0.2（W3-C2 U1 裁决 A：无独立第二源不入库，待双源后补） |
+| G92 单循环程序生成 | v0.2（DEFERRED #2b） |
+| GSK/KND/华中 G76 方言 | v0.2（DEFERRED #1；UI 页签置灰+"待补"徽标） |
+| 宏程序库（椭圆/网纹/油槽/切槽） | v0.3（DEFERRED #4） |
+
+## 数据性质披露
+
+- `src/data/materials.json` 切削参数库为**示例数据**：页内固定警示 + 每行 source 标"示例·待复核，以试切为准"（WAVE-PLAN §3 裁决 3）。
+- Tr 牙顶间隙 ac 表（src/core/thread.ts 内嵌，GB/T 5796.1）**已双源转正**（W3-C2，W2-C2 裁决②关账）：GB/T 5796.1-2005 主源 + DIN 103 反推互证（覆盖 P1.5–24）+ ISO 2901 抽查；P28–44 段为同档常量延伸（主源单源），provenance/threads-trapezoid.md §5.5 披露。
+- GB/T 196-2003 现行替代版为 GB/T 196-2025（全文未取得）；本表按 2003 口径录入并经 DIN 13 全量对拍 0 值冲突（W3-C1 U1 裁决 A），provenance/threads-metric.md 披露。
+
+## 逐表溯源
+
+见 src/data/PROVENANCE.md（Lead 自 provenance/ 片段串行合并，W3 收获时生成）。

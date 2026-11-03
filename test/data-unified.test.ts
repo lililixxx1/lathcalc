@@ -13,7 +13,7 @@
  *       （源表 mm 列按 3 位小数显示为 7.938，属显示取整，见 provenance §4）
  */
 import { describe, it, expect } from 'vitest';
-import rowsJson from '../data/threads-unified.json';
+import rowsJson from '../src/data/threads-unified.json';
 import { findThread, listThreads } from '../src/core/lookup';
 import { threadDimensions } from '../src/core/thread';
 import type { ThreadRow, ThreadSpec } from '../src/core/types';

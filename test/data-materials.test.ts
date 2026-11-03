@@ -9,7 +9,7 @@
 import { describe, it, expect } from 'vitest';
 import { findMaterial } from '../src/core/lookup';
 import type { MaterialRow } from '../src/core/types';
-import materialsJson from '../data/materials.json';
+import materialsJson from '../src/data/materials.json';
 
 const rows = materialsJson as unknown as MaterialRow[];
 

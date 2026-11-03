@@ -10,7 +10,7 @@
  *           图面 X 上、Z 右，自 +Y 视；前刀架顺时针 = G02，后刀架翻转。
  */
 import { describe, it, expect } from 'vitest';
-import gcodeJson from '../data/gcode-ref.json';
+import gcodeJson from '../src/data/gcode-ref.json';
 import { gcodeRef } from '../src/core/lookup';
 import { judgeArcDirection } from '../src/core/arc';
 import type { GcodeRefRow } from '../src/core/types';

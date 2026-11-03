@@ -10,7 +10,7 @@
 import { describe, it, expect } from 'vitest';
 import { itToleranceMM } from '../src/core/lookup';
 import type { ITTableRow } from '../src/core/types';
-import raw from '../data/tolerance-it.json';
+import raw from '../src/data/tolerance-it.json';
 
 const rows = raw as unknown as ITTableRow[];
 

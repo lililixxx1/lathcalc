@@ -15,7 +15,7 @@ import { describe, it, expect } from 'vitest';
 import { findThread, listThreads } from '../src/core/lookup';
 import { threadDimensions } from '../src/core/thread';
 import type { ThreadRow, ThreadSpec } from '../src/core/types';
-import metricRows from '../data/threads-metric.json';
+import metricRows from '../src/data/threads-metric.json';
 
 const rows = metricRows as unknown as ThreadRow[];
 

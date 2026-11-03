@@ -1,3 +1,80 @@
 [
-  {"key":"steel45","name":"45 钢","density":7.85,"source":"STUB-W3C5-将替换"}
+  {
+    "key": "carbon-steel",
+    "name": "碳钢",
+    "density": 7.85,
+    "source": "机械设计手册 钢 7.85（报告:174）；副证 Engineering Toolbox Steel 7850 kg/m³"
+  },
+  {
+    "key": "alloy-steel",
+    "name": "合金钢",
+    "density": 7.85,
+    "source": "GB/T 3077 合金钢；机械设计手册 7.85；副证 Engineering Toolbox Steel 7850 kg/m³"
+  },
+  {
+    "key": "stainless-304",
+    "name": "304 不锈钢",
+    "density": 7.93,
+    "source": "GB/T 20878 304；报告:174 不锈 7.93；副证 Engineering Toolbox Stainless 7480–8000 kg/m³"
+  },
+  {
+    "key": "stainless-316",
+    "name": "316 不锈钢",
+    "density": 7.98,
+    "source": "GB/T 20878 316；副证 Engineering Toolbox Stainless 7480–8000 kg/m³（7.98 在区间内）"
+  },
+  {
+    "key": "cast-iron-ht200",
+    "name": "HT200 灰铸铁",
+    "density": 7.2,
+    "source": "GB/T 9439 HT200；副证 Engineering Toolbox Cast iron 6800–7800 kg/m³"
+  },
+  {
+    "key": "aluminum",
+    "name": "铝",
+    "density": 2.7,
+    "source": "机械设计手册 纯铝 2.70（报告:174）；副证 Engineering Toolbox Aluminum 2712 kg/m³"
+  },
+  {
+    "key": "aluminum-6061",
+    "name": "6061 铝合金",
+    "density": 2.7,
+    "source": "GB/T 3190 6061；副证 Engineering Toolbox Aluminum alloy 6061 2720 kg/m³"
+  },
+  {
+    "key": "aluminum-7075",
+    "name": "7075 铝合金",
+    "density": 2.81,
+    "source": "GB/T 3190 7075；副证 Engineering Toolbox 7050 2800 / 7178 2830 kg/m³（区间夹逼）"
+  },
+  {
+    "key": "copper",
+    "name": "紫铜 T2",
+    "density": 8.96,
+    "source": "GB/T 5231 T2；副证 Engineering Toolbox Copper 8940 kg/m³"
+  },
+  {
+    "key": "brass-h62",
+    "name": "H62 黄铜",
+    "density": 8.5,
+    "source": "GB/T 5231 H62；报告:174 黄铜 8.5；副证 Engineering Toolbox Yellow Brass 8470 / Brass 60/40 8520 kg/m³"
+  },
+  {
+    "key": "bronze",
+    "name": "青铜 QSn6.5-0.1",
+    "density": 8.8,
+    "source": "GB/T 5231 QSn6.5-0.1；副证 Engineering Toolbox Phosphor bronze 8900 kg/m³"
+  },
+  {
+    "key": "nylon-pa6",
+    "name": "尼龙 PA6",
+    "density": 1.14,
+    "source": "PA6 工程塑料常用值 1.14；副证 Engineering Toolbox Nylon 6 1.12–1.17 g/cm³"
+  },
+  {
+    "key": "magnesium-az31",
+    "name": "AZ31 镁合金",
+    "density": 1.78,
+    "source": "GB/T 5153 AZ31；副证 Engineering Toolbox Magnesium alloy AZ31B 1770 kg/m³"
+  }
 ]

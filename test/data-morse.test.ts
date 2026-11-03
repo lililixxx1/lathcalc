@@ -18,7 +18,7 @@ import { describe, it, expect } from 'vitest';
 import { degToDMS } from '../src/core/arc';
 import { findMorse } from '../src/core/lookup';
 import type { MorseRow } from '../src/core/types';
-import morseJson from '../data/morse.json';
+import morseJson from '../src/data/morse.json';
 
 const rows = morseJson as unknown as MorseRow[];
 

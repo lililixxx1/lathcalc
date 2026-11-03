@@ -10,7 +10,7 @@
 import { describe, it, expect } from 'vitest';
 import { findDensity } from '../src/core/lookup';
 import type { DensityRow } from '../src/core/types';
-import densitiesJson from '../data/densities.json';
+import densitiesJson from '../src/data/densities.json';
 
 const rows = densitiesJson as unknown as DensityRow[];
 
