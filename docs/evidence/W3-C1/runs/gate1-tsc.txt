@@ -1,0 +1,2 @@
+# cmd: npx tsc --noEmit
+REAL_EXIT=0
