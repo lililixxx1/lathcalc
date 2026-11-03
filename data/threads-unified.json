@@ -1,0 +1,162 @@
+[
+  {
+    "family": "unified",
+    "designation": "1/4-20 UNC",
+    "pitch": 1.27,
+    "major": 6.35,
+    "tpi": 20,
+    "source": "ASME B1.1 UNC/UNF 系列；互证 gewinde-normen.de + eFunda（2026-11-03）"
+  },
+  {
+    "family": "unified",
+    "designation": "1/4-28 UNF",
+    "pitch": 0.9071428571428571,
+    "major": 6.35,
+    "tpi": 28,
+    "source": "ASME B1.1 UNC/UNF 系列；互证 gewinde-normen.de + eFunda（2026-11-03）"
+  },
+  {
+    "family": "unified",
+    "designation": "5/16-18 UNC",
+    "pitch": 1.411111111111111,
+    "major": 7.9375,
+    "tpi": 18,
+    "source": "ASME B1.1 UNC/UNF 系列；互证 gewinde-normen.de + eFunda（2026-11-03）"
+  },
+  {
+    "family": "unified",
+    "designation": "5/16-24 UNF",
+    "pitch": 1.0583333333333333,
+    "major": 7.9375,
+    "tpi": 24,
+    "source": "ASME B1.1 UNC/UNF 系列；互证 gewinde-normen.de + eFunda（2026-11-03）"
+  },
+  {
+    "family": "unified",
+    "designation": "3/8-16 UNC",
+    "pitch": 1.5875,
+    "major": 9.525,
+    "tpi": 16,
+    "source": "ASME B1.1 UNC/UNF 系列；互证 gewinde-normen.de + eFunda（2026-11-03）"
+  },
+  {
+    "family": "unified",
+    "designation": "3/8-24 UNF",
+    "pitch": 1.0583333333333333,
+    "major": 9.525,
+    "tpi": 24,
+    "source": "ASME B1.1 UNC/UNF 系列；互证 gewinde-normen.de + eFunda（2026-11-03）"
+  },
+  {
+    "family": "unified",
+    "designation": "7/16-14 UNC",
+    "pitch": 1.8142857142857143,
+    "major": 11.1125,
+    "tpi": 14,
+    "source": "ASME B1.1 UNC/UNF 系列；互证 gewinde-normen.de + eFunda（2026-11-03）"
+  },
+  {
+    "family": "unified",
+    "designation": "7/16-20 UNF",
+    "pitch": 1.27,
+    "major": 11.1125,
+    "tpi": 20,
+    "source": "ASME B1.1 UNC/UNF 系列；互证 gewinde-normen.de + eFunda（2026-11-03）"
+  },
+  {
+    "family": "unified",
+    "designation": "1/2-13 UNC",
+    "pitch": 1.9538461538461538,
+    "major": 12.7,
+    "tpi": 13,
+    "source": "ASME B1.1 UNC/UNF 系列；互证 gewinde-normen.de + eFunda（2026-11-03）"
+  },
+  {
+    "family": "unified",
+    "designation": "1/2-20 UNF",
+    "pitch": 1.27,
+    "major": 12.7,
+    "tpi": 20,
+    "source": "ASME B1.1 UNC/UNF 系列；互证 gewinde-normen.de + eFunda（2026-11-03）"
+  },
+  {
+    "family": "unified",
+    "designation": "9/16-12 UNC",
+    "pitch": 2.1166666666666667,
+    "major": 14.2875,
+    "tpi": 12,
+    "source": "ASME B1.1 UNC/UNF 系列；互证 gewinde-normen.de + eFunda（2026-11-03）"
+  },
+  {
+    "family": "unified",
+    "designation": "9/16-18 UNF",
+    "pitch": 1.411111111111111,
+    "major": 14.2875,
+    "tpi": 18,
+    "source": "ASME B1.1 UNC/UNF 系列；互证 gewinde-normen.de + eFunda（2026-11-03）"
+  },
+  {
+    "family": "unified",
+    "designation": "5/8-11 UNC",
+    "pitch": 2.309090909090909,
+    "major": 15.875,
+    "tpi": 11,
+    "source": "ASME B1.1 UNC/UNF 系列；互证 gewinde-normen.de + eFunda（2026-11-03）"
+  },
+  {
+    "family": "unified",
+    "designation": "5/8-18 UNF",
+    "pitch": 1.411111111111111,
+    "major": 15.875,
+    "tpi": 18,
+    "source": "ASME B1.1 UNC/UNF 系列；互证 gewinde-normen.de + eFunda（2026-11-03）"
+  },
+  {
+    "family": "unified",
+    "designation": "3/4-10 UNC",
+    "pitch": 2.54,
+    "major": 19.05,
+    "tpi": 10,
+    "source": "ASME B1.1 UNC/UNF 系列；互证 gewinde-normen.de + eFunda（2026-11-03）"
+  },
+  {
+    "family": "unified",
+    "designation": "3/4-16 UNF",
+    "pitch": 1.5875,
+    "major": 19.05,
+    "tpi": 16,
+    "source": "ASME B1.1 UNC/UNF 系列；互证 gewinde-normen.de + eFunda（2026-11-03）"
+  },
+  {
+    "family": "unified",
+    "designation": "7/8-9 UNC",
+    "pitch": 2.822222222222222,
+    "major": 22.225,
+    "tpi": 9,
+    "source": "ASME B1.1 UNC/UNF 系列；互证 gewinde-normen.de + eFunda（2026-11-03）"
+  },
+  {
+    "family": "unified",
+    "designation": "7/8-14 UNF",
+    "pitch": 1.8142857142857143,
+    "major": 22.225,
+    "tpi": 14,
+    "source": "ASME B1.1 UNC/UNF 系列；互证 gewinde-normen.de + eFunda（2026-11-03）"
+  },
+  {
+    "family": "unified",
+    "designation": "1-8 UNC",
+    "pitch": 3.175,
+    "major": 25.4,
+    "tpi": 8,
+    "source": "ASME B1.1 UNC/UNF 系列；互证 gewinde-normen.de + eFunda（2026-11-03）"
+  },
+  {
+    "family": "unified",
+    "designation": "1-12 UNF",
+    "pitch": 2.1166666666666667,
+    "major": 25.4,
+    "tpi": 12,
+    "source": "ASME B1.1 UNC/UNF 系列；互证 gewinde-normen.de + eFunda（2026-11-03）"
+  }
+]
