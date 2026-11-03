@@ -1,0 +1,19 @@
+gate1 tsc REAL_EXIT=0
+gate2 vitest REAL_EXIT=0：31 files / 225 tests passed
+gate3 build REAL_EXIT=0
+measure-390 p07–p10：p07 scrollWidth=390=clientWidth=390 hOverflow=false；p08 scrollWidth=390=clientWidth=390 hOverflow=false；p09 scrollWidth=390=clientWidth=390 hOverflow=false；p10 scrollWidth=390=clientWidth=390 hOverflow=false
+allPagesNoHorizontalOverflow=true
+screenshots：p07=390x844、p08=390x844、p09=390x844、p10=390x844
+
+| 交付物 | 行数 |
+| --- | --- |
+| `src/ui/pages/p07.ts` | 319 |
+| `src/ui/pages/p08.ts` | 221 |
+| `src/ui/pages/p09.ts` | 310 |
+| `src/ui/pages/p10.ts` | 236 |
+| `test/ui-p07.test.ts` | 191 |
+| `test/ui-p08.test.ts` | 159 |
+| `test/ui-p09.test.ts` | 165 |
+| `test/ui-p10.test.ts` | 133 |
+
+判定：本卡证据自洽（门禁 3/3 绿；p07–p10 390×844 零横向溢出；截图 4 张）；待 Lead G1 复验，本档不自称过审。

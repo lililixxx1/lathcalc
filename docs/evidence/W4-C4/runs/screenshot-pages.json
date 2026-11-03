@@ -1,0 +1,119 @@
+{
+  "tool": "chrome-headless-cdp",
+  "chromeVersion": "Chrome/156.0.8078.76",
+  "url": "http://127.0.0.1:4173/",
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "deviceScaleFactor": 1,
+    "mobile": true
+  },
+  "shots": [
+    {
+      "hash": "#/p01",
+      "pageId": "p01",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 1
+      },
+      "documentElement": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 844,
+        "clientHeight": 844
+      },
+      "appWidth": 390,
+      "pageWidth": 390,
+      "horizontalOverflow": false,
+      "verticalOverflow": false,
+      "file": "p01-390x844.png"
+    },
+    {
+      "hash": "#/p07",
+      "pageId": "p07",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 1
+      },
+      "documentElement": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 844,
+        "clientHeight": 844
+      },
+      "appWidth": 390,
+      "pageWidth": 390,
+      "horizontalOverflow": false,
+      "verticalOverflow": false,
+      "file": "p07-390x844.png"
+    },
+    {
+      "hash": "#/p08",
+      "pageId": "p08",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 1
+      },
+      "documentElement": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 844,
+        "clientHeight": 844
+      },
+      "appWidth": 390,
+      "pageWidth": 390,
+      "horizontalOverflow": false,
+      "verticalOverflow": false,
+      "file": "p08-390x844.png"
+    },
+    {
+      "hash": "#/p09",
+      "pageId": "p09",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 1
+      },
+      "documentElement": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 844,
+        "clientHeight": 844
+      },
+      "appWidth": 390,
+      "pageWidth": 390,
+      "horizontalOverflow": false,
+      "verticalOverflow": false,
+      "file": "p09-390x844.png"
+    },
+    {
+      "hash": "#/p10",
+      "pageId": "p10",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 1
+      },
+      "documentElement": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 844,
+        "clientHeight": 844
+      },
+      "appWidth": 390,
+      "pageWidth": 390,
+      "horizontalOverflow": false,
+      "verticalOverflow": false,
+      "file": "p10-390x844.png"
+    }
+  ],
+  "exceptions": [],
+  "consoleErrors": [
+    "http://127.0.0.1:4173/favicon.ico :: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "allPagesNoHorizontalOverflow": true,
+  "allPageIdsMatch": true
+}
