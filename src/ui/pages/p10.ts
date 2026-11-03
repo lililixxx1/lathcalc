@@ -43,6 +43,10 @@ const CSS = `
 .rc-p10__listcard { flex: 1 1 auto; min-height: 0; display: flex; padding: 3px 14px; }
 .rc-p10__list { flex: 1 1 auto; min-height: 0; overflow-y: auto; overflow-x: hidden; }
 .rc-p10__list .la-lrow { align-items: flex-start; padding: 9px 2px; }
+/* A4 修复：本页后注入的 padding 覆盖了 .la-lrow.sel 的 padding-left:10px（同特异性
+   后者胜），负 margin −10px 使行框越出 overflow-x:hidden 列表容器被裁（"45 钢"→"5 钢"）。
+   选中态就地收平：不加负 margin，改缩进 10px 呈现强调条。 */
+.rc-p10__list .la-lrow.sel { margin-left: 0; padding-left: 10px; }
 .rc-p10__list .rc-lrow__name { flex: 0 0 66px; font-weight: 600; }
 .rc-p10__list .rc-lrow__desc { min-width: 0; overflow-wrap: anywhere; font-size: 11.5px; line-height: 1.45; }
 .rc-p10__list .rc-lrow__value { padding-top: 1px; }
