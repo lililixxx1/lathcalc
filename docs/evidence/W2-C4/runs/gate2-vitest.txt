@@ -1,0 +1,18 @@
+$ npx vitest run --maxWorkers=2
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90mC:/Users/Administrator/Desktop/ccc/q-novel/LathCalc-trees_T-W2C4[39m
+
+ [32m✓[39m test/arc-cases-a.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m test/lookup.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m test/panic-w2c5.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m test/panic-w2c1.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m test/panic-w2c3.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m test/panic-w2c2.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 2[2mms[22m[39m
+ [32m✓[39m test/arc.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m7 passed[39m[22m[90m (7)[39m
+[2m      Tests [22m [1m[32m32 passed[39m[22m[90m (32)[39m
+[2m   Start at [22m 20:09:21
+[2m   Duration [22m 1.39s[2m (transform 109ms, setup 0ms, collect 256ms, tests 22ms, environment 1ms, prepare 740ms)[22m
+
+REAL_EXIT=0
