@@ -315,6 +315,18 @@ describe('工况注册与判向覆盖', () => {
     }
   });
 
+  it('solve 级后刀架翻转（W4-C3 R-1 补位）：AC07–AC12 逐例 rearToolPost=1 对调', () => {
+    for (const ex of EXAMPLES) {
+      const front = solver(ex.caseId).solve(ex.input);
+      const rear = solver(ex.caseId).solve({ ...ex.input, rearToolPost: 1 });
+      expect(rear.direction).toBe(front.direction === 'G02' ? 'G03' : 'G02');
+      expect(rear.gcodeLine.startsWith(rear.direction)).toBe(true);
+      // 几何不变：仅判向与程序行方向字对调
+      expect(rear.tangent).toEqual(front.tangent);
+      expect(rear.center).toEqual(front.center);
+    }
+  });
+
   it('越界/无解输入抛出明确错误（不返回 NaN 几何）', () => {
     expect(() => solver('AC07').solve({ R: 5, dX: 10, dZ: 0 })).toThrow(/2R/);
     expect(() => solver('AC08').solve({ R: 5, dZ: 11 })).toThrow(/dZ/);

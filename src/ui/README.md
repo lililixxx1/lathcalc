@@ -331,6 +331,7 @@ ensureBaseStyles()         // 基础样式 + #app 视口高度
 | p01 → p09 | `d` `vc` | 工件直径 mm / 线速度 m·min⁻¹ | `#/p09?d=50&vc=150` |
 | p01 → p07 | `mode` `morse` | `mode=morse`；`morse` = 0–6 | `#/p07?mode=morse&morse=4` |
 | p01 → p04 | （无） | G76 首页直达；p04 必须能处理空参数（默认值或重定向 p02，由 C2 定） | `#/p04` |
+| p05 → p06 | `case` | 工况号 `AC01`–`AC12`（W4-C3 冻结；非法值由 p06 选择器兜底） | `#/p06?case=AC01` |
 
 推荐调用：
 

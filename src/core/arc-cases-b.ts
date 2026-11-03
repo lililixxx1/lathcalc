@@ -3,6 +3,8 @@
  *
  *  坐标契约（冻结）：X = 直径值（mm）、Z = 线性值（mm），自 +Y 看；图面顺时针 =
  *  前刀架 G02、后刀架 G03。判向一律调 arc.ts 的 judgeArcDirection，本文件不自创。
+ *  rearToolPost: 0 | 1，默认 0 = 前刀架；1 = 后刀架，方向由 judgeArcDirection 翻转
+ *  （W4-C3 R-1 补位：与 arc-cases-a 同口径，此前 b 组未透传）。
  *
  *  桩输入键集不变；各工况的几何锚点约定（输入语义在派工单未逐键冻结，按下列
  *  标准车削构造实现，坐标手推见 test/arc-cases-b.test.ts 各例注释）：
@@ -31,6 +33,9 @@ function positive(value: number, key: string): number {
   return value;
 }
 
+/** 后刀架可选键（与 arc-cases-a 同口径）：rearToolPost=1 时判向翻转 */
+const rearOf = (input: Record<string, number>): boolean => input.rearToolPost === 1;
+
 /**
  * 数值格式化：最多 3 位小数，去掉无意义的尾零。
  * minDecimals=0 时整数不带小数点（X20/Z-30）；minDecimals=1 时补一位（R5.0，与设计稿一致）。
@@ -44,9 +49,15 @@ function formatNum(value: number, minDecimals = 0): string {
   return text;
 }
 
-/** 统一出口：切点/圆心 + arc.ts 判向 + 可复制程序行 */
-function makeSolution(center: Vec2, start: Vec2, tangent: Vec2, radius: number): ArcSolution {
-  const direction = judgeArcDirection(center, start, tangent);
+/** 统一出口：切点/圆心 + arc.ts 判向（后刀架翻转）+ 可复制程序行 */
+function makeSolution(
+  center: Vec2,
+  start: Vec2,
+  tangent: Vec2,
+  radius: number,
+  rear: boolean,
+): ArcSolution {
+  const direction = judgeArcDirection(center, start, tangent, rear);
   return {
     tangent,
     center,
@@ -69,6 +80,7 @@ function solveAC07(input: Record<string, number>): ArcSolution {
     { x: dX, z: dZ + R },
     { x: dX - 2 * R, z: dZ },
     R,
+    rearOf(input),
   );
 }
 
@@ -87,6 +99,7 @@ function solveAC08(input: Record<string, number>): ArcSolution {
     { x: 0, z: dZ },
     { x: tangentX, z: 0 },
     R,
+    rearOf(input),
   );
 }
 
@@ -107,6 +120,7 @@ function solveAC09(input: Record<string, number>): ArcSolution {
     { x: 2 * tangentRadius, z: 0 },
     { x: 2 * tangentRadius * Math.sin(alpha), z: tangentRadius * Math.cos(alpha) },
     R,
+    rearOf(input),
   );
 }
 
@@ -123,6 +137,7 @@ function solveAC10(input: Record<string, number>): ArcSolution {
     { x: 2 * Math.sqrt(R * R - lead * lead), z: lead },
     { x: 2 * R, z: 0 },
     R,
+    rearOf(input),
   );
 }
 
@@ -130,7 +145,7 @@ function solveAC10(input: Record<string, number>): ArcSolution {
  *  弧 P→T（T 处与外圆 X=2R 相切）。 */
 function solveAC11(input: Record<string, number>): ArcSolution {
   const R = positive(inputNumber(input, 'R'), 'R');
-  return makeSolution({ x: 0, z: 0 }, { x: 0, z: -R }, { x: 2 * R, z: 0 }, R);
+  return makeSolution({ x: 0, z: 0 }, { x: 0, z: -R }, { x: 2 * R, z: 0 }, R, rearOf(input));
 }
 
 /** AC12 内孔圆弧过渡：孔壁 X=boreD、孔底面 Z=0，材料在 +Z 侧。
@@ -143,6 +158,7 @@ function solveAC12(input: Record<string, number>): ArcSolution {
     { x: boreD, z: R },
     { x: boreD + 2 * R, z: 0 },
     R,
+    rearOf(input),
   );
 }
 

@@ -306,13 +306,13 @@ describe('p06 切点计算', () => {
     expect(p06Page()?.querySelector('.rc-codecard')).toBeNull();
   });
 
-  it('AC07–AC12 后刀架：core 未实现翻转时页面显式提示，不伪造 G02/G03 对调', async () => {
+  it('AC07 后刀架：G03→G02 对调（core b 组翻转 W4-C3 R-1 补位后全工况生效）', async () => {
     await router.navigate('p06', { case: 'AC07' });
     expect(codeLine()).toBe('G03 X20 Z-30 R5.0');
 
     click('.rc-p06__toolbar .rc-seg__item[data-value="rear"]');
-    expect(rowValue('判向依据')).toBe('后刀架 · 当前工况暂未支持翻转（仍 G03）');
-    expect(codeLine()).toBe('G03 X20 Z-30 R5.0');
+    expect(rowValue('判向依据')).toBe('后刀架 · 图面逆时针 → G02（前后刀架对调）');
+    expect(codeLine()).toBe('G02 X20 Z-30 R5.0');
   });
 
   it('顶栏返回回到工况图库 p05', async () => {

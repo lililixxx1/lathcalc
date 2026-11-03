@@ -9,8 +9,8 @@
  *   - 判向由 core 统一走 arc.ts judgeArcDirection（图面顺时针 = 前刀架 G02；
  *     rearToolPost=1 时 G02/G03 对调）。本页仅展示「判向依据」，不自行判向。
  *   - gcodeLine 原样取 core 输出（≤3 位小数/去尾零/R 至少 1 位），UI 不重拼。
- *   - 后刀架：向 solve() 传可选键 rearToolPost=1。arc-cases-a 已支持；arc-cases-b
- *     当前忽略该键，页面会在结果区显式提示「core 未翻转」，不伪装对调。
+ *   - 后刀架：向 solve() 传可选键 rearToolPost=1。a/b 两组均支持翻转（b 组为
+ *     W4-C3 R-1 Lead 补位，2026-11-03），判向依据行显示对调结果。
  *
  * 默认参数来源（均为树内黄金用例，见 test/arc-cases-a.test.ts / arc-cases-b.test.ts）：
  *   AC01 :57 ｜ AC02 :100 ｜ AC03 :144 ｜ AC04 :188 ｜ AC05 :235 ｜ AC06 :280
@@ -318,7 +318,7 @@ function renderCase(ctx: PageContext, arcCase: ArcCaseSolver): void {
     let solution = front;
     if (state.rear) {
       try {
-        // rearToolPost 为 core 冻结可选键；a 组支持翻转，b 组当前忽略（下方显式提示）。
+        // rearToolPost 为 core 冻结可选键；a/b 两组均翻转（b 组 W4-C3 R-1 补位）。
         solution = arcCase.solve({ ...input, rearToolPost: 1 });
       } catch (error) {
         resultHost.append(WarnCard({ text: errorText(error) }));
@@ -326,19 +326,13 @@ function renderCase(ctx: PageContext, arcCase: ArcCaseSolver): void {
       }
     }
 
-    const flipped = state.rear && solution.direction !== front.direction;
     const figureClockwise = state.rear
       ? solution.direction === 'G03'
       : solution.direction === 'G02';
 
-    let basis: string;
-    if (state.rear && !flipped) {
-      basis = `后刀架 · 当前工况暂未支持翻转（仍 ${solution.direction}）`;
-    } else if (state.rear) {
-      basis = `后刀架 · 图面${figureClockwise ? '顺' : '逆'}时针 → ${solution.direction}（前后刀架对调）`;
-    } else {
-      basis = `前刀架 T3 · 图面${figureClockwise ? '顺' : '逆'}时针 → ${solution.direction}`;
-    }
+    const basis = state.rear
+      ? `后刀架 · 图面${figureClockwise ? '顺' : '逆'}时针 → ${solution.direction}（前后刀架对调）`
+      : `前刀架 T3 · 图面${figureClockwise ? '顺' : '逆'}时针 → ${solution.direction}`;
 
     const centerText = `X${fmt(solution.center.x)} · Z${fmt(solution.center.z)} · R${radiusTextOf(solution.gcodeLine)}`;
 
