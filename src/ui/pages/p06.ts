@@ -79,6 +79,8 @@ const INPUT_META: Record<string, InputMeta> = {
 
 /** 工况级文案覆盖（语义随 arc-cases-a/b 文件头锚点） */
 const CASE_LABELS: Partial<Record<ArcCaseId, Record<string, string>>> = {
+  // A4 对拍修正：AC01 输入标签对齐设计稿「斜角 α」（原用通用「角度 α」）
+  AC01: { angle: '斜角 α' },
   AC02: { dZ: '圆心轴向差 dZ' },
   AC03: { dZ: '圆心轴向差 dZ' },
   AC04: { angle: '斜角 α' },

@@ -71,7 +71,9 @@ const P_BITS_NOTE = 'P021060 = 02 精车次数 · 10 退尾量（倒角量）· 
 
 const CSS = `
 .rc-p04__body { padding-top: 2px; }
-.rc-p04__meta { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex: 0 0 auto; }
+.rc-p04__meta { display: flex; align-items: center; gap: 8px; flex: 0 0 auto; }
+/* A4 修复：待补徽标语义属系统页签（GSK/KND/华中置灰），随页签行排布而非参数行 */
+.rc-p04__sysrow { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex: 0 0 auto; }
 .rc-p04__pnote { white-space: pre-line; }
 /* 六格参数在 390px 下保持单行（设计稿 3 列紧凑排布） */
 .rc-p04__body .rc-param { padding: 7px 8px; gap: 4px; }
@@ -131,11 +133,18 @@ function systemsRow(): HTMLElement {
 function metaRow(): HTMLElement {
   const row = document.createElement('div');
   row.className = 'rc-p04__meta';
-  const eyebrow = Eyebrow('带入参数（来自上一步）');
+  row.append(Eyebrow('带入参数（来自上一步）'));
+  return row;
+}
+
+/** 系统页签行 + 「待补」徽标（WAVE-PLAN §3 裁决 1：仅 FANUC，GSK/KND/华中置灰待补）。 */
+function systemsRowWithBadge(systems: HTMLElement): HTMLElement {
+  const row = document.createElement('div');
+  row.className = 'rc-p04__sysrow';
   const pending = Badge('待补', { gray: true });
   pending.setAttribute('title', 'GSK / KND / 华中 待补');
   pending.setAttribute('aria-label', 'GSK / KND / 华中 待补');
-  row.append(eyebrow, pending);
+  row.append(systems, pending);
   return row;
 }
 
@@ -149,7 +158,7 @@ const page: PageModule = {
     const params = readParams(ctx.params);
     const body = createBody({ className: 'rc-p04__body', ariaLabel: 'G76 参考程序' });
     const top = TopBar({ title: 'G76 参考程序', badge: 'FANUC' });
-    const systems = systemsRow();
+    const systems = systemsRowWithBadge(systemsRow());
 
     if (!params) {
       // 首页 G76 直达（#/p04，无参数）：容忍空参数并提示先选型（README §5.2）
