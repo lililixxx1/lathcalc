@@ -24,8 +24,10 @@ export function unit(dx: number, dz: number): Vec2 {
 
 /**
  * 判向：给定圆心、圆弧起点、终点与刀架方位，返回 G02/G03。
- * 前刀架（常规）：工件右端面看向卡盘，顺时针 = G02。
- * rearToolPost = true（后刀架）时翻转。
+ * 视图约定（FANUC G18，车床标准图）：X 朝上（直径）、Z 朝右，自 +Y（操作者一侧）看——
+ * 该图相对数学系（x 右 z 上）是转置系，定向翻转，故数学正叉积 = 车床顺时针。
+ * 前刀架：顺时针 = G02；rearToolPost = true（后刀架）时翻转。
+ * （C-02 修复：G2 见证 12 点→3 点前刀架必为 G02，绝对方向金测见 test/skeleton.test.ts）
  */
 export function judgeArcDirection(
   center: Vec2,
@@ -36,7 +38,7 @@ export function judgeArcDirection(
   const cross =
     (start.x - center.x) * (end.z - center.z) -
     (start.z - center.z) * (end.x - center.x);
-  const cw = cross < 0; // 数学负叉积 = 顺时针（x-z 平面，x 向右 z 向…由几何约定）
+  const cw = cross > 0; // 车床转置系：数学正叉积 = 图面顺时针
   const g02 = rearToolPost ? !cw : cw;
   return g02 ? 'G02' : 'G03';
 }

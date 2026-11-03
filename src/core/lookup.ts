@@ -20,11 +20,12 @@ export function findThread(rows: ThreadRow[], family: ThreadFamily, designation:
   );
 }
 
-/** 按基本尺寸与 IT 等级查公差值（mm）。跨段取 ≤ 直径的最大段；查不到抛错 */
+/** 按基本尺寸与 IT 等级查公差值（mm）。分段左开右闭 (lo,hi]，与 GB/T 1800.1"大于…至…"一致
+ *  （C-03 修复：Ø30 落 (18,30]、Ø50 落 (30,50]；段内无该等级或超出全部段则抛错） */
 export function itToleranceMM(table: ITTableRow[], nominal: number, grade: number): number {
   for (const row of table) {
     const [lo, hi] = row.segment;
-    if (nominal >= lo && nominal < hi) {
+    if (nominal > lo && nominal <= hi) {
       const v = row.values[grade];
       if (v == null) break;
       return v / 1000; // μm → mm

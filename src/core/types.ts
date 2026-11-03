@@ -135,7 +135,7 @@ export type ToleranceComposeFn = (input: ToleranceInput, itValueMM: number, fund
 
 /** IT 公差表行（GB/T 1800.1，W3-C4 录入） */
 export interface ITTableRow {
-  /** 尺寸分段（左闭右开，mm）：[30,50) */
+  /** 尺寸分段（左开右闭，mm）：(30,50]——与 GB/T 1800.1"大于 30 至 50"分段一致（C-03） */
   segment: [number, number];
   /** IT 等级 → 公差 μm */
   values: Partial<Record<number, number>>;

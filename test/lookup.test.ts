@@ -28,6 +28,15 @@ describe('lookup（夹具）', () => {
     expect(() => itToleranceMM(table, 40, 9)).toThrowError(/PANIC/);
   });
 
+  it('itToleranceMM：分段边界左开右闭（C-03）——GB/T 1800.1"大于…至…"', () => {
+    // Ø30 ∈ (18,30] → 21μm；Ø50 ∈ (30,50] → 25μm；Ø18 ∈ (10,18] → 18μm（标准值，非 reviewer 指令中的 0.016——已披露分歧）
+    expect(itToleranceMM(table, 30, 7)).toBe(0.021);
+    expect(itToleranceMM(table, 50, 7)).toBe(0.025);
+    expect(itToleranceMM(table, 18, 7)).toBe(0.018);
+    // 段内无该等级仍抛错：(18,30] 只录了 IT7
+    expect(() => itToleranceMM(table, 25, 8)).toThrowError(/PANIC/);
+  });
+
   it('findMorse / findDensity：命中与缺错', () => {
     expect(findMorse(morse as MorseRow[], 4).taper).toBe('1:19.254');
     expect(findDensity(densities as DensityRow[], 'al6061').density).toBe(2.7);
