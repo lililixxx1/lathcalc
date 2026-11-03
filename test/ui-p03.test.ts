@@ -95,7 +95,7 @@ describe('p03 M30×3.5 金测（WAVE-PLAN §4 #7）', () => {
     expect(formulaText()).toContain('依据：GB/T 196-2003');
   });
 
-  it('收藏星标派发 lathcalc:save（kind/title/params/ts）', () => {
+  it('收藏星标派发 lathcalc:save（kind/title/params/ts/favorite）', () => {
     const events: CustomEvent[] = [];
     const handler = (event: Event): void => {
       events.push(event as CustomEvent);
@@ -109,6 +109,7 @@ describe('p03 M30×3.5 金测（WAVE-PLAN §4 #7）', () => {
         title: string;
         params: Record<string, unknown>;
         ts: number;
+        favorite?: boolean;
       };
       expect(detail.kind).toBe('thread');
       expect(detail.title).toBe('M30 × 3.5');
@@ -120,6 +121,8 @@ describe('p03 M30×3.5 金测（WAVE-PLAN §4 #7）', () => {
       });
       expect(typeof detail.ts).toBe('number');
       expect(detail.ts).toBeGreaterThan(0);
+      // G2-W4 I-1：星标语义 = 双落收藏+历史（store.recordSave 消费），接缝必须钉住。
+      expect(detail.favorite).toBe(true);
     } finally {
       document.removeEventListener('lathcalc:save', handler);
     }
