@@ -52,7 +52,7 @@ describe('data/morse.json（W3-C5）', () => {
   });
 
   it('MT4 半角：atan(1/(2×19.254)) = atan(1/38.508) = 1.487558565° → 1°29′15″', () => {
-    // 1/38.508 = 0.025968744…；atan = 1.487558565°；degToDMS → 1°29′15″
+    // 1/38.508 = 0.025968630…；atan = 1.487558565°；degToDMS → 1°29′15″
     const expected = halfAngleDMSFromTaper('1:19.254');
     expect(expected).toBe('1°29′15″');
     expect(findMorse(rows, 4).halfAngleDMS).toBe(expected);
