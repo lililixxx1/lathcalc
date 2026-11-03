@@ -1,0 +1,895 @@
+{
+  "tool": "chrome-headless-cdp",
+  "chromeVersion": "Chrome/156.0.8078.76",
+  "url": "http://127.0.0.1:5199/docs/evidence/W4-C3/tools/harness.html",
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "deviceScaleFactor": 1,
+    "mobile": true
+  },
+  "pages": [
+    {
+      "hash": "#/p01",
+      "pageId": "p01",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 1
+      },
+      "documentElement": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 844,
+        "clientHeight": 844
+      },
+      "documentBody": {
+        "scrollWidth": 390,
+        "clientWidth": 390
+      },
+      "page": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 844,
+        "right": 390,
+        "bottom": 844
+      },
+      "body": {
+        "x": 0,
+        "y": 187.8,
+        "width": 390,
+        "height": 614.5,
+        "right": 390,
+        "bottom": 802.3
+      },
+      "bodyScroll": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 615,
+        "clientHeight": 615,
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      },
+      "pageOverflow": "hidden",
+      "horizontalOverflow": false,
+      "verticalOverflow": false
+    },
+    {
+      "hash": "#/p02",
+      "pageId": "p02",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 1
+      },
+      "documentElement": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 844,
+        "clientHeight": 844
+      },
+      "documentBody": {
+        "scrollWidth": 390,
+        "clientWidth": 390
+      },
+      "page": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 844,
+        "right": 390,
+        "bottom": 844
+      },
+      "body": {
+        "x": 0,
+        "y": 97,
+        "width": 390,
+        "height": 727,
+        "right": 390,
+        "bottom": 824
+      },
+      "bodyScroll": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 727,
+        "clientHeight": 727,
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      },
+      "pageOverflow": "hidden",
+      "horizontalOverflow": false,
+      "verticalOverflow": false
+    },
+    {
+      "hash": "#/p03",
+      "pageId": "p03",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 1
+      },
+      "documentElement": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 844,
+        "clientHeight": 844
+      },
+      "documentBody": {
+        "scrollWidth": 390,
+        "clientWidth": 390
+      },
+      "page": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 844,
+        "right": 390,
+        "bottom": 844
+      },
+      "body": {
+        "x": 0,
+        "y": 97,
+        "width": 390,
+        "height": 727,
+        "right": 390,
+        "bottom": 824
+      },
+      "bodyScroll": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 727,
+        "clientHeight": 727,
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      },
+      "pageOverflow": "hidden",
+      "horizontalOverflow": false,
+      "verticalOverflow": false
+    },
+    {
+      "hash": "#/p04",
+      "pageId": "p04",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 1
+      },
+      "documentElement": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 844,
+        "clientHeight": 844
+      },
+      "documentBody": {
+        "scrollWidth": 390,
+        "clientWidth": 390
+      },
+      "page": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 844,
+        "right": 390,
+        "bottom": 844
+      },
+      "body": {
+        "x": 0,
+        "y": 97,
+        "width": 390,
+        "height": 727,
+        "right": 390,
+        "bottom": 824
+      },
+      "bodyScroll": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 727,
+        "clientHeight": 727,
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      },
+      "pageOverflow": "hidden",
+      "horizontalOverflow": false,
+      "verticalOverflow": false
+    },
+    {
+      "hash": "#/p05",
+      "pageId": "p05",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 1
+      },
+      "documentElement": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 844,
+        "clientHeight": 844
+      },
+      "documentBody": {
+        "scrollWidth": 390,
+        "clientWidth": 390
+      },
+      "page": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 844,
+        "right": 390,
+        "bottom": 844
+      },
+      "body": {
+        "x": 0,
+        "y": 97,
+        "width": 390,
+        "height": 727,
+        "right": 390,
+        "bottom": 824
+      },
+      "bodyScroll": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 727,
+        "clientHeight": 727,
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      },
+      "pageOverflow": "hidden",
+      "horizontalOverflow": false,
+      "verticalOverflow": false
+    },
+    {
+      "hash": "#/p06",
+      "pageId": "p06",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 1
+      },
+      "documentElement": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 844,
+        "clientHeight": 844
+      },
+      "documentBody": {
+        "scrollWidth": 390,
+        "clientWidth": 390
+      },
+      "page": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 844,
+        "right": 390,
+        "bottom": 844
+      },
+      "body": {
+        "x": 0,
+        "y": 97,
+        "width": 390,
+        "height": 727,
+        "right": 390,
+        "bottom": 824
+      },
+      "bodyScroll": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 727,
+        "clientHeight": 727,
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      },
+      "pageOverflow": "hidden",
+      "horizontalOverflow": false,
+      "verticalOverflow": false
+    },
+    {
+      "hash": "#/p07",
+      "pageId": "p07",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 1
+      },
+      "documentElement": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 844,
+        "clientHeight": 844
+      },
+      "documentBody": {
+        "scrollWidth": 390,
+        "clientWidth": 390
+      },
+      "page": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 844,
+        "right": 390,
+        "bottom": 844
+      },
+      "body": {
+        "x": 0,
+        "y": 97,
+        "width": 390,
+        "height": 727,
+        "right": 390,
+        "bottom": 824
+      },
+      "bodyScroll": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 727,
+        "clientHeight": 727,
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      },
+      "pageOverflow": "hidden",
+      "horizontalOverflow": false,
+      "verticalOverflow": false
+    },
+    {
+      "hash": "#/p08",
+      "pageId": "p08",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 1
+      },
+      "documentElement": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 844,
+        "clientHeight": 844
+      },
+      "documentBody": {
+        "scrollWidth": 390,
+        "clientWidth": 390
+      },
+      "page": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 844,
+        "right": 390,
+        "bottom": 844
+      },
+      "body": {
+        "x": 0,
+        "y": 97,
+        "width": 390,
+        "height": 727,
+        "right": 390,
+        "bottom": 824
+      },
+      "bodyScroll": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 727,
+        "clientHeight": 727,
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      },
+      "pageOverflow": "hidden",
+      "horizontalOverflow": false,
+      "verticalOverflow": false
+    },
+    {
+      "hash": "#/p09",
+      "pageId": "p09",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 1
+      },
+      "documentElement": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 844,
+        "clientHeight": 844
+      },
+      "documentBody": {
+        "scrollWidth": 390,
+        "clientWidth": 390
+      },
+      "page": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 844,
+        "right": 390,
+        "bottom": 844
+      },
+      "body": {
+        "x": 0,
+        "y": 97,
+        "width": 390,
+        "height": 727,
+        "right": 390,
+        "bottom": 824
+      },
+      "bodyScroll": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 727,
+        "clientHeight": 727,
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      },
+      "pageOverflow": "hidden",
+      "horizontalOverflow": false,
+      "verticalOverflow": false
+    },
+    {
+      "hash": "#/p10",
+      "pageId": "p10",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 1
+      },
+      "documentElement": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 844,
+        "clientHeight": 844
+      },
+      "documentBody": {
+        "scrollWidth": 390,
+        "clientWidth": 390
+      },
+      "page": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 844,
+        "right": 390,
+        "bottom": 844
+      },
+      "body": {
+        "x": 0,
+        "y": 97,
+        "width": 390,
+        "height": 727,
+        "right": 390,
+        "bottom": 824
+      },
+      "bodyScroll": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 727,
+        "clientHeight": 727,
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      },
+      "pageOverflow": "hidden",
+      "horizontalOverflow": false,
+      "verticalOverflow": false
+    },
+    {
+      "hash": "#/p11",
+      "pageId": "p11",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 1
+      },
+      "documentElement": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 844,
+        "clientHeight": 844
+      },
+      "documentBody": {
+        "scrollWidth": 390,
+        "clientWidth": 390
+      },
+      "page": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 844,
+        "right": 390,
+        "bottom": 844
+      },
+      "body": {
+        "x": 0,
+        "y": 97,
+        "width": 390,
+        "height": 727,
+        "right": 390,
+        "bottom": 824
+      },
+      "bodyScroll": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 727,
+        "clientHeight": 727,
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      },
+      "pageOverflow": "hidden",
+      "horizontalOverflow": false,
+      "verticalOverflow": false
+    },
+    {
+      "hash": "#/p12",
+      "pageId": "p12",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 1
+      },
+      "documentElement": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 844,
+        "clientHeight": 844
+      },
+      "documentBody": {
+        "scrollWidth": 390,
+        "clientWidth": 390
+      },
+      "page": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 844,
+        "right": 390,
+        "bottom": 844
+      },
+      "body": {
+        "x": 0,
+        "y": 97,
+        "width": 390,
+        "height": 727,
+        "right": 390,
+        "bottom": 824
+      },
+      "bodyScroll": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 727,
+        "clientHeight": 727,
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      },
+      "pageOverflow": "hidden",
+      "horizontalOverflow": false,
+      "verticalOverflow": false
+    },
+    {
+      "hash": "#/p13",
+      "pageId": "p13",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 1
+      },
+      "documentElement": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 844,
+        "clientHeight": 844
+      },
+      "documentBody": {
+        "scrollWidth": 390,
+        "clientWidth": 390
+      },
+      "page": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 844,
+        "right": 390,
+        "bottom": 844
+      },
+      "body": {
+        "x": 0,
+        "y": 97,
+        "width": 390,
+        "height": 727,
+        "right": 390,
+        "bottom": 824
+      },
+      "bodyScroll": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 727,
+        "clientHeight": 727,
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      },
+      "pageOverflow": "hidden",
+      "horizontalOverflow": false,
+      "verticalOverflow": false
+    },
+    {
+      "hash": "#/p14",
+      "pageId": "p14",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 1
+      },
+      "documentElement": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 844,
+        "clientHeight": 844
+      },
+      "documentBody": {
+        "scrollWidth": 390,
+        "clientWidth": 390
+      },
+      "page": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 844,
+        "right": 390,
+        "bottom": 844
+      },
+      "body": {
+        "x": 0,
+        "y": 97,
+        "width": 390,
+        "height": 727,
+        "right": 390,
+        "bottom": 824
+      },
+      "bodyScroll": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 727,
+        "clientHeight": 727,
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      },
+      "pageOverflow": "hidden",
+      "horizontalOverflow": false,
+      "verticalOverflow": false
+    }
+  ],
+  "p05Detail": {
+    "grid": {
+      "x": 16,
+      "y": 129,
+      "width": 358,
+      "height": 416.3,
+      "right": 374,
+      "bottom": 545.3
+    },
+    "gridColumns": "174.5px 174.5px",
+    "tileCount": 12,
+    "tileHeights": [
+      65.3,
+      65.3,
+      77.1,
+      77.1,
+      60.9,
+      60.9,
+      56,
+      56,
+      56,
+      56,
+      56,
+      56
+    ],
+    "tileMinWidth": 174.5,
+    "tileMaxRight": 374,
+    "anchorLines": [
+      "R · α · 台阶Ø",
+      "R1 · R2 · dZ · X0基准",
+      "R1 > R2 · dZ · X0基准",
+      "R1 · R2 · α · L=R1+R2",
+      "R · stepX · stepZ",
+      "R · dX · dZ · X0基准",
+      "R · dX · dZ",
+      "R · dZ",
+      "R · 半角α",
+      "R · lead",
+      "R",
+      "R · 孔径"
+    ],
+    "accentDots": 12
+  },
+  "p06Detail": {
+    "body": {
+      "top": 97,
+      "bottom": 824,
+      "clientHeight": 727,
+      "scrollHeight": 727
+    },
+    "childCount": 5,
+    "lastChildBottom": 796.9,
+    "contentInsideBody": true,
+    "bodyContentOverflow": false,
+    "rects": {
+      "diagram": {
+        "x": 16,
+        "y": 99,
+        "width": 358,
+        "height": 118,
+        "right": 374,
+        "bottom": 217
+      },
+      "form": {
+        "x": 16,
+        "y": 225,
+        "width": 358,
+        "height": 168,
+        "right": 374,
+        "bottom": 393
+      },
+      "result": {
+        "x": 16,
+        "y": 401,
+        "width": 358,
+        "height": 306.9,
+        "right": 374,
+        "bottom": 707.9
+      },
+      "code": {
+        "x": 16,
+        "y": 622,
+        "width": 358,
+        "height": 85.9,
+        "right": 374,
+        "bottom": 707.9
+      },
+      "toolbar": {
+        "x": 16,
+        "y": 715.9,
+        "width": 358,
+        "height": 46,
+        "right": 374,
+        "bottom": 761.9
+      },
+      "accordion": {
+        "x": 16,
+        "y": 769.9,
+        "width": 358,
+        "height": 27,
+        "right": 374,
+        "bottom": 796.9
+      }
+    },
+    "inputCount": 3,
+    "inputNames": [
+      "R",
+      "angle",
+      "stepD"
+    ],
+    "codeLine": "G02 X36 Z0 R5.0",
+    "basis": "前刀架 T3 · 图面顺时针 → G02",
+    "rearOn": false,
+    "diagramSvg": true
+  },
+  "p06RearDetail": {
+    "body": {
+      "top": 97,
+      "bottom": 824,
+      "clientHeight": 727,
+      "scrollHeight": 727
+    },
+    "childCount": 5,
+    "lastChildBottom": 796.9,
+    "contentInsideBody": true,
+    "bodyContentOverflow": false,
+    "rects": {
+      "diagram": {
+        "x": 16,
+        "y": 99,
+        "width": 358,
+        "height": 118,
+        "right": 374,
+        "bottom": 217
+      },
+      "form": {
+        "x": 16,
+        "y": 225,
+        "width": 358,
+        "height": 168,
+        "right": 374,
+        "bottom": 393
+      },
+      "result": {
+        "x": 16,
+        "y": 401,
+        "width": 358,
+        "height": 306.9,
+        "right": 374,
+        "bottom": 707.9
+      },
+      "code": {
+        "x": 16,
+        "y": 622,
+        "width": 358,
+        "height": 85.9,
+        "right": 374,
+        "bottom": 707.9
+      },
+      "toolbar": {
+        "x": 16,
+        "y": 715.9,
+        "width": 358,
+        "height": 46,
+        "right": 374,
+        "bottom": 761.9
+      },
+      "accordion": {
+        "x": 16,
+        "y": 769.9,
+        "width": 358,
+        "height": 27,
+        "right": 374,
+        "bottom": 796.9
+      }
+    },
+    "inputCount": 3,
+    "inputNames": [
+      "R",
+      "angle",
+      "stepD"
+    ],
+    "codeLine": "G03 X36 Z0 R5.0",
+    "basis": "后刀架 · 图面顺时针 → G03（前后刀架对调）",
+    "rearOn": true,
+    "diagramSvg": true
+  },
+  "p06PickerDetail": {
+    "picker": {
+      "width": 328,
+      "height": 183
+    },
+    "chipCount": 12,
+    "chipLabels": [
+      "01 直线—圆弧相切",
+      "02 两圆弧外切",
+      "03 两圆弧内切",
+      "04 圆弧—斜线—圆弧",
+      "05 台阶倒圆",
+      "06 凹圆弧切入",
+      "07 凸圆弧收尾",
+      "08 端面切弧",
+      "09 锥面切弧",
+      "10 圆弧螺纹入口",
+      "11 球面收尾",
+      "12 内孔圆弧过渡"
+    ],
+    "codeCard": false
+  },
+  "summary": {
+    "allPagesNoHorizontalOverflow": true,
+    "p05NoHorizontalOverflow": true,
+    "p06NoHorizontalOverflow": true,
+    "p05DetailNoHorizontalOverflow": true,
+    "p06ContentFits": true,
+    "p06RearNoHorizontalOverflow": true,
+    "p06PickerNoHorizontalOverflow": true
+  },
+  "judgmentLines": [
+    "allPagesNoHorizontalOverflow=true",
+    "p05NoHorizontalOverflow=true",
+    "p06NoHorizontalOverflow=true",
+    "p05DetailNoHorizontalOverflow=true (tileMaxRight=374)",
+    "p06ContentFits=true (body scrollHeight=727, clientHeight=727, lastChildBottom=796.9)",
+    "p06RearNoHorizontalOverflow=true",
+    "p06PickerChips=12",
+    "p05AccentDots=12"
+  ],
+  "exceptions": [],
+  "consoleErrors": [
+    "http://127.0.0.1:5199/favicon.ico :: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "screenshots": [
+    "docs/evidence/W4-C3/runs/p05-390x844.png",
+    "docs/evidence/W4-C3/runs/p06-390x844.png",
+    "docs/evidence/W4-C3/runs/p06-rear-390x844.png",
+    "docs/evidence/W4-C3/runs/p06-picker-390x844.png"
+  ]
+}

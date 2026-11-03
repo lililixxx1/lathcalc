@@ -1,0 +1,19 @@
+$ CHROME="C:/Program Files/Google/Chrome/Application/chrome.exe" CDP_PORT=9444 node docs/evidence/W4-C3/tools/measure-390-c3.mjs "http://127.0.0.1:5199/docs/evidence/W4-C3/tools/harness.html" "docs/evidence/W4-C3/runs" > docs/evidence/W4-C3/runs/measure-390.json 2> docs/evidence/W4-C3/runs/measure-390.stderr.txt
+REAL_EXIT=0
+--- judgmentLines (computed from measure-390.json) ---
+allPagesNoHorizontalOverflow=true
+p05NoHorizontalOverflow=true
+p06NoHorizontalOverflow=true
+p05DetailNoHorizontalOverflow=true (tileMaxRight=374)
+p06ContentFits=true (body scrollHeight=727, clientHeight=727, lastChildBottom=796.9)
+p06RearNoHorizontalOverflow=true
+p06PickerChips=12
+p05AccentDots=12
+--- screenshots ---
+docs/evidence/W4-C3/runs/p05-390x844.png
+docs/evidence/W4-C3/runs/p06-390x844.png
+docs/evidence/W4-C3/runs/p06-rear-390x844.png
+docs/evidence/W4-C3/runs/p06-picker-390x844.png
+--- exceptions/consoleErrors ---
+exceptions=[]
+consoleErrors=["http://127.0.0.1:5199/favicon.ico :: Failed to load resource: the server responded with a status of 404 (Not Found)"]
