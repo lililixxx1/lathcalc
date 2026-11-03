@@ -79,23 +79,8 @@ describe('createRouter', () => {
     expect(PAGE_IDS).toHaveLength(14);
   });
 
-  it('p02–p14 占位页渲染「建设中」与页面标题', async () => {
-    router = createRouter({ root: app });
-    await router.start();
-
-    for (const pageId of PAGE_IDS) {
-      if (pageId === 'p01') continue;
-      await router.navigate(pageId);
-      const page = app.querySelector<HTMLElement>(`.la-page[data-page="${pageId}"]`);
-      expect(page).not.toBeNull();
-      expect(page?.querySelector('.rc-placeholder')?.textContent).toContain('建设中');
-      const bodyTitle = page?.querySelector('.rc-placeholder__title')?.textContent ?? '';
-      const barTitle = page?.querySelector('.rc-topbar__title')?.textContent ?? '';
-      expect(bodyTitle.length).toBeGreaterThan(0);
-      expect(barTitle).toContain(bodyTitle);
-      expect(page?.querySelector('.rc-placeholder')?.textContent).toContain(`#/${pageId}`);
-    }
-  });
+  // 占位页断言已按卡拆分至 test/placeholder-w4c2..c5.test.ts（Lead 转红拆分，2026-11-03）：
+  // 各卡实现对应页面后删除自己的占位文件（B.2 规则），本文件不再断言占位内容。
 
   it('navigate 携带参数并落在 hash + 解析结果中', async () => {    router = createRouter({ root: app });
     await router.start();
