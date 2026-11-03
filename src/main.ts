@@ -1,7 +1,9 @@
 import './ui/tokens.css';
+import { createRouter } from './ui/router';
 
-// W4 波次落地 14 页与路由；骨架期仅保证可构建、可离线预览。
+// W4-C1 入口接线：挂载 hash 路由（14 页注册表见 src/ui/router.ts）。
 const app = document.querySelector<HTMLDivElement>('#app');
 if (app) {
-  app.innerHTML = '<div class="boot">车工算 LathCalc · 骨架构建中（W4 落地页面）</div>';
+  const router = createRouter({ root: app });
+  void router.start();
 }
