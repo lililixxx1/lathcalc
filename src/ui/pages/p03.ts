@@ -181,7 +181,7 @@ function formulaHtml(params: ThreadParams, dims: ThreadDimensions, m: number): s
   ].join('<br>');
 }
 
-/** 收藏事件（跨卡契约：detail = {kind,title,params,ts}；无监听方时无副作用） */
+/** 收藏事件（跨卡契约：detail = {kind,title,params,ts,favorite?}；无监听方时无副作用） */
 function dispatchSave(params: ThreadParams): void {
   document.dispatchEvent(
     new CustomEvent('lathcalc:save', {
@@ -195,6 +195,8 @@ function dispatchSave(params: ThreadParams): void {
           p: params.p,
         },
         ts: Date.now(),
+        // W4 集成裁决：星标语义 = 收藏 + 历史双落（store.recordSave 消费）。
+        favorite: true,
       },
     }),
   );

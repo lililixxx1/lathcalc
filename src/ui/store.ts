@@ -17,8 +17,9 @@
  *     detail: { kind: 'thread', title: 'M30 × 3.5 普通螺纹', params: { d: 30, p: 3.5 }, ts: Date.now() },
  *   }));
  * 本模块收到合法 detail 后写入**历史**（同 kind + title + params 去重后置顶）。
- * 收藏不自动写入：冻结的 detail 只有 kind/title/params/ts 四个键，没有收藏标志位；
- * 收藏由显式 API（addFavorite / toggleFavorite）以及 p14 的星标动作负责。
+ * 收藏不默认写入：detail 增可选键 `favorite?: boolean`（W4 收获后 Lead 集成裁决，
+ * 增量式演进——无该键行为不变）；`favorite: true` 时同步加入收藏（如 p03 顶栏星标）。
+ * 其余收藏入口仍走显式 API（addFavorite / toggleFavorite）与 p14 的星标动作。
  *
  * ===== 存储 =====
  * localStorage，key 前缀 lathcalc.：lathcalc.favorites / lathcalc.history。
@@ -43,12 +44,14 @@ export interface StoredEntryInput {
   ts?: number;
 }
 
-/** lathcalc:save 事件的 detail 契约。 */
+/** lathcalc:save 事件的 detail 契约（favorite 为可选键，缺省只落历史）。 */
 export interface SaveEventDetail {
   kind: string;
   title: string;
   params: Record<string, string | number>;
   ts?: number;
+  /** true = 同步加入收藏（星标语义）；缺省 = 仅记录历史。 */
+  favorite?: boolean;
 }
 
 export const STORAGE_PREFIX = 'lathcalc.';
@@ -246,8 +249,11 @@ export function toggleFavorite(
   return { favorite: true, entry: added };
 }
 
-/** 保存事件缺省落点：写入历史（见文件头语义说明）。 */
+/** 保存事件缺省落点：写入历史；favorite: true 时同步入收藏（见文件头语义说明）。 */
 export function recordSave(detail: SaveEventDetail): StoredEntry | null {
+  if (detail.favorite === true) {
+    addFavorite(detail);
+  }
   return addHistory(detail);
 }
 

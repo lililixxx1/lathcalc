@@ -184,6 +184,36 @@ describe('store · 历史事件路径（lathcalc:save）', () => {
     expect(saved?.title).toBe('Ø50 转速');
     expect(listHistory()).toHaveLength(1);
   });
+
+  it('favorite: true 双落收藏+历史（W4 集成裁决）；缺省仅落历史', () => {
+    // p03 星标语义：dispatch 带 favorite:true → 收藏与历史同时落
+    document.dispatchEvent(
+      new CustomEvent(SAVE_EVENT, {
+        detail: {
+          kind: 'thread',
+          title: 'M30 × 3.5 普通螺纹',
+          params: { d: 30, p: 3.5 },
+          ts: TS_A,
+          favorite: true,
+        },
+      }),
+    );
+    expect(listHistory()).toHaveLength(1);
+    expect(listFavorites()).toHaveLength(1);
+    expect(listFavorites()[0]?.title).toBe('M30 × 3.5 普通螺纹');
+    expect(isFavorited({ kind: 'thread', title: 'M30 × 3.5 普通螺纹', params: { d: 30, p: 3.5 } })).toBe(
+      true,
+    );
+
+    // 缺省（无 favorite 键）：只写历史，不进收藏
+    document.dispatchEvent(
+      new CustomEvent(SAVE_EVENT, {
+        detail: { kind: 'weight', title: '圆钢 Ø50×100', params: { d: 50, l: 100 }, ts: TS_B },
+      }),
+    );
+    expect(listHistory()).toHaveLength(2);
+    expect(listFavorites()).toHaveLength(1);
+  });
 });
 
 describe('store · 非法入参', () => {
