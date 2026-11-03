@@ -1,0 +1,3 @@
+== dist 外联扫描（http/https 引用，排除 sourcemap/注释） ==
+      1 https://bit.ly/wb-precache`;console.warn
+== 扫描完成 ==

@@ -1,0 +1,62 @@
+{
+  "ok": true,
+  "count": 14,
+  "manifest": [
+    {
+      "file": "design-p01-390x844.png",
+      "label": "0101 首页 · 九宫格 + 最近使用"
+    },
+    {
+      "file": "design-p02-390x844.png",
+      "label": "0202 螺纹 · 选型"
+    },
+    {
+      "file": "design-p03-390x844.png",
+      "label": "0303 螺纹 · 结果卡"
+    },
+    {
+      "file": "design-p04-390x844.png",
+      "label": "0404 G76 参考程序"
+    },
+    {
+      "file": "design-p05-390x844.png",
+      "label": "0505 切点 · 工况图库（12 种）"
+    },
+    {
+      "file": "design-p06-390x844.png",
+      "label": "0606 切点 · 计算 + 程序行"
+    },
+    {
+      "file": "design-p07-390x844.png",
+      "label": "0707 锥度 · 莫氏"
+    },
+    {
+      "file": "design-p08-390x844.png",
+      "label": "0808 公差配合"
+    },
+    {
+      "file": "design-p09-390x844.png",
+      "label": "0909 转速 · 线速度（自绘键盘）"
+    },
+    {
+      "file": "design-p10-390x844.png",
+      "label": "1010 切削参数 · 国产牌号（示例）"
+    },
+    {
+      "file": "design-p11-390x844.png",
+      "label": "1111 重量"
+    },
+    {
+      "file": "design-p12-390x844.png",
+      "label": "1212 三角"
+    },
+    {
+      "file": "design-p13-390x844.png",
+      "label": "1313 速查"
+    },
+    {
+      "file": "design-p14-390x844.png",
+      "label": "1414 收藏 · 历史 · 分享长图"
+    }
+  ]
+}

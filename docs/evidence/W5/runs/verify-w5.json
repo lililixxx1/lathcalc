@@ -1,0 +1,295 @@
+{
+  "url": "http://127.0.0.1:4173/",
+  "pages": [
+    {
+      "pageId": "p01",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "documentElement": {
+        "scrollWidth": 390,
+        "clientWidth": 390
+      },
+      "horizontalOverflow": false,
+      "pageHorizontalOverflow": false,
+      "bodyHorizontalOverflow": false,
+      "textSample": "螺纹底孔 · 三针 · 尺寸表G76 程序参考程序 · 免费生成圆弧切点工况图库 · 刀补锥度 · 莫氏半角 · 查表公差配合GB/T 1800 偏差转速 · 线速度输入即算切削参数国产牌号 · 示例库重量圆钢 · 六方 · 管三角解三角形",
+      "hash": "#/"
+    },
+    {
+      "pageId": "p02",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "documentElement": {
+        "scrollWidth": 390,
+        "clientWidth": 390
+      },
+      "horizontalOverflow": false,
+      "pageHorizontalOverflow": false,
+      "bodyHorizontalOverflow": false,
+      "textSample": "普通 M梯形 Tr55° 管美制 UN\n    搜索\n    \n    \n  粗牙细牙按螺距筛选M1 × 0.20.870M1 × 0.250.838M1.1 × 0.20.970M1.1 × 0.250.938M1.2 × 0.21.07",
+      "hash": "#/p02"
+    },
+    {
+      "pageId": "p03",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "documentElement": {
+        "scrollWidth": 390,
+        "clientWidth": 390
+      },
+      "horizontalOverflow": false,
+      "pageHorizontalOverflow": false,
+      "bodyHorizontalOverflow": false,
+      "textSample": "普通螺纹 · 粗牙 · 螺距 P 3.5 mm大径 d30.000mm中径 d₂27.727mm小径 d₁26.211mm牙型高 H₁1.895mm底孔钻头≈ 26.5mm三针量针 d₀2.021mm三针跨距 M30.758mm\n    \n",
+      "hash": "#/p03?family=metric&spec=M30%20%C3%97%203.5&d=30&p=3.5"
+    },
+    {
+      "pageId": "p04",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "documentElement": {
+        "scrollWidth": 390,
+        "clientWidth": 390
+      },
+      "horizontalOverflow": false,
+      "pageHorizontalOverflow": false,
+      "bodyHorizontalOverflow": false,
+      "textSample": "FANUC广数 GSKKND华中GSK / KND / 华中 · 模板待补（置灰）带入参数（来自上一步）牙底 X26.211终点 Z-30.0牙高 P1894 μm首切 Q400 μm导程 F3.5精修 R0.05G76 P021060 Q",
+      "hash": "#/p04?family=metric&spec=M30%20%C3%97%203.5&d=30&p=3.5"
+    },
+    {
+      "pageId": "p05",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "documentElement": {
+        "scrollWidth": 390,
+        "clientWidth": 390
+      },
+      "horizontalOverflow": false,
+      "pageHorizontalOverflow": false,
+      "bodyHorizontalOverflow": false,
+      "textSample": "按加工情境选择工况，橙点即切点12 种 · 持续补充直线—圆弧相切R · α · 台阶Ø两圆弧外切R1 · R2 · dZ · X0基准两圆弧内切R1 > R2 · dZ · X0基准圆弧—斜线—圆弧R1 · R2 · α · L=R1+R",
+      "hash": "#/p05"
+    },
+    {
+      "pageId": "p06",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "documentElement": {
+        "scrollWidth": 390,
+        "clientWidth": 390
+      },
+      "horizontalOverflow": false,
+      "pageHorizontalOverflow": false,
+      "bodyHorizontalOverflow": false,
+      "textSample": "\n    圆弧 R\n    \n    mm\n  \n    斜角 α\n    \n    °\n  \n    台阶 Ø\n    \n    mm\n  切点 X36mm切点 Z0mm圆心 · RX28.929 · Z3.536 · R5.0判向依据前",
+      "hash": "#/p06?case=AC01"
+    },
+    {
+      "pageId": "p07",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "documentElement": {
+        "scrollWidth": 390,
+        "clientWidth": 390
+      },
+      "horizontalOverflow": false,
+      "pageHorizontalOverflow": false,
+      "bodyHorizontalOverflow": false,
+      "textSample": "计算莫氏对照MT0MT1MT2MT3MT4MT5MT6锥度1:19.254半角 α/21°29′15″GB/T 1443-2016 莫氏 4 号；副证 LittleMachineShop taper/ft 0.6233、angle 1.48",
+      "hash": "#/p07?mode=morse&morse=4"
+    },
+    {
+      "pageId": "p08",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "documentElement": {
+        "scrollWidth": 390,
+        "clientWidth": 390
+      },
+      "horizontalOverflow": false,
+      "pageHorizontalOverflow": false,
+      "bodyHorizontalOverflow": false,
+      "textSample": "\n    基本尺寸\n    \n    mm\n  孔 H轴 hIT5IT6IT7IT8IT9IT10IT11IT12+0.021上偏差 ES0.000下偏差 EI0.021公差 T常用配合（Ø30 H7 …）H7/g6 间隙H7/k6 过渡H",
+      "hash": "#/p08?d=30&grade=IT7"
+    },
+    {
+      "pageId": "p09",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "documentElement": {
+        "scrollWidth": 390,
+        "clientWidth": 390
+      },
+      "horizontalOverflow": false,
+      "pageHorizontalOverflow": false,
+      "bodyHorizontalOverflow": false,
+      "textSample": "求转速 n求线速度 Vc\n    工件直径 D\n    \n    mm\n  \n    切削速度 Vc\n    \n    m/min\n  主轴转速 n955r/minvf = f·n（未输入进给 f，暂不计算）\n    \n      \n   ",
+      "hash": "#/p09?d=50&vc=150"
+    },
+    {
+      "pageId": "p10",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "documentElement": {
+        "scrollWidth": 390,
+        "clientWidth": 390
+      },
+      "horizontalOverflow": false,
+      "pageHorizontalOverflow": false,
+      "bodyHorizontalOverflow": false,
+      "textSample": "工件材料（国产牌号库）全部碳钢合金钢铸铁不锈钢有色金属工程塑料硬质合金刀高速钢刀线速度 Vc120 – 180m/min进给量 f0.2 – 0.4mm/r带入 Ø50 → 转速 n764 – 1146r/min45 钢碳钢 · 示例·待复",
+      "hash": "#/p10"
+    },
+    {
+      "pageId": "p11",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "documentElement": {
+        "scrollWidth": 390,
+        "clientWidth": 390
+      },
+      "horizontalOverflow": false,
+      "pageHorizontalOverflow": false,
+      "bodyHorizontalOverflow": false,
+      "textSample": "圆钢六方钢管平板\n    直径 D\n    \n    mm\n  \n    长度 L\n    \n    mm\n  碳钢 7.85合金钢 7.85304 不锈钢 7.93316 不锈钢 7.98HT200 灰铸铁 7.20铝 2.706061 ",
+      "hash": "#/p11"
+    },
+    {
+      "pageId": "p12",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "documentElement": {
+        "scrollWidth": 390,
+        "clientWidth": 390
+      },
+      "horizontalOverflow": false,
+      "pageHorizontalOverflow": false,
+      "bodyHorizontalOverflow": false,
+      "textSample": "\n    \n      \n      c 50\n      b 40\n      a 30\n      C\n      A\n      B\n    \n  abc∠A36.87°∠B53.13°∠C90.00°直角三角形勾股校验通过\n    ",
+      "hash": "#/p12"
+    },
+    {
+      "pageId": "p13",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "documentElement": {
+        "scrollWidth": 390,
+        "clientWidth": 390
+      },
+      "horizontalOverflow": false,
+      "pageHorizontalOverflow": false,
+      "bodyHorizontalOverflow": false,
+      "textSample": "G 代码螺纹莫氏钻头硬度G01直线插补G02顺时针圆弧插补（图面顺时针＝前刀架 G02；X 上 Z 右、自 +Y 视；后刀架翻转）G03逆时针圆弧插补（图面逆时针＝前刀架 G03；X 上 Z 右、自 +Y 视；后刀架翻转）G04暂停延时G2",
+      "hash": "#/p13"
+    },
+    {
+      "pageId": "p14",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "documentElement": {
+        "scrollWidth": 390,
+        "clientWidth": 390
+      },
+      "horizontalOverflow": false,
+      "pageHorizontalOverflow": false,
+      "bodyHorizontalOverflow": false,
+      "textSample": "收藏 0历史暂无收藏 · 在历史条目点星标即可收藏生成分享长图长图可直接发微信群 · 仅保存在本机",
+      "hash": "#/p14"
+    }
+  ],
+  "ok_pages14": true,
+  "favicon404Count": 0,
+  "m30chain": {
+    "elapsedMs": 207,
+    "budgetMs": 30000,
+    "ok": true,
+    "steps": [
+      {
+        "name": "p01 点击「螺纹」入口 → p02",
+        "ms": 13,
+        "ok": true
+      },
+      {
+        "name": "p02 点击 M30 × 3.5 行 → p03",
+        "ms": 5,
+        "ok": true
+      },
+      {
+        "name": "p03 金值断言 d2=27.727 / d1=26.211 / 底孔 26.5",
+        "ms": 1,
+        "ok": true,
+        "values": {
+          "d2": "27.727",
+          "d1": "26.211",
+          "drill": "≈ 26.5"
+        }
+      },
+      {
+        "name": "p03 点击「生成 G76 程序」→ p04",
+        "ms": 6,
+        "ok": true
+      },
+      {
+        "name": "p04 两行 G76 逐字断言（P1894 禁 1895）",
+        "ms": 1,
+        "ok": true,
+        "lines": [
+          "G76 P021060 Q100 R0.05",
+          "G76 X26.211 Z-30. P1894 Q400 F3.5"
+        ]
+      },
+      {
+        "name": "p04 返回 p03 点星标 → 收藏+历史双落",
+        "ms": 170,
+        "ok": true,
+        "store": "1/1"
+      },
+      {
+        "name": "p01 最近使用已动态显示 M30 条目（W5 集成①）",
+        "ms": 6,
+        "ok": true,
+        "first": "M30 × 3.5"
+      }
+    ]
+  },
+  "ok_m30chain": true,
+  "offline": {
+    "swControlled": true,
+    "offlineRendered": true,
+    "textSample": "螺纹底孔 · 三针 · 尺寸表G76 程序参考程序 · 免费生成圆弧切点工况图库 · 刀补锥度 · 莫氏半角 · 查表公差配合GB/T 1800 偏差转速 · ",
+    "ok": true
+  },
+  "ok_offline": true,
+  "exceptions": [],
+  "consoleErrors": [],
+  "ok_all": true
+}
