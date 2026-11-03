@@ -1,0 +1,4 @@
+$ cd <TREE>
+$ npx tsc --noEmit
+
+REAL_EXIT=0
