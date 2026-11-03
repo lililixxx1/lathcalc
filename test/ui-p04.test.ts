@@ -149,8 +149,9 @@ describe('p04 系统页签（仅 FANUC）', () => {
     expect(items[0]?.classList.contains('on')).toBe(true);
     expect(items.slice(1).map((item) => item.disabled)).toEqual([true, true, true]);
 
-    // A4 修复：待补徽标随系统页签行（.rc-p04__sysrow），不再挂在带入参数行
-    expect(page().querySelector('.rc-p04__sysrow .la-badge')?.textContent).toBe('待补');
+    // A4 修复+复审修正：待补以页签行下小字注呈现（独立徽标会挤爆 390px 页签行），
+    // 不再挂在带入参数行
+    expect(page().querySelector('.rc-p04__sysnote')?.textContent).toContain('待补');
     expect(page().querySelector('.rc-p04__meta .la-badge')).toBeNull();
 
     items[1]?.click();

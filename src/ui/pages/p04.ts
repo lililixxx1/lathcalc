@@ -14,7 +14,6 @@
  */
 import type { PageContext, PageModule } from '../router';
 import {
-  Badge,
   Button,
   CodeCard,
   Eyebrow,
@@ -72,8 +71,9 @@ const P_BITS_NOTE = 'P021060 = 02 精车次数 · 10 退尾量（倒角量）· 
 const CSS = `
 .rc-p04__body { padding-top: 2px; }
 .rc-p04__meta { display: flex; align-items: center; gap: 8px; flex: 0 0 auto; }
-/* A4 修复：待补徽标语义属系统页签（GSK/KND/华中置灰），随页签行排布而非参数行 */
-.rc-p04__sysrow { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex: 0 0 auto; }
+/* A4 修复+复审修正：待补语义属系统页签；独立徽标挤爆页签行，改为行下右对齐小字注 */
+.rc-p04__syswrap { flex: 0 0 auto; }
+.rc-p04__sysnote { display: block; text-align: right; margin-top: 2px; }
 .rc-p04__pnote { white-space: pre-line; }
 /* 六格参数在 390px 下保持单行（设计稿 3 列紧凑排布） */
 .rc-p04__body .rc-param { padding: 7px 8px; gap: 4px; }
@@ -137,15 +137,18 @@ function metaRow(): HTMLElement {
   return row;
 }
 
-/** 系统页签行 + 「待补」徽标（WAVE-PLAN §3 裁决 1：仅 FANUC，GSK/KND/华中置灰待补）。 */
+/** 系统页签行 + 「待补」脚注（WAVE-PLAN §3 裁决 1：仅 FANUC，GSK/KND/华中置灰待补）。
+ *  A4 复审修正：独立 Badge 会挤爆 390px 页签行（FANUC/GSK/KND/华中 + 徽标放不下，
+ *  设计稿页签区本无徽标位）；改为页签行下右对齐小字注，零挤压、语义保留。 */
 function systemsRowWithBadge(systems: HTMLElement): HTMLElement {
-  const row = document.createElement('div');
-  row.className = 'rc-p04__sysrow';
-  const pending = Badge('待补', { gray: true });
-  pending.setAttribute('title', 'GSK / KND / 华中 待补');
-  pending.setAttribute('aria-label', 'GSK / KND / 华中 待补');
-  row.append(systems, pending);
-  return row;
+  const wrap = document.createElement('div');
+  wrap.className = 'rc-p04__syswrap';
+  const note = SubText('GSK / KND / 华中 · 模板待补（置灰）');
+  note.classList.add('rc-p04__sysnote');
+  note.setAttribute('title', 'GSK / KND / 华中 待补');
+  note.setAttribute('aria-label', 'GSK / KND / 华中 待补');
+  wrap.append(systems, note);
+  return wrap;
 }
 
 export const title = 'G76 参考程序';
