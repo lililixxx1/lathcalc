@@ -9,7 +9,8 @@
  * 数据口径（WAVE-PLAN §3 裁决 3）：
  *   - src/data/materials.json 为示例参数库，非标准值；
  *   - 页内固定警示「示例数据 · 以试切为准」；
- *   - 每行 source 原文展示（含「示例·待复核，以试切为准」）。
+ *   - 每行 source 原文展示，UI 剥除「（WAVE-PLAN …）」内部括注（U2 裁决 B，
+ *     数据档原文不动，完整出处见 src/data/PROVENANCE.md）。
  *   数值换算（Vc 区间 → 转速区间）走 src/core/speed.ts `spindleSpeed`，
  *   带入直径取设计稿示例 Ø50（仅展示用，不参与参数库数据）。
  *
@@ -155,7 +156,9 @@ const page: PageModule = {
             ListRow({
               name: row.name,
               value: rangeText(vcRangeOf(row, tool)),
-              description: `${row.group} · ${row.source}`,
+              // W4-C4 U2 裁决 B：数据 source 原文含内部计划括注（（WAVE-PLAN …）），
+              // 数据档不动（W3 冻结资产，出处见 PROVENANCE）；UI 显示层剥除内部括注。
+              description: `${row.group} · ${row.source.replace(/（WAVE-PLAN[^）]*）/, '')}`,
               selected: row.key === selectedKey,
               trailing: 'none',
               ariaLabel: `${row.name}：Vc ${rangeText(vcRangeOf(row, tool))} m/min，示例·待复核`,
