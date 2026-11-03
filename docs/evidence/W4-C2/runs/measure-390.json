@@ -1,0 +1,554 @@
+{
+  "tool": "chrome-headless-cdp",
+  "chromeVersion": "Chrome/156.0.8078.76",
+  "url": "http://127.0.0.1:4173/",
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "deviceScaleFactor": 1,
+    "mobile": true
+  },
+  "results": [
+    {
+      "name": "p02-metric",
+      "hash": "#/p02",
+      "pageId": "p02",
+      "eyebrow": null,
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 1
+      },
+      "documentElement": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 844,
+        "clientHeight": 844,
+        "overflowX": "visible",
+        "overflowY": "visible"
+      },
+      "page": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 844,
+        "clientHeight": 844,
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      },
+      "body": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 727,
+        "clientHeight": 727,
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      },
+      "p02List": {
+        "scrollWidth": 328,
+        "clientWidth": 328,
+        "scrollHeight": 6406,
+        "clientHeight": 466,
+        "overflowX": "auto",
+        "overflowY": "auto",
+        "rowCount": 149
+      },
+      "rowCount": 149,
+      "resultLabels": [],
+      "codeLines": [],
+      "warnText": null,
+      "horizontalOverflow": false,
+      "documentFitsHeight": true,
+      "pageFits": true
+    },
+    {
+      "name": "p02-trapezoid",
+      "hash": "#/p02",
+      "pageId": "p02",
+      "eyebrow": null,
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 1
+      },
+      "documentElement": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 844,
+        "clientHeight": 844,
+        "overflowX": "visible",
+        "overflowY": "visible"
+      },
+      "page": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 844,
+        "clientHeight": 844,
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      },
+      "body": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 727,
+        "clientHeight": 727,
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      },
+      "p02List": {
+        "scrollWidth": 328,
+        "clientWidth": 328,
+        "scrollHeight": 1762,
+        "clientHeight": 466,
+        "overflowX": "auto",
+        "overflowY": "auto",
+        "rowCount": 41
+      },
+      "rowCount": 41,
+      "resultLabels": [],
+      "codeLines": [],
+      "warnText": null,
+      "horizontalOverflow": false,
+      "documentFitsHeight": true,
+      "pageFits": true
+    },
+    {
+      "name": "p02-pipe",
+      "hash": "#/p02",
+      "pageId": "p02",
+      "eyebrow": null,
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 1
+      },
+      "documentElement": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 844,
+        "clientHeight": 844,
+        "overflowX": "visible",
+        "overflowY": "visible"
+      },
+      "page": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 844,
+        "clientHeight": 844,
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      },
+      "body": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 727,
+        "clientHeight": 727,
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      },
+      "p02List": {
+        "scrollWidth": 328,
+        "clientWidth": 328,
+        "scrollHeight": 558,
+        "clientHeight": 466,
+        "overflowX": "auto",
+        "overflowY": "auto",
+        "rowCount": 13
+      },
+      "rowCount": 13,
+      "resultLabels": [],
+      "codeLines": [],
+      "warnText": null,
+      "horizontalOverflow": false,
+      "documentFitsHeight": true,
+      "pageFits": true
+    },
+    {
+      "name": "p02-unified",
+      "hash": "#/p02",
+      "pageId": "p02",
+      "eyebrow": null,
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 1
+      },
+      "documentElement": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 844,
+        "clientHeight": 844,
+        "overflowX": "visible",
+        "overflowY": "visible"
+      },
+      "page": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 844,
+        "clientHeight": 844,
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      },
+      "body": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 727,
+        "clientHeight": 727,
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      },
+      "p02List": {
+        "scrollWidth": 328,
+        "clientWidth": 328,
+        "scrollHeight": 859,
+        "clientHeight": 466,
+        "overflowX": "auto",
+        "overflowY": "auto",
+        "rowCount": 20
+      },
+      "rowCount": 20,
+      "resultLabels": [],
+      "codeLines": [],
+      "warnText": null,
+      "horizontalOverflow": false,
+      "documentFitsHeight": true,
+      "pageFits": true
+    },
+    {
+      "name": "p03-M30x3.5",
+      "hash": "#/p03?family=metric&spec=M30+%C3%97+3.5&d=30&p=3.5",
+      "pageId": "p03",
+      "eyebrow": "普通螺纹 · 粗牙 · 螺距 P 3.5 mm",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 1
+      },
+      "documentElement": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 844,
+        "clientHeight": 844,
+        "overflowX": "visible",
+        "overflowY": "visible"
+      },
+      "page": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 844,
+        "clientHeight": 844,
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      },
+      "body": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 727,
+        "clientHeight": 727,
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      },
+      "p02List": null,
+      "rowCount": 0,
+      "resultLabels": [
+        "大径 d",
+        "中径 d₂",
+        "小径 d₁",
+        "牙型高 H₁",
+        "底孔钻头",
+        "三针量针 d₀",
+        "三针跨距 M"
+      ],
+      "codeLines": [],
+      "warnText": null,
+      "horizontalOverflow": false,
+      "documentFitsHeight": true,
+      "pageFits": true
+    },
+    {
+      "name": "p03-Tr40x7",
+      "hash": "#/p03?family=trapezoid&spec=Tr40+%C3%97+7&d=40&p=7",
+      "pageId": "p03",
+      "eyebrow": "梯形螺纹 · 螺距 P 7 mm",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 1
+      },
+      "documentElement": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 844,
+        "clientHeight": 844,
+        "overflowX": "visible",
+        "overflowY": "visible"
+      },
+      "page": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 844,
+        "clientHeight": 844,
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      },
+      "body": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 733,
+        "clientHeight": 727,
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      },
+      "p02List": null,
+      "rowCount": 0,
+      "resultLabels": [
+        "大径 d",
+        "中径 d₂",
+        "小径 d₁",
+        "牙型高 H₁",
+        "底孔钻头",
+        "三针量针 d₀",
+        "三针跨距 M",
+        "牙顶间隙 ac"
+      ],
+      "codeLines": [],
+      "warnText": null,
+      "horizontalOverflow": false,
+      "documentFitsHeight": true,
+      "pageFits": true
+    },
+    {
+      "name": "p03-G1/2",
+      "hash": "#/p03?family=pipe&spec=G1%2F2&d=20.955&p=1.8142857142857143",
+      "pageId": "p03",
+      "eyebrow": "55° 管螺纹 · 14 tpi · 螺距 P 1.814 mm",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 1
+      },
+      "documentElement": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 844,
+        "clientHeight": 844,
+        "overflowX": "visible",
+        "overflowY": "visible"
+      },
+      "page": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 844,
+        "clientHeight": 844,
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      },
+      "body": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 727,
+        "clientHeight": 727,
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      },
+      "p02List": null,
+      "rowCount": 0,
+      "resultLabels": [
+        "大径 d",
+        "中径 d₂",
+        "小径 d₁",
+        "牙型高 H₁",
+        "底孔钻头",
+        "三针量针 d₀",
+        "三针跨距 M"
+      ],
+      "codeLines": [],
+      "warnText": null,
+      "horizontalOverflow": false,
+      "documentFitsHeight": true,
+      "pageFits": true
+    },
+    {
+      "name": "p04-M30x3.5",
+      "hash": "#/p04?family=metric&spec=M30+%C3%97+3.5&d=30&p=3.5",
+      "pageId": "p04",
+      "eyebrow": "带入参数（来自上一步）",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 1
+      },
+      "documentElement": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 844,
+        "clientHeight": 844,
+        "overflowX": "visible",
+        "overflowY": "visible"
+      },
+      "page": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 844,
+        "clientHeight": 844,
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      },
+      "body": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 727,
+        "clientHeight": 727,
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      },
+      "p02List": null,
+      "rowCount": 0,
+      "resultLabels": [],
+      "codeLines": [
+        "G76 P021060 Q100 R0.05",
+        "G76 X26.211 Z-30. P1894 Q400 F3.5"
+      ],
+      "warnText": "代码为参考模板，上机前请核对系统、刀具、材料与安全间距。",
+      "horizontalOverflow": false,
+      "documentFitsHeight": true,
+      "pageFits": true
+    },
+    {
+      "name": "p04-G1/2",
+      "hash": "#/p04?family=pipe&spec=G1%2F2&d=20.955&p=1.8142857142857143",
+      "pageId": "p04",
+      "eyebrow": "带入参数（来自上一步）",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 1
+      },
+      "documentElement": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 844,
+        "clientHeight": 844,
+        "overflowX": "visible",
+        "overflowY": "visible"
+      },
+      "page": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 844,
+        "clientHeight": 844,
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      },
+      "body": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 727,
+        "clientHeight": 727,
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      },
+      "p02List": null,
+      "rowCount": 0,
+      "resultLabels": [],
+      "codeLines": [
+        "G76 P021060 Q100 R0.05",
+        "G76 X18.632 Z-30. P1162 Q400 F1.814"
+      ],
+      "warnText": "代码为参考模板，上机前请核对系统、刀具、材料与安全间距。",
+      "horizontalOverflow": false,
+      "documentFitsHeight": true,
+      "pageFits": true
+    },
+    {
+      "name": "p04-empty",
+      "hash": "#/p04",
+      "pageId": "p04",
+      "eyebrow": null,
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 1
+      },
+      "documentElement": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 844,
+        "clientHeight": 844,
+        "overflowX": "visible",
+        "overflowY": "visible"
+      },
+      "page": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 844,
+        "clientHeight": 844,
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      },
+      "body": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 727,
+        "clientHeight": 727,
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      },
+      "p02List": null,
+      "rowCount": 0,
+      "resultLabels": [],
+      "codeLines": [],
+      "warnText": "未选择螺纹规格。请先在「螺纹 · 选型」中选择规格，再生成 G76 程序。",
+      "horizontalOverflow": false,
+      "documentFitsHeight": true,
+      "pageFits": true
+    }
+  ],
+  "summary": {
+    "targetCount": 10,
+    "horizontalOverflowCount": 0,
+    "noHorizontalOverflow": true,
+    "allDocumentsFitHeight": true,
+    "p02RowCounts": [
+      {
+        "name": "p02-metric",
+        "rowCount": 149
+      },
+      {
+        "name": "p02-trapezoid",
+        "rowCount": 41
+      },
+      {
+        "name": "p02-pipe",
+        "rowCount": 13
+      },
+      {
+        "name": "p02-unified",
+        "rowCount": 20
+      }
+    ],
+    "p04CodeLines": [
+      {
+        "name": "p04-M30x3.5",
+        "codeLines": [
+          "G76 P021060 Q100 R0.05",
+          "G76 X26.211 Z-30. P1894 Q400 F3.5"
+        ]
+      },
+      {
+        "name": "p04-G1/2",
+        "codeLines": [
+          "G76 P021060 Q100 R0.05",
+          "G76 X18.632 Z-30. P1162 Q400 F1.814"
+        ]
+      },
+      {
+        "name": "p04-empty",
+        "codeLines": []
+      }
+    ]
+  },
+  "exceptions": [],
+  "consoleErrors": [
+    "http://127.0.0.1:4173/favicon.ico :: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ]
+}
