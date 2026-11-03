@@ -140,7 +140,7 @@ function metaRow(): HTMLElement {
 /** 系统页签行 + 「待补」脚注（WAVE-PLAN §3 裁决 1：仅 FANUC，GSK/KND/华中置灰待补）。
  *  A4 复审修正：独立 Badge 会挤爆 390px 页签行（FANUC/GSK/KND/华中 + 徽标放不下，
  *  设计稿页签区本无徽标位）；改为页签行下右对齐小字注，零挤压、语义保留。 */
-function systemsRowWithBadge(systems: HTMLElement): HTMLElement {
+function systemsRowWithNote(systems: HTMLElement): HTMLElement {
   const wrap = document.createElement('div');
   wrap.className = 'rc-p04__syswrap';
   const note = SubText('GSK / KND / 华中 · 模板待补（置灰）');
@@ -161,7 +161,7 @@ const page: PageModule = {
     const params = readParams(ctx.params);
     const body = createBody({ className: 'rc-p04__body', ariaLabel: 'G76 参考程序' });
     const top = TopBar({ title: 'G76 参考程序', badge: 'FANUC' });
-    const systems = systemsRowWithBadge(systemsRow());
+    const systems = systemsRowWithNote(systemsRow());
 
     if (!params) {
       // 首页 G76 直达（#/p04，无参数）：容忍空参数并提示先选型（README §5.2）
