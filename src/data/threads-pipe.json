@@ -1,1 +1,106 @@
-[]
+[
+  {
+    "family": "pipe55",
+    "designation": "G1/8",
+    "pitch": 0.9071428571428571,
+    "major": 9.728,
+    "tpi": 28,
+    "source": "GB/T 7307-2001；ISO 228-1"
+  },
+  {
+    "family": "pipe55",
+    "designation": "G1/4",
+    "pitch": 1.3368421052631578,
+    "major": 13.157,
+    "tpi": 19,
+    "source": "GB/T 7307-2001；ISO 228-1"
+  },
+  {
+    "family": "pipe55",
+    "designation": "G3/8",
+    "pitch": 1.3368421052631578,
+    "major": 16.662,
+    "tpi": 19,
+    "source": "GB/T 7307-2001；ISO 228-1"
+  },
+  {
+    "family": "pipe55",
+    "designation": "G1/2",
+    "pitch": 1.8142857142857143,
+    "major": 20.955,
+    "tpi": 14,
+    "source": "GB/T 7307-2001；ISO 228-1"
+  },
+  {
+    "family": "pipe55",
+    "designation": "G5/8",
+    "pitch": 1.8142857142857143,
+    "major": 22.911,
+    "tpi": 14,
+    "source": "GB/T 7307-2001；ISO 228-1"
+  },
+  {
+    "family": "pipe55",
+    "designation": "G3/4",
+    "pitch": 1.8142857142857143,
+    "major": 26.441,
+    "tpi": 14,
+    "source": "GB/T 7307-2001；ISO 228-1"
+  },
+  {
+    "family": "pipe55",
+    "designation": "G7/8",
+    "pitch": 1.8142857142857143,
+    "major": 30.201,
+    "tpi": 14,
+    "source": "GB/T 7307-2001；ISO 228-1"
+  },
+  {
+    "family": "pipe55",
+    "designation": "G1",
+    "pitch": 2.309090909090909,
+    "major": 33.249,
+    "tpi": 11,
+    "source": "GB/T 7307-2001；ISO 228-1"
+  },
+  {
+    "family": "pipe55",
+    "designation": "G1 1/8",
+    "pitch": 2.309090909090909,
+    "major": 37.897,
+    "tpi": 11,
+    "source": "GB/T 7307-2001；ISO 228-1"
+  },
+  {
+    "family": "pipe55",
+    "designation": "G1 1/4",
+    "pitch": 2.309090909090909,
+    "major": 41.91,
+    "tpi": 11,
+    "source": "GB/T 7307-2001；ISO 228-1"
+  },
+  {
+    "family": "pipe55",
+    "designation": "G1 1/2",
+    "pitch": 2.309090909090909,
+    "major": 47.803,
+    "tpi": 11,
+    "source": "GB/T 7307-2001；ISO 228-1"
+  },
+  {
+    "family": "pipe55",
+    "designation": "G1 3/4",
+    "pitch": 2.309090909090909,
+    "major": 53.746,
+    "tpi": 11,
+    "source": "GB/T 7307-2001；ISO 228-1"
+  },
+  {
+    "family": "pipe55",
+    "designation": "G2",
+    "pitch": 2.309090909090909,
+    "major": 59.614,
+    "tpi": 11,
+    "source": "GB/T 7307-2001；ISO 228-1"
+  }
+]

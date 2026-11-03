@@ -1,1 +1,289 @@
-[]
+[
+  {
+    "family": "trapezoid",
+    "designation": "Tr8×1.5",
+    "pitch": 1.5,
+    "major": 8,
+    "source": "GB/T 5796.2/5796.3-2005；DIN 103"
+  },
+  {
+    "family": "trapezoid",
+    "designation": "Tr9×1.5",
+    "pitch": 1.5,
+    "major": 9,
+    "source": "GB/T 5796.2/5796.3-2005；DIN 103"
+  },
+  {
+    "family": "trapezoid",
+    "designation": "Tr9×2",
+    "pitch": 2,
+    "major": 9,
+    "source": "GB/T 5796.2/5796.3-2005；DIN 103"
+  },
+  {
+    "family": "trapezoid",
+    "designation": "Tr10×1.5",
+    "pitch": 1.5,
+    "major": 10,
+    "source": "GB/T 5796.2/5796.3-2005；DIN 103"
+  },
+  {
+    "family": "trapezoid",
+    "designation": "Tr10×2",
+    "pitch": 2,
+    "major": 10,
+    "source": "GB/T 5796.2/5796.3-2005；DIN 103"
+  },
+  {
+    "family": "trapezoid",
+    "designation": "Tr11×2",
+    "pitch": 2,
+    "major": 11,
+    "source": "GB/T 5796.2/5796.3-2005；DIN 103"
+  },
+  {
+    "family": "trapezoid",
+    "designation": "Tr11×3",
+    "pitch": 3,
+    "major": 11,
+    "source": "GB/T 5796.2/5796.3-2005；DIN 103"
+  },
+  {
+    "family": "trapezoid",
+    "designation": "Tr12×2",
+    "pitch": 2,
+    "major": 12,
+    "source": "GB/T 5796.2/5796.3-2005；DIN 103"
+  },
+  {
+    "family": "trapezoid",
+    "designation": "Tr12×3",
+    "pitch": 3,
+    "major": 12,
+    "source": "GB/T 5796.2/5796.3-2005；DIN 103"
+  },
+  {
+    "family": "trapezoid",
+    "designation": "Tr14×2",
+    "pitch": 2,
+    "major": 14,
+    "source": "GB/T 5796.2/5796.3-2005；DIN 103"
+  },
+  {
+    "family": "trapezoid",
+    "designation": "Tr14×3",
+    "pitch": 3,
+    "major": 14,
+    "source": "GB/T 5796.2/5796.3-2005；DIN 103"
+  },
+  {
+    "family": "trapezoid",
+    "designation": "Tr16×2",
+    "pitch": 2,
+    "major": 16,
+    "source": "GB/T 5796.2/5796.3-2005；DIN 103"
+  },
+  {
+    "family": "trapezoid",
+    "designation": "Tr16×4",
+    "pitch": 4,
+    "major": 16,
+    "source": "GB/T 5796.2/5796.3-2005；DIN 103"
+  },
+  {
+    "family": "trapezoid",
+    "designation": "Tr18×2",
+    "pitch": 2,
+    "major": 18,
+    "source": "GB/T 5796.2/5796.3-2005；DIN 103"
+  },
+  {
+    "family": "trapezoid",
+    "designation": "Tr18×4",
+    "pitch": 4,
+    "major": 18,
+    "source": "GB/T 5796.2/5796.3-2005；DIN 103"
+  },
+  {
+    "family": "trapezoid",
+    "designation": "Tr20×2",
+    "pitch": 2,
+    "major": 20,
+    "source": "GB/T 5796.2/5796.3-2005；DIN 103"
+  },
+  {
+    "family": "trapezoid",
+    "designation": "Tr20×4",
+    "pitch": 4,
+    "major": 20,
+    "source": "GB/T 5796.2/5796.3-2005；DIN 103"
+  },
+  {
+    "family": "trapezoid",
+    "designation": "Tr22×3",
+    "pitch": 3,
+    "major": 22,
+    "source": "GB/T 5796.2/5796.3-2005；DIN 103"
+  },
+  {
+    "family": "trapezoid",
+    "designation": "Tr22×5",
+    "pitch": 5,
+    "major": 22,
+    "source": "GB/T 5796.2/5796.3-2005；DIN 103"
+  },
+  {
+    "family": "trapezoid",
+    "designation": "Tr24×3",
+    "pitch": 3,
+    "major": 24,
+    "source": "GB/T 5796.2/5796.3-2005；DIN 103"
+  },
+  {
+    "family": "trapezoid",
+    "designation": "Tr24×5",
+    "pitch": 5,
+    "major": 24,
+    "source": "GB/T 5796.2/5796.3-2005；DIN 103"
+  },
+  {
+    "family": "trapezoid",
+    "designation": "Tr26×3",
+    "pitch": 3,
+    "major": 26,
+    "source": "GB/T 5796.2/5796.3-2005；DIN 103"
+  },
+  {
+    "family": "trapezoid",
+    "designation": "Tr26×5",
+    "pitch": 5,
+    "major": 26,
+    "source": "GB/T 5796.2/5796.3-2005；DIN 103"
+  },
+  {
+    "family": "trapezoid",
+    "designation": "Tr28×3",
+    "pitch": 3,
+    "major": 28,
+    "source": "GB/T 5796.2/5796.3-2005；DIN 103"
+  },
+  {
+    "family": "trapezoid",
+    "designation": "Tr28×5",
+    "pitch": 5,
+    "major": 28,
+    "source": "GB/T 5796.2/5796.3-2005；DIN 103"
+  },
+  {
+    "family": "trapezoid",
+    "designation": "Tr30×3",
+    "pitch": 3,
+    "major": 30,
+    "source": "GB/T 5796.2/5796.3-2005；DIN 103"
+  },
+  {
+    "family": "trapezoid",
+    "designation": "Tr30×6",
+    "pitch": 6,
+    "major": 30,
+    "source": "GB/T 5796.2/5796.3-2005；DIN 103"
+  },
+  {
+    "family": "trapezoid",
+    "designation": "Tr32×3",
+    "pitch": 3,
+    "major": 32,
+    "source": "GB/T 5796.2/5796.3-2005；DIN 103"
+  },
+  {
+    "family": "trapezoid",
+    "designation": "Tr32×6",
+    "pitch": 6,
+    "major": 32,
+    "source": "GB/T 5796.2/5796.3-2005；DIN 103"
+  },
+  {
+    "family": "trapezoid",
+    "designation": "Tr34×3",
+    "pitch": 3,
+    "major": 34,
+    "source": "GB/T 5796.2/5796.3-2005；DIN 103"
+  },
+  {
+    "family": "trapezoid",
+    "designation": "Tr34×6",
+    "pitch": 6,
+    "major": 34,
+    "source": "GB/T 5796.2/5796.3-2005；DIN 103"
+  },
+  {
+    "family": "trapezoid",
+    "designation": "Tr36×3",
+    "pitch": 3,
+    "major": 36,
+    "source": "GB/T 5796.2/5796.3-2005；DIN 103"
+  },
+  {
+    "family": "trapezoid",
+    "designation": "Tr36×6",
+    "pitch": 6,
+    "major": 36,
+    "source": "GB/T 5796.2/5796.3-2005；DIN 103"
+  },
+  {
+    "family": "trapezoid",
+    "designation": "Tr38×3",
+    "pitch": 3,
+    "major": 38,
+    "source": "GB/T 5796.2/5796.3-2005；DIN 103"
+  },
+  {
+    "family": "trapezoid",
+    "designation": "Tr38×7",
+    "pitch": 7,
+    "major": 38,
+    "source": "GB/T 5796.2/5796.3-2005；DIN 103"
+  },
+  {
+    "family": "trapezoid",
+    "designation": "Tr40×3",
+    "pitch": 3,
+    "major": 40,
+    "source": "GB/T 5796.2/5796.3-2005；DIN 103"
+  },
+  {
+    "family": "trapezoid",
+    "designation": "Tr40×7",
+    "pitch": 7,
+    "major": 40,
+    "source": "GB/T 5796.2/5796.3-2005；DIN 103"
+  },
+  {
+    "family": "trapezoid",
+    "designation": "Tr42×3",
+    "pitch": 3,
+    "major": 42,
+    "source": "GB/T 5796.2/5796.3-2005；DIN 103"
+  },
+  {
+    "family": "trapezoid",
+    "designation": "Tr42×7",
+    "pitch": 7,
+    "major": 42,
+    "source": "GB/T 5796.2/5796.3-2005；DIN 103"
+  },
+  {
+    "family": "trapezoid",
+    "designation": "Tr44×3",
+    "pitch": 3,
+    "major": 44,
+    "source": "GB/T 5796.2/5796.3-2005；DIN 103"
+  },
+  {
+    "family": "trapezoid",
+    "designation": "Tr44×7",
+    "pitch": 7,
+    "major": 44,
+    "source": "GB/T 5796.2/5796.3-2005；DIN 103"
+  }
+]
