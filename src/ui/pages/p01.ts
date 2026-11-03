@@ -10,6 +10,7 @@
  *   转速→p09 / 切削参数→p10 / 重量→p11 / 三角→p12 / 速查→p13 / 收藏→p14
  */
 import type { PageContext, PageId, PageModule, PageParams } from '../router';
+import { listHistory } from '../store';
 import {
   Chip,
   HomeHeader,
@@ -63,11 +64,12 @@ interface RecentEntry {
 }
 
 /**
- * 最近使用（设计稿静态示例值）。
- * v0.1 不做首页动态历史：store.ts 属 W4-C5 写范围，且 C5 不可回写 p01；
- * 若后续要动态化，需 Lead 单独裁决。
+ * 最近使用兜底（设计稿静态示例值）。
+ * W5 集成裁决（DEFERRED #9 落实）：渲染时读 store 历史，取前 3 条动态生成 chips；
+ * 历史为空时回落本静态示例。kind → 页映射：thread→p03 / speed→p09 / weight→p11 /
+ * triangle→p12，其余 kind 一律 p14（历史列表本身可达）。
  */
-const RECENT_ENTRIES: readonly RecentEntry[] = [
+const RECENT_FALLBACK: readonly RecentEntry[] = [
   {
     label: 'M30 螺纹',
     active: true,
@@ -77,6 +79,26 @@ const RECENT_ENTRIES: readonly RecentEntry[] = [
   { label: 'Ø50 转速 955', page: 'p09', params: { d: 50, vc: 150 } },
   { label: '莫氏 4 号', page: 'p07', params: { mode: 'morse', morse: 4 } },
 ];
+
+/** 历史条目 kind → 目标页（未知 kind 落 p14 收藏·历史）。 */
+const KIND_TO_PAGE: Record<string, PageId> = {
+  thread: 'p03',
+  speed: 'p09',
+  weight: 'p11',
+  triangle: 'p12',
+};
+
+/** 渲染期取最近使用：历史前 3 条 → chips；空历史 → 静态兜底。 */
+function recentEntries(): RecentEntry[] {
+  const history = listHistory().slice(0, 3);
+  if (history.length === 0) return [...RECENT_FALLBACK];
+  return history.map((entry, index) => ({
+    label: entry.title,
+    active: index === 0,
+    page: KIND_TO_PAGE[entry.kind] ?? 'p14',
+    params: entry.params as PageParams,
+  }));
+}
 
 export const title = '首页';
 
@@ -104,7 +126,7 @@ const page: PageModule = {
     recentLabel.textContent = '最近使用';
     const chips = document.createElement('div');
     chips.className = 'rc-home__chips';
-    for (const entry of RECENT_ENTRIES) {
+    for (const entry of recentEntries()) {
       chips.append(
         Chip({
           label: entry.label,

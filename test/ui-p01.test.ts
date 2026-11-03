@@ -6,6 +6,7 @@
  * 断言逐区块、逐文案、逐入口（名称与副标顺序）对齐设计稿 docs/车工计算App-无限画布.html:1135-1160。
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { addHistory } from '../src/ui/store';
 import { createRouter, type PageId, type Router } from '../src/ui/router';
 
 let app: HTMLElement;
@@ -194,5 +195,40 @@ describe('p01 导航', () => {
     const taperParams = new URLSearchParams(window.location.hash.split('?')[1] ?? '');
     expect(taperParams.get('mode')).toBe('morse');
     expect(taperParams.get('morse')).toBe('4');
+  });
+});
+
+describe('p01 最近使用动态化（W5 集成，DEFERRED #9 落实）', () => {
+  it('历史前 3 条动态渲染、首条高亮、thread 携参入 p03；第 4 条不入', async () => {
+    localStorage.clear();
+    addHistory({ kind: 'thread', title: 'Tr40×7 梯形螺纹', params: { family: 'trapezoid', spec: 'Tr40×7', d: 40, p: 7 }, ts: 4000 });
+    addHistory({ kind: 'speed', title: 'Ø50 转速 955', params: { d: 50, vc: 150 }, ts: 3000 });
+    addHistory({ kind: 'weight', title: '圆钢 Ø50×100', params: { d: 50 }, ts: 2000 });
+    addHistory({ kind: 'triangle', title: '30/40/50 解三角形', params: { a: 30 }, ts: 1000 });
+
+    await router.navigate('p01');
+    const chips = [...currentPage().querySelectorAll<HTMLElement>('.rc-home__chips .la-chip')];
+    expect(chips.map((chip) => chip.textContent)).toEqual([
+      'Tr40×7 梯形螺纹',
+      'Ø50 转速 955',
+      '圆钢 Ø50×100',
+    ]);
+    expect(chips[0]?.classList.contains('on')).toBe(true);
+    expect(chips[1]?.classList.contains('on')).toBe(false);
+
+    chips[0]?.click();
+    await vi.waitFor(() => expect(router.current()).toBe('p03'));
+    const query = new URLSearchParams(window.location.hash.split('?')[1] ?? '');
+    expect(query.get('family')).toBe('trapezoid');
+    expect(query.get('spec')).toBe('Tr40×7');
+    localStorage.clear();
+  });
+
+  it('空历史回落 W4-C1 静态示例', async () => {
+    localStorage.clear();
+    await router.navigate('p01');
+    const chips = [...currentPage().querySelectorAll<HTMLElement>('.rc-home__chips .la-chip')];
+    expect(chips[0]?.textContent).toBe('M30 螺纹');
+    expect(chips[2]?.textContent).toBe('莫氏 4 号');
   });
 });
