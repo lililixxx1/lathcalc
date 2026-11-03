@@ -1,0 +1,20 @@
+TOOL=chrome-headless-cdp
+CHROME=Chrome/156.0.8078.76
+VIEWPORT=390x844 dpr=1 mobile=true
+URL=http://localhost:4175/
+
+PER_PAGE
+p11 docScrollWidth=390 docClientWidth=390 pageHOverflow=false bodyHOverflow=false bodyVOverflow=false counts={"segItems":4,"inputs":2,"densityChips":13,"p12Fields":0,"resultRows":0,"gcodeRows":0,"p14Items":0,"p14DetailParams":0,"statValue":"1.54kg","shareImageDataUrlLength":null,"shareDownloadName":null}
+p12 docScrollWidth=390 docClientWidth=390 pageHOverflow=false bodyHOverflow=false bodyVOverflow=false counts={"segItems":0,"inputs":0,"densityChips":0,"p12Fields":3,"resultRows":3,"gcodeRows":0,"p14Items":0,"p14DetailParams":0,"statValue":null,"shareImageDataUrlLength":null,"shareDownloadName":null}
+p13 docScrollWidth=390 docClientWidth=390 pageHOverflow=false bodyHOverflow=false bodyVOverflow=false counts={"segItems":5,"inputs":0,"densityChips":0,"p12Fields":0,"resultRows":0,"gcodeRows":10,"p14Items":0,"p14DetailParams":0,"statValue":null,"shareImageDataUrlLength":null,"shareDownloadName":null}
+p14 docScrollWidth=390 docClientWidth=390 pageHOverflow=false bodyHOverflow=false bodyVOverflow=false counts={"segItems":2,"inputs":0,"densityChips":0,"p12Fields":0,"resultRows":0,"gcodeRows":0,"p14Items":3,"p14DetailParams":0,"statValue":null,"shareImageDataUrlLength":null,"shareDownloadName":null}
+
+ALL_PAGES_NO_HORIZONTAL_OVERFLOW=true
+P14_DETAIL_PARAMS=3 DETAIL_BODY_H_OVERFLOW=false DETAIL_BODY_V_OVERFLOW=false
+SHARE_DATA_URL_LENGTH=68170
+SHARE_DOWNLOAD_NAME=lathcalc-thread-demo-1.png
+SHARE_IMAGE_PATH=docs\evidence\W4-C5\runs\p14-share-image.png
+SHARE_PROBE={"click":"clicked","hasImage":true,"message":null,"itemCount":3,"storedFavoritesCount":3}
+EXCEPTIONS=0
+CONSOLE_ERRORS=1
+CONSOLE_ERROR=http://localhost:4175/favicon.ico :: Failed to load resource: the server responded with a status of 404 (Not Found)

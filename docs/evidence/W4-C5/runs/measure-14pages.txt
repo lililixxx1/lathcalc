@@ -1,0 +1,24 @@
+$ CHROME="C:/Program Files/Google/Chrome/Application/chrome.exe" node docs/evidence/W4-C1/tools/measure-390.mjs "http://localhost:4175/" > docs/evidence/W4-C5/runs/measure-14pages.json 2> docs/evidence/W4-C5/runs/measure-14pages.stderr.txt
+REAL_EXIT=0
+$ node -e "read measure-14pages.json and print computed summary"
+p01 horizontalOverflow=false scrollWidth=390 clientWidth=390
+p02 horizontalOverflow=false scrollWidth=390 clientWidth=390
+p03 horizontalOverflow=false scrollWidth=390 clientWidth=390
+p04 horizontalOverflow=false scrollWidth=390 clientWidth=390
+p05 horizontalOverflow=false scrollWidth=390 clientWidth=390
+p06 horizontalOverflow=false scrollWidth=390 clientWidth=390
+p07 horizontalOverflow=false scrollWidth=390 clientWidth=390
+p08 horizontalOverflow=false scrollWidth=390 clientWidth=390
+p09 horizontalOverflow=false scrollWidth=390 clientWidth=390
+p10 horizontalOverflow=false scrollWidth=390 clientWidth=390
+p11 horizontalOverflow=false scrollWidth=390 clientWidth=390
+p12 horizontalOverflow=false scrollWidth=390 clientWidth=390
+p13 horizontalOverflow=false scrollWidth=390 clientWidth=390
+p14 horizontalOverflow=false scrollWidth=390 clientWidth=390
+pagesMeasured=14
+allPagesNoHorizontalOverflow=true
+exceptions=0
+consoleErrors=["http://localhost:4175/favicon.ico :: Failed to load resource: the server responded with a status of 404 (Not Found)"]
+SUMMARY_EXIT=0
+--- measure-14pages.stderr.txt (size) ---
+0

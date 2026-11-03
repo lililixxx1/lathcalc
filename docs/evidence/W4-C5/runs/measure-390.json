@@ -1,0 +1,440 @@
+{
+  "tool": "chrome-headless-cdp",
+  "chromeVersion": "Chrome/156.0.8078.76",
+  "url": "http://localhost:4175/",
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "deviceScaleFactor": 1,
+    "mobile": true
+  },
+  "pages": [
+    {
+      "hash": "#/p11",
+      "pageId": "p11",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 1
+      },
+      "documentElement": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 844,
+        "clientHeight": 844
+      },
+      "body": {
+        "scrollWidth": 390,
+        "clientWidth": 390
+      },
+      "app": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 844,
+        "right": 390,
+        "bottom": 844
+      },
+      "page": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 844,
+        "right": 390,
+        "bottom": 844
+      },
+      "pageOverflow": "hidden",
+      "bodyRect": {
+        "x": 0,
+        "y": 97,
+        "width": 390,
+        "height": 727,
+        "right": 390,
+        "bottom": 824
+      },
+      "bodyScroll": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 727,
+        "clientHeight": 727
+      },
+      "horizontalOverflow": false,
+      "pageHorizontalOverflow": false,
+      "bodyHorizontalOverflow": false,
+      "bodyVerticalOverflow": false,
+      "counts": {
+        "segItems": 4,
+        "inputs": 2,
+        "densityChips": 13,
+        "p12Fields": 0,
+        "resultRows": 0,
+        "gcodeRows": 0,
+        "p14Items": 0,
+        "p14DetailParams": 0,
+        "statValue": "1.54kg",
+        "shareImageDataUrlLength": null,
+        "shareDownloadName": null
+      }
+    },
+    {
+      "hash": "#/p12",
+      "pageId": "p12",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 1
+      },
+      "documentElement": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 844,
+        "clientHeight": 844
+      },
+      "body": {
+        "scrollWidth": 390,
+        "clientWidth": 390
+      },
+      "app": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 844,
+        "right": 390,
+        "bottom": 844
+      },
+      "page": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 844,
+        "right": 390,
+        "bottom": 844
+      },
+      "pageOverflow": "hidden",
+      "bodyRect": {
+        "x": 0,
+        "y": 97,
+        "width": 390,
+        "height": 727,
+        "right": 390,
+        "bottom": 824
+      },
+      "bodyScroll": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 727,
+        "clientHeight": 727
+      },
+      "horizontalOverflow": false,
+      "pageHorizontalOverflow": false,
+      "bodyHorizontalOverflow": false,
+      "bodyVerticalOverflow": false,
+      "counts": {
+        "segItems": 0,
+        "inputs": 0,
+        "densityChips": 0,
+        "p12Fields": 3,
+        "resultRows": 3,
+        "gcodeRows": 0,
+        "p14Items": 0,
+        "p14DetailParams": 0,
+        "statValue": null,
+        "shareImageDataUrlLength": null,
+        "shareDownloadName": null
+      }
+    },
+    {
+      "hash": "#/p13",
+      "pageId": "p13",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 1
+      },
+      "documentElement": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 844,
+        "clientHeight": 844
+      },
+      "body": {
+        "scrollWidth": 390,
+        "clientWidth": 390
+      },
+      "app": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 844,
+        "right": 390,
+        "bottom": 844
+      },
+      "page": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 844,
+        "right": 390,
+        "bottom": 844
+      },
+      "pageOverflow": "hidden",
+      "bodyRect": {
+        "x": 0,
+        "y": 97,
+        "width": 390,
+        "height": 727,
+        "right": 390,
+        "bottom": 824
+      },
+      "bodyScroll": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 727,
+        "clientHeight": 727
+      },
+      "horizontalOverflow": false,
+      "pageHorizontalOverflow": false,
+      "bodyHorizontalOverflow": false,
+      "bodyVerticalOverflow": false,
+      "counts": {
+        "segItems": 5,
+        "inputs": 0,
+        "densityChips": 0,
+        "p12Fields": 0,
+        "resultRows": 0,
+        "gcodeRows": 10,
+        "p14Items": 0,
+        "p14DetailParams": 0,
+        "statValue": null,
+        "shareImageDataUrlLength": null,
+        "shareDownloadName": null
+      }
+    },
+    {
+      "hash": "#/p14",
+      "pageId": "p14",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 1
+      },
+      "documentElement": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 844,
+        "clientHeight": 844
+      },
+      "body": {
+        "scrollWidth": 390,
+        "clientWidth": 390
+      },
+      "app": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 844,
+        "right": 390,
+        "bottom": 844
+      },
+      "page": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 844,
+        "right": 390,
+        "bottom": 844
+      },
+      "pageOverflow": "hidden",
+      "bodyRect": {
+        "x": 0,
+        "y": 97,
+        "width": 390,
+        "height": 727,
+        "right": 390,
+        "bottom": 824
+      },
+      "bodyScroll": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 727,
+        "clientHeight": 727
+      },
+      "horizontalOverflow": false,
+      "pageHorizontalOverflow": false,
+      "bodyHorizontalOverflow": false,
+      "bodyVerticalOverflow": false,
+      "counts": {
+        "segItems": 2,
+        "inputs": 0,
+        "densityChips": 0,
+        "p12Fields": 0,
+        "resultRows": 0,
+        "gcodeRows": 0,
+        "p14Items": 3,
+        "p14DetailParams": 0,
+        "statValue": null,
+        "shareImageDataUrlLength": null,
+        "shareDownloadName": null
+      }
+    }
+  ],
+  "detailMetrics": {
+    "hash": "#/p14",
+    "pageId": "p14",
+    "viewport": {
+      "width": 390,
+      "height": 844,
+      "dpr": 1
+    },
+    "documentElement": {
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "scrollHeight": 844,
+      "clientHeight": 844
+    },
+    "body": {
+      "scrollWidth": 390,
+      "clientWidth": 390
+    },
+    "app": {
+      "x": 0,
+      "y": 0,
+      "width": 390,
+      "height": 844,
+      "right": 390,
+      "bottom": 844
+    },
+    "page": {
+      "x": 0,
+      "y": 0,
+      "width": 390,
+      "height": 844,
+      "right": 390,
+      "bottom": 844
+    },
+    "pageOverflow": "hidden",
+    "bodyRect": {
+      "x": 0,
+      "y": 97,
+      "width": 390,
+      "height": 727,
+      "right": 390,
+      "bottom": 824
+    },
+    "bodyScroll": {
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "scrollHeight": 727,
+      "clientHeight": 727
+    },
+    "horizontalOverflow": false,
+    "pageHorizontalOverflow": false,
+    "bodyHorizontalOverflow": false,
+    "bodyVerticalOverflow": false,
+    "counts": {
+      "segItems": 2,
+      "inputs": 0,
+      "densityChips": 0,
+      "p12Fields": 0,
+      "resultRows": 0,
+      "gcodeRows": 0,
+      "p14Items": 3,
+      "p14DetailParams": 3,
+      "statValue": null,
+      "shareImageDataUrlLength": null,
+      "shareDownloadName": null
+    }
+  },
+  "shareMetrics": {
+    "hash": "#/p14",
+    "pageId": "p14",
+    "viewport": {
+      "width": 390,
+      "height": 844,
+      "dpr": 1
+    },
+    "documentElement": {
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "scrollHeight": 844,
+      "clientHeight": 844
+    },
+    "body": {
+      "scrollWidth": 390,
+      "clientWidth": 390
+    },
+    "app": {
+      "x": 0,
+      "y": 0,
+      "width": 390,
+      "height": 844,
+      "right": 390,
+      "bottom": 844
+    },
+    "page": {
+      "x": 0,
+      "y": 0,
+      "width": 390,
+      "height": 844,
+      "right": 390,
+      "bottom": 844
+    },
+    "pageOverflow": "hidden",
+    "bodyRect": {
+      "x": 0,
+      "y": 97,
+      "width": 390,
+      "height": 727,
+      "right": 390,
+      "bottom": 824
+    },
+    "bodyScroll": {
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "scrollHeight": 727,
+      "clientHeight": 727
+    },
+    "horizontalOverflow": false,
+    "pageHorizontalOverflow": false,
+    "bodyHorizontalOverflow": false,
+    "bodyVerticalOverflow": false,
+    "counts": {
+      "segItems": 2,
+      "inputs": 0,
+      "densityChips": 0,
+      "p12Fields": 0,
+      "resultRows": 0,
+      "gcodeRows": 0,
+      "p14Items": 3,
+      "p14DetailParams": 0,
+      "statValue": null,
+      "shareImageDataUrlLength": 68170,
+      "shareDownloadName": "lathcalc-thread-demo-1.png"
+    }
+  },
+  "allPagesNoHorizontalOverflow": true,
+  "sharePreview": {
+    "dataUrlLength": 68170,
+    "downloadName": "lathcalc-thread-demo-1.png"
+  },
+  "shareProbe": {
+    "click": "clicked",
+    "hasImage": true,
+    "message": null,
+    "itemCount": 3,
+    "storedFavoritesCount": 3
+  },
+  "shareImagePath": "docs\\evidence\\W4-C5\\runs\\p14-share-image.png",
+  "screenshots": [
+    "p11-390x844.png",
+    "p12-390x844.png",
+    "p13-390x844.png",
+    "p14-390x844.png",
+    "p14-detail-390x844.png",
+    "p14-share-390x844.png"
+  ],
+  "exceptions": [],
+  "consoleErrors": [
+    "http://localhost:4175/favicon.ico :: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ]
+}
