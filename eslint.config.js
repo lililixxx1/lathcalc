@@ -4,8 +4,9 @@ import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
-  // dist=构建产物；docs=证据/调研冻结档（不改写历史，不纳入 lint）；team-prompt=台账（gitignored）
-  { ignores: ['dist/', 'docs/', 'team-prompt/'] },
+  // dist=构建产物；docs=证据/调研冻结档（不改写历史，不纳入 lint）；team-prompt=台账（gitignored）；
+  // .zcode-site=ZCode Sites 部署 stage（含构建产物副本，v0.2.0 上线时引入）
+  { ignores: ['dist/', 'docs/', 'team-prompt/', '.zcode-site/'] },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {

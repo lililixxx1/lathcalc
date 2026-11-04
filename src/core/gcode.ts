@@ -1,5 +1,5 @@
 /** gcode.ts · G76 两行式模板 + 方言分支 + G92 单行（W2-C5 实现；方言/G92 由 W6-C2 扩展完成，WAVE-PLAN-V2 §1） */
-import type { CncSystem, G76Params, G76Program } from './types';
+import type { CncSystem, G76Params, G76Program, GskModel } from './types';
 
 /**
  * 固定免责文案：逐字导出自 docs/车工计算App-调研报告.md:330 §7.4 原句，禁止改写。
@@ -52,7 +52,7 @@ export function fanucG76(p: G76Params): G76Program {
  *     置灰不生成（静默误解达 10⁴ 倍），错误文案冻结。
  * 免责文案随程序一起返回（报告 §7.4）。
  */
-export function g76Dialect(p: G76Params, system: CncSystem): G76Program {
+export function g76Dialect(p: G76Params, system: CncSystem, gskModel?: GskModel): G76Program {
   switch (system) {
     case 'fanuc':
       return fanucG76(p);
@@ -77,6 +77,12 @@ export function g76Dialect(p: G76Params, system: CncSystem): G76Program {
       return { lines, disclaimer: G76_DISCLAIMER };
     }
     case 'gsk':
+      // W8-B 契约（WAVE-PLAN-V3 §1/V3-3）：带 gskModel 走两口径分支（988TA mm 小数 /
+      // 980TDc 0.0001mm 增量 №.182.7，金值 g76-dialects.md §1 行1）；缺 model 抛
+      // 「GSK 需先选型号（988TA mm / 980TDc 增量）」。以下桩占位，卡内替换。
+      if (gskModel) {
+        throw new Error(`g76Dialect: GSK ${gskModel} 分支未实现（W8-B 填充）`);
+      }
       throw new Error(
         'g76Dialect: GSK G76 两代系统 P/Q 单位口径不同，暂不生成（W6-C1 R1 置灰）',
       );
@@ -88,8 +94,14 @@ export function g76Dialect(p: G76Params, system: CncSystem): G76Program {
  * FANUC 基线单行 G92 X(U)_ Z(W)_ F_；行数冻结 = 1（G0-B2）。
  * FANUC / GSK / KND 三系统同串（g76-dialects.md §1 行2/行6），core 层不做 system 分支；
  * 单行仅为循环首行，完整螺纹需后续 X 递减分刀（调研档 §4.2 第 7 条，UI 注记）。
+ * W8-B 契约（WAVE-PLAN-V3 §1/V3-4）：system='hnc' → G82 单行
+ * `G82 X26.211 Z-30. I0 R0 E0 C1 P0 F3.5`（g76-dialects.md §1 行4 脚注冻结模板）；
+ * 其余/缺省保持 FANUC 格式（v0.2 既有测试零改）。桩占位，卡内替换。
  */
-export function g92Cycle(p: G76Params): G76Program {
+export function g92Cycle(p: G76Params, system?: CncSystem): G76Program {
+  if (system === 'hnc') {
+    throw new Error('g92Cycle: HNC G82 分支未实现（W8-B 填充）');
+  }
   const lines = [
     `G92 X${formatAxis(p.minorDiameter)} Z${formatAxis(p.endZ)} F${formatNumber(p.lead, 1)}`,
   ];

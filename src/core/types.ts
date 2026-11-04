@@ -18,8 +18,8 @@ export interface Vec2 {
 export type DegToDMS = (deg: number) => string;
 
 // ===== 螺纹（W2-C2 实现） =====
-export type ThreadFamily = 'metric' | 'trapezoid' | 'pipe55' | 'unified';
-export type FlankAngle = 60 | 55 | 30;
+export type ThreadFamily = 'metric' | 'trapezoid' | 'pipe55' | 'unified' | 'sealpipe' | 'npt' | 'worm';
+export type FlankAngle = 60 | 55 | 30 | 40;
 
 export interface ThreadSpec {
   family: ThreadFamily;
@@ -289,9 +289,40 @@ export type FanucG76Fn = (p: G76Params) => G76Program;
 // ===== 方言与 G92（WAVE-PLAN-V2 §1，W6-C2 实现；DEFERRED #1/#2b） =====
 export type CncSystem = 'fanuc' | 'gsk' | 'knd' | 'hnc';
 /** 语义待 W6-C1 双源调研冻结（docs/research/g76-dialects.md）；恒等式 g76Dialect(p,'fanuc') ≡ fanucG76(p) */
-export type G76DialectFn = (p: G76Params, system: CncSystem) => G76Program;
-/** FANUC 车螺纹单行程循环，单行输出（G0-B2 冻结行数） */
-export type G92CycleFn = (p: G76Params) => G76Program;
+export type G76DialectFn = (p: G76Params, system: CncSystem, gskModel?: GskModel) => G76Program;
+/** FANUC 车螺纹单行程循环，单行输出（G0-B2 冻结行数）；system='hnc' → G82 单循环（WAVE-PLAN-V3 G4） */
+export type G92CycleFn = (p: G76Params, system?: CncSystem) => G76Program;
+
+// ===== GSK 型号细分（WAVE-PLAN-V3 §1，W8-B 实现；DEFERRED #16） =====
+/** 988TA=P/Q/R 均 mm（半径，小数）；980TDc=P/Q/Δdmin 为 0.0001mm 增量（№.182.7）、R 保持 mm */
+export type GskModel = '988ta' | '980tdc';
+
+// ===== 蜗杆几何（WAVE-PLAN-V3 §1，W8-A 实现；模数制 GB/T 10088/10087） =====
+/** px=π·m（活算单一真源）；全齿高 h₁=2.2·m；ZA 牙型角 40°。蜗杆不走 threadDimensions/threeWireM */
+export interface WormGeometry {
+  axialPitch: number;
+  wholeDepth: number;
+  flankAngle: 40;
+}
+export type WormGeometryFn = (moduleMM: number) => WormGeometry;
+
+// ===== 常用配合实算（WAVE-PLAN-V3 §1，W8-C 实现；DEFERRED #12） =====
+/** 孔恒 H7（基孔制）；shaftBand 的基本偏差端别：g=es（负）/ k,p=ei（GB/T 1800.1：a–h=es，k–zc=ei） */
+export interface FitInput {
+  nominal: number;
+  shaftBand: 'g6' | 'k6' | 'p6';
+}
+export interface FitResult {
+  /** H7：EI=0，ES=+IT7（μm） */
+  hole: { lowerUM: number; upperUM: number };
+  /** g6：es=表值、ei=es−IT6；k6/p6：ei=表值、es=ei+IT6（μm，未舍入路径） */
+  shaft: { upperUM: number; lowerUM: number };
+  fitType: 'clearance' | 'transition' | 'interference';
+  /** 间隙为正/过盈为负：Xmin=EI−es，Xmax=ES−ei */
+  minUM: number;
+  maxUM: number;
+}
+export type FitToleranceFn = (input: FitInput) => FitResult;
 
 // ===== 材料 / 莫氏 / 速查（W3-C5 录入） =====
 /** 切削参数区间 [min,max] */

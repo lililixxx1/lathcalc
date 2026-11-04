@@ -1,5 +1,5 @@
 /** thread.ts · 螺纹公式族 60°/55°/30°Tr（W2-C2 实现；常数集见 types.ts 头注） */
-import type { ThreadSpec, ThreadDimensions } from './types';
+import type { ThreadDimensions, ThreadSpec, WormGeometry } from './types';
 
 /**
  * GB/T 5796.1（ISO 2901 同值）梯形螺纹牙顶间隙 ac：
@@ -67,4 +67,14 @@ export function threeWireM(spec: ThreadSpec, wireDiameter: number): number {
   if (spec.flankAngle === 60) return d2 + 3 * wireDiameter - 0.866 * p;
   if (spec.flankAngle === 55) return d2 + 3.1657 * wireDiameter - 0.9605 * p;
   return d2 + 4.8637 * wireDiameter - 1.866 * p;
+}
+
+/**
+ * 蜗杆几何（WAVE-PLAN-V3 §1/V3-2，W8-A 实现；契约冻结于 types.ts，卡内禁改签名）：
+ * px=π·m 活算（单一真源，数据表只存 m）、全齿高 h₁=2.2·m（GB/T 10087 基本牙型）、
+ * ZA 牙型角 40°。蜗杆不走 threadDimensions/threeWireM（模数制，三针 v0.2.1 不做）。
+ * m≤0 或非有限数抛错。桩占位，卡内替换。
+ */
+export function wormGeometry(moduleMM: number): WormGeometry {
+  throw new Error(`wormGeometry: 未实现（W8-A 填充），收到 moduleMM=${moduleMM}`);
 }

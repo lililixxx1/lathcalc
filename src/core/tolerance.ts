@@ -1,5 +1,5 @@
 /** tolerance.ts · 偏差合成（W2-C3 实现纯公式段；IT 表值由 lookup.itToleranceMM 提供） */
-import type { ToleranceInput, ToleranceResult } from './types';
+import type { FitInput, FitResult, ToleranceInput, ToleranceResult } from './types';
 
 /**
  * 偏差合成（GB/T 1800.1 基本偏差朝向）：
@@ -32,4 +32,14 @@ export function toleranceCompose(
   const lower = offsetIsLower ? fundamentalOffsetMM : fundamentalOffsetMM - itValueMM;
   const upper = offsetIsLower ? fundamentalOffsetMM + itValueMM : fundamentalOffsetMM;
   return { upper, lower, tolerance: itValueMM };
+}
+
+/**
+ * 常用配合实算（WAVE-PLAN-V3 §1/V3-5，W8-C 实现；契约冻结于 types.ts，卡内禁改签名）：
+ * 孔恒 H7（EI=0、ES=+IT7）；轴 g6/k6/p6 基本偏差取 fundamental-deviations.json 表值
+ * （端别按 GB/T 1800.1：g=es、k/p=ei，另一端 ±IT6），Xmin=EI−es、Xmax=ES−ei。
+ * 数据缺段/尺寸越界抛错。桩占位，卡内替换。
+ */
+export function fitTolerance(input: FitInput): FitResult {
+  throw new Error(`fitTolerance: 未实现（W8-C 填充），收到 ${JSON.stringify(input)}`);
 }
