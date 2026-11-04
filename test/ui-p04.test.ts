@@ -1,12 +1,17 @@
 // @vitest-environment happy-dom
 /**
- * W4-C2 · p04 G76 参考程序测试
+ * W4-C2 · p04 G76 参考程序测试；W6-C2 三系统解灰 + 循环形式
  *
- * 金测锚点（WAVE-PLAN §4 #7）：
+ * 金测锚点（WAVE-PLAN §4 #7 / WAVE-PLAN-V2 §4）：
  *   M30×3.5 → 行 2 P = 牙深 (30 − 26.21125)/2 = 1.894375 → 1894 μm（禁 1895）
- *   两行 = ['G76 P021060 Q100 R0.05', 'G76 X26.211 Z-30. P1894 Q400 F3.5']
+ *   FANUC 两行 = ['G76 P021060 Q100 R0.05', 'G76 X26.211 Z-30. P1894 Q400 F3.5']
+ *   KND 两行   = ['G76 P021060 Q100 R50',  'G76 X26.211 Z-30. P1894 Q400 F3.5']（R50=0.05×1000）
+ *   HNC 单行   = 'G76 C2 R0 E0 A60 X26.211 Z-30. I0 K1.894 U0.05 V0.1 Q0.4 P0 F3.5'
+ *   G92 单行   = 'G92 X26.211 Z-30. F3.5'（lines.length===1，G0-B2）
+ * 来源：docs/research/g76-dialects.md §1 行1–6（W6-C1 双源调研）。
  * P 位正名（W2-C5 裁决 2）：P021060 = 02 精车次数 / 10 退尾量（倒角量）/ 60 刀尖角。
- * 系统页签：仅 FANUC 可用；GSK / KND / 华中置灰 + 待补徽标（WAVE-PLAN §3 裁决 1）。
+ * enable 矩阵（WAVE-PLAN-V2 V2-4）：G76 形式 GSK 禁用；G92 形式 华中禁用。
+ * URL 键：system=fanuc|gsk|knd|hnc、cycle=g76|g92。
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createRouter, type Router } from '../src/ui/router';
@@ -53,6 +58,29 @@ function paramMap(): Record<string, string> {
   return map;
 }
 
+function paramKeys(): string[] {
+  return [...page().querySelectorAll<HTMLElement>('.rc-param')].map(
+    (cell) => cell.dataset.key ?? '',
+  );
+}
+
+/** 按 aria-label 取 Segmented 项（系统 / 循环形式两组） */
+function segItems(ariaLabel: string): HTMLButtonElement[] {
+  return [
+    ...page().querySelectorAll<HTMLButtonElement>(
+      `.la-seg[aria-label="${ariaLabel}"] .rc-seg__item`,
+    ),
+  ];
+}
+
+function sysnote(): string {
+  return page().querySelector('.rc-p04__sysnote')?.textContent ?? '';
+}
+
+function badgeText(): string {
+  return page().querySelector('.rc-topbar__title .la-badge')?.textContent ?? '';
+}
+
 /** M30×3.5 的 core 期望输出（与页面同一函数、同一参数） */
 function coreM30Program(): string[] {
   const spec: ThreadSpec = {
@@ -72,14 +100,11 @@ function coreM30Program(): string[] {
   }).lines;
 }
 
+const M30_PARAMS = { family: 'metric', spec: 'M30 × 3.5', d: 30, p: 3.5 };
+
 describe('p04 M30×3.5 金测', () => {
   beforeEach(async () => {
-    await router.navigate('p04', {
-      family: 'metric',
-      spec: 'M30 × 3.5',
-      d: 30,
-      p: 3.5,
-    });
+    await router.navigate('p04', M30_PARAMS);
   });
 
   it('两行 G76 与 core fanucG76 输出逐字符一致（含 P1894 / 禁 1895）', () => {
@@ -134,29 +159,198 @@ describe('p04 M30×3.5 金测', () => {
   });
 });
 
-describe('p04 系统页签（仅 FANUC）', () => {
-  it('FANUC 可用；GSK / KND / 华中置灰并带「待补」徽标', async () => {
-    await router.navigate('p04', {
-      family: 'metric',
-      spec: 'M30 × 3.5',
-      d: 30,
-      p: 3.5,
-    });
+describe('p04 系统页签 · G76 形式 enable 矩阵（V2-4）', () => {
+  it('FANUC / KND / 华中 可用，GSK 禁用；提示文案为 G76 口径注（逐字）', async () => {
+    await router.navigate('p04', M30_PARAMS);
 
-    const items = [...page().querySelectorAll<HTMLButtonElement>('.la-seg .rc-seg__item')];
+    const items = segItems('数控系统');
     expect(items.map((item) => item.textContent)).toEqual(['FANUC', '广数 GSK', 'KND', '华中']);
-    expect(items[0]?.disabled).toBe(false);
+    expect(items.map((item) => item.disabled)).toEqual([false, true, false, false]);
     expect(items[0]?.classList.contains('on')).toBe(true);
-    expect(items.slice(1).map((item) => item.disabled)).toEqual([true, true, true]);
 
-    // A4 修复+复审修正：待补以页签行下小字注呈现（独立徽标会挤爆 390px 页签行），
-    // 不再挂在带入参数行
-    expect(page().querySelector('.rc-p04__sysnote')?.textContent).toContain('待补');
+    // 两态提示之一：G76 形式下 GSK 置灰理由（逐字冻结）
+    expect(sysnote()).toBe('GSK · 两代系统单位口径不同，暂不生成（防静默错误）');
     expect(page().querySelector('.rc-p04__meta .la-badge')).toBeNull();
 
+    // 禁用项点击不生效
     items[1]?.click();
-    expect(items[0]?.classList.contains('on')).toBe(true);
-    expect(items[1]?.classList.contains('on')).toBe(false);
+    expect(segItems('数控系统')[0]?.classList.contains('on')).toBe(true);
+    expect(segItems('数控系统')[1]?.classList.contains('on')).toBe(false);
+  });
+
+  it('G76 形式默认选中；循环形式页签标签与默认态正确', async () => {
+    await router.navigate('p04', M30_PARAMS);
+
+    const cycles = segItems('循环形式');
+    expect(cycles.map((item) => item.textContent)).toEqual(['G76 复合循环', 'G92 直进循环']);
+    expect(cycles[0]?.classList.contains('on')).toBe(true);
+    expect(cycles[1]?.classList.contains('on')).toBe(false);
+  });
+});
+
+describe('p04 G92 形式 enable 矩阵（V2-4）', () => {
+  it('G92 形式：FANUC / GSK / KND 可用，华中禁用；提示文案逐字', async () => {
+    await router.navigate('p04', { ...M30_PARAMS, cycle: 'g92' });
+
+    const items = segItems('数控系统');
+    expect(items.map((item) => item.disabled)).toEqual([false, false, false, true]);
+
+    // 两态提示之二：G92 形式下华中置灰理由（逐字冻结）
+    expect(sysnote()).toBe('华中 · G92 为工件坐标系设定，螺纹单循环请用 G82');
+
+    items[3]?.click();
+    expect(segItems('数控系统')[0]?.classList.contains('on')).toBe(true);
+    expect(segItems('数控系统')[3]?.classList.contains('on')).toBe(false);
+  });
+
+  it('G92 形式下切 HNC（当前 HNC）回落 FANUC，防死状态', async () => {
+    // 先在 G76 形式选中华中（允许），再切 G92 形式 → 华中在新形式禁用 → 回落 FANUC
+    await router.navigate('p04', { ...M30_PARAMS, system: 'hnc' });
+    expect(badgeText()).toBe('华中');
+    expect(segItems('数控系统')[3]?.classList.contains('on')).toBe(true);
+
+    segItems('循环形式')[1]?.click();
+
+    expect(segItems('循环形式')[1]?.classList.contains('on')).toBe(true);
+    expect(segItems('数控系统')[0]?.classList.contains('on')).toBe(true);
+    expect(badgeText()).toBe('FANUC');
+    expect(codeLines()).toEqual(['G92 X26.211 Z-30. F3.5']);
+    expect(sysnote()).toBe('华中 · G92 为工件坐标系设定，螺纹单循环请用 G82');
+  });
+
+  it('初始 URL 落在禁用格（system=hnc&cycle=g92）同样回落 FANUC', async () => {
+    await router.navigate('p04', { ...M30_PARAMS, system: 'hnc', cycle: 'g92' });
+
+    expect(segItems('数控系统')[0]?.classList.contains('on')).toBe(true);
+    expect(badgeText()).toBe('FANUC');
+    expect(codeLines()).toEqual(['G92 X26.211 Z-30. F3.5']);
+  });
+
+  it('G76 → G92 切换后代码卡单行、参数卡收缩为三项', async () => {
+    await router.navigate('p04', M30_PARAMS);
+    expect(codeLines()).toHaveLength(2);
+
+    segItems('循环形式')[1]?.click();
+
+    expect(codeLines()).toEqual(['G92 X26.211 Z-30. F3.5']);
+    expect(paramKeys()).toEqual(['牙底 X', '终点 Z', '导程 F']);
+    expect(paramMap()).toEqual({
+      '牙底 X': '26.211',
+      '终点 Z': '-30.0',
+      '导程 F': '3.5',
+    });
+    // W6-C1-04 裁决文案
+    expect(page().querySelector('.rc-p04__pnote')?.textContent).toBe(
+      'G92 为循环首行，完整螺纹需后续 X 递减分刀',
+    );
+    expect(page().querySelector('.rc-codecard')?.getAttribute('aria-label')).toBe(
+      'G92 直进循环程序',
+    );
+  });
+});
+
+describe('p04 system=knd 直达（0.001mm 口径，R2 裁决）', () => {
+  it('KND 两行金值 + 口径注 + 参数卡单位', async () => {
+    await router.navigate('p04', { ...M30_PARAMS, system: 'knd' });
+
+    expect(badgeText()).toBe('KND');
+    expect(segItems('数控系统')[2]?.classList.contains('on')).toBe(true);
+    expect(codeLines()).toEqual([
+      'G76 P021060 Q100 R50',
+      'G76 X26.211 Z-30. P1894 Q400 F3.5',
+    ]);
+    expect(page().querySelector('.rc-codecard__comment')?.textContent).toContain(
+      '按 KND-1000T 口径（P/Q/R=0.001mm）',
+    );
+    expect(paramMap()).toEqual({
+      '牙底 X': '26.211',
+      '终点 Z': '-30.0',
+      '牙高 P': '1894（0.001mm）',
+      '首切 Q': '400（0.001mm）',
+      '导程 F': '3.5',
+      '精修 R': '50（0.001mm）',
+    });
+  });
+});
+
+describe('p04 三系统参数卡标签对照（M30×3.5 金工况）', () => {
+  it('FANUC：P 1894 μm / Q 400 μm / R 0.05', async () => {
+    await router.navigate('p04', M30_PARAMS);
+    expect(paramKeys()).toEqual(['牙底 X', '终点 Z', '牙高 P', '首切 Q', '导程 F', '精修 R']);
+    expect(paramMap()['牙高 P']).toBe('1894 μm');
+    expect(paramMap()['首切 Q']).toBe('400 μm');
+    expect(paramMap()['精修 R']).toBe('0.05');
+  });
+
+  it('KND：P 1894（0.001mm）/ Q 400（0.001mm）/ R 50（0.001mm）', async () => {
+    await router.navigate('p04', { ...M30_PARAMS, system: 'knd' });
+    expect(paramKeys()).toEqual(['牙底 X', '终点 Z', '牙高 P', '首切 Q', '导程 F', '精修 R']);
+    expect(paramMap()['牙高 P']).toBe('1894（0.001mm）');
+    expect(paramMap()['首切 Q']).toBe('400（0.001mm）');
+    expect(paramMap()['精修 R']).toBe('50（0.001mm）');
+  });
+
+  it('HNC：K 1.894 mm / Q 0.4 mm / U 0.05 mm，单行程序', async () => {
+    await router.navigate('p04', { ...M30_PARAMS, system: 'hnc' });
+
+    expect(badgeText()).toBe('华中');
+    expect(codeLines()).toEqual([
+      'G76 C2 R0 E0 A60 X26.211 Z-30. I0 K1.894 U0.05 V0.1 Q0.4 P0 F3.5',
+    ]);
+    expect(paramKeys()).toEqual(['牙底 X', '终点 Z', '牙高 K', '首切 Q', '导程 F', '精修 U']);
+    expect(paramMap()['牙高 K']).toBe('1.894 mm');
+    expect(paramMap()['首切 Q']).toBe('0.4 mm');
+    expect(paramMap()['精修 U']).toBe('0.05 mm');
+    expect(paramMap()['牙底 X']).toBe('26.211');
+    expect(paramMap()['终点 Z']).toBe('-30.0');
+    expect(paramMap()['导程 F']).toBe('3.5');
+  });
+
+  it('HNC 代码卡注释「已按 华中 生成」，P021060 说明不误挂到 HNC', async () => {
+    await router.navigate('p04', { ...M30_PARAMS, system: 'hnc' });
+    expect(page().querySelector('.rc-codecard__comment')?.textContent).toContain('已按 华中 生成');
+    expect(page().querySelector('.rc-p04__pnote')?.textContent).not.toContain('P021060');
+  });
+});
+
+describe('p04 cycle=g92 直达与复制', () => {
+  it('cycle=g92 直达：单行 G92 + 三项参数卡', async () => {
+    await router.navigate('p04', { ...M30_PARAMS, cycle: 'g92' });
+
+    expect(codeLines()).toEqual(['G92 X26.211 Z-30. F3.5']);
+    expect(paramKeys()).toEqual(['牙底 X', '终点 Z', '导程 F']);
+    expect(paramMap()).toEqual({
+      '牙底 X': '26.211',
+      '终点 Z': '-30.0',
+      '导程 F': '3.5',
+    });
+  });
+
+  it('G92 复制按钮写入单行剪贴板内容', async () => {
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, 'clipboard', {
+      value: { writeText },
+      configurable: true,
+    });
+
+    await router.navigate('p04', { ...M30_PARAMS, cycle: 'g92' });
+    page().querySelector<HTMLButtonElement>('.rc-btn.ghost')?.click();
+
+    expect(writeText).toHaveBeenCalledTimes(1);
+    expect(writeText).toHaveBeenCalledWith('G92 X26.211 Z-30. F3.5');
+  });
+
+  it('G92 形式系统页签可正常切换：GSK 可用、KND 可用', async () => {
+    await router.navigate('p04', { ...M30_PARAMS, cycle: 'g92' });
+
+    segItems('数控系统')[1]?.click();
+    expect(badgeText()).toBe('广数 GSK');
+    expect(segItems('数控系统')[1]?.classList.contains('on')).toBe(true);
+    expect(codeLines()).toEqual(['G92 X26.211 Z-30. F3.5']);
+
+    segItems('数控系统')[2]?.click();
+    expect(badgeText()).toBe('KND');
+    expect(segItems('数控系统')[2]?.classList.contains('on')).toBe(true);
   });
 });
 

@@ -1,4 +1,4 @@
-/** gcode.ts · FANUC 两行式 G76 模板（W2-C5 实现；方言/G92 由 W6-C2 扩展，WAVE-PLAN-V2 §1） */
+/** gcode.ts · G76 两行式模板 + 方言分支 + G92 单行（W2-C5 实现；方言/G92 由 W6-C2 扩展完成，WAVE-PLAN-V2 §1） */
 import type { CncSystem, G76Params, G76Program } from './types';
 
 /**
@@ -44,22 +44,54 @@ export function fanucG76(p: G76Params): G76Program {
 
 /**
  * G76 方言分支（WAVE-PLAN-V2 §1 契约，W6-C2 实现；DEFERRED #1）。
- * 语义由 W6-C1 双源调研冻结（docs/research/g76-dialects.md 结论表）；
- * 恒等式 g76Dialect(p, 'fanuc') ≡ fanucG76(p)。
- * 契约桩：W6-C2 实现，调用即抛错。
+ * 语义由 W6-C1 双源调研冻结（docs/research/g76-dialects.md 结论表）：
+ *   - FANUC：恒等式 g76Dialect(p, 'fanuc') ≡ fanucG76(p)，直接复用调用；
+ *   - KND：两行式，P/Q/R 按 KND-1000T 的 0.001 mm 口径（§1 行5），行2 与 FANUC 同串；
+ *   - HNC：单行式，mm 半径口径（§1 行3），字序 C R E A X Z I K U V Q P F；
+ *   - GSK：W6-C1 裁决 R1 / V2-4 宁缺毋滥——980TDc 与 988TA 两代系统 P/Q 单位冲突，
+ *     置灰不生成（静默误解达 10⁴ 倍），错误文案冻结。
+ * 免责文案随程序一起返回（报告 §7.4）。
  */
 export function g76Dialect(p: G76Params, system: CncSystem): G76Program {
-  void p;
-  void system;
-  throw new Error('PANIC: g76Dialect 契约桩，由 W6-C2 实现（WAVE-PLAN-V2 §1）');
+  switch (system) {
+    case 'fanuc':
+      return fanucG76(p);
+    case 'knd': {
+      // KND-1000T 0.001 mm 口径：R50 = 0.05×1000；P1894 = 1894.375→Math.round；
+      // Q400 = 0.4×1000。行2 与 FANUC 同串（g76-dialects.md §1 行5）。
+      const finishAllowance = p.finishAllowanceMM ?? 0.05;
+      const lines = [
+        `G76 P021060 Q100 R${Math.round(finishAllowance * 1000)}`,
+        `G76 X${formatAxis(p.minorDiameter)} Z${formatAxis(p.endZ)} P${Math.round(p.threadDepthMM * 1000)} Q${Math.round(p.firstCutDepthMM * 1000)} F${formatNumber(p.lead, 1)}`,
+      ];
+      return { lines, disclaimer: G76_DISCLAIMER };
+    }
+    case 'hnc': {
+      // HNC 单行式（g76-dialects.md §1 行3 冻结示例逐字）：
+      // C2 R0 E0 A60 / I0 / V0.1 / P0 为模板常量（直螺纹、冻结示例参数，禁跨方言等效改写）；
+      // K/U/Q 为 mm 半径口径三位小数（K1.894、U0.05、Q0.4）。
+      const finishAllowance = p.finishAllowanceMM ?? 0.05;
+      const lines = [
+        `G76 C2 R0 E0 A60 X${formatAxis(p.minorDiameter)} Z${formatAxis(p.endZ)} I0 K${formatNumber(p.threadDepthMM)} U${formatNumber(finishAllowance)} V0.1 Q${formatNumber(p.firstCutDepthMM)} P0 F${formatNumber(p.lead, 1)}`,
+      ];
+      return { lines, disclaimer: G76_DISCLAIMER };
+    }
+    case 'gsk':
+      throw new Error(
+        'g76Dialect: GSK G76 两代系统 P/Q 单位口径不同，暂不生成（W6-C1 R1 置灰）',
+      );
+  }
 }
 
 /**
  * G92 车螺纹单行程循环（WAVE-PLAN-V2 §1 契约，W6-C2 实现；DEFERRED #2b）。
  * FANUC 基线单行 G92 X(U)_ Z(W)_ F_；行数冻结 = 1（G0-B2）。
- * 契约桩：W6-C2 实现，调用即抛错。
+ * FANUC / GSK / KND 三系统同串（g76-dialects.md §1 行2/行6），core 层不做 system 分支；
+ * 单行仅为循环首行，完整螺纹需后续 X 递减分刀（调研档 §4.2 第 7 条，UI 注记）。
  */
 export function g92Cycle(p: G76Params): G76Program {
-  void p;
-  throw new Error('PANIC: g92Cycle 契约桩，由 W6-C2 实现（WAVE-PLAN-V2 §1）');
+  const lines = [
+    `G92 X${formatAxis(p.minorDiameter)} Z${formatAxis(p.endZ)} F${formatNumber(p.lead, 1)}`,
+  ];
+  return { lines, disclaimer: G76_DISCLAIMER };
 }
