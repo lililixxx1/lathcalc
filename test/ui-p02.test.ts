@@ -62,6 +62,30 @@ function searchInput(): HTMLInputElement {
   return input;
 }
 
+function customRow(): HTMLElement {
+  const row = page().querySelector<HTMLElement>('.rc-p02__customrow');
+  if (!row) throw new Error('未找到自定义规格行');
+  return row;
+}
+
+function customInput(name: string): HTMLInputElement {
+  const input = page().querySelector<HTMLInputElement>(`input[name="${name}"]`);
+  if (!input) throw new Error(`未找到自定义输入 ${name}`);
+  return input;
+}
+
+function setCustom(name: string, value: string): void {
+  const input = customInput(name);
+  input.value = value;
+  input.dispatchEvent(new Event('input', { bubbles: true }));
+}
+
+function clickCustomCalc(): void {
+  const button = page().querySelector<HTMLButtonElement>('.rc-p02__custompanel .rc-btn');
+  if (!button) throw new Error('未找到自定义「计算」按钮');
+  button.click();
+}
+
 describe('p02 结构保真与四族列表', () => {
   it('顶栏 / 四族页签 / 搜索 / 筛选 / 说明逐块存在', async () => {
     await router.navigate('p02');
@@ -206,5 +230,91 @@ describe('p02 导航（p02 → p03 传参约定）', () => {
     expect(params.get('spec')).toBe('G1/2');
     expect(params.get('d')).toBe('20.955');
     expect(Number(params.get('p'))).toBeCloseTo(25.4 / 14, 12);
+  });
+});
+
+describe('p02 自定义规格输入（W6-C3 · V2-5/V2-8）', () => {
+  it('静态行已激活：可展开 d / P 两格 + 计算按钮，无 aria-disabled', async () => {
+    await router.navigate('p02');
+    const row = customRow();
+    expect(row.getAttribute('aria-disabled')).toBeNull();
+    expect(row.getAttribute('aria-expanded')).toBe('false');
+    expect(row.textContent).toContain('P = 2.0');
+    expect(page().querySelector('.rc-p02__custompanel')).toBeNull();
+
+    row.click();
+    expect(customRow().getAttribute('aria-expanded')).toBe('true');
+    expect(customRow().textContent).not.toContain('P = 2.0');
+    expect(customInput('customD').value).toBe('');
+    expect(customInput('customP').value).toBe('');
+    // 只输 d + P，不做 tpi 输入（V2-5）
+    expect(page().querySelectorAll('.rc-p02__custompanel input')).toHaveLength(2);
+    expect(
+      page().querySelector('.rc-p02__custompanel .rc-btn')?.textContent,
+    ).toBe('计算');
+  });
+
+  it('普通 M 页签 d=30 / P=3.5 → p03，hash 带 family/d/p 与 spec=自定义 Ø30×3.5', async () => {
+    await router.navigate('p02');
+    customRow().click();
+    setCustom('customD', '30');
+    setCustom('customP', '3.5');
+    clickCustomCalc();
+
+    await vi.waitFor(() => expect(router.current()).toBe('p03'));
+    const raw = window.location.hash.split('?')[1] ?? '';
+    const params = new URLSearchParams(raw);
+    expect(params.get('family')).toBe('metric');
+    expect(params.get('d')).toBe('30');
+    expect(params.get('p')).toBe('3.5');
+    // spec 格式钉死：自定义 Ø30×3.5（UTF-8 百分号编码 + 空格 '+'）
+    expect(params.get('spec')).toBe('自定义 Ø30×3.5');
+    expect(raw).toContain(
+      `spec=${encodeURIComponent('自定义')}+${encodeURIComponent('Ø30×3.5')}`,
+    );
+    expect(app.querySelector('.la-page[data-page="p03"]')).not.toBeNull();
+    expect(app.textContent).toContain('自定义 Ø30×3.5');
+  });
+
+  it('自定义规格随当前族页签：梯形 Tr → family=trapezoid', async () => {
+    await router.navigate('p02');
+    tabButton('梯形 Tr').click();
+    customRow().click();
+    setCustom('customD', '40');
+    setCustom('customP', '7');
+    clickCustomCalc();
+
+    await vi.waitFor(() => expect(router.current()).toBe('p03'));
+    const params = new URLSearchParams(window.location.hash.split('?')[1] ?? '');
+    expect(params.get('family')).toBe('trapezoid');
+    expect(params.get('d')).toBe('40');
+    expect(params.get('p')).toBe('7');
+    expect(params.get('spec')).toBe('自定义 Ø40×7');
+  });
+
+  it('非法输入（d=0）→ 行内提示、不跳转', async () => {
+    await router.navigate('p02');
+    customRow().click();
+    setCustom('customD', '0');
+    setCustom('customP', '3.5');
+    clickCustomCalc();
+
+    expect(router.current()).toBe('p02');
+    expect(window.location.hash).not.toContain('p03');
+    const error = page().querySelector<HTMLElement>('.rc-p02__customerr');
+    expect(error).not.toBeNull();
+    expect(error?.hidden).toBe(false);
+    expect(error?.textContent).toContain('大于 0');
+  });
+
+  it('非法输入（P=0）→ 行内提示、不跳转', async () => {
+    await router.navigate('p02');
+    customRow().click();
+    setCustom('customD', '30');
+    setCustom('customP', '0');
+    clickCustomCalc();
+
+    expect(router.current()).toBe('p02');
+    expect(page().querySelector<HTMLElement>('.rc-p02__customerr')?.hidden).toBe(false);
   });
 });

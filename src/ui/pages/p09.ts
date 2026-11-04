@@ -8,19 +8,22 @@
  *
  * 计算口径（src/core/speed.ts）：
  *   n = 1000·Vc / (π·D)           （spindleSpeed 正向）
- *   Vc = n·π·D / 1000             （同一关系反解；core 未提供反向函数，页面按同式求值）
+ *   Vc = n·π·D / 1000             （surfaceSpeed 反解，DEFERRED #13 已 core 化）
+ *   vf = f·n                      （feedRate；f 有效时在结果区追加进给卡）
  * 自绘键盘写入「当前高亮输入行」：默认在求转速模式下指向 Vc，在求线速度模式下指向 n；
- * 点击 / 聚焦任意输入行可切换写入目标（.rc-p09__input--active 高亮）。
+ * 点击 / 聚焦任意输入行可切换写入目标（.rc-p09__input--active 高亮；f 行同样可写）。
  *
- * 页面参数（README §5.2 冻结链路）：`d`（工件直径 mm）、`vc`（线速度 m·min⁻¹）。
+ * 页面参数（README §5.2 冻结链路）：`d`（工件直径 mm）、`vc`（线速度 m·min⁻¹）、
+ * `f`（每转进给 mm/r，可选；WAVE-PLAN-V2 §1 新增键）。
  */
 import type { PageContext, PageModule } from '../router';
 import type { KeypadKey } from '../components';
-import { spindleSpeed } from '../../core/speed';
+import { feedRate, spindleSpeed, surfaceSpeed } from '../../core/speed';
 import {
   Accordion,
   InputRow,
   Keypad,
+  ResultCard,
   Scale,
   Segmented,
   StatBlock,
@@ -34,6 +37,7 @@ const CSS = `
 .rc-p09__inputs { display: flex; flex-direction: column; gap: 9px; }
 .rc-p09__input--active { border-color: var(--la-accent); }
 .rc-p09__hint { font-size: 12px; line-height: 1.55; color: var(--la-accent-ink); padding: 0 2px; }
+.rc-p09__result { display: flex; flex-direction: column; gap: 9px; }
 `;
 
 /**
@@ -43,12 +47,13 @@ const CSS = `
 const SCALE_MAX_RPM = 1500;
 
 type Mode = 'rpm' | 'vc';
-type Field = 'd' | 'vc' | 'rpm';
+type Field = 'd' | 'vc' | 'rpm' | 'f';
 
 interface Texts {
   d: string;
   vc: string;
   rpm: string;
+  f: string;
 }
 
 function parseNum(text: string): number | null {
@@ -64,6 +69,12 @@ function trimFixed(value: number, digits: number): string {
   return text === '-0' ? '0' : text;
 }
 
+/** 进给显示：常规走去尾零；小于显示精度（如 0.0004）时退化为原值，避免显示成 0。 */
+function formatFeed(value: number): string {
+  const text = trimFixed(value, 3);
+  return text === '0' ? String(value) : text;
+}
+
 export const title = '转速 · 线速度';
 
 const page: PageModule = {
@@ -73,10 +84,12 @@ const page: PageModule = {
 
     const dParam = Number(ctx.params.get('d'));
     const vcParam = Number(ctx.params.get('vc'));
+    const fParam = Number(ctx.params.get('f'));
     const texts: Texts = {
       d: Number.isFinite(dParam) && dParam > 0 ? String(dParam) : '50',
       vc: Number.isFinite(vcParam) && vcParam > 0 ? String(vcParam) : '150',
       rpm: '',
+      f: Number.isFinite(fParam) && fParam > 0 ? String(fParam) : '',
     };
 
     const state: { mode: Mode; active: Field } = { mode: 'rpm', active: 'vc' };
@@ -114,7 +127,7 @@ const page: PageModule = {
       }
       const rpm = parseNum(texts.rpm);
       if (rpm === null || rpm < 0) return null;
-      const vc = (rpm * Math.PI * d) / 1000;
+      const vc = surfaceSpeed({ d, n: rpm });
       return { d, main: vc, rpm, vc };
     }
 
@@ -140,13 +153,21 @@ const page: PageModule = {
         return;
       }
 
+      // f 有效（有限且 > 0）才计算并显示 vf；空 / 0 / 负数一律不显示（诚实不伪造）。
+      const fValue = parseNum(texts.f);
+      const feed = fValue !== null && fValue > 0 ? fValue : null;
+      const vf = feed === null ? null : feedRate(feed, calc.rpm);
+
       if (state.mode === 'rpm') {
         resultWrap.append(
           StatBlock({
             eyebrow: '主轴转速 n',
             value: calc.rpm.toFixed(0),
             unit: 'r/min',
-            footnote: 'vf = f·n（未输入进给 f，暂不计算）',
+            footnote:
+              vf === null
+                ? 'vf = f·n（未输入进给 f，暂不计算）'
+                : 'vf = f·n（结果见下方进给卡）',
             ariaLabel: '主轴转速计算结果',
           }),
         );
@@ -162,6 +183,25 @@ const page: PageModule = {
         );
       }
 
+      if (feed !== null && vf !== null) {
+        const vfCard = document.createElement('div');
+        vfCard.className = 'rc-p09__vfcard';
+        vfCard.append(
+          ResultCard({
+            items: [
+              {
+                label: `vf = f·n = ${formatFeed(feed)}×${calc.rpm.toFixed(0)}`,
+                value: vf.toFixed(1),
+                unit: 'mm/min',
+                copy: false,
+              },
+            ],
+            ariaLabel: '每分钟进给结果',
+          }),
+        );
+        resultWrap.append(vfCard);
+      }
+
       scaleWrap.append(
         Scale({
           value: (calc.rpm / SCALE_MAX_RPM) * 100,
@@ -169,6 +209,10 @@ const page: PageModule = {
         }),
       );
 
+      const vfLine =
+        feed !== null && vf !== null
+          ? `<br>vf = f·n = ${formatFeed(feed)}×${calc.rpm.toFixed(0)} = ${vf.toFixed(1)} mm/min`
+          : '';
       accWrap.append(
         Accordion({
           open: accordionOpen,
@@ -178,9 +222,11 @@ const page: PageModule = {
           content:
             state.mode === 'rpm'
               ? `n = 1000·Vc / (π·D)<br>` +
-                `&nbsp;&nbsp;= 1000×${trimFixed(calc.vc, 6)} / (π×${trimFixed(calc.d, 6)}) = ${calc.rpm.toFixed(0)} r/min`
+                `&nbsp;&nbsp;= 1000×${trimFixed(calc.vc, 6)} / (π×${trimFixed(calc.d, 6)}) = ${calc.rpm.toFixed(0)} r/min` +
+                vfLine
               : `Vc = n·π·D / 1000<br>` +
-                `&nbsp;&nbsp;= ${trimFixed(calc.rpm, 6)}×π×${trimFixed(calc.d, 6)} / 1000 = ${calc.vc.toFixed(1)} m/min`,
+                `&nbsp;&nbsp;= ${trimFixed(calc.rpm, 6)}×π×${trimFixed(calc.d, 6)} / 1000 = ${calc.vc.toFixed(1)} m/min` +
+                vfLine,
         }),
       );
     }
@@ -243,13 +289,29 @@ const page: PageModule = {
         inputWrap.append(dRow, rpmRow);
       }
 
+      const fRow = InputRow({
+        label: '每转进给 f',
+        value: texts.f,
+        unit: 'mm/r',
+        name: 'f',
+        onInput: (value) => {
+          texts.f = value;
+          setActive('f');
+          paintResult();
+        },
+      });
+      register('f', fRow);
+      inputWrap.append(fRow);
+
       setActive(state.active);
     }
 
     function onKeypad(key: KeypadKey): void {
       const field = state.active;
       const allowed =
-        field === 'd' || (state.mode === 'rpm' ? field === 'vc' : field === 'rpm');
+        field === 'd' ||
+        field === 'f' ||
+        (state.mode === 'rpm' ? field === 'vc' : field === 'rpm');
       if (!allowed) return;
       const current = texts[field];
       let next = current;

@@ -12,6 +12,7 @@
  */
 import type { PageContext, PageModule } from '../router';
 import {
+  Button,
   Card,
   Chip,
   InputRow,
@@ -68,9 +69,13 @@ const CSS = `
 .rc-p02__chips { display: flex; gap: 7px; flex: 0 0 auto; }
 .rc-p02__listcard { flex: 1 1 auto; min-height: 0; display: flex; }
 .rc-p02__listcard .la-rowlist { flex: 1 1 auto; min-height: 0; overflow-y: auto; }
-.rc-p02__customrow { cursor: default; }
+.rc-p02__customrow { cursor: pointer; }
 .rc-p02__customname { color: var(--la-sub); }
 .rc-p02__customval { color: var(--la-accent-ink); font-weight: 600; }
+.rc-p02__custompanel { display: flex; flex-direction: column; gap: 8px; padding: 4px 0 10px; border-top: 1px solid var(--la-border-soft); }
+.rc-p02__customerr { font-size: 12px; line-height: 1.55; color: var(--la-accent-ink); padding: 0 2px; }
+.rc-p02__customactions { display: flex; }
+.rc-p02__customactions .la-btn { flex: 1 1 auto; }
 `;
 
 function flankAngleFor(family: ThreadFamily): FlankAngle {
@@ -108,14 +113,7 @@ function previewD2(row: ThreadRow): string {
   }).d2.toFixed(3);
 }
 
-/** 设计稿静态「自定义规格…」行（docs/车工计算App-无限画布.html:1178）；v0.1 不做自定义输入页 */
-function customSpecRow(): HTMLElement {
-  const row = document.createElement('div');
-  row.className = 'la-lrow rc-lrow rc-p02__customrow';
-  row.setAttribute('aria-disabled', 'true');
-  row.innerHTML = `<span class="grow rc-lrow__name rc-p02__customname">自定义规格…</span><span class="val la-num rc-p02__customval">P = 2.0</span><span class="rc-lrow__chev">${icon('chev', 15)}</span>`;
-  return row;
-}
+/** 设计稿静态「自定义规格…」行（docs/车工计算App-无限画布.html:1178）；W6-C3 激活为可展开输入（V2-8） */
 
 export const title = '螺纹 · 选型';
 
@@ -128,6 +126,10 @@ const page: PageModule = {
     let coarse: CoarseFilter = 'all';
     let query = '';
     let pitchMode = false;
+    let customOpen = false;
+    let customD = '';
+    let customP = '';
+    let customErrorEl: HTMLElement | null = null;
 
     const activeTab = (): FamilyTab =>
       FAMILY_TABS.find((tab) => tab.value === family) ?? FAMILY_TABS[0]!;
@@ -143,7 +145,7 @@ const page: PageModule = {
       className: 'rc-p02__listcard',
       ariaLabel: '螺纹规格列表',
     });
-    const customCard = Card({ tight: true, children: [customSpecRow()] });
+    const customCard = Card({ tight: true, className: 'rc-p02__customcard' });
     const hint = SubText('右侧为中径预览 d₂ / mm · 选中查看完整结果', { center: true });
 
     function syncBadge(): void {
@@ -201,6 +203,100 @@ const page: PageModule = {
           },
         }),
       );
+    }
+
+    function submitCustom(): void {
+      const d = Number(customD.trim());
+      const p = Number(customP.trim());
+      if (!Number.isFinite(d) || d <= 0 || !Number.isFinite(p) || p <= 0) {
+        if (customErrorEl) {
+          customErrorEl.textContent = '请输入大于 0 的大径 d 与螺距 P。';
+          customErrorEl.hidden = false;
+        }
+        return;
+      }
+      if (customErrorEl) {
+        customErrorEl.textContent = '';
+        customErrorEl.hidden = true;
+      }
+      // V2-5：只输 d + P，牙型角由 p03 按 family 取；spec 显示名钉死为「自定义 Ø30×3.5」。
+      void ctx.navigate('p03', {
+        family,
+        spec: `自定义 Ø${d}×${p}`,
+        d,
+        p,
+      });
+    }
+
+    /** 自定义规格行：点击展开 d / P 两格 + 计算按钮；族别取当前页签（V2-8）。 */
+    function renderCustom(): void {
+      const row = document.createElement('button');
+      row.type = 'button';
+      row.className = 'la-lrow rc-lrow rc-p02__customrow';
+      row.setAttribute('aria-expanded', String(customOpen));
+      // 折叠态保留设计稿静态「P = 2.0」；展开后隐藏，避免与用户输入冲突。
+      const staticVal = customOpen
+        ? ''
+        : '<span class="val la-num rc-p02__customval">P = 2.0</span>';
+      row.innerHTML = `<span class="grow rc-lrow__name rc-p02__customname">自定义规格…</span>${staticVal}<span class="rc-lrow__chev">${icon(customOpen ? 'chevd' : 'chev', 15)}</span>`;
+      row.addEventListener('click', () => {
+        customOpen = !customOpen;
+        renderCustom();
+      });
+
+      const children: HTMLElement[] = [row];
+      customErrorEl = null;
+      if (customOpen) {
+        const clearError = (): void => {
+          if (customErrorEl) {
+            customErrorEl.textContent = '';
+            customErrorEl.hidden = true;
+          }
+        };
+
+        const panel = document.createElement('div');
+        panel.className = 'rc-p02__custompanel';
+        panel.setAttribute('role', 'group');
+        panel.setAttribute('aria-label', '自定义规格输入');
+        panel.append(
+          InputRow({
+            label: '大径 d',
+            value: customD,
+            unit: 'mm',
+            name: 'customD',
+            placeholder: '如 30',
+            onInput: (value) => {
+              customD = value;
+              clearError();
+            },
+          }),
+          InputRow({
+            label: '螺距 P',
+            value: customP,
+            unit: 'mm',
+            name: 'customP',
+            placeholder: '如 3.5',
+            onInput: (value) => {
+              customP = value;
+              clearError();
+            },
+          }),
+        );
+
+        const error = document.createElement('div');
+        error.className = 'rc-p02__customerr';
+        error.setAttribute('role', 'note');
+        error.hidden = true;
+        customErrorEl = error;
+
+        const actions = document.createElement('div');
+        actions.className = 'rc-p02__customactions';
+        actions.append(Button({ label: '计算', onClick: submitCustom }));
+
+        panel.append(error, actions);
+        children.push(panel);
+      }
+      customCard.replaceChildren(...children);
     }
 
     function filteredRows(): ThreadRow[] {
@@ -261,6 +357,7 @@ const page: PageModule = {
     body.append(segmented, searchWrap, chipsRow, listCard, customCard, hint);
     buildSearch();
     buildChips();
+    renderCustom();
     renderList();
 
     ctx.root.append(createPage({ id: 'p02', top, body }));

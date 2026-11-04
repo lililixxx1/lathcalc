@@ -1,0 +1,4 @@
+$ node docs/evidence/W6-C3/tools/summarize.mjs
+gate1 tsc REAL_EXIT=0 ｜ gate2 vitest REAL_EXIT=0：38 files / 338 tests passed ｜ gate3 build REAL_EXIT=0
+ALL_GATES_REAL_EXIT_ZERO=true
+REAL_EXIT=0

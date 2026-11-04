@@ -19,16 +19,13 @@ export function spindleSpeed(input: SpeedInput): SpeedResult {
 
 /**
  * 反向：Vc = n·π·D/1000 [m/min]（DEFERRED #13 core 化，WAVE-PLAN-V2 §1）。
- * 契约桩：W6-C3 实现，调用即抛错。
+ * 与 spindleSpeed 的正向关系互逆：n = 1000·Vc/(π·D)。
  */
 export function surfaceSpeed(input: { d: number; n: number }): number {
-  void input;
-  throw new Error('PANIC: surfaceSpeed 契约桩，由 W6-C3 实现（WAVE-PLAN-V2 §1）');
+  return (input.n * Math.PI * input.d) / 1000;
 }
 
-/** vf = f·n [mm/min]（WAVE-PLAN-V2 F6）。契约桩：W6-C3 实现。 */
+/** vf = f·n [mm/min]（WAVE-PLAN-V2 F6）。 */
 export function feedRate(f: number, n: number): number {
-  void f;
-  void n;
-  throw new Error('PANIC: feedRate 契约桩，由 W6-C3 实现（WAVE-PLAN-V2 §1）');
+  return f * n;
 }

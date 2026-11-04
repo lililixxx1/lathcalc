@@ -12,7 +12,7 @@
  */
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { createRouter, type Router } from '../src/ui/router';
-import { spindleSpeed } from '../src/core/speed';
+import { feedRate, spindleSpeed, surfaceSpeed } from '../src/core/speed';
 import { KEYPAD_KEYS } from '../src/ui/components';
 
 let app: HTMLElement;
@@ -161,5 +161,64 @@ describe('p09 转速 · 线速度', () => {
     expect(currentPage().querySelector<HTMLInputElement>('input[name="vc"]')?.value).toBe('100');
     expect(spindleSpeed({ diameter: 40, vc: 100 }).rpm.toFixed(0)).toBe('796');
     expect(statMainValue()).toBe('796');
+  });
+});
+
+describe('p09 进给 f / vf 卡（W6-C3 · WAVE-PLAN-V2 F6）', () => {
+  it('默认 f 为空 → 不渲染 vf 卡（诚实不伪造）', async () => {
+    await router.navigate('p09');
+    expect(currentPage().querySelector('.rc-p09__vfcard')).toBeNull();
+    expect(currentPage().querySelector<HTMLInputElement>('input[name="f"]')?.value).toBe('');
+  });
+
+  it('输入 f=0.2 → vf 卡 191.0 mm/min（值调 core feedRate）', async () => {
+    await router.navigate('p09');
+    setInput('f', '0.2');
+
+    const coreVf = feedRate(0.2, spindleSpeed({ diameter: 50, vc: 150 }).rpm);
+    // vf = 0.2×954.929658551372 = 190.9859317102744 → toFixed(1) = 191.0
+    expect(coreVf.toFixed(1)).toBe('191.0');
+
+    const card = currentPage().querySelector<HTMLElement>('.rc-p09__vfcard');
+    expect(card).not.toBeNull();
+    expect(card?.textContent).toContain('vf = f·n');
+    expect(card?.textContent).toContain('191.0');
+    expect(card?.textContent).toContain('mm/min');
+  });
+
+  it('f=0 → 不渲染 vf 卡，主结果仍为 955', async () => {
+    await router.navigate('p09');
+    setInput('f', '0');
+    expect(currentPage().querySelector('.rc-p09__vfcard')).toBeNull();
+    expect(statMainValue()).toBe('955');
+  });
+
+  it('求线速度 Vc 走 core surfaceSpeed：D=50 / n=1000 → 157.1', async () => {
+    await router.navigate('p09');
+    clickSegItem('vc');
+    setInput('rpm', '1000');
+
+    const expected = surfaceSpeed({ d: 50, n: 1000 });
+    // (1000×π)×50/1000 = 157.07963267948963 → 157.1
+    expect(expected.toFixed(1)).toBe('157.1');
+    expect(statMainValue()).toBe(expected.toFixed(1));
+  });
+
+  it('传参 f=0.2：f 预填且 vf 卡 191.0（#/p09?d=50&vc=150&f=0.2）', async () => {
+    await router.navigate('p09', { d: 50, vc: 150, f: 0.2 });
+    expect(currentPage().querySelector<HTMLInputElement>('input[name="f"]')?.value).toBe('0.2');
+    expect(currentPage().querySelector('.rc-p09__vfcard')?.textContent).toContain('191.0');
+  });
+
+  it('f 行可成为键盘写入目标：点击 f 行后键入 0.2 → vf 卡 191.0', async () => {
+    await router.navigate('p09');
+    const fInput = currentPage().querySelector<HTMLInputElement>('input[name="f"]');
+    fInput?.closest('.rc-input')?.dispatchEvent(new Event('click', { bubbles: true }));
+    keypad('0');
+    keypad('.');
+    keypad('2');
+
+    expect(currentPage().querySelector<HTMLInputElement>('input[name="f"]')?.value).toBe('0.2');
+    expect(currentPage().querySelector('.rc-p09__vfcard')?.textContent).toContain('191.0');
   });
 });

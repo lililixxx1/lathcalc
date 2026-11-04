@@ -1,0 +1,51 @@
+$ NO_COLOR=1 npx vitest run --maxWorkers=2
+
+ RUN  v3.2.7 <TREE>
+
+ ✓ test/ui-p02.test.ts (14 tests) 900ms
+ ✓ test/ui-p01.test.ts (12 tests) 1167ms
+   ✓ p01 导航 > 10 个入口分别导航到 p02/p04/p05/p07/p08/p09/p10/p11/p12/p13  633ms
+ ✓ test/ui-p06.test.ts (10 tests) 311ms
+ ✓ test/ui-p04.test.ts (9 tests) 310ms
+ ✓ test/ui-p05.test.ts (5 tests) 273ms
+ ✓ test/ui-p03.test.ts (10 tests) 225ms
+ ✓ test/ui-router.test.ts (11 tests) 193ms
+ ✓ test/ui-p11.test.ts (10 tests) 137ms
+ ✓ test/ui-p09.test.ts (13 tests) 146ms
+ ✓ test/ui-p14.test.ts (15 tests) 158ms
+ ✓ test/ui-p07.test.ts (8 tests) 114ms
+ ✓ test/ui-p12.test.ts (8 tests) 116ms
+ ✓ test/ui-p08.test.ts (7 tests) 97ms
+ ✓ test/ui-p10.test.ts (5 tests) 94ms
+ ✓ test/ui-p13.test.ts (6 tests) 90ms
+ ✓ test/ui-components.test.ts (26 tests) 34ms
+ ✓ test/ui-store.test.ts (16 tests) 8ms
+ ✓ test/ui-source.test.ts (7 tests) 431ms
+   ✓ UI 源码契约 > 14 页 loader 在无 DOM 环境均可解析，且模块含 title/render  417ms
+ ✓ test/data-gcode-ref.test.ts (8 tests) 11ms
+ ✓ test/data-it.test.ts (8 tests) 8ms
+ ✓ test/arc-cases-b.test.ts (16 tests) 9ms
+ ✓ test/data-materials.test.ts (6 tests) 7ms
+ ✓ test/arc-cases-a.test.ts (15 tests) 10ms
+ ✓ test/data-trapezoid.test.ts (9 tests) 6ms
+ ✓ test/data-unified.test.ts (8 tests) 6ms
+ ✓ test/data-metric.test.ts (5 tests) 5ms
+ ✓ test/data-pipe.test.ts (8 tests) 4ms
+ ✓ test/tolerance.test.ts (7 tests) 4ms
+ ✓ test/gcode.test.ts (6 tests) 4ms
+ ✓ test/lookup.test.ts (5 tests) 3ms
+ ✓ test/data-morse.test.ts (7 tests) 4ms
+ ✓ test/thread.test.ts (8 tests) 4ms
+ ✓ test/taper.test.ts (7 tests) 3ms
+ ✓ test/data-densities.test.ts (5 tests) 3ms
+ ✓ test/speed.test.ts (8 tests) 3ms
+ ✓ test/triangle.test.ts (3 tests) 3ms
+ ✓ test/weight.test.ts (4 tests) 3ms
+ ✓ test/arc.test.ts (3 tests) 2ms
+
+ Test Files  38 passed (38)
+      Tests  338 passed (338)
+   Start at  09:53:24
+   Duration  12.24s (transform 730ms, setup 0ms, collect 994ms, tests 4.91s, environment 8.18s, prepare 3.48s)
+
+REAL_EXIT=0
