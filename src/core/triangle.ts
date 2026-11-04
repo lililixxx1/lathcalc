@@ -3,7 +3,7 @@
  * 公式：余弦定理 cos A = (b²+c²−a²)/(2bc)；海伦公式 S = √(s(s−a)(s−b)(s−c))。
  * 角度单位度（°），边长单位与输入一致。
  */
-import type { TriangleInput, TriangleResult } from './types';
+import type { TriangleInput, TriangleResult, TriangleSolveOutput } from './types';
 
 const RAD_TO_DEG = 180 / Math.PI;
 /** 直角判定容差（度）：任一角 ±0.01° 内视为 90°（types.ts TriangleResult.right） */
@@ -34,4 +34,15 @@ export function solveTriangle(input: TriangleInput): TriangleResult {
   const right = [A, B, C].some((angle) => Math.abs(angle - 90) <= RIGHT_TOLERANCE_DEG);
 
   return { a, b, c, A, B, C, area, right };
+}
+
+/**
+ * 多模式解算（WAVE-PLAN-V2 §1 契约，W6-C4 实现）：SSS/SAS/ASA/SSA。
+ * SSA 双解并列、锐角解在前；边界（A≥90° 且 a≤c、sinC>1、解出 B≤0/C≤0 退化）判无解（V2-3）。
+ * 模式判定与其余组合抛错文案见 types.ts SolveTriangleByFn 注释（G0-I2）。
+ * 契约桩：W6-C4 实现，调用即抛错。
+ */
+export function solveTriangleBy(input: TriangleInput): TriangleSolveOutput {
+  void input;
+  throw new Error('PANIC: solveTriangleBy 契约桩，由 W6-C4 实现（WAVE-PLAN-V2 §1）');
 }

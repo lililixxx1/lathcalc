@@ -90,6 +90,12 @@ export interface SpeedResult {
 
 export type SpindleSpeedFn = (input: SpeedInput) => SpeedResult;
 
+// ===== 转速反向（WAVE-PLAN-V2 §1，W6-C3 实现；DEFERRED #13 收账） =====
+/** Vc = n·π·D/1000 [m/min]，返回标量（G0-B1：不滥用 SpeedResult） */
+export type SurfaceSpeedFn = (input: { d: number; n: number }) => number;
+/** vf = f·n [mm/min]（WAVE-PLAN-V2 F6） */
+export type FeedRateFn = (f: number, n: number) => number;
+
 // ===== 锥度（W2-C3 实现） =====
 /** 三值互算：big/small/length 任给其三（缺项传 undefined），求缺项 + 锥度 C + 半角 */
 export interface TaperInput {
@@ -110,6 +116,25 @@ export interface TaperResult {
 }
 
 export type TaperCalcFn = (input: TaperInput) => TaperResult;
+
+// ===== 锥度反推（WAVE-PLAN-V2 §1，W6-C4 实现；DEFERRED #8） =====
+export interface TaperReverseInput extends TaperInput {
+  /** 外部给定锥比 C（莫氏预设如 1/19.254 或自定义值）；必须 > 0 */
+  taperC: number;
+}
+
+export interface TaperReverseResult extends TaperResult {
+  /** 反推出的第三值字段名 */
+  solved: 'big' | 'small' | 'length';
+  /** (D − d)/2 [mm]，由未舍入值计算（G0-I4 钉路径） */
+  halfDiffMM: number;
+}
+
+/**
+ * taperC(>0) + big/small/length 恰两值 → 解第三值；缺/多值或 taperC≤0 抛错（不臆造）。
+ * missing = 反推所得第三值的数值。
+ */
+export type TaperReverseFn = (input: TaperReverseInput) => TaperReverseResult;
 
 // ===== 公差（W2-C3 合成 / W3-C4 录表） =====
 export interface ToleranceInput {
@@ -166,6 +191,20 @@ export interface TriangleResult {
 }
 
 export type SolveTriangleFn = (input: TriangleInput) => TriangleResult;
+
+// ===== 三角多模式（WAVE-PLAN-V2 §1，W6-C4 实现；DEFERRED #7） =====
+/** SSA 双解时两解并列、锐角解在前（V2-3） */
+export interface TriangleSolveOutput {
+  mode: 'SSS' | 'SAS' | 'ASA' | 'SSA';
+  solutions: TriangleResult[];
+}
+
+/**
+ * 模式判定（G0-I2 冻结）：恰三边=SSS；恰两边+其夹角=SAS；恰两边+对角=SSA；
+ * 恰两角+其夹边=ASA；其余组合（AAS/AAA/缺值/多值/零值负值）一律抛错，
+ * 文案「无法判定解算模式或输入非法」。
+ */
+export type SolveTriangleByFn = (input: TriangleInput) => TriangleSolveOutput;
 
 // ===== 重量（W2-C1 实现） =====
 export type WeightShape = 'round' | 'hex' | 'pipe' | 'plate';
@@ -246,6 +285,13 @@ export interface G76Program {
 }
 
 export type FanucG76Fn = (p: G76Params) => G76Program;
+
+// ===== 方言与 G92（WAVE-PLAN-V2 §1，W6-C2 实现；DEFERRED #1/#2b） =====
+export type CncSystem = 'fanuc' | 'gsk' | 'knd' | 'hnc';
+/** 语义待 W6-C1 双源调研冻结（docs/research/g76-dialects.md）；恒等式 g76Dialect(p,'fanuc') ≡ fanucG76(p) */
+export type G76DialectFn = (p: G76Params, system: CncSystem) => G76Program;
+/** FANUC 车螺纹单行程循环，单行输出（G0-B2 冻结行数） */
+export type G92CycleFn = (p: G76Params) => G76Program;
 
 // ===== 材料 / 莫氏 / 速查（W3-C5 录入） =====
 /** 切削参数区间 [min,max] */

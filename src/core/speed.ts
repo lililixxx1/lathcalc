@@ -1,4 +1,4 @@
-/** speed.ts · 转速/进给/粗糙度（W2-C1 实现） */
+/** speed.ts · 转速/进给/粗糙度（W2-C1 实现；反向函数 W6-C3 扩展，WAVE-PLAN-V2 §1） */
 import type { SpeedInput, SpeedResult } from './types';
 
 /**
@@ -15,4 +15,20 @@ export function spindleSpeed(input: SpeedInput): SpeedResult {
       ? (1000 * input.feed * input.feed) / (8 * input.tipRadius)
       : undefined;
   return { rpm, feedPerMin, ra };
+}
+
+/**
+ * 反向：Vc = n·π·D/1000 [m/min]（DEFERRED #13 core 化，WAVE-PLAN-V2 §1）。
+ * 契约桩：W6-C3 实现，调用即抛错。
+ */
+export function surfaceSpeed(input: { d: number; n: number }): number {
+  void input;
+  throw new Error('PANIC: surfaceSpeed 契约桩，由 W6-C3 实现（WAVE-PLAN-V2 §1）');
+}
+
+/** vf = f·n [mm/min]（WAVE-PLAN-V2 F6）。契约桩：W6-C3 实现。 */
+export function feedRate(f: number, n: number): number {
+  void f;
+  void n;
+  throw new Error('PANIC: feedRate 契约桩，由 W6-C3 实现（WAVE-PLAN-V2 §1）');
 }

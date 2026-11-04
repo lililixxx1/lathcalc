@@ -1,5 +1,5 @@
 /** taper.ts · 锥度三值互算/半角（W2-C3 实现；莫氏查表走 lookup + W3-C5 数据） */
-import type { TaperInput, TaperResult } from './types';
+import type { TaperInput, TaperResult, TaperReverseInput, TaperReverseResult } from './types';
 import { degToDMS } from './arc';
 
 /**
@@ -31,4 +31,14 @@ export function taperCalc(input: TaperInput): TaperResult {
     halfAngleDeg,
     halfAngleDMS: degToDMS(halfAngleDeg),
   };
+}
+
+/**
+ * 锥度反推（WAVE-PLAN-V2 §1 契约，W6-C4 实现；DEFERRED #8）：
+ * taperC(>0) + big/small/length 恰两值 → 解第三值 + halfDiffMM=(D−d)/2（未舍入路径，G0-I4）。
+ * 契约桩：W6-C4 实现，调用即抛错。
+ */
+export function taperReverse(input: TaperReverseInput): TaperReverseResult {
+  void input;
+  throw new Error('PANIC: taperReverse 契约桩，由 W6-C4 实现（WAVE-PLAN-V2 §1）');
 }

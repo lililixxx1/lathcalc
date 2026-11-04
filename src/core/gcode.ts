@@ -1,5 +1,5 @@
-/** gcode.ts · FANUC 两行式 G76 模板（W2-C5 实现；仅 FANUC，其余系统 v0.2 延期） */
-import type { G76Params, G76Program } from './types';
+/** gcode.ts · FANUC 两行式 G76 模板（W2-C5 实现；方言/G92 由 W6-C2 扩展，WAVE-PLAN-V2 §1） */
+import type { CncSystem, G76Params, G76Program } from './types';
 
 /**
  * 固定免责文案：逐字导出自 docs/车工计算App-调研报告.md:330 §7.4 原句，禁止改写。
@@ -40,4 +40,26 @@ export function fanucG76(p: G76Params): G76Program {
     `G76 X${formatAxis(p.minorDiameter)} Z${formatAxis(p.endZ)} P${depthUM} Q${firstCutUM} F${formatNumber(p.lead, 1)}`,
   ];
   return { lines, disclaimer: G76_DISCLAIMER };
+}
+
+/**
+ * G76 方言分支（WAVE-PLAN-V2 §1 契约，W6-C2 实现；DEFERRED #1）。
+ * 语义由 W6-C1 双源调研冻结（docs/research/g76-dialects.md 结论表）；
+ * 恒等式 g76Dialect(p, 'fanuc') ≡ fanucG76(p)。
+ * 契约桩：W6-C2 实现，调用即抛错。
+ */
+export function g76Dialect(p: G76Params, system: CncSystem): G76Program {
+  void p;
+  void system;
+  throw new Error('PANIC: g76Dialect 契约桩，由 W6-C2 实现（WAVE-PLAN-V2 §1）');
+}
+
+/**
+ * G92 车螺纹单行程循环（WAVE-PLAN-V2 §1 契约，W6-C2 实现；DEFERRED #2b）。
+ * FANUC 基线单行 G92 X(U)_ Z(W)_ F_；行数冻结 = 1（G0-B2）。
+ * 契约桩：W6-C2 实现，调用即抛错。
+ */
+export function g92Cycle(p: G76Params): G76Program {
+  void p;
+  throw new Error('PANIC: g92Cycle 契约桩，由 W6-C2 实现（WAVE-PLAN-V2 §1）');
 }
