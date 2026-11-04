@@ -3,7 +3,7 @@
 > 卡：W6-C2 ｜ 执行者：worker-1 ｜ 隔离树：T-W6C2 ｜ 基线 commit：`be90518`
 > 日期：2026-11-04 ｜ 语义唯一来源：`docs/research/g76-dialects.md`（W6-C1，Lead 裁决 R1/R2/R3）
 > 结论：**三门禁全部 exit 0**；全量 vitest `38 files / 387 tests` 全绿；金值双盲复算 **6/6 PASS**；
-> 写范围审计仅 4 个在单文件 + 本证据目录（`runs/04-baseline-diff.log`）。
+> 写范围审计仅 4 个在单文件 + 本证据目录（`runs/04-baseline-diff.txt`）。
 
 ## 1. 交付物与写范围
 
@@ -15,25 +15,25 @@
 | `test/ui-p04.test.ts` | +220 / −26 | 预授权迁移 2 条 + 新用例（9 → 22） |
 | `docs/evidence/W6-C2/` | 新增 | 本 README + `runs/` + `recompute.mjs` |
 
-基线导出逐文件比对（`runs/04-baseline-diff.log`）：仅上述 4 文件 `differ`，另 `docs/evidence/W6-C2` 为新增目录；无范围外改动。
-逐文件行数见 `runs/05-diff-numstat.log`。
+基线导出逐文件比对（`runs/04-baseline-diff.txt`）：仅上述 4 文件 `differ`，另 `docs/evidence/W6-C2` 为新增目录；无范围外改动。
+逐文件行数见 `runs/05-diff-numstat.txt`。
 
 ## 2. 门禁（仓库根逐条、单独整句执行）
 
 | 门禁 | 命令 | 退出码 | 证据档 |
 | --- | --- | --- | --- |
-| 静态检查 | `npx tsc --noEmit` | 0 | `runs/01-tsc.log` |
-| 测试 | `npx vitest run --maxWorkers=2` | 0 | `runs/02-vitest.log` |
-| 构建 | `npm run build` | 0 | `runs/03-build.log` |
+| 静态检查 | `npx tsc --noEmit` | 0 | `runs/01-tsc.txt` |
+| 测试 | `npx vitest run --maxWorkers=2` | 0 | `runs/02-vitest.txt` |
+| 构建 | `npm run build` | 0 | `runs/03-build.txt` |
 
 - vitest 原始汇总：`Test Files 38 passed (38)` / `Tests 387 passed (387)`；其中 `test/gcode.test.ts (19 tests)`、`test/ui-p04.test.ts (22 tests)`。
-- 环境：Node `v24.12.0`、npm `11.21.1`、TypeScript `5.9.3`、vitest `3.2.7`（`runs/06-env.log`）。
+- 环境：Node `v24.12.0`、npm `11.21.1`、TypeScript `5.9.3`、vitest `3.2.7`（`runs/06-env.txt`）。
 - 每档均含命令行 + 原始输出 + `REAL_EXIT`；vitest RUN 行的树根绝对路径已按附录 G 只改前缀为 `<tree-root>`。
 
 ## 3. 金值双盲复算（强制项）
 
 - 脚本：`docs/evidence/W6-C2/recompute.mjs`（独立实现，不 import `src/**`；复算格式化口径与 `gcode.ts` helper 规格一致）。
-- 记录：`runs/00-double-blind.log`，`REAL_EXIT=0`，**6/6 PASS**。
+- 记录：`runs/00-double-blind.txt`，`REAL_EXIT=0`，**6/6 PASS**。
 - 未舍入中间值：`d1=26.21125`；单边牙深 `1.894375`；`depthUM=1894`；`depth3=1.894`；`firstUM=400`；`finishKND=50`。
 - 逐字符结果（built === expected）：
 
@@ -104,4 +104,4 @@ npm run build
 node docs/evidence/W6-C2/recompute.mjs
 ```
 
-证据档相对路径索引：`runs/00-double-blind.log`、`runs/01-tsc.log`、`runs/02-vitest.log`、`runs/03-build.log`、`runs/04-baseline-diff.log`、`runs/05-diff-numstat.log`、`runs/06-env.log`。
+证据档相对路径索引：`runs/00-double-blind.txt`、`runs/01-tsc.txt`、`runs/02-vitest.txt`、`runs/03-build.txt`、`runs/04-baseline-diff.txt`、`runs/05-diff-numstat.txt`、`runs/06-env.txt`。

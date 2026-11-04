@@ -9,8 +9,8 @@
 
 | 内容 | 路径 |
 | --- | --- |
-| 门禁原始输出 | `runs/tsc.log` / `runs/vitest.log` / `runs/build.log`（命令全文 + 原始输出 + `REAL_EXIT`） |
-| 判定行（脚本生成） | `runs/summary.log`（生成脚本 `summarize.mjs`） |
+| 门禁原始输出 | `runs/tsc.txt` / `runs/vitest.txt` / `runs/build.txt`（命令全文 + 原始输出 + `REAL_EXIT`） |
+| 判定行（脚本生成） | `runs/summary.txt`（生成脚本 `summarize.mjs`） |
 | 本说明 | `README.md` |
 
 判定行原文（由 `node docs/evidence/W6-C4/summarize.mjs` 从三份日志的 `REAL_EXIT` 计算）：
@@ -59,9 +59,9 @@ JUDGMENT | ALL GATES PASS (exit 0)
 
 | 门禁 | 命令 | 期望 | 实测 REAL_EXIT | 原始输出要点 |
 | --- | --- | --- | --- | --- |
-| 静态检查 | `npx tsc --noEmit` | 0 | **0** | 无输出（`runs/tsc.log`） |
-| 测试 | `npx vitest run --maxWorkers=2` | 0 | **0** | `Test Files 38 passed (38)`；`Tests 346 passed (346)`（`runs/vitest.log`） |
-| 构建 | `npm run build` | 0 | **0** | `✓ built in 397ms`；PWA `precache 39 entries (164.13 KiB)`（`runs/build.log`） |
+| 静态检查 | `npx tsc --noEmit` | 0 | **0** | 无输出（`runs/tsc.txt`） |
+| 测试 | `npx vitest run --maxWorkers=2` | 0 | **0** | `Test Files 38 passed (38)`；`Tests 346 passed (346)`（`runs/vitest.txt`） |
+| 构建 | `npm run build` | 0 | **0** | `✓ built in 397ms`；PWA `precache 39 entries (164.13 KiB)`（`runs/build.txt`） |
 
 测试基线 323 例；本卡新增 23 例（triangle +9、taper +5、ui-p07 +4、ui-p12 +5），共 346 例全绿。
 既有测试仅按派工单授权改断言：`test/ui-p07.test.ts:70`（两项→三项）、`test/ui-p12.test.ts:88`（无多模式入口→四项 Segmented）、`test/ui-p12.test.ts:143/:146`（缺值 hint 文案），未删除测试。
@@ -80,4 +80,4 @@ JUDGMENT | ALL GATES PASS (exit 0)
 
 ## 证据档清理说明
 
-`runs/vitest.log` 第 2 行原含机器绝对路径前缀，按附录 G「只改前缀」要求替换为 `<TREE>`；命令、行号与其余内容原样保留。
+`runs/vitest.txt` 第 2 行原含机器绝对路径前缀，按附录 G「只改前缀」要求替换为 `<TREE>`；命令、行号与其余内容原样保留。

@@ -1,0 +1,57 @@
+$ npm run build   # NO_COLOR=1
+
+> lathcalc@0.1.0 build
+> vite build
+
+vite v7.3.7 building client environment for production...
+transforming...
+✓ 63 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/registerSW.js                        0.13 kB
+dist/manifest.webmanifest                 0.35 kB
+dist/index.html                           0.72 kB │ gzip: 0.42 kB
+dist/assets/index-BLh4fxfH.css            1.15 kB │ gzip: 0.62 kB
+dist/assets/speed-CWlMox2k.js             0.29 kB │ gzip: 0.20 kB
+dist/assets/arc-BXF2nq1s.js               0.32 kB │ gzip: 0.25 kB
+dist/assets/thread-DqtIAzPU.js            0.51 kB │ gzip: 0.31 kB
+dist/assets/lookup-zXJH-NWF.js            0.75 kB │ gzip: 0.37 kB
+dist/assets/CodeCard-CqpFx6P_.js          0.85 kB │ gzip: 0.45 kB
+dist/assets/WarnCard-CYgeif0V.js          0.89 kB │ gzip: 0.50 kB
+dist/assets/Button-kj7gGvcV.js            0.95 kB │ gzip: 0.59 kB
+dist/assets/ParamGrid-BS-DJd1E.js         1.09 kB │ gzip: 0.56 kB
+dist/assets/Card-DE7CHRlR.js              1.50 kB │ gzip: 0.64 kB
+dist/assets/InputRow-CjPyNd8R.js          1.62 kB │ gzip: 0.84 kB
+dist/assets/Accordion-Bcqu1hSq.js         1.77 kB │ gzip: 0.97 kB
+dist/assets/StatBlock-Cb440rxf.js         1.96 kB │ gzip: 0.68 kB
+dist/assets/ResultCard-ZJWCMIbX.js        1.98 kB │ gzip: 0.93 kB
+dist/assets/Tile-C3JMuU4p.js              2.08 kB │ gzip: 0.91 kB
+dist/assets/ListRow-Bij20oux.js           2.17 kB │ gzip: 0.93 kB
+dist/assets/SegChip-C0o-hw0e.js           2.37 kB │ gzip: 1.03 kB
+dist/assets/p13-Cu8Xz-2T.js               2.75 kB │ gzip: 1.51 kB
+dist/assets/p01-TRVni3Pv.js               3.12 kB │ gzip: 1.67 kB
+dist/assets/p03-DQnAl-5J.js               4.62 kB │ gzip: 2.27 kB
+dist/assets/p02-CSFu1zvp.js               5.47 kB │ gzip: 2.52 kB
+dist/assets/p08-B3stnNNR.js               5.61 kB │ gzip: 2.45 kB
+dist/assets/p11-B_gqBteU.js               6.88 kB │ gzip: 2.87 kB
+dist/assets/p09-BOAj6erc.js               6.97 kB │ gzip: 3.05 kB
+dist/assets/PageShell-DPexTcWZ.js         7.50 kB │ gzip: 2.73 kB
+dist/assets/p04-CucfwUY6.js               7.53 kB │ gzip: 3.47 kB
+dist/assets/p06-DNt8EXo_.js               8.16 kB │ gzip: 3.68 kB
+dist/assets/p10-Ds6bKrz3.js               8.20 kB │ gzip: 2.65 kB
+dist/assets/p05-hf3SvTmV.js               8.54 kB │ gzip: 3.50 kB
+dist/assets/p12-CA94wKhA.js               9.70 kB │ gzip: 4.02 kB
+dist/assets/p07-Pob8917r.js               9.88 kB │ gzip: 3.84 kB
+dist/assets/p14-DXIrmo78.js              11.34 kB │ gzip: 4.49 kB
+dist/assets/index-7v-fT-Rm.js            11.48 kB │ gzip: 4.85 kB
+dist/assets/threads-unified-DTB2sbp9.js  32.42 kB │ gzip: 2.17 kB
+✓ built in 406ms
+
+PWA v1.3.0
+mode      generateSW
+precache  39 entries (169.48 KiB)
+files generated
+  dist/sw.js
+  dist/workbox-9c191d2f.js
+
+REAL_EXIT=0

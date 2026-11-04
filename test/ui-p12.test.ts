@@ -226,11 +226,13 @@ describe('p12 多模式解算（W6-C4）', () => {
     expect(first).toBeDefined();
     expect(second).toBeDefined();
     if (!first || !second) return;
-    // 解₁（锐角 C=48.590533°）：b₁ = a·sinB₁/sinA = 66.457378 → 66.46
+    // 解₁（锐角 C=48.590533°）：B₁=180−36.87−48.590533=94.539467 → 94.54°；b₁ = a·sinB₁/sinA = 66.457378 → 66.46
     expect(cardValue(first, '∠C')).toBe('48.59°');
+    expect(cardValue(first, '∠B')).toBe('94.54°');
     expect(cardValue(first, '边 b')).toBe('66.46');
-    // 解₂（钝角 C=131.409467°）：b₂ = 13.542514 → 13.54
+    // 解₂（钝角 C=131.409467°）：B₂=180−36.87−131.409467=11.720533 → 11.72°；b₂ = 13.542514 → 13.54
     expect(cardValue(second, '∠C')).toBe('131.41°');
+    expect(cardValue(second, '∠B')).toBe('11.72°');
     expect(cardValue(second, '边 b')).toBe('13.54');
     expect(page().textContent).toContain('SSA 双解');
     expect(page().querySelector('.rc-acc__body')?.textContent).toContain('sinC');

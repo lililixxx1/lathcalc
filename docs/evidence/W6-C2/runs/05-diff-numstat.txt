@@ -1,0 +1,9 @@
+$ git diff --no-index --numstat <baseline-be90518-blob> <tree-file> (per written file)
+src/core/gcode.ts	warning: in the working copy of '<baseline-export>/src/core/gcode.ts', LF will be replaced by CRLF the next time Git touches it
+42	10
+src/ui/pages/p04.ts	warning: in the working copy of '<baseline-export>/src/ui/pages/p04.ts', LF will be replaced by CRLF the next time Git touches it
+270	101
+test/gcode.test.ts	warning: in the working copy of '<baseline-export>/test/gcode.test.ts', LF will be replaced by CRLF the next time Git touches it
+142	2
+test/ui-p04.test.ts	warning: in the working copy of '<baseline-export>/test/ui-p04.test.ts', LF will be replaced by CRLF the next time Git touches it
+220	26

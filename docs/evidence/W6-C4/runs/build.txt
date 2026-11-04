@@ -1,0 +1,59 @@
+COMMAND: npm run build
+CWD: <TREE>
+--- RAW OUTPUT ---
+
+> lathcalc@0.1.0 build
+> vite build
+
+[36mvite v7.3.7 [32mbuilding client environment for production...[36m[39m
+transforming...
+[32m✓[39m 63 modules transformed.
+rendering chunks...
+computing gzip size...
+[2mdist/[22m[32mregisterSW.js                       [39m[1m[2m 0.13 kB[22m[1m[22m
+[2mdist/[22m[32mmanifest.webmanifest                [39m[1m[2m 0.35 kB[22m[1m[22m
+[2mdist/[22m[32mindex.html                          [39m[1m[2m 0.72 kB[22m[1m[22m[2m │ gzip: 0.42 kB[22m
+[2mdist/[22m[35massets/index-BLh4fxfH.css           [39m[1m[2m 1.15 kB[22m[1m[22m[2m │ gzip: 0.62 kB[22m
+[2mdist/[22m[36massets/speed-I2JsrEVO.js            [39m[1m[2m 0.21 kB[22m[1m[22m[2m │ gzip: 0.17 kB[22m
+[2mdist/[22m[36massets/arc-BXF2nq1s.js              [39m[1m[2m 0.32 kB[22m[1m[22m[2m │ gzip: 0.25 kB[22m
+[2mdist/[22m[36massets/thread-DqtIAzPU.js           [39m[1m[2m 0.51 kB[22m[1m[22m[2m │ gzip: 0.31 kB[22m
+[2mdist/[22m[36massets/lookup-zXJH-NWF.js           [39m[1m[2m 0.75 kB[22m[1m[22m[2m │ gzip: 0.37 kB[22m
+[2mdist/[22m[36massets/CodeCard-BKopjjqt.js         [39m[1m[2m 0.85 kB[22m[1m[22m[2m │ gzip: 0.45 kB[22m
+[2mdist/[22m[36massets/WarnCard-BphzOL1q.js         [39m[1m[2m 0.89 kB[22m[1m[22m[2m │ gzip: 0.50 kB[22m
+[2mdist/[22m[36massets/Button-Dn9OsEq0.js           [39m[1m[2m 0.95 kB[22m[1m[22m[2m │ gzip: 0.59 kB[22m
+[2mdist/[22m[36massets/ParamGrid-DR8RKPPB.js        [39m[1m[2m 1.09 kB[22m[1m[22m[2m │ gzip: 0.56 kB[22m
+[2mdist/[22m[36massets/Card-DU0MadRh.js             [39m[1m[2m 1.50 kB[22m[1m[22m[2m │ gzip: 0.64 kB[22m
+[2mdist/[22m[36massets/InputRow-BDdATp9V.js         [39m[1m[2m 1.62 kB[22m[1m[22m[2m │ gzip: 0.84 kB[22m
+[2mdist/[22m[36massets/Accordion-zP4UM5Yt.js        [39m[1m[2m 1.77 kB[22m[1m[22m[2m │ gzip: 0.97 kB[22m
+[2mdist/[22m[36massets/StatBlock-CjVS8wGA.js        [39m[1m[2m 1.96 kB[22m[1m[22m[2m │ gzip: 0.68 kB[22m
+[2mdist/[22m[36massets/ResultCard-r6utKnf5.js       [39m[1m[2m 1.98 kB[22m[1m[22m[2m │ gzip: 0.93 kB[22m
+[2mdist/[22m[36massets/Tile-BNSbxE-4.js             [39m[1m[2m 2.08 kB[22m[1m[22m[2m │ gzip: 0.91 kB[22m
+[2mdist/[22m[36massets/ListRow-mMVGkzGl.js          [39m[1m[2m 2.17 kB[22m[1m[22m[2m │ gzip: 0.93 kB[22m
+[2mdist/[22m[36massets/SegChip-CddpFZAQ.js          [39m[1m[2m 2.37 kB[22m[1m[22m[2m │ gzip: 1.03 kB[22m
+[2mdist/[22m[36massets/p13-DhHrmLHY.js              [39m[1m[2m 2.75 kB[22m[1m[22m[2m │ gzip: 1.51 kB[22m
+[2mdist/[22m[36massets/p01-CeK-3DJ6.js              [39m[1m[2m 3.12 kB[22m[1m[22m[2m │ gzip: 1.67 kB[22m
+[2mdist/[22m[36massets/p02-B3emWfZw.js              [39m[1m[2m 3.95 kB[22m[1m[22m[2m │ gzip: 1.96 kB[22m
+[2mdist/[22m[36massets/p04-BSzgf9vx.js              [39m[1m[2m 4.51 kB[22m[1m[22m[2m │ gzip: 2.51 kB[22m
+[2mdist/[22m[36massets/p03-D47IEXvN.js              [39m[1m[2m 4.62 kB[22m[1m[22m[2m │ gzip: 2.27 kB[22m
+[2mdist/[22m[36massets/p08-yYIfSw8V.js              [39m[1m[2m 5.61 kB[22m[1m[22m[2m │ gzip: 2.46 kB[22m
+[2mdist/[22m[36massets/p09-DG-LH6V8.js              [39m[1m[2m 6.12 kB[22m[1m[22m[2m │ gzip: 2.78 kB[22m
+[2mdist/[22m[36massets/p11-B5AnJm7p.js              [39m[1m[2m 6.88 kB[22m[1m[22m[2m │ gzip: 2.87 kB[22m
+[2mdist/[22m[36massets/PageShell-DrfI1Z1u.js        [39m[1m[2m 7.50 kB[22m[1m[22m[2m │ gzip: 2.73 kB[22m
+[2mdist/[22m[36massets/p06-DElYP5Ph.js              [39m[1m[2m 8.16 kB[22m[1m[22m[2m │ gzip: 3.69 kB[22m
+[2mdist/[22m[36massets/p10-BdZ4CkHN.js              [39m[1m[2m 8.20 kB[22m[1m[22m[2m │ gzip: 2.65 kB[22m
+[2mdist/[22m[36massets/p05-DITyJ76-.js              [39m[1m[2m 8.54 kB[22m[1m[22m[2m │ gzip: 3.50 kB[22m
+[2mdist/[22m[36massets/p12-DF-LwLRa.js              [39m[1m[2m 9.70 kB[22m[1m[22m[2m │ gzip: 4.02 kB[22m
+[2mdist/[22m[36massets/p07-CDr2HFxP.js              [39m[1m[2m 9.88 kB[22m[1m[22m[2m │ gzip: 3.84 kB[22m
+[2mdist/[22m[36massets/p14-Dd1bcdkz.js              [39m[1m[2m11.34 kB[22m[1m[22m[2m │ gzip: 4.49 kB[22m
+[2mdist/[22m[36massets/index-2zBGewKU.js            [39m[1m[2m11.48 kB[22m[1m[22m[2m │ gzip: 4.86 kB[22m
+[2mdist/[22m[36massets/threads-unified-DTB2sbp9.js  [39m[1m[2m32.42 kB[22m[1m[22m[2m │ gzip: 2.17 kB[22m
+[32m✓ built in 397ms[39m
+
+PWA v1.3.0
+mode      generateSW
+precache  39 entries (164.13 KiB)
+files generated
+  dist/sw.js
+  dist/workbox-9c191d2f.js
+
+REAL_EXIT=0

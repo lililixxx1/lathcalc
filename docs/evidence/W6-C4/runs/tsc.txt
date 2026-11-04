@@ -1,0 +1,5 @@
+COMMAND: npx tsc --noEmit
+CWD: <TREE>
+--- RAW OUTPUT ---
+
+REAL_EXIT=0
