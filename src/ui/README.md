@@ -322,15 +322,20 @@ ensureBaseStyles()         // 基础样式 + #app 视口高度
 
 | 链路 | 键 | 含义 | 示例 |
 | --- | --- | --- | --- |
-| p02 → p03 | `family` | `metric` \| `trapezoid` \| `pipe` \| `unified` | `metric` |
-| | `spec` | 规格显示名 | `M30 × 3.5` |
+| p02 → p03 | `family` | `metric` \| `trapezoid` \| `pipe` \| `unified`（自定义规格随当前族页签） | `metric` |
+| | `spec` | 规格显示名；自定义规格形如 `自定义 Ø30×3.5`（W6-C3，V2-5：仅 d+P 不做 tpi） | `M30 × 3.5` |
 | | `d` | 大径 mm | `30` |
 | | `p` | 螺距 mm | `3.5` |
 | p03 → p04 | `family` `spec` `d` `p` | 同上四键原样带出；p04 用 core 重算 | 同上 |
+| | `system` | 数控系统 `fanuc` \| `gsk` \| `knd` \| `hnc`，默认 `fanuc`（W6-C2；禁用组合自动回落 fanuc） | `knd` |
+| | `cycle` | 循环形式 `g76` \| `g92`，默认 `g76`（W6-C2，V2-7） | `g92` |
 | p01 最近使用 → p03 等 | thread 同上四键；speed/weight/triangle 传各自原始输入键 | 动态历史 chip，kind→页：`thread→p03 / speed→p09 / weight→p11 / triangle→p12`（未知落 p14；W5 集成①，空历史回落静态示例） | `#/p03?family=metric&spec=M30+%C3%97+3.5&d=30&p=3.5` |
-| p01 → p09 | `d` `vc` | 工件直径 mm / 线速度 m·min⁻¹ | `#/p09?d=50&vc=150` |
-| p01 → p07 | `mode` `morse` | `mode=morse`；`morse` = 0–6 | `#/p07?mode=morse&morse=4` |
-| p01 → p04 | （无） | G76 首页直达；p04 必须能处理空参数（默认值或重定向 p02，由 C2 定） | `#/p04` |
+| p01 → p09 | `d` `vc` `f` | 工件直径 mm / 线速度 m·min⁻¹ / 每转进给 mm（W6-C3；f>0 时显示 vf=f·n 实算卡） | `#/p09?d=50&vc=150&f=0.2` |
+| p01 → p07 | `mode` `morse` | `mode` = `calc`（默认）\| `morse`；`morse` = 0–6 | `#/p07?mode=morse&morse=4` |
+| p07 反推直达 | `mode` `taperC` `big` `small` `length` | `mode=reverse` + 锥比 C 与大端/小端/长度**恰两值**（W6-C4；缺省预填 D=32/d=27，带参则按参） | `#/p07?mode=reverse&taperC=0.05194&small=30&length=50` |
+| p12 模式直达 | `mode` | 解算模式 `sss`（默认）\| `sas` \| `asa` \| `ssa`（W6-C4；SSA 双解锐角在前，V2-3） | `#/p12?mode=ssa` |
+| p08 公差直达 | `d` `grade` | 公称直径 mm / 精度等级号（v0.1 W4-C4 实现，W6 波末补登） | `#/p08?d=30&grade=7` |
+| p01 → p04 | （无） | G76 首页直达；p04 容忍空参数降级为「请先选型」+ 引导按钮回 p02（W6-C2 维持 W4-C2 冻结行为；带参时见上 `system`/`cycle`） | `#/p04` |
 | p05 → p06 | `case` | 工况号 `AC01`–`AC12`（W4-C3 冻结；非法值由 p06 选择器兜底） | `#/p06?case=AC01` |
 
 推荐调用：
@@ -338,13 +343,15 @@ ensureBaseStyles()         // 基础样式 + #app 视口高度
 ```ts
 await ctx.navigate('p03', { family: 'metric', spec: 'M30 × 3.5', d: 30, p: 3.5 });
 await ctx.navigate('p04', { family: 'metric', spec: 'M30 × 3.5', d: 30, p: 3.5 });
-await ctx.navigate('p09', { d: 50, vc: 150 });
+await ctx.navigate('p04', { family: 'metric', spec: 'M30 × 3.5', d: 30, p: 3.5, system: 'knd', cycle: 'g92' });
+await ctx.navigate('p09', { d: 50, vc: 150, f: 0.2 });
 ```
 
 ### 5.3 待对应卡冻结的链路
 
-p05→p06（工况参数）、p07/p08/p10–p12 的输入参数键由 C3/C4/C5 在自己的页面文件顶部
-注释中登记，并同步到本表**下一版**（需 Lead 批准；本版不预占键名，避免冲突）。
+p10 / p11 现无 URL 键（静态页 + store 收藏，v0.1 实现口径）；后续任何页面新增键
+须先经 Lead 批准入 §5.2，不预占键名。p05→p06（`case`）、p07（`mode` 系）、p08
+（`d` `grade`）、p12（`mode`）均已冻结于 §5.2（W6 波末并入，G0-I5）。
 
 ---
 
