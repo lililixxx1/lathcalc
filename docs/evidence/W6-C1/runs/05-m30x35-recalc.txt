@@ -1,0 +1,27 @@
+# 05 · M30×3.5 示例数值复核
+- 时间：2026-11-04
+- 命令（单独整句执行）：
+  `node -e "const d=30,p=3.5,d1=d-1.0825*p; const h=(d-d1)/2; console.log('d1_raw='+d1); console.log('d1_3dp='+d1.toFixed(3)); console.log('depth_mm='+h); console.log('depth_um_raw='+(h*1000)); console.log('depth_um_round='+Math.round(h*1000)); console.log('first_cut_um='+Math.round(0.4*1000)); console.log('gsk_980tdc_P='+Math.round(h/0.0001)); console.log('gsk_980tdc_Q='+Math.round(0.4/0.0001)); console.log('gsk_980tdc_Qmin='+Math.round(0.1/0.0001));"`
+- 原始输出：
+```
+d1_raw=26.21125
+d1_3dp=26.211
+depth_mm=1.8943750000000001
+depth_um_raw=1894.3750000000002
+depth_um_round=1894
+first_cut_um=400
+gsk_980tdc_P=18944
+gsk_980tdc_Q=4000
+gsk_980tdc_Qmin=1000
+```
+- REAL_EXIT=0
+- 结论：
+  - X = 26.211（三位小数，FANUC/GSK/KND 写法；HNC 同值）。
+  - 单边牙深 = 1.894375 mm = 1894 μm（四舍五入）；GSK988TA/HNC 用 1.894 mm。
+  - 首刀 = 0.4 mm = 400 μm；GSK988TA/HNC 用 0.4 mm。
+  - GSK980TDc 0.0001 mm 增量模式：P(k)=18944、Q(Δd)=4000、Q(Δdmin)=1000。
+- 与结论表示例逐位对照：
+  - GSK 988TA：`P021060 Q0.1 R0.05` / `X26.211 Z-30. P1.894 Q0.4 F3.5`。
+  - GSK 980TDc：`P021060 Q1000 R0.05` / `X26.211 Z-30. P18944 Q4000 F3.5`。
+  - HNC：`C2 R0 E0 A60 X26.211 Z-30. I0 K1.894 U0.05 V0.1 Q0.4 P0 F3.5`。
+  - KND：`P021060 Q100 R50` / `X26.211 Z-30. P1894 Q400 F3.5`。

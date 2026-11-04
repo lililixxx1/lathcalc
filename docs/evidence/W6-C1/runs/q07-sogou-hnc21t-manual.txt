@@ -1,0 +1,17 @@
+# q07 · HNC-21T 编程说明书检索（Sogou）
+- 时间：2026-11-04
+- 引擎：Sogou（https://www.sogou.com/web）
+- 查询词：HNC-21T 编程说明书 G76 G82
+- 命令（等价）：curl -G --data-urlencode "query=HNC-21T 编程说明书 G76 G82" "https://www.sogou.com/web"
+- 命中 URL（经 /link 解析后的真实目标）：
+  - https://max.book118.com/html/2015/0127/11802428.shtm （HNC-21T车编程说明书.pdf）
+  - https://wenku.baidu.com/view/d53dffedb8f67c1cfad6b8d9.html （HNC-21T指令(与FANUC不同点)）
+  - https://www.docin.com/p-55993678.html （华中世纪星HNC-21T的编程与操作）
+  - https://max.book118.com/html/2016/1218/73646227.shtm （华中（HNC-21/22T）数控车床系统编程指令分解.ppt）
+  - https://www.21ic.com/a/922614.html （数控车加工螺纹的工艺分析）
+- 关键摘要：
+  - “HNC-21T车编程说明书.pdf 全文-综合-文档在线”
+  - “华中(HNC-21/22T)数控车床系统编程指令”
+- 判定：book118/doc88 为扫描图/JS；21ic 文章可直取全文，作为 HNC-21T 专用 B 级来源。
+
+- REAL_EXIT=0（检索页/来源页 HTTP 200；原始命中/摘录见本档正文）

@@ -1,0 +1,14 @@
+# q05 · HNC-21T G76 检索（360 搜索）
+- 时间：2026-11-04
+- 引擎：360 搜索
+- 查询词：华中数控 HNC-21T G76 指令格式 螺纹
+- 命令（等价）：curl -G --data-urlencode "q=华中数控 HNC-21T G76 指令格式 螺纹" "https://www.so.com/s"
+- 命中 URL：
+  - https://www.so.com/link?m=... → https://wenku.baidu.com/view/... （华中世纪星HNC-21T 的编程与操作）
+  - https://www.so.com/link?m=... → https://www.docin.com/p-4590002531.html （HNC-21T指令(与FANUC不同点)）
+- 关键摘要：
+  - “6.5.1 内(外)径粗车复合循环指令G71 … 例:用螺纹切削复合循环指令G76编程,加工螺纹为 ZM60×2…”
+  - “直螺纹切削循环82G格式,锥螺纹切削循…”
+- 判定：确认 HNC-21T 的 G76/G82 线索；Baidu 文库/豆丁为 JS/图片页，未能直接抽全文，后续改用 Sogou 解析出的 21ic 文章。
+
+- REAL_EXIT=0（检索页/来源页 HTTP 200；原始命中/摘录见本档正文）

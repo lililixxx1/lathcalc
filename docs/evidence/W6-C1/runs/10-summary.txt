@@ -1,0 +1,17 @@
+# 10 · 结论表判定行（脚本生成）
+- 时间：2026-11-04
+- 命令（在树根执行）：
+  `node docs/evidence/W6-C1/tools/summarize.mjs docs/research/g76-dialects.md`
+- 原始输出：
+```
+RESEARCH_FILE=docs/research/g76-dialects.md
+CONCLUSION_ROWS=6
+ENABLE=4
+KEEP_GRAY=2
+FOOTNOTED_ROWS=6
+ROWS_WITHOUT_RECOMMENDATION=0
+JUDGEMENT=PASS（行数≥6、每行有建议、每行有脚注编号）
+REAL_EXIT=0
+```
+- REAL_EXIT=0
+- 说明：脚本 `tools/summarize.mjs` 只统计结论表的系统行数与建议/脚注，不替代人工审阅；判定行由脚本计算，人工只解读。

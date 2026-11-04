@@ -1,0 +1,15 @@
+# q09 · KND G76 单位检索（Sogou）
+- 时间：2026-11-04
+- 引擎：Sogou
+- 查询词：凯恩帝系统 G76 指令 P Q 微米
+- 命令（等价）：curl -G --data-urlencode "query=凯恩帝系统 G76 指令 P Q 微米" "https://www.sogou.com/web"
+- 命中 URL：
+  - https://zhidao.baidu.com/question/1707836333550397820 （凯恩帝K1000TI和K100TI系统怎么把P和Q改为以毫米为单位的）
+  - http://www.58che.com/wenda/1257443.html （K100Ti-D系统G78 G76怎么编程）
+  - https://max.book118.com/html/2015/1001/26496342.shtm （KND-1000T 手册）
+- 关键摘要：
+  - “G76 P020060 Q150 R0.03; G76 X Z-35.0 P Q R F ;”
+  - “(第一行可以套用，Q是每次吃刀量，单位微米。R是精车余量，半径值)”
+- 判定：两处独立问答均给 μm 单位，作为 KND-1000T 手册示例的旁证（C 级）。
+
+- REAL_EXIT=0（检索页/来源页 HTTP 200；原始命中/摘录见本档正文）

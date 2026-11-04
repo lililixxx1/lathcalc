@@ -1,0 +1,28 @@
+# 09 · 代码 / 冻结参考件零改动核验
+- 时间：2026-11-04
+- 方法：从主仓 `cd99856` 导出基线路径到临时目录，与隔离树逐文件 diff。
+- 命令（等价，路径含空格已加引号）：
+```
+git -C "<主仓>" archive cd99856 src test index.html package.json | tar -x -C <TEMP>/w6c1_baseline
+diff -r "<树>/src" <TEMP>/w6c1_baseline/src ; echo SRC_DIFF_EXIT=$?
+diff -r "<树>/test" <TEMP>/w6c1_baseline/test ; echo TEST_DIFF_EXIT=$?
+diff "<树>/index.html" <TEMP>/w6c1_baseline/index.html ; echo HTML_DIFF_EXIT=$?
+diff "<树>/package.json" <TEMP>/w6c1_baseline/package.json ; echo PKG_DIFF_EXIT=$?
+
+git -C "<主仓>" archive cd99856 docs/plan "docs/车工计算App-调研报告.md" "docs/车工计算App-无限画布.html" | tar -x -C <TEMP>/w6c1_frozen
+diff -r "<树>/docs/plan" <TEMP>/w6c1_frozen/docs/plan ; echo PLAN_DIFF_EXIT=$?
+diff "<树>/docs/车工计算App-调研报告.md" "<TEMP>/w6c1_frozen/docs/车工计算App-调研报告.md" ; echo REPORT_DIFF_EXIT=$?
+diff "<树>/docs/车工计算App-无限画布.html" "<TEMP>/w6c1_frozen/docs/车工计算App-无限画布.html" ; echo CANVAS_DIFF_EXIT=$?
+```
+- 原始输出：
+```
+SRC_DIFF_EXIT=0
+TEST_DIFF_EXIT=0
+HTML_DIFF_EXIT=0
+PKG_DIFF_EXIT=0
+PLAN_DIFF_EXIT=0
+REPORT_DIFF_EXIT=0
+CANVAS_DIFF_EXIT=0
+```
+- REAL_EXIT=0（各 diff 均为 0，表示与基线逐字节一致）
+- 结论：`src/`、`test/`、`index.html`、`package.json`、`docs/plan/`、`docs/车工计算App-*` 零改动；本卡只新增 `docs/research/` 与 `docs/evidence/W6-C1/`。

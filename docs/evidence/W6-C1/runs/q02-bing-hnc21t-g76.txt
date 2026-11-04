@@ -1,0 +1,10 @@
+# q02 · HNC-21T G76 检索（Bing CN）
+- 时间：2026-11-04
+- 引擎：Bing CN
+- 查询词：华中数控 HNC-21T G76 螺纹切削复合循环 指令格式
+- 命令（等价）：curl -L -A "Mozilla/5.0" "https://cn.bing.com/search?q=%E5%8D%8E%E4%B8%AD%E6%95%B0%E6%8E%A7+HNC-21T+G76+%E8%9E%BA%E7%BA%B9%E5%88%87%E5%89%8A%E5%A4%8D%E5%90%88%E5%BE%AA%E7%8E%AF+%E6%8C%87%E4%BB%A4%E6%A0%BC%E5%BC%8F"
+- 结果：返回 10 条，全部为 CZUR/成者科技等无关结果。
+- 命中 URL：无可用
+- 判定：该引擎该查询无效，改用 360/Sogou。
+
+- REAL_EXIT=0（检索页/来源页 HTTP 200；原始命中/摘录见本档正文）

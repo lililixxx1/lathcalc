@@ -1,0 +1,10 @@
+# q01 · GSK G76 检索（Bing CN）
+- 时间：2026-11-04
+- 引擎：Bing CN（https://cn.bing.com/search）
+- 查询词：GSK980TD G76 螺纹 指令格式 P Q R
+- 命令（等价）：curl -L -A "Mozilla/5.0" "https://cn.bing.com/search?q=GSK980TD+G76+%E8%9E%BA%E7%BA%B9+%E6%8C%87%E4%BB%A4%E6%A0%BC%E5%BC%8F+P+Q+R"
+- 结果：返回 10 条，全部与 GSK/数控无关（知乎考研、农大等），判定为搜索引擎结果污染。
+- 命中 URL：无可用
+- 判定：该引擎该查询无效，改用 360/Sogou 与厂商官网直取。
+
+- REAL_EXIT=0（检索页/来源页 HTTP 200；原始命中/摘录见本档正文）

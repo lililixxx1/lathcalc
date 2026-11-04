@@ -1,0 +1,15 @@
+# q08 · KND-1000T 用户手册检索（Sogou）
+- 时间：2026-11-04
+- 引擎：Sogou
+- 查询词：B12B-T00N-0001 KND 1000T
+- 命令（等价）：curl -G --data-urlencode "query=B12B-T00N-0001 KND 1000T" "https://www.sogou.com/web"
+- 命中 URL：
+  - https://max.book118.com/html/2015/1001/26496342.shtm （KND-1000T数控车床说明书.pdf，303 页扫描件）
+  - https://max.book118.com/html/2018/0516/166573946.shtm （凯恩帝K1000T系统用户手册.pdf）
+  - https://www.docin.com/p-82343029.html （KND—1000T 车床用数控系统用户手册）
+  - https://blog.csdn.net/weixin_42501892/article/details/111965731 （含手册目录的 CSDN 转载）
+- 关键摘要：
+  - “CNC Series KND—1000T 车床用数控系统 用 户 手 册 北京凯恩帝数控技术公司 B12B－T00N－0001 C KND LTD,2006”
+- 判定：book118 扫描件可经预览接口取页图；逐页读取到 §14.2.7 G76 与 §14.1.2 G92 原文。
+
+- REAL_EXIT=0（检索页/来源页 HTTP 200；原始命中/摘录见本档正文）
