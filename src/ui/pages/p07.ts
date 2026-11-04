@@ -1,8 +1,8 @@
 /**
- * p07 · 锥度 · 莫氏（W4-C4 实现）
+ * p07 · 锥度 · 莫氏（W4-C4 实现；W6-C4 增「反推」模式）
  *
  * 设计稿区块（docs/车工计算App-无限画布.html pTaper）：
- *   状态栏 → 顶栏 → 分段（计算 / 莫氏对照）
+ *   状态栏 → 顶栏 → 分段（计算 / 莫氏对照 / 反推）
  *   → 示意图 → 大端 D / 小端 d / 锥长 L 三行输入
  *   → 结果卡（锥度 C / 半角 α/2 / 大小端单边差）→ 怎么算的 → Home
  *
@@ -13,14 +13,21 @@
  *   - 大小端差 (D−d)/2 单列一行（DEFERRED #8 本卡关账）；
  *   - 莫氏快捷选择：findMorse 查 src/data/morse.json，展示锥度比 + halfAngleDMS。
  *
- * 页面参数（README §5.3 登记）：`mode` = morse；`morse` = 0–6。
+ * 反推模式（WAVE-PLAN-V2 §1，W6-C4；DEFERRED #8）：
+ *   - 锥比 C（>0）+ D/d/L 恰两值（留空恰好一行）→ core/taper.taperReverse 解第三值；
+ *   - 莫氏快选 chips（MT0–MT6）点选把 taper 字段换算为 C 填入；
+ *   - 结果卡：第三值（标名）/ (D−d)/2 / 半角 DMS。
  *
- * 数据访问：所有标准表数值经 src/core/lookup.ts（findMorse），页面不硬编码表值。
+ * 页面参数（README §5.3 登记）：`mode` = morse | reverse；`morse` = 0–6；
+ * 反推链路键：`#/p07?mode=reverse&taperC=<C>&small=30&length=50`。
+ *
+ * 数据访问：所有标准表数值经 src/core/lookup.ts（findMorse）与 src/data/morse.json，
+ * 页面不硬编码表值。
  */
 import type { PageContext, PageModule } from '../router';
 import type { MorseRow } from '../../core/types';
 import { findMorse } from '../../core/lookup';
-import { taperCalc } from '../../core/taper';
+import { taperCalc, taperReverse } from '../../core/taper';
 import {
   Accordion,
   Chip,
@@ -44,9 +51,10 @@ const CSS = `
 .rc-p07__hint { font-size: 12px; line-height: 1.55; color: var(--la-accent-ink); padding: 0 2px; }
 .rc-p07__chips { display: flex; flex-wrap: wrap; gap: 7px; }
 .rc-p07__source { margin-top: 2px; }
+.rc-p07__reverse { display: flex; flex-direction: column; gap: 9px; }
 `;
 
-type Mode = 'calc' | 'morse';
+type Mode = 'calc' | 'morse' | 'reverse';
 
 interface State {
   mode: Mode;
@@ -55,6 +63,13 @@ interface State {
   small: string;
   length: string;
   morse: number;
+  /** 反推模式独立输入（与计算模式互不串值） */
+  taperC: string;
+  reverseBig: string;
+  reverseSmall: string;
+  reverseLength: string;
+  /** 反推模式当前选中的莫氏号（null = 未选/已手改） */
+  reverseMorse: number | null;
 }
 
 /** 解析输入框文本；空 / 非数值 → null（缺值语义）。 */
@@ -81,6 +96,14 @@ function taperRatioText(taperC: number): string {
   return `${taperC < 0 ? '-' : ''}1 : ${text}`;
 }
 
+/** 莫氏表 taper 字段（如 '1:19.254'）→ 锥比 C = 1/x；解析失败返回 null。 */
+function morseTaperC(taper: string): number | null {
+  const match = /^\s*1\s*:\s*([0-9]+(?:\.[0-9]+)?)\s*$/.exec(taper);
+  if (!match) return null;
+  const ratio = Number(match[1]);
+  return ratio > 0 ? 1 / ratio : null;
+}
+
 /** 设计稿 p07 示意图（受信内部标记；标签值经 escapeHtml）。 */
 function taperFigure(big: string, small: string, length: string): HTMLElement {
   const wrap = document.createElement('div');
@@ -105,12 +128,27 @@ const page: PageModule = {
   render(ctx: PageContext): void {
     injectStyle('rc-p07-styles', CSS);
 
+    const modeParam = ctx.params.get('mode');
+    const initialMode: Mode =
+      modeParam === 'morse' ? 'morse' : modeParam === 'reverse' ? 'reverse' : 'calc';
+    const reverseProvided =
+      ctx.params.has('taperC') ||
+      ctx.params.has('big') ||
+      ctx.params.has('small') ||
+      ctx.params.has('length');
+
     const state: State = {
-      mode: ctx.params.get('mode') === 'morse' ? 'morse' : 'calc',
+      mode: initialMode,
       big: '32',
       small: '27',
       length: '50',
       morse: 4,
+      taperC: ctx.params.get('taperC') ?? '',
+      // 反推参数直达：按传入值填；未传该行即留空（待求）
+      reverseBig: ctx.params.get('big') ?? (reverseProvided ? '' : '32'),
+      reverseSmall: ctx.params.get('small') ?? (reverseProvided ? '' : '27'),
+      reverseLength: ctx.params.get('length') ?? (reverseProvided ? '' : ''),
+      reverseMorse: null,
     };
     const morseParam = Number(ctx.params.get('morse'));
     if (Number.isInteger(morseParam) && morseParam >= 0 && morseParam <= 6) {
@@ -237,6 +275,146 @@ const page: PageModule = {
       return view;
     }
 
+    /** 反推视图：锥比 C + 莫氏快选 + D/d/L 三行（留空恰好一行 = 待求）。 */
+    function renderReverseView(): HTMLElement {
+      const view = document.createElement('div');
+      view.className = 'rc-p07__reverse';
+      const chipWrap = document.createElement('div');
+      chipWrap.className = 'rc-p07__chips';
+      const outcome = document.createElement('div');
+      outcome.className = 'rc-p07__reverseout';
+
+      const inputC = InputRow({
+        label: '锥比 C',
+        value: state.taperC,
+        name: 'taperC',
+        placeholder: '如 0.051937',
+        ariaLabel: '锥比 C',
+        onInput: (value) => {
+          state.taperC = value;
+          state.reverseMorse = null;
+          paintChips();
+          paintOutcome();
+        },
+      });
+      const cField = inputC.querySelector<HTMLInputElement>('.rc-input__field');
+
+      const paintChips = (): void => {
+        chipWrap.replaceChildren(
+          ...MORSE_ROWS.map((morse) =>
+            Chip({
+              label: `MT${morse.number}`,
+              active: state.reverseMorse === morse.number,
+              onClick: () => {
+                const taperC = morseTaperC(morse.taper);
+                if (taperC === null) return;
+                state.reverseMorse = morse.number;
+                state.taperC = formatNumber(taperC, 6);
+                if (cField) cField.value = state.taperC;
+                paintChips();
+                paintOutcome();
+              },
+            }),
+          ),
+        );
+      };
+
+      const paintOutcome = (): void => {
+        outcome.replaceChildren();
+        const taperC = parseNum(state.taperC);
+        if (taperC === null || taperC <= 0) {
+          const hint = document.createElement('div');
+          hint.className = 'rc-p07__hint';
+          hint.setAttribute('role', 'note');
+          hint.textContent = '锥比 C 需大于 0（可选莫氏快选填入）。';
+          outcome.append(hint);
+          return;
+        }
+
+        const big = parseNum(state.reverseBig);
+        const small = parseNum(state.reverseSmall);
+        const length = parseNum(state.reverseLength);
+        const filled = [big, small, length].filter((value) => value !== null).length;
+        if (filled !== 2) {
+          const hint = document.createElement('div');
+          hint.className = 'rc-p07__hint';
+          hint.setAttribute('role', 'note');
+          hint.textContent = '大端 D / 小端 d / 锥长 L 需留空恰好一行作为待求值。';
+          outcome.append(hint);
+          return;
+        }
+
+        try {
+          const result = taperReverse({
+            taperC,
+            big: big ?? undefined,
+            small: small ?? undefined,
+            length: length ?? undefined,
+          });
+          const solvedLabel =
+            result.solved === 'big' ? '大端 D' : result.solved === 'small' ? '小端 d' : '锥长 L';
+          outcome.append(
+            ResultCard({
+              ariaLabel: '锥度反推结果',
+              items: [
+                { label: solvedLabel, value: formatNumber(result.missing), unit: 'mm', big: true },
+                {
+                  label: '大小端差 (D−d)/2',
+                  value: formatNumber(result.halfDiffMM),
+                  unit: 'mm',
+                },
+                { label: '半角 α/2', value: result.halfAngleDMS },
+              ],
+            }),
+          );
+        } catch (error) {
+          const hint = document.createElement('div');
+          hint.className = 'rc-p07__hint';
+          hint.setAttribute('role', 'note');
+          hint.textContent =
+            error instanceof Error
+              ? error.message.replace(/^taperReverse:\s*/, '')
+              : '反推失败：输入非法';
+          outcome.append(hint);
+        }
+      };
+
+      paintChips();
+      paintOutcome();
+      const inputBig = InputRow({
+        label: '大端 D',
+        value: state.reverseBig,
+        unit: 'mm',
+        name: 'big',
+        onInput: (value) => {
+          state.reverseBig = value;
+          paintOutcome();
+        },
+      });
+      const inputSmall = InputRow({
+        label: '小端 d',
+        value: state.reverseSmall,
+        unit: 'mm',
+        name: 'small',
+        onInput: (value) => {
+          state.reverseSmall = value;
+          paintOutcome();
+        },
+      });
+      const inputLength = InputRow({
+        label: '锥长 L',
+        value: state.reverseLength,
+        unit: 'mm',
+        name: 'length',
+        onInput: (value) => {
+          state.reverseLength = value;
+          paintOutcome();
+        },
+      });
+      view.append(inputC, chipWrap, inputBig, inputSmall, inputLength, outcome);
+      return view;
+    }
+
     /** 莫氏视图：0–6 号快捷选择 + 查表结果（findMorse）。 */
     function renderMorseView(): HTMLElement {
       const view = document.createElement('div');
@@ -292,7 +470,13 @@ const page: PageModule = {
     }
 
     const renderContent = (): void => {
-      content.replaceChildren(state.mode === 'calc' ? renderCalcView() : renderMorseView());
+      content.replaceChildren(
+        state.mode === 'calc'
+          ? renderCalcView()
+          : state.mode === 'morse'
+            ? renderMorseView()
+            : renderReverseView(),
+      );
     };
 
     body.append(
@@ -300,11 +484,12 @@ const page: PageModule = {
         options: [
           { value: 'calc', label: '计算' },
           { value: 'morse', label: '莫氏对照' },
+          { value: 'reverse', label: '反推' },
         ],
         value: state.mode,
         ariaLabel: '锥度计算模式',
         onChange: (value) => {
-          state.mode = value === 'morse' ? 'morse' : 'calc';
+          state.mode = value === 'morse' ? 'morse' : value === 'reverse' ? 'reverse' : 'calc';
           renderContent();
         },
       }),

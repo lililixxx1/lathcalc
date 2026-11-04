@@ -1,6 +1,6 @@
 /** taper.ts 单测（W2-C3）：三值 → 锥度 C / 半角 / DMS（调研报告 §4.1 #5、§6.4 #3） */
 import { describe, it, expect } from 'vitest';
-import { taperCalc } from '../src/core/taper';
+import { taperCalc, taperReverse } from '../src/core/taper';
 import { findMorse } from '../src/core/lookup';
 import type { MorseRow } from '../src/core/types';
 import morse from './fixtures/morse.json';
@@ -70,5 +70,59 @@ describe('莫氏接口桩（数据表归 W3-C5，本卡不查表）', () => {
     expect(row.number).toBe(4);
     expect(row.taper).toBe('1:19.254');
     expect(row.halfAngleDMS).toBe('1°29′16″');
+  });
+});
+
+/**
+ * W6-C4 · 锥度反推（WAVE-PLAN-V2 §1 / §4 黄金用例；G0-I4 未舍入路径）。
+ * 期望值独立代入：D = d + C·L；halfDiff = (D−d)/2；α/2 = arctan(C/2)。
+ */
+describe('taperReverse（锥比 + 恰两值 → 第三值）', () => {
+  it('MT4 反推大端：{taperC:1/19.254, small:30, length:50} → big=32.596863→32.597', () => {
+    // C = 1/19.254 = 0.05193726；D = 30 + 50/19.254 = 32.59686299
+    // halfDiff = (D−30)/2 = 1.29843149（未舍入路径）；α/2 = arctan(C/2) = 1.4875586° → 1°29′15″
+    const r = taperReverse({ taperC: 1 / 19.254, small: 30, length: 50 });
+    expect(r.solved).toBe('big');
+    expect(r.taperC).toBeCloseTo(1 / 19.254, 12);
+    expect(r.missing).toBeCloseTo(32.596863, 6);
+    expect(Number(r.missing.toFixed(3))).toBe(32.597);
+    // G0-I4 钉路径：halfDiffMM 必须由未舍入 missing 直接算，不能先舍入
+    expect(r.halfDiffMM).toBe((r.missing - 30) / 2);
+    expect(r.halfDiffMM).toBeCloseTo(1.298431, 5);
+    expect(Number(r.halfDiffMM.toFixed(3))).toBe(1.298);
+    expect(r.halfAngleDeg).toBeCloseTo(1.4875586, 6);
+    expect(r.halfAngleDMS).toBe('1°29′15″');
+    // 半角与莫氏表 number=4 行一致（GB/T 1443-2016）
+    expect(dmsToDeg(r.halfAngleDMS)).toBeCloseTo(1.4875, 3);
+  });
+
+  it('反推锥长：{taperC:1/20, big:32, small:30} → length=(32−30)/(1/20)=40（整锚）', () => {
+    const r = taperReverse({ taperC: 1 / 20, big: 32, small: 30 });
+    expect(r.solved).toBe('length');
+    expect(r.missing).toBe(40);
+    expect(r.halfDiffMM).toBe(1);
+    expect(r.halfAngleDMS).toBe('1°25′56″');
+  });
+
+  it('反推小端：{taperC:0.1, big:32, length:50} → small=32−0.1×50=27', () => {
+    const r = taperReverse({ taperC: 0.1, big: 32, length: 50 });
+    expect(r.solved).toBe('small');
+    expect(r.missing).toBeCloseTo(27, 12);
+    expect(r.halfDiffMM).toBeCloseTo(2.5, 12);
+    expect(r.halfAngleDMS).toBe('2°51′45″');
+  });
+
+  it('非法输入：taperC≤0 / 给值 1 或 3 个 → 抛错（文案含「恰两值」）', () => {
+    expect(() => taperReverse({ taperC: 0, big: 32, small: 30 })).toThrow(/恰两值/);
+    expect(() => taperReverse({ taperC: -0.1, big: 32, small: 30 })).toThrow(/恰两值/);
+    expect(() => taperReverse({ taperC: 1 / 20, big: 32 })).toThrow(/恰两值/);
+    expect(() =>
+      taperReverse({ taperC: 1 / 19.254, big: 32, small: 30, length: 50 }),
+    ).toThrow(/恰两值/);
+    expect(() => taperReverse({ taperC: Number.NaN, big: 32, small: 30 })).toThrow(/恰两值/);
+  });
+
+  it('尺寸矛盾（大端≤小端）反推锥长非正 → 抛错、不臆造', () => {
+    expect(() => taperReverse({ taperC: 0.1, big: 27, small: 32 })).toThrow(/非正/);
   });
 });

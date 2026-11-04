@@ -26,8 +26,22 @@ function setSide(side: 'a' | 'b' | 'c', value: string): void {
   input.dispatchEvent(new Event('input', { bubbles: true }));
 }
 
+function setField(field: 'a' | 'b' | 'c' | 'A' | 'B' | 'C', value: string): void {
+  const input = page().querySelector<HTMLInputElement>(`.rc-p12__field[data-field="${field}"]`);
+  if (!input) throw new Error(`字段 ${field} 输入框不存在`);
+  input.value = value;
+  input.dispatchEvent(new Event('input', { bubbles: true }));
+}
+
 function resultValue(label: string): string {
   const rows = [...page().querySelectorAll<HTMLElement>('.rc-resultcard__row')];
+  const row = rows.find((item) => item.dataset.label === label);
+  return row?.querySelector('.rc-resultcard__value')?.textContent ?? '';
+}
+
+/** 指定结果卡内的行值（SSA 双解时两张卡并列，需按卡定位）。 */
+function cardValue(card: Element, label: string): string {
+  const rows = [...card.querySelectorAll<HTMLElement>('.rc-resultcard__row')];
   const row = rows.find((item) => item.dataset.label === label);
   return row?.querySelector('.rc-resultcard__value')?.textContent ?? '';
 }
@@ -35,6 +49,16 @@ function resultValue(label: string): string {
 function chipTexts(): string[] {
   return [...page().querySelectorAll<HTMLElement>('.rc-p12__chips .la-chip')].map(
     (chip) => chip.textContent ?? '',
+  );
+}
+
+function clickSeg(value: string): void {
+  page().querySelector<HTMLButtonElement>(`.rc-seg__item[data-value="${value}"]`)?.click();
+}
+
+function fieldKeys(): string[] {
+  return [...page().querySelectorAll<HTMLInputElement>('.rc-p12__field')].map(
+    (field) => field.dataset.field ?? '',
   );
 }
 
@@ -85,14 +109,13 @@ describe('p12 结构保真', () => {
     expect(page().querySelectorAll('.rc-p12__chips .la-chip.on')).toHaveLength(1);
   });
 
-  it('只有 SSS：无 SAS/ASA/SSA 入口、无分段控件', () => {
+  it('模式 Segmented：SSS/SAS/ASA/SSA 四项，默认 SSS 且三输入 a/b/c', () => {
     const root = page();
-    expect(root.querySelectorAll('.la-seg')).toHaveLength(0);
+    const segItems = [...root.querySelectorAll<HTMLElement>('.la-seg .rc-seg__item')];
+    expect(segItems.map((item) => item.textContent)).toEqual(['SSS', 'SAS', 'ASA', 'SSA']);
+    expect(segItems.map((item) => item.dataset.value)).toEqual(['sss', 'sas', 'asa', 'ssa']);
+    expect(segItems[0]?.classList.contains('on')).toBe(true);
     expect(root.querySelectorAll('.rc-p12__field')).toHaveLength(3);
-    const text = root.textContent ?? '';
-    expect(text.includes('SAS')).toBe(false);
-    expect(text.includes('ASA')).toBe(false);
-    expect(text.includes('SSA')).toBe(false);
   });
 });
 
@@ -140,10 +163,10 @@ describe('p12 SSS 实时计算（core 对拍）', () => {
 });
 
 describe('p12 输入校验', () => {
-  it('缺边时提示「输入三边 a / b / c（仅 SSS）」', () => {
+  it('缺边时提示「输入三边 a / b / c」', () => {
     setSide('b', '');
     expect(page().querySelector('.rc-resultcard')).toBeNull();
-    expect(page().querySelector('.rc-p12__hint')?.textContent).toBe('输入三边 a / b / c（仅 SSS）');
+    expect(page().querySelector('.rc-p12__hint')?.textContent).toBe('输入三边 a / b / c');
   });
 
   it('三边不能构成三角形时显示错误、不渲染结果卡', () => {
@@ -154,5 +177,80 @@ describe('p12 输入校验', () => {
     expect(page().querySelector('.rc-p12__hint')?.textContent).toBe('三边不能构成三角形');
     setSide('c', '2.5');
     expect(page().querySelectorAll('.rc-resultcard__row')).toHaveLength(3);
+  });
+});
+
+describe('p12 多模式解算（W6-C4）', () => {
+  it('SAS：切换后三输入 b/c/A；b=40,c=50,A=36.87 → 边 a=30.00、直角', () => {
+    clickSeg('sas');
+    expect(fieldKeys()).toEqual(['b', 'c', 'A']);
+    setField('b', '40');
+    setField('c', '50');
+    setField('A', '36.87');
+    // a = √(40²+50²−2×40×50×cos36.87°) = 30.000071 → 30.00
+    expect(resultValue('边 a')).toBe('30.00');
+    expect(resultValue('∠A')).toBe('36.87°');
+    expect(resultValue('∠C')).toBe('90.00°');
+    expect(page().querySelectorAll('.rc-p12__solutions .rc-resultcard')).toHaveLength(1);
+    expect(page().querySelector('.rc-acc__body')?.textContent).toContain('余弦定理');
+  });
+
+  it('ASA：切换后三输入 A/B/c；A=36.87,B=53.13,c=50 → a=30.00、b=40.00', () => {
+    clickSeg('asa');
+    expect(fieldKeys()).toEqual(['A', 'B', 'c']);
+    setField('A', '36.87');
+    setField('B', '53.13');
+    setField('c', '50');
+    // C=90°；a=c·sinA/sinC=30.000071；b=c·sinB/sinC=39.999946
+    expect(resultValue('边 a')).toBe('30.00');
+    expect(resultValue('边 b')).toBe('40.00');
+    expect(resultValue('∠C')).toBe('90.00°');
+  });
+
+  it('SSA 链路键直达 #/p12?mode=ssa：a=40,c=50,A=36.87 → 双解两卡并列、锐角解在前', async () => {
+    await router.navigate('p12', { mode: 'ssa' });
+    expect(window.location.hash).toBe('#/p12?mode=ssa');
+    const segItems = [...page().querySelectorAll<HTMLElement>('.rc-seg__item')];
+    expect(segItems.find((item) => item.dataset.value === 'ssa')?.classList.contains('on')).toBe(
+      true,
+    );
+    expect(fieldKeys()).toEqual(['a', 'c', 'A']);
+
+    setField('a', '40');
+    setField('c', '50');
+    setField('A', '36.87');
+
+    const cards = [...page().querySelectorAll<HTMLElement>('.rc-p12__solutions .rc-resultcard')];
+    expect(cards).toHaveLength(2);
+    const [first, second] = cards;
+    expect(first).toBeDefined();
+    expect(second).toBeDefined();
+    if (!first || !second) return;
+    // 解₁（锐角 C=48.590533°）：b₁ = a·sinB₁/sinA = 66.457378 → 66.46
+    expect(cardValue(first, '∠C')).toBe('48.59°');
+    expect(cardValue(first, '边 b')).toBe('66.46');
+    // 解₂（钝角 C=131.409467°）：b₂ = 13.542514 → 13.54
+    expect(cardValue(second, '∠C')).toBe('131.41°');
+    expect(cardValue(second, '边 b')).toBe('13.54');
+    expect(page().textContent).toContain('SSA 双解');
+    expect(page().querySelector('.rc-acc__body')?.textContent).toContain('sinC');
+  });
+
+  it('SSA 边界无解：A=120,a=45,c=50 → 提示「构不成三角形」，不渲染结果卡', () => {
+    clickSeg('ssa');
+    setField('a', '45');
+    setField('c', '50');
+    setField('A', '120');
+    expect(page().querySelector('.rc-p12__hint')?.textContent).toBe('构不成三角形');
+    expect(page().querySelector('.rc-resultcard')).toBeNull();
+  });
+
+  it('模式往返：ssa → sss 恢复 a/b/c 三输入与 v0.1 结果', () => {
+    clickSeg('ssa');
+    expect(fieldKeys()).toEqual(['a', 'c', 'A']);
+    clickSeg('sss');
+    expect(fieldKeys()).toEqual(['a', 'b', 'c']);
+    expect(resultValue('∠C')).toBe('90.00°');
+    expect(chipTexts()).toEqual(['直角三角形', '勾股校验通过']);
   });
 });

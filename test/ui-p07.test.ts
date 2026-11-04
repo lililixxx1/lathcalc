@@ -67,7 +67,7 @@ describe('p07 锥度 · 莫氏：计算视图', () => {
     expect(page.querySelector('.rc-topbar__title')?.textContent).toContain('锥度 · 莫氏');
 
     const segItems = [...page.querySelectorAll<HTMLElement>('.rc-seg__item')];
-    expect(segItems.map((el) => el.textContent)).toEqual(['计算', '莫氏对照']);
+    expect(segItems.map((el) => el.textContent)).toEqual(['计算', '莫氏对照', '反推']);
     expect(segItems[0]?.classList.contains('on')).toBe(true);
 
     expect(page.querySelector('.rc-p07__figure svg')).not.toBeNull();
@@ -187,5 +187,89 @@ describe('p07 锥度 · 莫氏：莫氏对照', () => {
     clickSegItem('calc');
     expect(currentPage().querySelectorAll('.rc-input')).toHaveLength(3);
     expect(currentPage().querySelector('.rc-p07__chips')).toBeNull();
+  });
+});
+
+describe('p07 反推模式（W6-C4）', () => {
+  it('链路键直达 #/p07?mode=reverse&taperC=1/19.254&small=30&length=50 → 32.597 / 1.298 / 1°29′15″', async () => {
+    await router.navigate('p07', { mode: 'reverse', taperC: 1 / 19.254, small: 30, length: 50 });
+    expect(window.location.hash).toBe(
+      '#/p07?mode=reverse&taperC=0.05193725979017347&small=30&length=50',
+    );
+    const page = currentPage();
+    expect(
+      page.querySelector<HTMLElement>('.rc-seg__item[data-value="reverse"]')?.classList.contains('on'),
+    ).toBe(true);
+    expect(page.querySelector<HTMLInputElement>('input[name="taperC"]')).not.toBeNull();
+    // 反推大端：D = d + C·L = 30 + 50/19.254 = 32.596863 → 32.597
+    // (D−d)/2 = 1.298431 → 1.298（G0-I4 未舍入路径）；α/2 = arctan(C/2) = 1°29′15″
+    expect(resultValues()).toEqual(['32.597', '1.298', '1°29′15″']);
+    const labels = [...page.querySelectorAll<HTMLElement>('.rc-resultcard__label')].map(
+      (el) => el.textContent,
+    );
+    expect(labels).toEqual(['大端 D', '大小端差 (D−d)/2', '半角 α/2']);
+  });
+
+  it('莫氏快选 MT4：填入 C=1/19.254，默认 D=32/d=27 留空 L → 反推锥长 96.27', async () => {
+    await router.navigate('p07', { mode: 'reverse' });
+    const chips = [...currentPage().querySelectorAll<HTMLButtonElement>('.rc-p07__chips .la-chip')];
+    expect(chips.map((el) => el.textContent)).toEqual([
+      'MT0',
+      'MT1',
+      'MT2',
+      'MT3',
+      'MT4',
+      'MT5',
+      'MT6',
+    ]);
+    chips[4]?.click();
+    const cInput = currentPage().querySelector<HTMLInputElement>('input[name="taperC"]');
+    expect(Number(cInput?.value)).toBeCloseTo(1 / 19.254, 6);
+    expect(
+      currentPage()
+        .querySelectorAll<HTMLElement>('.rc-p07__chips .la-chip')[4]
+        ?.classList.contains('on'),
+    ).toBe(true);
+    // L = (D−d)/C = (32−27)/(1/19.254) = 96.27
+    expect(resultValues()).toEqual(['96.27', '2.5', '1°29′15″']);
+  });
+
+  it('非法输入行内提示：留空 0 行 / 2+ 行、锥比 C≤0', async () => {
+    await router.navigate('p07', {
+      mode: 'reverse',
+      taperC: 0.05,
+      big: 32,
+      small: 30,
+      length: 50,
+    });
+    const hint = (): string => currentPage().querySelector('.rc-p07__hint')?.textContent ?? '';
+    // 三行全给 = 留空 0 行
+    expect(hint()).toContain('留空恰好一行');
+    expect(currentPage().querySelector('.rc-resultcard')).toBeNull();
+
+    // 留空 L = 恰一行 → 可解
+    setInput('length', '');
+    expect(resultValues()).toEqual(['40', '1', '1°25′56″']);
+
+    // 再留空 D = 2 行 → 提示
+    setInput('big', '');
+    expect(hint()).toContain('留空恰好一行');
+
+    // C≤0 → 提示
+    setInput('big', '32');
+    setInput('taperC', '0');
+    expect(hint()).toContain('大于 0');
+    expect(currentPage().textContent).not.toContain('NaN');
+  });
+
+  it('分段第三项 data-value=reverse；反推 ↔ 计算可往返且计算视图零回归', async () => {
+    await router.navigate('p07');
+    const items = [...currentPage().querySelectorAll<HTMLElement>('.rc-seg__item')];
+    expect(items.map((el) => el.dataset.value)).toEqual(['calc', 'morse', 'reverse']);
+    clickSegItem('reverse');
+    expect(currentPage().querySelector('input[name="taperC"]')).not.toBeNull();
+    clickSegItem('calc');
+    expect(currentPage().querySelectorAll('.rc-input')).toHaveLength(3);
+    expect(resultValues()).toEqual(['1 : 10', '2°51′45″', '2.5']);
   });
 });
