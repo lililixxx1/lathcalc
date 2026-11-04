@@ -45,8 +45,8 @@ Vite + TypeScript + vitest，零框架（原生 TS + DOM），零运行时依赖
 
 - 标准数据（螺纹四族/IT 公差/莫氏锥度/密度）录入自公开标准与双源互证，逐表溯源见
   [`src/data/PROVENANCE.md`](src/data/PROVENANCE.md)。
-- G76/G92 方言语义按厂商官方手册双源取证冻结（结论表/逐字摘录见
-  [`docs/research/g76-dialects.md`](docs/research/g76-dialects.md)）：KND 按 **KND-1000T** 口径
+- G76/G92 方言语义按厂商手册 + 独立第二源双源取证冻结（来源分级见
+  [`docs/research/g76-dialects.md`](docs/research/g76-dialects.md) §4.1）：KND 按 **KND-1000T** 口径
   （P/Q/R=0.001mm，其他机型单位可能不同）；GSK 的 G76 因 980TDc/988TA 两代口径冲突暂不生成；
   华中 G92 为工件坐标系设定（非螺纹循环），页面提示改用 G82。**程序为参考模板，上机前请核对。**
 - 切削参数库为**示例数据**（非标准值），页面内固定警示「以试切为准」。
