@@ -56,7 +56,8 @@ Vite + TypeScript + vitest，零框架（原生 TS + DOM），零运行时依赖
 
 ## 截图对拍
 
-`docs/evidence/W5/runs/` 内含 14 页 390×844 实现截图与设计稿基准图，逐页对拍留档。
+`docs/evidence/W5/runs/` 内含 14 页 390×844 实现截图与设计稿基准图，逐页对拍留档；
+v0.2 改动五页（p02/p04/p07/p09/p12）的复拍与新态截图在 `docs/evidence/W6W7/runs/`。
 
 ## 许可
 

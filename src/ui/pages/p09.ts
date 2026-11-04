@@ -38,6 +38,10 @@ const CSS = `
 .rc-p09__input--active { border-color: var(--la-accent); }
 .rc-p09__hint { font-size: 12px; line-height: 1.55; color: var(--la-accent-ink); padding: 0 2px; }
 .rc-p09__result { display: flex; flex-direction: column; gap: 9px; }
+/* 真机矮屏兜底：390×844 下键盘四行完整（末行余量 72px，W7-A4 probe-scroll 实测），
+   但矮屏（如 667px 高，body 内容区仅约 550px）f 卡态内容会超屏被 overflow:hidden 硬裁。
+   页面级开纵滚：844 及以下内容不满屏时不触发滚动，不影响 W5 对拍基线。 */
+.la-page[data-page="p09"] .la-body { overflow-y: auto; }
 `;
 
 /**
