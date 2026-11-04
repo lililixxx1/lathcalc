@@ -65,7 +65,6 @@ const sub = (a: RP, b: RP): RP => ({ z: a.z - b.z, r: a.r - b.r });
 const mul = (a: RP, k: number): RP => ({ z: a.z * k, r: a.r * k });
 /** (z,r) 平面内逆时针 90°：rot90(z,r) = (−r, z) */
 const rot90 = (a: RP): RP => ({ z: -a.r, r: a.z });
-const toRadius = (v: Vec2): RP => ({ z: v.z, r: v.x / 2 });
 const toDia = (p: RP): Vec2 => ({ x: p.r * 2, z: p.z });
 const deg2rad = (deg: number): number => (deg * Math.PI) / 180;
 

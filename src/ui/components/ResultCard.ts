@@ -3,7 +3,7 @@
  *
  * 一行 = 标签 + 数值 + 单位 + 复制按钮；big 变体用于主结果（26px）。
  */
-import { escapeHtml, ensureBaseStyles, injectStyle } from './base';
+import { ensureBaseStyles, injectStyle } from './base';
 import { icon } from './icons';
 
 const CSS = `

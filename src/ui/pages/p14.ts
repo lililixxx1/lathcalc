@@ -180,7 +180,8 @@ export function wrapText(text: string, maxWidth: number, fontSize: number): stri
   let current = '';
   let width = 0;
   for (const char of text) {
-    const charWidth = /[\u0000-\u00ff]/.test(char) ? fontSize * 0.56 : fontSize;
+    // 码点 ≤ 0xFF（拉丁/ASCII）按窄字宽 0.56 倍；代理对高位置 > 0xFF 判宽，与原 [\u0000-\u00ff] 语义一致
+    const charWidth = char.charCodeAt(0) <= 0xff ? fontSize * 0.56 : fontSize;
     if (current.length > 0 && width + charWidth > maxWidth) {
       lines.push(current);
       current = char;

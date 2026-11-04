@@ -279,7 +279,7 @@ describe('AC06 凹圆弧切入（R, dX, dZ）', () => {
     //   S→E 逆时针（圆心 −83.13°→−23.13°）⇒ 前刀架 G03
     const out = solver('AC06').solve({ R: 10, dX: 12, dZ: 8 });
     expectVec(out.tangent, 12, 8);
-    expectVec(out.center, 19.856406460551020, -1.196152422706632);
+    expectVec(out.center, 19.85640646055102, -1.196152422706632);
     expect(out.direction).toBe('G03');
     expect(out.gcodeLine).toBe('G03 X12 Z8 R10.0');
 

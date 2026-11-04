@@ -210,7 +210,7 @@ describe('g76Dialect · GSK 置灰（W6-C1 裁决 R1 / V2-4 宁缺毋滥）', ()
     try {
       lines = g76Dialect(M30X35, 'gsk').lines;
     } catch {
-      lines = null;
+      // throw 时赋值不发生，lines 保持 null（显式重赋值冗余，lint no-useless-assignment）
     }
     expect(lines).toBeNull();
   });

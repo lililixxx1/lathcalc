@@ -314,7 +314,7 @@ const page: PageModule = {
         (state.mode === 'rpm' ? field === 'vc' : field === 'rpm');
       if (!allowed) return;
       const current = texts[field];
-      let next = current;
+      let next: string;
       if (key === 'del') {
         next = current.slice(0, -1);
       } else if (key === '.') {
