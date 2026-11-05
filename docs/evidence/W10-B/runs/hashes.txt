@@ -1,0 +1,14 @@
+W10-B write-scope file hashes (B plan: zero code change)
+date: 2026-11-05 (GMT+8)
+
+sha256 (tree files, after all work):
+ba512d37f048125712d452ae2bf2fa6f4aa32df3f5794ae07ea71e5a97451098 *src/data/threads-npt.json
+756377b4e6dc3cbf146a44327bf6bebcd92478a99ce605c4af17b4a365330962 *test/data-npt.test.ts
+
+git blob hash vs baseline bd1d74d (filter-aware, see isolation-check.txt):
+src/data/threads-npt.json baseline_blob=81620882e6010ee65ea1ba7b3a68e161359a06d0
+src/data/threads-npt.json tree_hashobj=81620882e6010ee65ea1ba7b3a68e161359a06d0
+test/data-npt.test.ts baseline_blob=a9a8733aa70e9cb0d93f78e86929b69723148762
+test/data-npt.test.ts tree_hashobj=a9a8733aa70e9cb0d93f78e86929b69723148762
+
+note: paths in this file are repo-relative or <TREE> placeholders; no machine absolute paths.

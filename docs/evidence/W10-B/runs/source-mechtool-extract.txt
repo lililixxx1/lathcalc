@@ -1,0 +1,39 @@
+SOURCE T3-mechtool: 一般密封管螺纹(NPT,NPSC) | 美制管螺纹(60°)
+URL: https://www.mechtool.cn/thread/thread_americanpipethreadgeneralsealingpipethread.html
+Retrieved: 2026-11-05 (GMT+8)
+
+Extraction method: <table> rows parsed from the page HTML; tags stripped and
+whitespace collapsed to single spaces.
+
+Header rows (verbatim excerpt):
+大径 d＝D | 中径 d1＝D2 | 小径 d1＝D1
+(from the page's transposed table header; the page's own note defines the
+relation: "其中：D2＝d2＝D-0.8P D1＝d1＝D-1.6P")
+
+Rows (verbatim; 4" included as a control row):
+4 | 8 | 3.175 | 2.540 | 113.973 | 111.433 | 108.893 | 6.75 | 21.431 | 2 | 6.350 | 107.554
+5 | 8 | 3.175 | 2.540 | 140.952 | 138.412 | 135.872 | 7.50 | 23.812 | 2 | 6.350 | 134.384
+6 | 8 | 3.175 | 2.540 | 167.792 | 165.252 | 162.712 | 7.66 | 24.320 | 2 | 6.350 | 161.191
+
+Column mapping (12 data cells):
+[1] 尺寸代号
+[2] 牙数 n
+[3] 螺距 P / mm
+[4] 牙型高度 h / mm
+[5] 大径 d=D / mm
+[6] 中径 d2=D2 / mm
+[7] 小径 d1=D1 / mm
+[8] 基准距离 螺纹数
+[9] 基准距离 L1 / mm
+[10] 装配余量 螺纹数
+[11] 装配距离 L3 / mm
+[12] 外螺纹小端面内的基本小径 / mm
+
+Observation:
+- 5"/6" 大径 d=D = 140.952 / 167.792 mm, a direct match with P1.
+- The page is a Chinese mechanical-design reference transcription. It does not
+  state a standard edition; its values align with the GB/T 12716 lineage used
+  by P1, and its L1 differs slightly from P1/ASME (23.812 vs 23.800;
+  24.320 vs 24.333), indicating a secondary transcription. Per the dispatch's
+  reporting condition (2) it is registered here, not treated as an
+  authoritative independent third source.

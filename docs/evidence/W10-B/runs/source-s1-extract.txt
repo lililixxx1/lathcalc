@@ -1,0 +1,27 @@
+SOURCE S1 (W8-A 第二源): gewinde-normen.de · NPT Pipe Thread (60° 1:16)
+URL: https://www.gewinde-normen.de/en/npt-pipe-thread.html
+Retrieved: 2026-11-05 (GMT+8)
+Page title (verbatim): NPT American Taper Pipe Thread ANSI B 1.20.1
+
+Extraction method: <table> rows parsed from the page HTML; tags stripped and
+whitespace collapsed to single spaces.
+
+Table header (verbatim):
+Nominal Diameter | Major Diametermm | TappingDrill Sizemm | TPI | Pitchmm
+
+Rows (verbatim; 4" included as a control row):
+4" - 8 NPT | 113.973 | 107.00 | 8 | 3.175
+5" - 8 NPT | 141.300 | 134.384 | 8 | 3.175
+6" - 8 NPT | 168.275 | 161.191 | 8 | 3.175
+
+Observation:
+- 5"/6" TPI=8 and Pitch=3.175 agree with P1.
+- The 5"/6" "Major Diameter" cells equal the pipe OD caliber:
+  5.563 in x 25.4 = 141.3002 mm (page: 141.300);
+  6.625 in x 25.4 = 168.275 mm (page: 168.275).
+- For 1/16"-4" the same "Major Diameter" column equals P1's gaging-plane
+  major diameter (control row 4" = 113.973 = P1), so S1's column caliber is
+  inconsistent between small sizes and 5/6 (and 8-12).
+- The S1 "TappingDrill Size" for 5/6 (134.384 / 161.191) equals P1's
+  "外螺纹小端面内的基本小径" (small-end basic minor diameter), i.e. S1's other
+  columns are aligned with P1; only the major-diameter column switches caliber.

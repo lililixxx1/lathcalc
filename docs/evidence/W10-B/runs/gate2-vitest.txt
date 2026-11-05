@@ -1,0 +1,59 @@
+
+ RUN  v3.2.7 <TREE>
+
+ ✓ test/ui-p01.test.ts (12 tests) 1177ms
+   ✓ p01 导航 > 10 个入口分别导航到 p02/p04/p05/p07/p08/p09/p10/p11/p12/p13  629ms
+ ✓ test/ui-p02.test.ts (19 tests) 1339ms
+   ✓ p02 结构保真与七族列表 > 顶栏 / 七族页签 / 搜索 / 筛选 / 说明逐块存在  327ms
+ ✓ test/ui-p04.test.ts (30 tests) 446ms
+ ✓ test/ui-p06.test.ts (10 tests) 311ms
+ ✓ test/ui-p05.test.ts (5 tests) 261ms
+ ✓ test/ui-p03.test.ts (14 tests) 283ms
+ ✓ test/ui-p13.test.ts (11 tests) 164ms
+ ✓ test/ui-router.test.ts (11 tests) 215ms
+ ✓ test/ui-p08.test.ts (12 tests) 152ms
+ ✓ test/ui-p12.test.ts (13 tests) 190ms
+ ✓ test/ui-p07.test.ts (12 tests) 157ms
+ ✓ test/ui-p09.test.ts (13 tests) 148ms
+ ✓ test/ui-p11.test.ts (10 tests) 140ms
+ ✓ test/ui-p14.test.ts (15 tests) 141ms
+ ✓ test/ui-p10.test.ts (5 tests) 97ms
+ ✓ test/ui-components.test.ts (26 tests) 37ms
+ ✓ test/ui-store.test.ts (16 tests) 8ms
+ ✓ test/ui-source.test.ts (7 tests) 445ms
+   ✓ UI 源码契约 > 14 页 loader 在无 DOM 环境均可解析，且模块含 title/render  427ms
+ ✓ test/data-gcode-ref.test.ts (8 tests) 11ms
+ ✓ test/data-it.test.ts (8 tests) 8ms
+ ✓ test/thread.test.ts (13 tests) 6ms
+ ✓ test/gcode.test.ts (32 tests) 8ms
+ ✓ test/ref-tables.test.ts (10 tests) 8ms
+ ✓ test/data-trapezoid.test.ts (11 tests) 7ms
+ ✓ test/arc-cases-b.test.ts (16 tests) 7ms
+ ✓ test/data-materials.test.ts (6 tests) 6ms
+ ✓ test/data-fundamental-deviations.test.ts (6 tests) 5ms
+ ✓ test/triangle.test.ts (12 tests) 6ms
+ ✓ test/data-unified.test.ts (8 tests) 6ms
+ ✓ test/arc-cases-a.test.ts (15 tests) 6ms
+ ✓ test/taper.test.ts (12 tests) 4ms
+ ✓ test/fit-tolerance.test.ts (9 tests) 5ms
+ ✓ test/data-metric.test.ts (5 tests) 5ms
+ ✓ test/data-npt.test.ts (6 tests) 4ms
+ ✓ test/data-sealpipe.test.ts (7 tests) 5ms
+ ✓ test/data-pipe.test.ts (8 tests) 5ms
+ ✓ test/data-worm.test.ts (5 tests) 4ms
+ ✓ test/data-morse.test.ts (7 tests) 4ms
+ ✓ test/lookup.test.ts (5 tests) 3ms
+ ✓ test/tolerance.test.ts (7 tests) 4ms
+ ✓ test/data-densities.test.ts (5 tests) 3ms
+ ✓ test/speed.test.ts (8 tests) 3ms
+ ✓ test/weight.test.ts (4 tests) 2ms
+ ✓ test/arc.test.ts (3 tests) 2ms
+
+ Test Files  44 passed (44)
+      Tests  477 passed (477)
+   Start at  11:44:15
+   Duration  13.82s (transform 879ms, setup 0ms, collect 1.16s, tests 5.85s, environment 8.52s, prepare 4.11s)
+
+
+REAL_EXIT=0
+SANITIZED: machine path prefix replaced with <TREE> (prefix only; output otherwise verbatim)

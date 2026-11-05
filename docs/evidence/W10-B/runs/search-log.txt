@@ -1,0 +1,73 @@
+W10-B · 检索过程简记（检索词 + 命中/未命中）
+检索日期：2026-11-05 (GMT+8)
+目标：NPT 5 / NPT 6 基面大径的公开第三源（ASME B1.20.1 原文 / 权威工程手册 / 厂商技术表）
+
+== 直接命中（公开页面，已留逐字摘录） ==
+H1. 直接访问 S1: https://www.gewinde-normen.de/en/npt-pipe-thread.html
+    -> 命中。5" - 8 NPT | 141.300 | ... ; 6" - 8 NPT | 168.275 | ...（Major Diameter 列；
+       该列 5/6 行为管外径口径）。摘录见 source-s1-extract.txt。
+H2. 直接访问 P1: https://www.164580.com/data/detail_13.html
+    -> 命中。大径 d=D 行 5 列=140.952、6 列=167.792；页脚注「数据来源：GB 12716-2011,
+       ASME B1.20.1」。摘录见 source-p1-extract.txt。
+H3. 360 搜索 "ASME B1.20.1 NPT basic major diameter gaging plane"
+    -> 命中 amesweb.info NPT Thread Chart；直接访问
+       https://amesweb.info/Screws/NPT-Thread-Chart.aspx 成功。
+       ANSI/ASME B1.20.1 表；含 E0/E1/E2、L1/L2/L4、小端基本小径；无基面大径直列。
+       摘录见 source-amesweb-extract.txt。
+H4. 360 搜索 "ASME B1.20.1 NPT basic major diameter gaging plane"
+    -> 命中 mechtool.cn 一般密封管螺纹(NPT,NPSC) 页；直接访问成功。
+       大径 d=D 行 5=140.952、6=167.792（与 P1 直接一致）；属中文参考站转录。
+       摘录见 source-mechtool-extract.txt。
+
+== 检索命中但不可用 / 需上报判定 ==
+U1. 360 搜索 "ASME B1.20.1-2013 中文版" / "ASME B1.20.1-2013 filetype:pdf"
+    -> 命中 doc88.com、max.book118.com、百度文库、360文库 的中文译本/转载页；
+       均需登录/付费，且属镜像/转载站，权威性不可确认（上报条件 2）。
+U2. 360 搜索 "guifanku ASME B1.20.1"
+    -> 命中 doc88 多份 ASME B1.20.1 中文版；规范库站内搜索无可直接下载的英文原文。
+U3. 360 搜索 "NPT \"basic major\" table pdf ASME"
+    -> 命中 amesweb（已用 H3）、doc88、guifanku、renrendoc；无直接给出基面大径列的
+       权威英文表。
+U4. 360 搜索 "NPT thread turning catalog pdf basic major diameter gaging plane"
+    -> 命中 smtcarbide Thread-Turning 目录；非 NPT 基面尺寸表，未采用。
+U5. 360 搜索 "Sandvik NPT thread dimensions pdf"
+    -> 命中 Sandvik Coromant 页面；未检索到含 NPT 5/6 基面大径列的公开表。
+U6. 360 搜索 "NPT thread gage basic major diameter at gaging plane"
+    -> 命中 imeasu 螺纹量规基础页、docin/doc88 NPTF/NPSF 资料；无 5/6 基面大径表。
+
+== 检索词未命中 / 站点不可达（环境限制） ==
+N1. DuckDuckGo HTML: "NPT 5 basic major diameter gaging plane"; "NPT 5 141.3 140.952";
+    "140.952 NPT"; "ASME B1.20.1 table basic major diameter 5 6"
+    -> 结果页无可用结果链接（空结果/被拦截）。
+N2. Bing (www.bing.com, 中文区域): 上述同义检索词 + "NPT basic major diameter table"
+    -> 返回中文本地化结果（164580/mechtool/百度文库/知乎）或无关结果；无英文原始表。
+N3. Bing ensearch: "\"basic major diameter at gaging plane\""
+    -> 无相关英文结果（返回中文词典/无关页）。
+N4. Baidu: "ASME B1.20.1 基准平面 大径 140.952"
+    -> 百度安全验证（captcha），未取得结果。
+N5. Sogou: "ASME B1.20.1 NPT gaging plane major diameter"
+    -> 结果页以无关热点为主，无可用技术源。
+N6. 360: "\"basic major diameter at gaging plane\"" / "NPT 5.5493" / "NPT 6.6060"
+    -> 无相关结果（词典/无关商品页）。
+N7. Mojeek: 同 N3 -> HTTP 403。
+N8. Yandex: 同 N3 -> SmartCaptcha。
+N9. Brave Search: 同 N3 -> 连接超时。
+N10. Marginalia: "NPT gaging plane basic major diameter" -> 无结果。
+N11. 直接访问失败：
+     - https://www.engineersedge.com/thread_strength/npt_threads.htm -> HTTP 403 (Cloudflare)
+     - https://www.machiningdoctor.com/threadinfo/npt/ -> 页面无尺寸表
+     - https://www.efunda.com/designstandards/screws/npt*.cfm -> 404
+     - https://www.engineeringtoolbox.com/npt-threads-dimensions-d_963.html -> 404
+     - https://en.wikipedia.org/wiki/National_pipe_thread -> 连接超时
+     - https://archive.org / https://web.archive.org -> 连接超时
+     - https://law.resource.org/pub/us/cfr/ibr/002/ -> 目录中无 ASME B1.20.1
+     - https://www.guifanku.com/?s=ASME+B1.20.1 -> 站内搜索无结果/需登录
+
+== 结论 ==
+- 公开可引且独立于 GB/T 12716 口径的第三源仅找到 AmesWeb（ASME B1.20.1 表）。
+  该表有基面中径 E1，无基面大径直列；按 NPT 基本牙型 D=E1+0.8P 派生后与 P1 逐位一致
+  （见 tools/verify-w10b.mjs 与 runs/summary.txt）。
+- 有基面大径直列、且与 P1 直接一致的 mechtool.cn 属中文参考站同系转录（未注明版本，
+  且 L1 与 P1/ASME 有 0.01 mm 级差异），按上报条件 2 登记。
+- doc88/book118/百度文库 的 ASME 中文译本属镜像/转载站，按上报条件 2 登记。
+- 未发现任何第三源给出 141.300 / 168.275 作为「基面大径」；该两值只在管外径口径出现。

@@ -1,0 +1,41 @@
+SOURCE T3-AmesWeb: NPT Thread Dimensions Chart - ASME B1.20.1 Pipe Sizes
+URL: https://amesweb.info/Screws/NPT-Thread-Chart.aspx
+Retrieved: 2026-11-05 (GMT+8)
+Page title (verbatim): NPT Thread Dimensions Chart – ASME B1.20.1 Pipe Sizes | AmesWeb
+Page statement (verbatim): "ANSI/ASME B1.20.1 taper pipe thread dimensions by nominal size"
+
+Extraction method: <table> rows parsed from the page HTML; tags stripped and
+whitespace collapsed to single spaces.
+
+Column headers (verbatim, two header rows):
+Nom. Pipe Size | Outer Dia. of Pipe | TPI | Pitch, P | Pitch Dia. at Beginning of External Thread, E0 | Hand-Tight Engagement | Effective Thread, External | Overall Length, External Thread, L4 | Basic Minor Dia. at Small End of Pipe
+L1 (in) | L1 (threads) | E1 | L2 (in) | L2 (threads) | E2
+
+Rows (verbatim; 4" included as a control row):
+4 | 4.5000 | 8 | 0.12500 | 4.33438 | 0.8440 | 6.75 | 4.38712 | 1.3000 | 10.40 | 4.41562 | 1.7337 | 4.2344
+5 | 5.5630 | 8 | 0.12500 | 5.39073 | 0.9370 | 7.50 | 5.44929 | 1.4063 | 11.25 | 5.47862 | 1.8400 | 5.2907
+6 | 6.6250 | 8 | 0.12500 | 6.44609 | 0.9580 | 7.66 | 6.50597 | 1.5125 | 12.10 | 6.54062 | 1.9462 | 6.3461
+
+Column mapping (13 data cells):
+[1] Nominal Pipe Size
+[2] Outer Dia. of Pipe (in)
+[3] TPI
+[4] Pitch P (in)
+[5] Pitch Dia. at Beginning of External Thread, E0 (in)
+[6] L1 (in)
+[7] L1 (threads)
+[8] Pitch Dia. at Gaging Plane, E1 (in)     <-- gaging-plane caliber, NOT pipe OD
+[9] L2 (in)
+[10] L2 (threads)
+[11] E2
+[12] L4
+[13] Basic Minor Dia. at Small End of Pipe (in)
+
+Key point: this table has NO "basic major diameter at gaging plane" column.
+It publishes the gaging-plane PITCH diameter E1, from which the basic major
+diameter at the gaging plane follows by the NPT basic profile relation
+D = E1 + 0.8P (mechtool.cn prints this relation explicitly as "D2=d2=D-0.8P";
+P1's table values satisfy it row-by-row).
+The source-internal cross-check E0 - (basic minor at small end) = 0.8P holds
+on the published rows, e.g. 5.39073 - 5.2907 = 0.10003 ~ 0.10000 and
+6.44609 - 6.3461 = 0.09999 ~ 0.10000.
