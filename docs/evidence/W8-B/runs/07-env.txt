@@ -1,0 +1,8 @@
+$ { echo "node: $(node --version)"; echo "npm: $(npm --version)"; echo "tsc: $(npx tsc --version)"; echo "vitest: $(npx vitest --version)"; echo "eslint: $(npx eslint --version)"; }
+node: v24.12.0
+npm: 11.21.1
+tsc: Version 5.9.3
+vitest: vitest/3.2.7 win32-x64 node-v24.12.0
+eslint: v10.14.0
+
+REAL_EXIT=0

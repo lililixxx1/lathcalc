@@ -43,13 +43,34 @@ export function fanucG76(p: G76Params): G76Program {
 }
 
 /**
+ * GSK G76 最小切深 Q(Δdmin) = 0.1 mm（冻结示例值：988TA `Q0.1` / 980TDc `Q1000`）。
+ * 来源：docs/research/g76-dialects.md §1 行1 示例；与 FANUC 行1 `Q100`（0.1 mm）同值。
+ */
+const GSK_MIN_CUT_MM = 0.1;
+
+/**
+ * GSK 980TDc 最小输入增量 0.0001 mm（状态参数 №.182.7 的增量档）。
+ * 1 / 0.0001 = 10⁴；mm → 整数增量时乘该系数后 Math.round。
+ * 来源：docs/research/g76-dialects.md §1 行1 单位注（980TDc 手册 `P36800` = 3.68 mm）。
+ */
+const GSK_980TDC_SCALE = 10_000;
+
+/** 0.0001 mm 增量口径换算：1.894375 → 18944；0.4 → 4000；0.1 → 1000（§1 行1 单位注） */
+function toGskIncrement(valueMM: number): number {
+  return Math.round(valueMM * GSK_980TDC_SCALE);
+}
+
+/**
  * G76 方言分支（WAVE-PLAN-V2 §1 契约，W6-C2 实现；DEFERRED #1）。
  * 语义由 W6-C1 双源调研冻结（docs/research/g76-dialects.md 结论表）：
  *   - FANUC：恒等式 g76Dialect(p, 'fanuc') ≡ fanucG76(p)，直接复用调用；
  *   - KND：两行式，P/Q/R 按 KND-1000T 的 0.001 mm 口径（§1 行5），行2 与 FANUC 同串；
  *   - HNC：单行式，mm 半径口径（§1 行3），字序 C R E A X Z I K U V Q P F；
- *   - GSK：W6-C1 裁决 R1 / V2-4 宁缺毋滥——980TDc 与 988TA 两代系统 P/Q 单位冲突，
- *     置灰不生成（静默误解达 10⁴ 倍），错误文案冻结。
+ *   - GSK：W6-C1 裁决 R1 的「未限定型号」前提由 WAVE-PLAN-V3 V3-3 型号细分消除
+ *     （DEFERRED #16），两口径分支（§1 行1）：
+ *       988TA：P/Q/R 均 mm 半径小数 → `P1.894 Q0.4`、`Q0.1`、`R0.05`；
+ *       980TDc：P(k)/Q(Δd)/Q(Δdmin) 为 0.0001 mm 增量（№.182.7 默认档），R(d) 保持 mm
+ *       → `P18944 Q4000`、`Q1000`、`R0.05`。缺 gskModel 即 throw（防 10⁴ 倍静默误解）。
  * 免责文案随程序一起返回（报告 §7.4）。
  */
 export function g76Dialect(p: G76Params, system: CncSystem, gskModel?: GskModel): G76Program {
@@ -76,31 +97,52 @@ export function g76Dialect(p: G76Params, system: CncSystem, gskModel?: GskModel)
       ];
       return { lines, disclaimer: G76_DISCLAIMER };
     }
-    case 'gsk':
-      // W8-B 契约（WAVE-PLAN-V3 §1/V3-3）：带 gskModel 走两口径分支（988TA mm 小数 /
-      // 980TDc 0.0001mm 增量 №.182.7，金值 g76-dialects.md §1 行1）；缺 model 抛
-      // 「GSK 需先选型号（988TA mm / 980TDc 增量）」。以下桩占位，卡内替换。
-      if (gskModel) {
-        throw new Error(`g76Dialect: GSK ${gskModel} 分支未实现（W8-B 填充）`);
+    case 'gsk': {
+      // WAVE-PLAN-V3 §1/V3-3（DEFERRED #16）：988TA mm 小数 / 980TDc 0.0001mm 增量
+      // （№.182.7），两行格式与示例逐字取 g76-dialects.md §1 行1；J/K 退尾两型号行位置
+      // 不同（§4.2 第 2 条），本实现不输出 J/K，避免跨型号行位歧义。
+      if (!gskModel) {
+        // 防静默误解：同一段 P1.894 Q0.4 在 980TDc 增量档会差 10⁴ 倍。
+        throw new Error('GSK 需先选型号（988TA mm / 980TDc 增量）');
       }
-      throw new Error(
-        'g76Dialect: GSK G76 两代系统 P/Q 单位口径不同，暂不生成（W6-C1 R1 置灰）',
-      );
+      const finishAllowance = p.finishAllowanceMM ?? 0.05;
+      const minCut = formatNumber(GSK_MIN_CUT_MM); // 988TA：mm 小数 0.1
+      const minCutInc = toGskIncrement(GSK_MIN_CUT_MM); // 980TDc：增量 1000
+      const lines =
+        gskModel === '980tdc'
+          ? [
+              // R(d) 精修余量两型号均保持 mm（§1 行1 单位注）。
+              `G76 P021060 Q${minCutInc} R${formatNumber(finishAllowance)}`,
+              // P(k)=1.894375×10⁴→18944；Q(Δd)=0.4×10⁴→4000；X/Z/F 写法同 FANUC。
+              `G76 X${formatAxis(p.minorDiameter)} Z${formatAxis(p.endZ)} P${toGskIncrement(p.threadDepthMM)} Q${toGskIncrement(p.firstCutDepthMM)} F${formatNumber(p.lead, 1)}`,
+            ]
+          : [
+              // P/Q 为 mm 半径小数（非 μm 整数）：P(k)=1.894375→1.894（三位）、Q(Δd)=0.4。
+              `G76 P021060 Q${minCut} R${formatNumber(finishAllowance)}`,
+              `G76 X${formatAxis(p.minorDiameter)} Z${formatAxis(p.endZ)} P${formatNumber(p.threadDepthMM)} Q${formatNumber(p.firstCutDepthMM)} F${formatNumber(p.lead, 1)}`,
+            ];
+      return { lines, disclaimer: G76_DISCLAIMER };
+    }
   }
 }
 
 /**
  * G92 车螺纹单行程循环（WAVE-PLAN-V2 §1 契约，W6-C2 实现；DEFERRED #2b）。
  * FANUC 基线单行 G92 X(U)_ Z(W)_ F_；行数冻结 = 1（G0-B2）。
- * FANUC / GSK / KND 三系统同串（g76-dialects.md §1 行2/行6），core 层不做 system 分支；
+ * FANUC / GSK / KND 三系统同串（g76-dialects.md §1 行2/行6），core 层对三者不做分支；
  * 单行仅为循环首行，完整螺纹需后续 X 递减分刀（调研档 §4.2 第 7 条，UI 注记）。
- * W8-B 契约（WAVE-PLAN-V3 §1/V3-4）：system='hnc' → G82 单行
- * `G82 X26.211 Z-30. I0 R0 E0 C1 P0 F3.5`（g76-dialects.md §1 行4 脚注冻结模板）；
- * 其余/缺省保持 FANUC 格式（v0.2 既有测试零改）。桩占位，卡内替换。
+ * WAVE-PLAN-V3 §1/V3-4（DEFERRED #17）：HNC 的 G92 是工件坐标系设定（负结论 §1 行4），
+ * 螺纹单循环生成 G82 单行 `G82 X26.211 Z-30. I0 R0 E0 C1 P0 F3.5`——模板逐字取
+ * g76-dialects.md §1 行4 脚注（HNC-8 手册 + 21ic 双源），I 锥度半径差 / R·E 退尾 /
+ * C 头数 / P 起始角为直螺纹模板值；其余/缺省保持 FANUC 格式（v0.2 既有测试零改）。
  */
 export function g92Cycle(p: G76Params, system?: CncSystem): G76Program {
   if (system === 'hnc') {
-    throw new Error('g92Cycle: HNC G82 分支未实现（W8-B 填充）');
+    const lines = [
+      // 直螺纹模板：I0（无锥度）、R0/E0（无退尾）、C1（单头）、P0（起始角 0）。
+      `G82 X${formatAxis(p.minorDiameter)} Z${formatAxis(p.endZ)} I0 R0 E0 C1 P0 F${formatNumber(p.lead, 1)}`,
+    ];
+    return { lines, disclaimer: G76_DISCLAIMER };
   }
   const lines = [
     `G92 X${formatAxis(p.minorDiameter)} Z${formatAxis(p.endZ)} F${formatNumber(p.lead, 1)}`,

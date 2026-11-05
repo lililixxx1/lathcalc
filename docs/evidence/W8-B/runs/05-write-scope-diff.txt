@@ -1,0 +1,8 @@
+$ diff -rq --exclude=node_modules --exclude=dist "<baseline-b9f6b3a>" .
+Only in ./docs/evidence: W8-B
+Files '<baseline-b9f6b3a>/src/core/gcode.ts' and ./src/core/gcode.ts differ
+Files '<baseline-b9f6b3a>/src/ui/pages/p04.ts' and ./src/ui/pages/p04.ts differ
+Files '<baseline-b9f6b3a>/test/gcode.test.ts' and ./test/gcode.test.ts differ
+Files '<baseline-b9f6b3a>/test/ui-p04.test.ts' and ./test/ui-p04.test.ts differ
+
+REAL_EXIT=1

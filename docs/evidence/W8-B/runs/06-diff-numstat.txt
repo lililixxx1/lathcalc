@@ -1,0 +1,8 @@
+$ git diff --no-index --numstat "<baseline-b9f6b3a>/<path>" "./<path>"  # 逐文件
+58	16	"<baseline-b9f6b3a>/src/core/gcode.ts" => ./src/core/gcode.ts
+91	54	"<baseline-b9f6b3a>/src/ui/pages/p04.ts" => ./src/ui/pages/p04.ts
+157	6	"<baseline-b9f6b3a>/test/gcode.test.ts" => ./test/gcode.test.ts
+176	36	"<baseline-b9f6b3a>/test/ui-p04.test.ts" => ./test/ui-p04.test.ts
+
+# 生成方式：对 4 个在单文件逐条执行 git diff --no-index --numstat "<baseline-b9f6b3a>/<path>" "./<path>"
+# git diff --no-index 存在差异时退出码=1（预期值）；本档为行数汇总，不单独作为门禁

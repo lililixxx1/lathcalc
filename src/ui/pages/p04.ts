@@ -1,10 +1,11 @@
 /**
- * p04 · G76 / G92 参考程序（W4-C2 实现；W6-C2 三系统解灰 + 循环形式切换）
+ * p04 · G76 / G92 参考程序（W4-C2 实现；W6-C2 三系统解灰 + 循环形式切换；
+ * W8-B GSK 型号细分 + HNC G82，WAVE-PLAN-V3 G3/G4）
  *
  * 设计稿区块（自上而下，docs/车工计算App-无限画布.html:1206-1225）：
- *   状态栏 → 顶栏（参考程序 + 当前系统徽标）→ 系统页签 → 循环形式页签
- *   → 带入参数眉标 → 参数卡 → 暗色代码卡（两行/单行 + 注释）→ P 位/牙深说明
- *   → 复制程序 → 免责警示条 → Home 指示条
+ *   状态栏 → 顶栏（参考程序 + 当前系统徽标）→ 系统页签 →（GSK 型号页签）
+ *   → 循环形式页签 → 带入参数眉标 → 参数卡 → 暗色代码卡（两行/单行 + 注释）
+ *   → P 位/牙深说明 → 复制程序 → 免责警示条 → Home 指示条
  *
  * P 位正名（W2-C5 裁决 2 冻结，禁写错）：
  *   P(m)(r)(a) 三位 = 02 精车次数 / 10 退尾量（倒角量）/ 60 刀尖角。
@@ -12,11 +13,13 @@
  * 参数卡数值同样从程序输出反解，保证与代码行逐字符一致。
  * 牙高 P 位（行 2 的 P 字）取实际单边牙深 (d − d₁)/2，M30×3.5 → 1894 μm（禁 1895）。
  *
- * 方言 enable 矩阵（WAVE-PLAN-V2 V2-4，docs/research/g76-dialects.md §1）：
- *   G76 形式：GSK 禁用（两代系统 P/Q 口径冲突，R1 置灰）；FANUC/KND/HNC 可用。
- *   G92 形式：华中禁用（G92 为工件坐标系设定，负结论）；FANUC/GSK/KND 可用。
- * 切换形式后当前系统在新形式下禁用 → 回落 FANUC（防死状态）。
- * URL 键：system=fanuc|gsk|knd|hnc（默认 fanuc）、cycle=g76|g92（默认 g76）。
+ * 方言 enable 矩阵（WAVE-PLAN-V3 V3-3/V3-4 起解除 W6 置灰）：
+ *   G76 形式：四系统全可用；GSK 下增「型号」Segmented 选择两端口径——
+ *     988TA（P/Q/R 均 mm 半径小数）/ 980TDc（P/Q 为 0.0001mm 增量 №.182.7，R=mm）。
+ *   G92 直进形式：四系统全可用；HNC 生成 G82 单循环（G92 在 HNC 是工件坐标系设定）。
+ * 原「GSK 暂不生成」「华中请用 G82」两态置灰提示及回落 FANUC 逻辑随解灰整体移除。
+ * URL 键：system=fanuc|gsk|knd|hnc（默认 fanuc）、cycle=g76|g92（默认 g76）、
+ *   gskmodel=988ta|980tdc（默认 988ta，非法值同缺省回落——防死状态）。
  */
 import type { PageContext, PageModule } from '../router';
 import {
@@ -40,6 +43,7 @@ import type {
   FlankAngle,
   G76Params,
   G76Program,
+  GskModel,
   ThreadFamily,
   ThreadSpec,
 } from '../../core/types';
@@ -95,14 +99,23 @@ const CYCLE_OPTIONS: readonly { value: CycleForm; label: string }[] = [
   { value: 'g92', label: 'G92 直进循环' },
 ];
 
-/** 置灰提示（两态，逐字冻结）：G76 形式提示 GSK；G92 形式提示华中。 */
-const CYCLE_NOTE: Record<CycleForm, string> = {
-  g76: 'GSK · 两代系统单位口径不同，暂不生成（防静默错误）',
-  g92: '华中 · G92 为工件坐标系设定，螺纹单循环请用 G82',
+/** GSK 型号页签（仅 GSK + G76 形式出现；values 与 types.ts GskModel 对齐） */
+const GSK_MODELS: readonly { value: GskModel; label: string }[] = [
+  { value: '988ta', label: '988TA mm' },
+  { value: '980tdc', label: '980TDc 增量' },
+];
+
+/** GSK 代码卡口径注（逐字：P/Q 单位两型号不同，防 10⁴ 倍静默误解） */
+const GSK_MODEL_COMMENT: Record<GskModel, string> = {
+  '988ta': '按 GSK988TA 口径（P/Q=mm 半径）',
+  '980tdc': '按 GSK980TDc 口径（P/Q=0.0001mm 增量 №.182.7，R=mm）',
 };
 
 /** W6-C1-04 裁决文案：G92 单行只是循环首行 */
 const G92_ROW_NOTE = 'G92 为循环首行，完整螺纹需后续 X 递减分刀';
+
+/** V3-4 文案：HNC 直进循环 = G82 单循环，同样只是首行 */
+const G82_ROW_NOTE = 'G82 为单循环行，完整螺纹需后续 X 递减分刀';
 
 /** 设计稿 p04 冻结示例参数（非标准表值）：Z 终点 −30 mm、首刀 0.4 mm（Q400 μm） */
 const END_Z_MM = -30;
@@ -113,11 +126,8 @@ const P_BITS_NOTE = 'P021060 = 02 精车次数 · 10 退尾量（倒角量）· 
 const CSS = `
 .rc-p04__body { padding-top: 2px; }
 .rc-p04__meta { display: flex; align-items: center; gap: 8px; flex: 0 0 auto; }
-/* A4 修复+复审修正：待补/口径提示语义属系统页签；独立徽标挤爆页签行，改为行下右对齐小字注 */
-.rc-p04__syswrap { flex: 0 0 auto; }
-.rc-p04__sysnote { display: block; text-align: right; margin-top: 2px; }
 .rc-p04__pnote { white-space: pre-line; }
-/* 系统页签 + 循环形式页签两组 Segmented 纵向排布 */
+/* 系统页签 +（GSK 型号页签）+ 循环形式页签纵向排布 */
 .rc-p04__controls { display: flex; flex-direction: column; gap: 9px; flex: 0 0 auto; }
 /* 六格参数在 390px 下保持单行（设计稿 3 列紧凑排布） */
 .rc-p04__body .rc-param { padding: 7px 8px; gap: 4px; }
@@ -152,9 +162,9 @@ function readCycle(value: string | null): CycleForm {
   return value === 'g92' ? 'g92' : 'g76';
 }
 
-/** enable 矩阵（V2-4：粒度 = 系统 × 循环形式） */
-function isEnabled(system: CncSystem, cycle: CycleForm): boolean {
-  return cycle === 'g76' ? system !== 'gsk' : system !== 'hnc';
+/** URL gskmodel 键（默认 988ta；非法值回落默认——防死状态，同 W6-C2-04 先例） */
+function readGskModel(value: string | null): GskModel {
+  return value === '980tdc' ? '980tdc' : '988ta';
 }
 
 /** 从程序行反解参数（单一事实源；首 token 前缀匹配） */
@@ -173,7 +183,11 @@ function displayZ(value: string): string {
 }
 
 /** G76 参数卡六格：值从当前系统 g76Dialect 输出反解，标签/单位按方言正确 */
-function buildG76ParamItems(program: G76Program, system: CncSystem): ParamItem[] {
+function buildG76ParamItems(
+  program: G76Program,
+  system: CncSystem,
+  gskModel: GskModel,
+): ParamItem[] {
   const line1 = program.lines[0] ?? '';
   const line2 = program.lines[1] ?? '';
 
@@ -186,6 +200,20 @@ function buildG76ParamItems(program: G76Program, system: CncSystem): ParamItem[]
       { key: '首切 Q', value: `${token(line1, 'Q')} mm` },
       { key: '导程 F', value: token(line1, 'F') },
       { key: '精修 U', value: `${token(line1, 'U')} mm` },
+    ];
+  }
+
+  if (system === 'gsk') {
+    // GSK 两行式：988TA 的 P/Q 为 mm 半径小数；980TDc 为 0.0001mm 增量（№.182.7）；
+    // 两型号 R(d) 均保持 mm（g76-dialects.md §1 行1 单位注）。
+    const unit = gskModel === '980tdc' ? '（0.0001mm）' : ' mm';
+    return [
+      { key: '牙底 X', value: token(line2, 'X') },
+      { key: '终点 Z', value: displayZ(token(line2, 'Z')) },
+      { key: '牙高 P', value: `${token(line2, 'P')}${unit}` },
+      { key: '首切 Q', value: `${token(line2, 'Q')}${unit}` },
+      { key: '导程 F', value: token(line2, 'F') },
+      { key: '精修 R', value: `${token(line1, 'R')} mm` },
     ];
   }
 
@@ -220,11 +248,14 @@ function metaRow(): HTMLElement {
   return row;
 }
 
-/** 代码卡注释：按系统生成；KND + G76 追加口径注（R2 裁决条件） */
-function codeComment(system: CncSystem, cycle: CycleForm): string {
+/** 代码卡注释：按系统生成；KND / GSK + G76 追加口径注（R2 裁决条件 / V3-3） */
+function codeComment(system: CncSystem, cycle: CycleForm, gskModel: GskModel): string {
   const base = `系统不同，P/Q/R 含义不同 — ${SYSTEM_COMMENT[system]}`;
   if (cycle === 'g76' && system === 'knd') {
     return `${base} · 按 KND-1000T 口径（P/Q/R=0.001mm）`;
+  }
+  if (cycle === 'g76' && system === 'gsk') {
+    return `${base} · ${GSK_MODEL_COMMENT[gskModel]}`;
   }
   return base;
 }
@@ -240,9 +271,8 @@ const page: PageModule = {
     const state = {
       system: readSystem(ctx.params.get('system')),
       cycle: readCycle(ctx.params.get('cycle')),
+      gskModel: readGskModel(ctx.params.get('gskmodel')),
     };
-    // 初始 URL 组合落在禁用格（如 system=hnc&cycle=g92）时同样回落 FANUC，防死状态
-    if (!isEnabled(state.system, state.cycle)) state.system = 'fanuc';
 
     const body = createBody({ className: 'rc-p04__body', ariaLabel: 'G76 参考程序' });
     const top = TopBar({ title: 'G76 参考程序', badge: SYSTEM_BADGE[state.system] });
@@ -250,13 +280,10 @@ const page: PageModule = {
     controls.className = 'rc-p04__controls';
     body.append(controls);
 
+    // V3-3 起四系统全可用（G76 / G92 两形式），系统页签不再有 disabled 项。
     const systemsRow = (): HTMLElement =>
       Segmented({
-        options: SYSTEMS.map((system) => ({
-          value: system.value,
-          label: system.label,
-          ...(isEnabled(system.value, state.cycle) ? {} : { disabled: true }),
-        })),
+        options: SYSTEMS,
         value: state.system,
         ariaLabel: '数控系统',
         onChange: (value) => {
@@ -265,17 +292,18 @@ const page: PageModule = {
         },
       });
 
-    /** 系统页签行 + 当前形式的置灰提示（两态小字注） */
-    const systemsRowWithNote = (systems: HTMLElement): HTMLElement => {
-      const wrap = document.createElement('div');
-      wrap.className = 'rc-p04__syswrap';
-      const noteText = CYCLE_NOTE[state.cycle];
-      const note = SubText(noteText);
-      note.classList.add('rc-p04__sysnote');
-      note.setAttribute('title', noteText);
-      note.setAttribute('aria-label', noteText);
-      wrap.append(systems, note);
-      return wrap;
+    /** GSK 型号页签：仅 GSK + G76（两代手册的 P/Q 口径差异只存在于 G76） */
+    const modelRow = (): HTMLElement | null => {
+      if (state.system !== 'gsk' || state.cycle !== 'g76') return null;
+      return Segmented({
+        options: GSK_MODELS,
+        value: state.gskModel,
+        ariaLabel: 'GSK 型号',
+        onChange: (value) => {
+          state.gskModel = readGskModel(value);
+          render();
+        },
+      });
     };
 
     const cycleRow = (): HTMLElement =>
@@ -285,8 +313,6 @@ const page: PageModule = {
         ariaLabel: '循环形式',
         onChange: (value) => {
           state.cycle = readCycle(value);
-          // 切换形式后当前系统在新形式下禁用 → 自动回落 FANUC（钉死，防死状态）
-          if (!isEnabled(state.system, state.cycle)) state.system = 'fanuc';
           render();
         },
       });
@@ -295,7 +321,8 @@ const page: PageModule = {
       const badge = top.querySelector<HTMLElement>('.la-badge');
       if (badge) badge.textContent = SYSTEM_BADGE[state.system];
 
-      controls.replaceChildren(systemsRowWithNote(systemsRow()), cycleRow());
+      const model = modelRow();
+      controls.replaceChildren(systemsRow(), ...(model ? [model] : []), cycleRow());
 
       if (!params) {
         // 首页 G76 直达（#/p04，无参数）：容忍空参数并提示先选型（README §5.2）
@@ -334,17 +361,20 @@ const page: PageModule = {
       };
 
       if (state.cycle === 'g92') {
-        const program = g92Cycle(g76Params);
+        // HNC 的直进循环是 G82（G92 在 HNC = 工件坐标系设定，§1 行4 负结论）；
+        // 其余三系统仍为 G92 单行（§1 行2/行6）。
+        const program = g92Cycle(g76Params, state.system);
+        const rowNote = state.system === 'hnc' ? G82_ROW_NOTE : G92_ROW_NOTE;
         body.replaceChildren(
           controls,
           metaRow(),
           ParamGrid({ items: buildG92ParamItems(program), ariaLabel: 'G92 参数' }),
           CodeCard({
             lines: program.lines,
-            comment: codeComment(state.system, state.cycle),
-            ariaLabel: 'G92 直进循环程序',
+            comment: codeComment(state.system, state.cycle, state.gskModel),
+            ariaLabel: state.system === 'hnc' ? 'G82 直进循环程序' : 'G92 直进循环程序',
           }),
-          SubText(G92_ROW_NOTE, { className: 'rc-p04__pnote' }),
+          SubText(rowNote, { className: 'rc-p04__pnote' }),
           Button({
             variant: 'ghost',
             icon: 'copy',
@@ -358,22 +388,29 @@ const page: PageModule = {
         return;
       }
 
-      const program = g76Dialect(g76Params, state.system);
-      const depthUM = Math.round(threadDepthMM * 1000);
+      const program = g76Dialect(g76Params, state.system, state.gskModel);
+      const depthMM = threadDepthMM.toFixed(3);
       const depthNote =
         state.system === 'hnc'
-          ? `K = 牙深 (d − d₁)/2 = ${threadDepthMM.toFixed(3)} mm（mm 口径，非工作牙高 H₁）`
-          : `P = 牙深 (d − d₁)/2 = ${threadDepthMM.toFixed(3)} mm → ${depthUM} μm（非工作牙高 H₁）`;
+          ? `K = 牙深 (d − d₁)/2 = ${depthMM} mm（mm 口径，非工作牙高 H₁）`
+          : state.system === 'gsk' && state.gskModel === '980tdc'
+            ? `P = 牙深 (d − d₁)/2 = ${depthMM} mm → ${Math.round(threadDepthMM * 10000)}（0.0001mm 增量，№.182.7；非工作牙高 H₁）`
+            : state.system === 'gsk'
+              ? `P = 牙深 (d − d₁)/2 = ${depthMM} mm（mm 口径三位，非工作牙高 H₁）`
+              : `P = 牙深 (d − d₁)/2 = ${depthMM} mm → ${Math.round(threadDepthMM * 1000)} μm（非工作牙高 H₁）`;
       const pnote =
         state.system === 'hnc' ? depthNote : `${P_BITS_NOTE}\n${depthNote}`;
 
       body.replaceChildren(
         controls,
         metaRow(),
-        ParamGrid({ items: buildG76ParamItems(program, state.system), ariaLabel: 'G76 参数' }),
+        ParamGrid({
+          items: buildG76ParamItems(program, state.system, state.gskModel),
+          ariaLabel: 'G76 参数',
+        }),
         CodeCard({
           lines: program.lines,
-          comment: codeComment(state.system, state.cycle),
+          comment: codeComment(state.system, state.cycle, state.gskModel),
           ariaLabel: state.system === 'hnc' ? 'G76 单行式程序' : 'G76 两行式程序',
         }),
         SubText(pnote, { className: 'rc-p04__pnote' }),

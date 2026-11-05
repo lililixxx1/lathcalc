@@ -1,0 +1,63 @@
+$ node docs/evidence/W8-B/recompute.mjs
+PASS | M30×3.5 d1（算式）
+  built   : 26.21125
+  expected: 26.21125 (±1e-9)
+PASS | M30×3.5 牙深（算式）
+  built   : 1.8943750000000001
+  expected: 1.894375 (±1e-9)
+PASS | GSK 988TA 行1
+  built   : G76 P021060 Q0.1 R0.05
+  expected: G76 P021060 Q0.1 R0.05
+PASS | GSK 988TA 行2
+  built   : G76 X26.211 Z-30. P1.894 Q0.4 F3.5
+  expected: G76 X26.211 Z-30. P1.894 Q0.4 F3.5
+PASS | GSK 988TA 行1（精修 0.08）
+  built   : G76 P021060 Q0.1 R0.08
+  expected: G76 P021060 Q0.1 R0.08
+PASS | GSK 980TDc 增量中间值 P（1.894375×10⁴）
+  built   : 18944
+  expected: 18944
+PASS | GSK 980TDc 增量中间值 Q（0.4×10⁴）
+  built   : 4000
+  expected: 4000
+PASS | GSK 980TDc 增量中间值 Δdmin（0.1×10⁴）
+  built   : 1000
+  expected: 1000
+PASS | GSK 980TDc 行1
+  built   : G76 P021060 Q1000 R0.05
+  expected: G76 P021060 Q1000 R0.05
+PASS | GSK 980TDc 行2
+  built   : G76 X26.211 Z-30. P18944 Q4000 F3.5
+  expected: G76 X26.211 Z-30. P18944 Q4000 F3.5
+PASS | GSK 980TDc 行1（精修 0.08）
+  built   : G76 P021060 Q1000 R0.08
+  expected: G76 P021060 Q1000 R0.08
+PASS | M30×2 d1（算式）
+  built   : 27.835
+  expected: 27.835 (±1e-9)
+PASS | M30×2 牙深三位（名义 1.0825）
+  built   : 1.083
+  expected: 1.083
+PASS | M30×2 牙深增量（名义 1.0825）
+  built   : 10825
+  expected: 10825
+PASS | GSK 988TA M30×2 行2
+  built   : G76 X27.835 Z-30. P1.083 Q0.3 F2.0
+  expected: G76 X27.835 Z-30. P1.083 Q0.3 F2.0
+PASS | GSK 980TDc M30×2 行2
+  built   : G76 X27.835 Z-30. P10825 Q3000 F2.0
+  expected: G76 X27.835 Z-30. P10825 Q3000 F2.0
+PASS | HNC G82 单行（M30×3.5）
+  built   : G82 X26.211 Z-30. I0 R0 E0 C1 P0 F3.5
+  expected: G82 X26.211 Z-30. I0 R0 E0 C1 P0 F3.5
+PASS | G92 向后兼容单行（M30×3.5）
+  built   : G92 X26.211 Z-30. F3.5
+  expected: G92 X26.211 Z-30. F3.5
+PASS | GSK 988TA ≠ 980TDc（两口径输出必须不同）
+  built   : false
+  expected: false
+
+SUMMARY 19/19 PASS
+VERDICT PASS
+
+REAL_EXIT=0
