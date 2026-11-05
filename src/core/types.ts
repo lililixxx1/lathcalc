@@ -275,6 +275,14 @@ export interface G76Params {
   lead: number;
   /** 精修余量 mm → R（默认 0.05） */
   finishAllowanceMM?: number;
+  /**
+   * 锥螺纹锥度位（WAVE-PLAN-V4 §1，W10-C 实现）：起点与终点 X 轴半径差 mm；
+   * 缺省/0 = 直螺纹（现状不变，向后兼容）。
+   * 方向约定（V4 §2 W10-C 冻结）：终点=基准平面 Z=−L、X=基面小径、起点=小端 Z0，
+   * 锥度位 = 起点半径−终点半径 = −L/32（GB/T 7306.1/12716 锥比 1:16=直径:长度 → 半径差=L×(1/16)/2）。
+   * 位名随系统（docs/research/g76-dialects.md §1）：两行式/G92 = R(i)、HNC = I（「常规锥螺纹 i 为负」）。
+   */
+  taperRadiusMM?: number;
 }
 
 export interface G76Program {

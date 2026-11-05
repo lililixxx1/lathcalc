@@ -32,6 +32,7 @@ function formatNumber(value: number, minDecimals = 0): string {
  * 免责文案随程序一起返回（报告 §7.4）。
  */
 export function fanucG76(p: G76Params): G76Program {
+  assertNoTaper(p);
   const finishAllowance = p.finishAllowanceMM ?? 0.05;
   const depthUM = Math.round(p.threadDepthMM * 1000);
   const firstCutUM = Math.round(p.firstCutDepthMM * 1000);
@@ -47,6 +48,17 @@ export function fanucG76(p: G76Params): G76Program {
  * 来源：docs/research/g76-dialects.md §1 行1 示例；与 FANUC 行1 `Q100`（0.1 mm）同值。
  */
 const GSK_MIN_CUT_MM = 0.1;
+
+/**
+ * 锥度位 panic 桩（WAVE-PLAN-V4 §1 契约预置，W10-C 填实现）：
+ * taperRadiusMM 显式非 0 即抛——fanucG76 / g76Dialect / g92Cycle 三入口同守
+ * （g92Cycle 入口一致性系 G0-v0.3 复核观察 2 顺手补齐）。
+ */
+function assertNoTaper(p: G76Params): void {
+  if (p.taperRadiusMM !== undefined && p.taperRadiusMM !== 0) {
+    throw new Error('PANIC: 锥螺纹 taperRadiusMM 未实现（W10-C 待实现）');
+  }
+}
 
 /**
  * GSK 980TDc 最小输入增量 0.0001 mm（状态参数 №.182.7 的增量档）。
@@ -74,6 +86,7 @@ function toGskIncrement(valueMM: number): number {
  * 免责文案随程序一起返回（报告 §7.4）。
  */
 export function g76Dialect(p: G76Params, system: CncSystem, gskModel?: GskModel): G76Program {
+  assertNoTaper(p);
   switch (system) {
     case 'fanuc':
       return fanucG76(p);
@@ -137,6 +150,7 @@ export function g76Dialect(p: G76Params, system: CncSystem, gskModel?: GskModel)
  * C 头数 / P 起始角为直螺纹模板值；其余/缺省保持 FANUC 格式（v0.2 既有测试零改）。
  */
 export function g92Cycle(p: G76Params, system?: CncSystem): G76Program {
+  assertNoTaper(p);
   if (system === 'hnc') {
     const lines = [
       // 直螺纹模板：I0（无锥度）、R0/E0（无退尾）、C1（单头）、P0（起始角 0）。
