@@ -1,7 +1,7 @@
 /**
  * W3-C2 · Tr 梯形螺纹数据表测试（GB/T 5796.1/.2/.3）
  *
- * 数据表：src/data/threads-trapezoid.json（41 行，family='trapezoid'）
+ * 数据表：src/data/threads-trapezoid.json（53 行，family='trapezoid'；W8-A 补 12 个最大螺距档）
  * 公式：src/core/thread.ts（30° Tr：d2=d−0.5P，H1=0.5P，d1=d−P−2ac）
  * ac 来源：GB/T 5796.1—2005 牙顶间隙表（P1.5→0.15；P2–5→0.25；P6–12→0.5；P14–44→1.0）
  *          双源互证见 src/data/provenance/threads-trapezoid.md §5（ac 表已转正，W2-C2 裁决②关账）
@@ -41,16 +41,21 @@ function specOf(row: ThreadRow): ThreadSpec {
   };
 }
 
-describe('W3-C2 · Tr 数据表形态（41 行）', () => {
+describe('W3-C2 · Tr 数据表形态（53 行）', () => {
   it('行数 / 族 / designation / 唯一性 / 来源键', () => {
-    // 41 行 = GB/T 5796.3—2005 表 1 中 8–44 mm 全部第一/第二直径系列、且 DIN 103 独立副源可查的 (d,P) 交集；
-    // 副源与行集口径见 provenance/threads-trapezoid.md §2（12 个最大螺距档因无第二独立源未录入）。
-    expect(rows).toHaveLength(41);
+    // 53 行 = 41 行 W3-C2 基线（GB/DIN 交集）+ 12 个最大螺距档（GB/T 5796.2 系列，
+    //   W8-A 以 Autodesk Fusion ISO Metric Trapezoidal 表为第二独立源补齐）；
+    //   副源与行集口径见 PROVENANCE.md「threads-trapezoid.json」§2 与 W8-A 片段。
+    expect(rows).toHaveLength(53);
 
     expect(rows.every((r) => r.family === 'trapezoid')).toBe(true);
     expect(rows.every((r) => r.designation.startsWith('Tr'))).toBe(true);
     expect(rows.every((r) => r.pitch > 0 && r.major > 0)).toBe(true);
-    expect(rows.every((r) => r.source.includes('GB/T 5796') && r.source.includes('DIN 103'))).toBe(true);
+    // 主源统一 GB/T 5796；副源分两类：41 行基线 = DIN 103，12 个最大螺距档 = Fusion ISO 表
+    expect(rows.every((r) => r.source.includes('GB/T 5796'))).toBe(true);
+    expect(
+      rows.every((r) => r.source.includes('DIN 103') || r.source.includes('Autodesk Fusion')),
+    ).toBe(true);
 
     // 规格名唯一
     const names = rows.map((r) => r.designation);
@@ -68,7 +73,7 @@ describe('W3-C2 · Tr 数据表形态（41 行）', () => {
 
   it('listThreads：按大径升序、同径按螺距升序', () => {
     const listed = listThreads(rows, 'trapezoid');
-    expect(listed).toHaveLength(41);
+    expect(listed).toHaveLength(53);
     for (let i = 1; i < listed.length; i += 1) {
       const prev = listed[i - 1]!;
       const cur = listed[i]!;
@@ -138,7 +143,54 @@ describe('W3-C2 · 其余 W2-C2 锚点行（ac 三档交叉核对）', () => {
   });
 });
 
-describe('W3-C2 · 全表 41 行与标准公式逐行一致', () => {
+describe('W8-A · Tr 最大螺距 12 行（GB/T 5796.2 系列补全）', () => {
+  it('12 个最大螺距档齐备，designation/major/pitch 逐行', () => {
+    // 来源：GB/T 5796.2 直径与螺距系列（每个直径的最大螺距档），经 GB/T 5796.3-2005 表 1；
+    //   第二独立源：Autodesk Fusion ISO Metric Trapezoidal Threads 数据表（12/12 命中）
+    const expected: Array<[string, number, number]> = [
+      ['Tr22×8', 22, 8],
+      ['Tr24×8', 24, 8],
+      ['Tr26×8', 26, 8],
+      ['Tr28×8', 28, 8],
+      ['Tr30×10', 30, 10],
+      ['Tr32×10', 32, 10],
+      ['Tr34×10', 34, 10],
+      ['Tr36×10', 36, 10],
+      ['Tr38×10', 38, 10],
+      ['Tr40×10', 40, 10],
+      ['Tr42×10', 42, 10],
+      ['Tr44×12', 44, 12],
+    ];
+    for (const [name, major, pitch] of expected) {
+      const row = mustFind('trapezoid', name);
+      expect(row.major, name).toBe(major);
+      expect(row.pitch, name).toBe(pitch);
+      expect(row.family).toBe('trapezoid');
+    }
+    // 新增 12 行的副源键统一指向 Fusion ISO 表（与基线 41 行的 DIN 103 副源区分）
+    const added = rows.filter((r) => r.source.includes('Autodesk Fusion'));
+    expect(added).toHaveLength(12);
+  });
+
+  it('最大螺距档按 30° 公式：d₂=d−0.5P、d₁=d−P−2ac（ac 四档）', () => {
+    for (const row of rows.filter((r) => r.source.includes('Autodesk Fusion'))) {
+      // d₂ = d − 0.5P；d₁ = d − P − 2ac，ac 取 GB/T 5796.1-2005 四档（P=8/10/12 均落 6–12 → 0.5）
+      const dims = threadDimensions(specOf(row));
+      expect(dims.d2, `${row.designation} d2`).toBeCloseTo(row.major - 0.5 * row.pitch, 9);
+      expect(dims.d1, `${row.designation} d1`).toBeCloseTo(
+        row.major - row.pitch - 2 * acFromStandard(row.pitch),
+        9,
+      );
+    }
+    // 抽样锚点：Tr30×10 → d₂=25.000、d₁=19.000（ac=0.5）；Tr44×12 → d₂=38.000、d₁=31.000
+    expect(threadDimensions(specOf(mustFind('trapezoid', 'Tr30×10'))).d2).toBeCloseTo(25, 9);
+    expect(threadDimensions(specOf(mustFind('trapezoid', 'Tr30×10'))).d1).toBeCloseTo(19, 9);
+    expect(threadDimensions(specOf(mustFind('trapezoid', 'Tr44×12'))).d2).toBeCloseTo(38, 9);
+    expect(threadDimensions(specOf(mustFind('trapezoid', 'Tr44×12'))).d1).toBeCloseTo(31, 9);
+  });
+});
+
+describe('W3-C2 · 全表 53 行与标准公式逐行一致', () => {
   it('每行 d2=d−0.5P、d1=d−P−2ac（ac 按 GB/T 5796.1—2005 四档）', () => {
     for (const row of rows) {
       // 期望值来源：GB/T 5796.1—2005 基本牙型（d2=d−0.5P；d1=d−2h3=d−P−2ac）

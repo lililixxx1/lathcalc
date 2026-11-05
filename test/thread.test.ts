@@ -18,7 +18,12 @@
  *   30°→0.517638P（取 0.51764P）。
  */
 import { describe, it, expect } from 'vitest';
-import { threadDimensions, threeWireM } from '../src/core/thread';
+import {
+  PROFILE_CONSTANTS,
+  threadDimensions,
+  threeWireM,
+  wormGeometry,
+} from '../src/core/thread';
 import type { ThreadSpec } from '../src/core/types';
 
 const metric = (designation: string, major: number, pitch: number): ThreadSpec => ({
@@ -302,5 +307,99 @@ describe('W2-C2 · 30° Tr 梯形螺纹（GB/T 5796）', () => {
     expect(m).toBeCloseTo(8.227468502, 6);
     expect(m.toFixed(6)).toBe('8.227469');
     expect(m.toFixed(3)).toBe('8.227');
+  });
+});
+
+describe('W8-A · PROFILE_CONSTANTS 常数集（G2 消双写的唯一真源）', () => {
+  it('60°/55°/30°Tr/40° 全字段与冻结常数集逐值一致', () => {
+    // 来源：types.ts 头注 / WAVE-PLAN §4 头部冻结常数集
+    expect(PROFILE_CONSTANTS.deg60).toEqual({
+      d2Factor: 0.6495,
+      d1Factor: 1.0825,
+      h1Factor: 0.5413,
+      wireFactor: 0.57735,
+      threeWireK1: 3,
+      threeWireK2: 0.866,
+    });
+    expect(PROFILE_CONSTANTS.deg55).toEqual({
+      d2Factor: 0.6403,
+      d1Factor: 1.2806,
+      h1Factor: 0.6403,
+      wireFactor: 0.56371,
+      threeWireK1: 3.1657,
+      threeWireK2: 0.9605,
+    });
+    expect(PROFILE_CONSTANTS.deg30Tr).toEqual({
+      d2Factor: 0.5,
+      h1Factor: 0.5,
+      wireFactor: 0.51764,
+      threeWireK1: 4.8637,
+      threeWireK2: 1.866,
+    });
+    // GB/T 10087-2018 基本齿廓：h1 = 2.2m；ZA 牙型角 40°
+    expect(PROFILE_CONSTANTS.deg40Worm).toEqual({ flankAngle: 40, wholeDepthFactor: 2.2 });
+  });
+
+  it('threadDimensions / threeWireM 输出与常数集算式一致（抽样 60°/55°/30°）', () => {
+    const spec60 = metric('M30×3.5', 30, 3.5);
+    const dims60 = threadDimensions(spec60);
+    expect(dims60.d2).toBeCloseTo(30 - PROFILE_CONSTANTS.deg60.d2Factor * 3.5, 12);
+    expect(dims60.d1).toBeCloseTo(30 - PROFILE_CONSTANTS.deg60.d1Factor * 3.5, 12);
+    expect(dims60.h1).toBeCloseTo(PROFILE_CONSTANTS.deg60.h1Factor * 3.5, 12);
+    expect(dims60.bestWire).toBeCloseTo(PROFILE_CONSTANTS.deg60.wireFactor * 3.5, 12);
+    expect(threeWireM(spec60, dims60.bestWire)).toBeCloseTo(
+      dims60.d2 +
+        PROFILE_CONSTANTS.deg60.threeWireK1 * dims60.bestWire -
+        PROFILE_CONSTANTS.deg60.threeWireK2 * 3.5,
+      12,
+    );
+
+    const spec55 = pipe55('G1/2', 20.955, 25.4 / 14);
+    const dims55 = threadDimensions(spec55);
+    expect(dims55.d2).toBeCloseTo(
+      20.955 - PROFILE_CONSTANTS.deg55.d2Factor * (25.4 / 14),
+      12,
+    );
+    expect(dims55.d1).toBeCloseTo(
+      20.955 - PROFILE_CONSTANTS.deg55.d1Factor * (25.4 / 14),
+      12,
+    );
+
+    const spec30 = trapezoid('Tr40×7', 40, 7);
+    const dims30 = threadDimensions(spec30);
+    expect(dims30.d2).toBeCloseTo(40 - PROFILE_CONSTANTS.deg30Tr.d2Factor * 7, 12);
+    expect(dims30.h1).toBeCloseTo(PROFILE_CONSTANTS.deg30Tr.h1Factor * 7, 12);
+    expect(dims30.bestWire).toBeCloseTo(PROFILE_CONSTANTS.deg30Tr.wireFactor * 7, 12);
+  });
+});
+
+describe('W8-A · 蜗杆几何 wormGeometry（px=π·m / h₁=2.2·m / ZA 40°）', () => {
+  it('m=2：px=6.283185307…；h₁=4.4；flankAngle=40', () => {
+    // px = π×2 = 6.283185307179586（V3-2 活算单一真源）
+    // h₁ = 2.2×2 = 4.4（GB/T 10087-2018 基本齿廓 h1=2.2m）
+    const g = wormGeometry(2);
+    expect(g.axialPitch).toBeCloseTo(6.283185307179586, 12);
+    expect(g.axialPitch.toFixed(3)).toBe('6.283');
+    expect(g.wholeDepth).toBeCloseTo(4.4, 12);
+    expect(g.flankAngle).toBe(40);
+  });
+
+  it('m=1.25 / m=25：按同一算式活算', () => {
+    const small = wormGeometry(1.25);
+    expect(small.axialPitch).toBeCloseTo(Math.PI * 1.25, 12);
+    expect(small.wholeDepth).toBeCloseTo(2.75, 12);
+
+    const large = wormGeometry(25);
+    expect(large.axialPitch).toBeCloseTo(Math.PI * 25, 12);
+    expect(large.wholeDepth).toBeCloseTo(55, 12);
+  });
+
+  it('m≤0 或非有限数抛错（不臆造）', () => {
+    // 契约：types.ts WormGeometryFn 注释「m≤0 或非数抛错」
+    expect(() => wormGeometry(0)).toThrow(/模数/);
+    expect(() => wormGeometry(-2)).toThrow(/模数/);
+    expect(() => wormGeometry(Number.NaN)).toThrow(/模数/);
+    expect(() => wormGeometry(Number.POSITIVE_INFINITY)).toThrow(/模数/);
+    expect(() => wormGeometry(Number.NEGATIVE_INFINITY)).toThrow(/模数/);
   });
 });

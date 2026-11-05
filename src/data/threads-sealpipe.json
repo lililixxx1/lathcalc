@@ -1,0 +1,122 @@
+[
+  {
+    "family": "sealpipe",
+    "designation": "R1/16",
+    "pitch": 0.9071428571428571,
+    "major": 7.723,
+    "tpi": 28,
+    "source": "GB/T 7306.1-2000 表1（基面大径）；BSPT 厂商表（supergaging.com）校核"
+  },
+  {
+    "family": "sealpipe",
+    "designation": "R1/8",
+    "pitch": 0.9071428571428571,
+    "major": 9.728,
+    "tpi": 28,
+    "source": "GB/T 7306.1-2000 表1（基面大径）；BSPT 厂商表（supergaging.com）校核"
+  },
+  {
+    "family": "sealpipe",
+    "designation": "R1/4",
+    "pitch": 1.3368421052631578,
+    "major": 13.157,
+    "tpi": 19,
+    "source": "GB/T 7306.1-2000 表1（基面大径）；BSPT 厂商表（supergaging.com）校核"
+  },
+  {
+    "family": "sealpipe",
+    "designation": "R3/8",
+    "pitch": 1.3368421052631578,
+    "major": 16.662,
+    "tpi": 19,
+    "source": "GB/T 7306.1-2000 表1（基面大径）；BSPT 厂商表（supergaging.com）校核"
+  },
+  {
+    "family": "sealpipe",
+    "designation": "R1/2",
+    "pitch": 1.8142857142857143,
+    "major": 20.955,
+    "tpi": 14,
+    "source": "GB/T 7306.1-2000 表1（基面大径）；BSPT 厂商表（supergaging.com）校核"
+  },
+  {
+    "family": "sealpipe",
+    "designation": "R3/4",
+    "pitch": 1.8142857142857143,
+    "major": 26.441,
+    "tpi": 14,
+    "source": "GB/T 7306.1-2000 表1（基面大径）；BSPT 厂商表（supergaging.com）校核"
+  },
+  {
+    "family": "sealpipe",
+    "designation": "R1",
+    "pitch": 2.309090909090909,
+    "major": 33.249,
+    "tpi": 11,
+    "source": "GB/T 7306.1-2000 表1（基面大径）；BSPT 厂商表（supergaging.com）校核"
+  },
+  {
+    "family": "sealpipe",
+    "designation": "R1 1/4",
+    "pitch": 2.309090909090909,
+    "major": 41.91,
+    "tpi": 11,
+    "source": "GB/T 7306.1-2000 表1（基面大径）；BSPT 厂商表（supergaging.com）校核"
+  },
+  {
+    "family": "sealpipe",
+    "designation": "R1 1/2",
+    "pitch": 2.309090909090909,
+    "major": 47.803,
+    "tpi": 11,
+    "source": "GB/T 7306.1-2000 表1（基面大径）；BSPT 厂商表（supergaging.com）校核"
+  },
+  {
+    "family": "sealpipe",
+    "designation": "R2",
+    "pitch": 2.309090909090909,
+    "major": 59.614,
+    "tpi": 11,
+    "source": "GB/T 7306.1-2000 表1（基面大径）；BSPT 厂商表（supergaging.com）校核"
+  },
+  {
+    "family": "sealpipe",
+    "designation": "R2 1/2",
+    "pitch": 2.309090909090909,
+    "major": 75.184,
+    "tpi": 11,
+    "source": "GB/T 7306.1-2000 表1（基面大径）；BSPT 厂商表（supergaging.com）校核"
+  },
+  {
+    "family": "sealpipe",
+    "designation": "R3",
+    "pitch": 2.309090909090909,
+    "major": 87.884,
+    "tpi": 11,
+    "source": "GB/T 7306.1-2000 表1（基面大径）；BSPT 厂商表（supergaging.com）校核"
+  },
+  {
+    "family": "sealpipe",
+    "designation": "R4",
+    "pitch": 2.309090909090909,
+    "major": 113.03,
+    "tpi": 11,
+    "source": "GB/T 7306.1-2000 表1（基面大径）；BSPT 厂商表（supergaging.com）校核"
+  },
+  {
+    "family": "sealpipe",
+    "designation": "R5",
+    "pitch": 2.309090909090909,
+    "major": 138.43,
+    "tpi": 11,
+    "source": "GB/T 7306.1-2000 表1（基面大径）；BSPT 厂商表（supergaging.com）校核"
+  },
+  {
+    "family": "sealpipe",
+    "designation": "R6",
+    "pitch": 2.309090909090909,
+    "major": 163.83,
+    "tpi": 11,
+    "source": "GB/T 7306.1-2000 表1（基面大径）；BSPT 厂商表（supergaging.com）校核"
+  }
+]

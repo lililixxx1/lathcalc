@@ -1,0 +1,107 @@
+[
+  {
+    "family": "worm",
+    "designation": "m1",
+    "pitch": 1,
+    "major": 1,
+    "source": "GB/T 10088-2018 模数系列；GB/T 10085-1988 表（jlcfa 转载）与 mechtool 匹配表校核"
+  },
+  {
+    "family": "worm",
+    "designation": "m1.25",
+    "pitch": 1.25,
+    "major": 1.25,
+    "source": "GB/T 10088-2018 模数系列；GB/T 10085-1988 表（jlcfa 转载）与 mechtool 匹配表校核"
+  },
+  {
+    "family": "worm",
+    "designation": "m1.6",
+    "pitch": 1.6,
+    "major": 1.6,
+    "source": "GB/T 10088-2018 模数系列；GB/T 10085-1988 表（jlcfa 转载）与 mechtool 匹配表校核"
+  },
+  {
+    "family": "worm",
+    "designation": "m2",
+    "pitch": 2,
+    "major": 2,
+    "source": "GB/T 10088-2018 模数系列；GB/T 10085-1988 表（jlcfa 转载）与 mechtool 匹配表校核"
+  },
+  {
+    "family": "worm",
+    "designation": "m2.5",
+    "pitch": 2.5,
+    "major": 2.5,
+    "source": "GB/T 10088-2018 模数系列；GB/T 10085-1988 表（jlcfa 转载）与 mechtool 匹配表校核"
+  },
+  {
+    "family": "worm",
+    "designation": "m3.15",
+    "pitch": 3.15,
+    "major": 3.15,
+    "source": "GB/T 10088-2018 模数系列；GB/T 10085-1988 表（jlcfa 转载）与 mechtool 匹配表校核"
+  },
+  {
+    "family": "worm",
+    "designation": "m4",
+    "pitch": 4,
+    "major": 4,
+    "source": "GB/T 10088-2018 模数系列；GB/T 10085-1988 表（jlcfa 转载）与 mechtool 匹配表校核"
+  },
+  {
+    "family": "worm",
+    "designation": "m5",
+    "pitch": 5,
+    "major": 5,
+    "source": "GB/T 10088-2018 模数系列；GB/T 10085-1988 表（jlcfa 转载）与 mechtool 匹配表校核"
+  },
+  {
+    "family": "worm",
+    "designation": "m6.3",
+    "pitch": 6.3,
+    "major": 6.3,
+    "source": "GB/T 10088-2018 模数系列；GB/T 10085-1988 表（jlcfa 转载）与 mechtool 匹配表校核"
+  },
+  {
+    "family": "worm",
+    "designation": "m8",
+    "pitch": 8,
+    "major": 8,
+    "source": "GB/T 10088-2018 模数系列；GB/T 10085-1988 表（jlcfa 转载）与 mechtool 匹配表校核"
+  },
+  {
+    "family": "worm",
+    "designation": "m10",
+    "pitch": 10,
+    "major": 10,
+    "source": "GB/T 10088-2018 模数系列；GB/T 10085-1988 表（jlcfa 转载）与 mechtool 匹配表校核"
+  },
+  {
+    "family": "worm",
+    "designation": "m12.5",
+    "pitch": 12.5,
+    "major": 12.5,
+    "source": "GB/T 10088-2018 模数系列；GB/T 10085-1988 表（jlcfa 转载）与 mechtool 匹配表校核"
+  },
+  {
+    "family": "worm",
+    "designation": "m16",
+    "pitch": 16,
+    "major": 16,
+    "source": "GB/T 10088-2018 模数系列；GB/T 10085-1988 表（jlcfa 转载）与 mechtool 匹配表校核"
+  },
+  {
+    "family": "worm",
+    "designation": "m20",
+    "pitch": 20,
+    "major": 20,
+    "source": "GB/T 10088-2018 模数系列；GB/T 10085-1988 表（jlcfa 转载）与 mechtool 匹配表校核"
+  },
+  {
+    "family": "worm",
+    "designation": "m25",
+    "pitch": 25,
+    "major": 25,
+    "source": "GB/T 10088-2018 模数系列；GB/T 10085-1988 表（jlcfa 转载）与 mechtool 匹配表校核"
+  }
+]

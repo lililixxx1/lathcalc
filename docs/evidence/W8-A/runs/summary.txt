@@ -1,0 +1,8 @@
+W8-A GATE SUMMARY (script-generated; do not hand-edit)
+
+lint    REAL_EXIT=0  PASS
+tsc     REAL_EXIT=0  PASS
+vitest  REAL_EXIT=0  PASS  tests=421 files=41
+build   REAL_EXIT=0  PASS
+
+JUDGMENT: ALL_GATES_PASS

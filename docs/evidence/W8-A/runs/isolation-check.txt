@@ -1,0 +1,23 @@
+$ node docs/evidence/W8-A/tools/isolation-check.mjs "../CNC Machinist Calculator" b9f6b3a .
+ISOLATION CHECK · tree vs baseline
+repo=../CNC Machinist Calculator  baseline=b9f6b3a
+changed=16  allowed=16
+  src/core/thread.ts | MODIFIED
+  src/data/COVERAGE.md | MODIFIED
+  src/data/PROVENANCE.md | MODIFIED
+  src/data/threads-npt.json | NEW
+  src/data/threads-sealpipe.json | NEW
+  src/data/threads-trapezoid.json | MODIFIED
+  src/data/threads-worm.json | NEW
+  src/ui/pages/p02.ts | MODIFIED
+  src/ui/pages/p03.ts | MODIFIED
+  test/data-npt.test.ts | NEW
+  test/data-sealpipe.test.ts | NEW
+  test/data-trapezoid.test.ts | MODIFIED
+  test/data-worm.test.ts | NEW
+  test/thread.test.ts | MODIFIED
+  test/ui-p02.test.ts | MODIFIED
+  test/ui-p03.test.ts | MODIFIED
+ISOLATION_JUDGMENT: PASS
+
+REAL_EXIT=0

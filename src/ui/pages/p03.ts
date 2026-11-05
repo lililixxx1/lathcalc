@@ -1,5 +1,5 @@
 /**
- * p03 · 螺纹 · 结果（W4-C2 实现）
+ * p03 · 螺纹 · 结果（W4-C2 实现；W8-A 七族扩展 + PROFILE_CONSTANTS 单源）
  *
  * 设计稿区块（自上而下，docs/车工计算App-无限画布.html:1184-1204）：
  *   状态栏 → 顶栏（规格名 + 标准徽标 + 收藏）→ 族别 · 粗细牙 · 螺距眉标
@@ -7,8 +7,12 @@
  *   → 「怎么算的」公式（默认展开，设计稿 acc(1)）→ 生成 G76 程序按钮 → Home 指示条
  *
  * 口径：d₂/d₁/H₁/底孔/最佳针径由 core/thread.threadDimensions 计算，
- *   三针跨距由 core/thread.threeWireM 计算（UI 不重算牙型常数）；
- *   Tr 的 ac 由 core 输出的 d₁ 反解（d₁ = d − P − 2ac），不复制 ac 档位表。
+ *   三针跨距由 core/thread.threeWireM 计算（UI 不重算牙型常数；W8-A 起常数统一引用
+ *   core/thread.PROFILE_CONSTANTS，消除与公式文案的双写）。
+ *   密封管 R / 锥管 NPT：d₂/d₁ = 基准平面处直径（V3-1），底孔 = 基面小径，
+ *   展示区加「基准平面」标注行（GB/T 7306 / GB/T 12716）。
+ *   蜗杆：走 core/thread.wormGeometry（px=π·m、h₁=2.2·m、ZA 40°），
+ *   不走 threadDimensions / threeWireM，不显示三针卡（V3-2）。
  * 收藏：点击顶栏星标派发 `lathcalc:save`（跨卡契约，W4-C5 store.ts 监听）。
  */
 import type { PageContext, PageModule } from '../router';
@@ -17,6 +21,7 @@ import {
   Button,
   Eyebrow,
   ResultCard,
+  SubText,
   TopBar,
   WarnCard,
   createBody,
@@ -24,7 +29,12 @@ import {
   injectStyle,
 } from '../components';
 import { listThreads } from '../../core/lookup';
-import { threeWireM, threadDimensions } from '../../core/thread';
+import {
+  PROFILE_CONSTANTS,
+  threeWireM,
+  threadDimensions,
+  wormGeometry,
+} from '../../core/thread';
 import type {
   FlankAngle,
   ThreadDimensions,
@@ -36,15 +46,28 @@ import metricRows from '../../data/threads-metric.json';
 import trapezoidRows from '../../data/threads-trapezoid.json';
 import pipeRows from '../../data/threads-pipe.json';
 import unifiedRows from '../../data/threads-unified.json';
+import sealpipeRows from '../../data/threads-sealpipe.json';
+import nptRows from '../../data/threads-npt.json';
+import wormRows from '../../data/threads-worm.json';
 
 const ALL_ROWS: ThreadRow[] = [
   ...(metricRows as unknown as ThreadRow[]),
   ...(trapezoidRows as unknown as ThreadRow[]),
   ...(pipeRows as unknown as ThreadRow[]),
   ...(unifiedRows as unknown as ThreadRow[]),
+  ...(sealpipeRows as unknown as ThreadRow[]),
+  ...(nptRows as unknown as ThreadRow[]),
+  ...(wormRows as unknown as ThreadRow[]),
 ];
 
-type RouteFamily = 'metric' | 'trapezoid' | 'pipe' | 'unified';
+type RouteFamily =
+  | 'metric'
+  | 'trapezoid'
+  | 'pipe'
+  | 'unified'
+  | 'sealpipe'
+  | 'npt'
+  | 'worm';
 
 interface FamilyMeta {
   /** 眉标族名（设计稿「普通螺纹」） */
@@ -61,6 +84,14 @@ const FAMILY_META: Record<RouteFamily, FamilyMeta> = {
   trapezoid: { label: '梯形螺纹', standard: 'GB/T 5796', dataFamily: 'trapezoid', flankAngle: 30 },
   pipe: { label: '55° 管螺纹', standard: 'GB/T 7307', dataFamily: 'pipe55', flankAngle: 55 },
   unified: { label: '美制统一螺纹', standard: 'ASME B1.1', dataFamily: 'unified', flankAngle: 60 },
+  sealpipe: {
+    label: '55° 密封管螺纹',
+    standard: 'GB/T 7306',
+    dataFamily: 'sealpipe',
+    flankAngle: 55,
+  },
+  npt: { label: '60° 锥管螺纹', standard: 'GB/T 12716', dataFamily: 'npt', flankAngle: 60 },
+  worm: { label: '蜗杆', standard: 'GB/T 10087', dataFamily: 'worm', flankAngle: 40 },
 };
 
 interface ThreadParams {
@@ -78,7 +109,15 @@ const CSS = `
 `;
 
 function readFamily(value: string | null): RouteFamily | null {
-  if (value === 'metric' || value === 'trapezoid' || value === 'pipe' || value === 'unified') {
+  if (
+    value === 'metric' ||
+    value === 'trapezoid' ||
+    value === 'pipe' ||
+    value === 'unified' ||
+    value === 'sealpipe' ||
+    value === 'npt' ||
+    value === 'worm'
+  ) {
     return value;
   }
   return null;
@@ -111,14 +150,26 @@ function format3(value: number): string {
   return value.toFixed(3);
 }
 
-/** 眉标：族别 · 粗/细牙（metric）或 tpi（管/美制）· 螺距 P x mm */
+/** 眉标：族别 · 粗/细牙（metric）或 tpi（管/制）· 螺距 P x mm（蜗杆为模数 m） */
 function eyebrowText(params: ThreadParams, row: ThreadRow | undefined): string {
   const meta = FAMILY_META[params.family];
   const parts: string[] = [meta.label];
+  if (params.dataFamily === 'worm') {
+    parts.push('ZA 40°');
+    parts.push(`模数 m ${formatPitch(params.p)} mm`);
+    return parts.join(' · ');
+  }
   if (params.dataFamily === 'metric' && row) {
     parts.push(row.coarse === true ? '粗牙' : '细牙');
   }
-  if (params.dataFamily === 'pipe55' && row?.tpi) parts.push(`${row.tpi} tpi`);
+  if (
+    (params.dataFamily === 'pipe55' ||
+      params.dataFamily === 'sealpipe' ||
+      params.dataFamily === 'npt') &&
+    row?.tpi
+  ) {
+    parts.push(`${row.tpi} tpi`);
+  }
   if (params.dataFamily === 'unified') {
     if (params.spec.includes('UNF')) parts.push('UNF');
     else if (params.spec.includes('UNC')) parts.push('UNC');
@@ -127,10 +178,19 @@ function eyebrowText(params: ThreadParams, row: ThreadRow | undefined): string {
   return parts.join(' · ');
 }
 
+/** 公式区标准徽标（按族切换；显示文案与 W4 冻结口径一致） */
+function standardOf(dataFamily: ThreadFamily): string {
+  if (dataFamily === 'metric') return 'GB/T 196-2003';
+  if (dataFamily === 'unified') return 'ASME B1.1';
+  if (dataFamily === 'sealpipe') return 'GB/T 7306.1-2000';
+  if (dataFamily === 'npt') return 'GB/T 12716-2011';
+  return 'GB/T 7307-2001';
+}
+
 /**
  * 「怎么算的」公式（受信 HTML，仅数值与固定文案）。
- * 公式中的常数来自 WAVE-PLAN §4 冻结常数集；代入值优先由 core 输出反推
- * （如 d − d₂），避免 UI 重算核心常数。
+ * 牙型常数一律取自 core/thread.PROFILE_CONSTANTS（W8-A G2 消双写），
+ * 代入值优先由 core 输出反推（如 d − d₂），避免 UI 重算核心常数。
  */
 function formulaHtml(params: ThreadParams, dims: ThreadDimensions, m: number): string {
   const { d, p, dataFamily } = params;
@@ -143,41 +203,49 @@ function formulaHtml(params: ThreadParams, dims: ThreadDimensions, m: number): s
   const tap = dims.tapDrill.toFixed(1);
 
   if (dataFamily === 'trapezoid') {
+    const c = PROFILE_CONSTANTS.deg30Tr;
     const twoAc = d - p - dims.d1;
     const ac = twoAc / 2;
     return [
-      `d₂ = d − 0.5P = ${d} − ${delta2} = ${d2}`,
+      `d₂ = d − ${c.d2Factor}P = ${d} − ${delta2} = ${d2}`,
       `d₁ = d − P − 2ac = ${d} − ${p} − ${format3(twoAc)} = ${d1}（ac = ${ac.toFixed(2)}）`,
-      `牙型高 H₁ = 0.5P = ${format3(dims.h1)}`,
-      `d₀ = 0.51764P = ${wire}`,
-      `三针 M = d₂ + 4.8637d₀ − 1.866P = ${mText}`,
+      `牙型高 H₁ = ${c.h1Factor}P = ${format3(dims.h1)}`,
+      `d₀ = ${c.wireFactor}P = ${wire}`,
+      `三针 M = d₂ + ${c.threeWireK1}d₀ − ${c.threeWireK2}P = ${mText}`,
       `底孔 ≈ d − P = ${tap}（= 内螺纹小径 D₁）`,
       '依据：GB/T 5796.3-2005',
     ].join('<br>');
   }
 
-  const metric60 = dataFamily === 'metric' || dataFamily === 'unified';
-  const standard = metric60
-    ? dataFamily === 'metric'
-      ? 'GB/T 196-2003'
-      : 'ASME B1.1'
-    : 'GB/T 7307-2001';
-  const tapNote = metric60 ? '（切削丝锥 · 钢件近似）' : '（切削丝锥近似；55° 管螺纹实际攻孔另表）';
+  const metric60 = dataFamily === 'metric' || dataFamily === 'unified' || dataFamily === 'npt';
+  const taper = dataFamily === 'sealpipe' || dataFamily === 'npt';
+  const c = metric60 ? PROFILE_CONSTANTS.deg60 : PROFILE_CONSTANTS.deg55;
+  const tapNote = taper
+    ? '（密封锥管：取基准平面小径，实际攻孔另表）'
+    : metric60
+      ? '（切削丝锥 · 钢件近似）'
+      : '（切削丝锥近似；55° 管螺纹实际攻孔另表）';
+  const tapExpr = taper ? '底孔 ≈ 基面小径 d₁' : '底孔 ≈ d − P';
   return [
-    metric60
-      ? `d₂ = d − 0.6495P = ${d} − ${delta2} = ${d2}`
-      : `d₂ = d − 0.6403P = ${d} − ${delta2} = ${d2}`,
-    metric60
-      ? `d₁ = d − 1.0825P = ${d} − ${delta1} = ${d1}`
-      : `d₁ = d − 1.2806P = ${d} − ${delta1} = ${d1}`,
-    metric60
-      ? `d₀ = 0.57735P = ${wire}`
-      : `d₀ = 0.56371P = ${wire}`,
-    metric60
-      ? `三针 M = d₂ + 3d₀ − 0.866P = ${mText}`
-      : `三针 M = d₂ + 3.1657d₀ − 0.9605P = ${mText}`,
-    `底孔 ≈ d − P = ${tap}${tapNote}`,
-    `依据：${standard}`,
+    `d₂ = d − ${c.d2Factor}P = ${d} − ${delta2} = ${d2}`,
+    `d₁ = d − ${c.d1Factor}P = ${d} − ${delta1} = ${d1}`,
+    `d₀ = ${c.wireFactor}P = ${wire}`,
+    `三针 M = d₂ + ${c.threeWireK1}d₀ − ${c.threeWireK2}P = ${mText}`,
+    `${tapExpr} = ${tap}${tapNote}`,
+    `依据：${standardOf(dataFamily)}`,
+  ].join('<br>');
+}
+
+/** 蜗杆公式（模数制；px=π·m 与 h₁=2.2m 均取自 core 活算结果，常数取 PROFILE_CONSTANTS） */
+function wormFormulaHtml(moduleMM: number): string {
+  const g = wormGeometry(moduleMM);
+  const c = PROFILE_CONSTANTS.deg40Worm;
+  const m = formatPitch(moduleMM);
+  return [
+    `px = π·m = π × ${m} = ${format3(g.axialPitch)}`,
+    `h₁ = ${c.wholeDepthFactor}m = ${c.wholeDepthFactor} × ${m} = ${format3(g.wholeDepth)}`,
+    `牙型角 α = ${c.flankAngle}°（ZA，GB/T 10087）`,
+    '依据：GB/T 10087-2018 / GB/T 10088-2018',
   ].join('<br>');
 }
 
@@ -230,6 +298,39 @@ const page: PageModule = {
     }
 
     const meta = FAMILY_META[params.family];
+    const row = findRow(params.dataFamily, params.d, params.p);
+
+    const top = TopBar({
+      title: params.spec,
+      badge: meta.standard,
+      star: true,
+      onStar: () => dispatchSave(params),
+    });
+
+    if (params.dataFamily === 'worm') {
+      // V3-2：模数制只做查表 + 几何活算；不走 threadDimensions/threeWireM，不显示三针卡。
+      const worm = wormGeometry(params.p);
+      const moduleMM = params.p;
+      const dimensionItems = [
+        { label: '模数 m', value: format3(moduleMM), unit: 'mm' },
+        {
+          label: '轴向齿距 px',
+          value: format3(worm.axialPitch),
+          unit: 'mm',
+          copyValue: format3(worm.axialPitch),
+        },
+        { label: '全齿高 h₁', value: format3(worm.wholeDepth), unit: 'mm' },
+        { label: '牙型角 α', value: String(worm.flankAngle), unit: '°' },
+      ];
+      body.append(
+        Eyebrow(eyebrowText(params, row)),
+        ResultCard({ items: dimensionItems, ariaLabel: '蜗杆几何' }),
+        Accordion({ content: wormFormulaHtml(moduleMM), open: true }),
+      );
+      ctx.root.append(createPage({ id: 'p03', top, body }));
+      return;
+    }
+
     const spec: ThreadSpec = {
       family: params.dataFamily,
       designation: params.spec,
@@ -239,14 +340,7 @@ const page: PageModule = {
     };
     const dims = threadDimensions(spec);
     const wireM = threeWireM(spec, dims.bestWire);
-    const row = findRow(params.dataFamily, params.d, params.p);
-
-    const top = TopBar({
-      title: params.spec,
-      badge: meta.standard,
-      star: true,
-      onStar: () => dispatchSave(params),
-    });
+    const taper = params.dataFamily === 'sealpipe' || params.dataFamily === 'npt';
 
     const dimensionItems = [
       { label: '大径 d', value: format3(params.d), unit: 'mm' },
@@ -272,9 +366,18 @@ const page: PageModule = {
       wireItems.push({ label: '牙顶间隙 ac', value: ac.toFixed(2), unit: 'mm' });
     }
 
+    // V3-1：锥管族的尺寸语义 = 基准平面处直径，展示区显式标注（GB/T 7306 / 12716）
+    const taperNote = taper
+      ? SubText(
+          `基准平面处直径（${params.dataFamily === 'sealpipe' ? 'GB/T 7306' : 'GB/T 12716'}，1:16 锥）`,
+          { center: true },
+        )
+      : null;
+
     body.append(
       Eyebrow(eyebrowText(params, row)),
       ResultCard({ items: dimensionItems, ariaLabel: '螺纹基本尺寸' }),
+      ...(taperNote ? [taperNote] : []),
       ResultCard({ items: wireItems, ariaLabel: '三针测量' }),
       Accordion({ content: formulaHtml(params, dims, wireM), open: true }),
       Button({

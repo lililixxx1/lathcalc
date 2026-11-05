@@ -203,6 +203,107 @@ describe('p03 四族常数路由', () => {
   });
 });
 
+describe('p03 三新族（W8-A · V3-1/V3-2）', () => {
+  it('R1/16（密封管 55°）：基面 d₂=7.142 / d₁=6.561，底孔取基面小径，加基准平面标注', async () => {
+    await router.navigate('p03', {
+      family: 'sealpipe',
+      spec: 'R1/16',
+      d: 7.723,
+      p: 25.4 / 28,
+    });
+
+    expect(page().querySelector('.rc-topbar .la-badge')?.textContent).toBe('GB/T 7306');
+    expect(page().querySelector('.rc-eyebrow')?.textContent).toBe(
+      '55° 密封管螺纹 · 28 tpi · 螺距 P 0.907 mm',
+    );
+    // d₂ = 7.723 − 0.6403×0.907142857… = 7.142156… → 7.142
+    expect(resultValue('中径 d₂')).toBe('7.142');
+    // d₁ = 7.723 − 1.2806×0.907142857… = 6.561312… → 6.561
+    expect(resultValue('小径 d₁')).toBe('6.561');
+    // H₁ = 0.6403×0.907142857… = 0.580843… → 0.581
+    expect(resultValue('牙型高 H₁')).toBe('0.581');
+    // 底孔 = 基面小径 d₁（V3-1）：6.561… → 6.6
+    expect(resultValue('底孔钻头')).toBe('≈ 6.6');
+    // d₀ = 0.56371×0.907142857… = 0.5113655 → 0.511
+    expect(resultValue('三针量针 d₀')).toBe('0.511');
+    // M = 7.142156… + 3.1657×0.5113655 − 0.9605×0.907142… = 7.889675… → 7.890
+    expect(resultValue('三针跨距 M')).toBe('7.890');
+    // 基准平面标注行（GB/T 7306，1:16 锥）
+    expect(page().textContent).toContain('基准平面处直径（GB/T 7306，1:16 锥）');
+    // 公式引 PROFILE_CONSTANTS，显示文案不变
+    expect(formulaText()).toContain('d₂ = d − 0.6403P = 7.723 − 0.581 = 7.142');
+    expect(formulaText()).toContain('底孔 ≈ 基面小径 d₁ = 6.6');
+    expect(formulaText()).toContain('依据：GB/T 7306.1-2000');
+  });
+
+  it('NPT1/16（锥管 60°）：基面 d₂=7.284 / d₁=6.877，加 GB/T 12716 标注', async () => {
+    await router.navigate('p03', {
+      family: 'npt',
+      spec: 'NPT1/16',
+      d: 7.895,
+      p: 25.4 / 27,
+    });
+
+    expect(page().querySelector('.rc-topbar .la-badge')?.textContent).toBe('GB/T 12716');
+    expect(page().querySelector('.rc-eyebrow')?.textContent).toBe(
+      '60° 锥管螺纹 · 27 tpi · 螺距 P 0.941 mm',
+    );
+    // d₂ = 7.895 − 0.6495×0.940740… = 7.283988… → 7.284
+    expect(resultValue('中径 d₂')).toBe('7.284');
+    // d₁ = 7.895 − 1.0825×0.940740… = 6.876648… → 6.877
+    expect(resultValue('小径 d₁')).toBe('6.877');
+    // H₁ = 0.5413×0.940740… = 0.509222… → 0.509
+    expect(resultValue('牙型高 H₁')).toBe('0.509');
+    // 底孔 = 基面小径 d₁（V3-1）：6.876… → 6.9
+    expect(resultValue('底孔钻头')).toBe('≈ 6.9');
+    // M = 7.283988… + 3×0.543136… − 0.866×0.940740… = 8.098717… → 8.099
+    expect(resultValue('三针跨距 M')).toBe('8.099');
+    expect(page().textContent).toContain('基准平面处直径（GB/T 12716，1:16 锥）');
+    expect(formulaText()).toContain('依据：GB/T 12716-2011');
+    expect(formulaText()).toContain('d₂ = d − 0.6495P = 7.895 − 0.611 = 7.284');
+  });
+
+  it('蜗杆 m=2：px=6.283 / h₁=4.400 / 40°，无三针卡、无 G76 按钮', async () => {
+    await router.navigate('p03', {
+      family: 'worm',
+      spec: 'm2',
+      d: 2,
+      p: 2,
+    });
+
+    expect(page().querySelector('.rc-topbar .la-badge')?.textContent).toBe('GB/T 10087');
+    expect(page().querySelector('.rc-eyebrow')?.textContent).toBe(
+      '蜗杆 · ZA 40° · 模数 m 2 mm',
+    );
+    expect(resultValue('模数 m')).toBe('2.000');
+    // px = π×2 = 6.283185… → 6.283
+    expect(resultValue('轴向齿距 px')).toBe('6.283');
+    // h₁ = 2.2×2 = 4.4 → 4.400
+    expect(resultValue('全齿高 h₁')).toBe('4.400');
+    expect(resultValue('牙型角 α')).toBe('40');
+    // V3-2：不走三针（三针行不存在），只有一张结果卡（蜗杆几何）
+    expect(resultValue('三针跨距 M')).toBeUndefined();
+    expect(resultValue('三针量针 d₀')).toBeUndefined();
+    expect(page().querySelectorAll('.rc-resultcard')).toHaveLength(1);
+    expect(page().querySelector('.rc-resultcard')?.getAttribute('aria-label')).toBe('蜗杆几何');
+    // 蜗杆无 G76 生成入口（模数制，p04 不含该族）
+    expect(page().querySelector('.rc-btn')).toBeNull();
+    expect(formulaText()).toContain('px = π·m = π × 2 = 6.283');
+    expect(formulaText()).toContain('h₁ = 2.2m = 2.2 × 2 = 4.400');
+    expect(formulaText()).toContain('依据：GB/T 10087-2018 / GB/T 10088-2018');
+  });
+
+  it('既有族不出现基准平面标注（标注仅锥管族）', async () => {
+    await router.navigate('p03', {
+      family: 'metric',
+      spec: 'M30 × 3.5',
+      d: 30,
+      p: 3.5,
+    });
+    expect(page().textContent).not.toContain('基准平面处直径');
+  });
+});
+
 describe('p03 空参数降级', () => {
   it('直达 #/p03 无参数：提示先选型，不渲染结果卡，按钮回 p02', async () => {
     await router.navigate('p03');

@@ -3,9 +3,10 @@
  * W4-C2 · p02 螺纹选型测试
  *
  * 设计稿区块（docs/车工计算App-无限画布.html:1162-1182）与验收口径：
- *   四族页签（普通 M / 梯形 Tr / 55° 管 / 美制 UN）+ 族内全量列表 + 族内搜索；
- *   行右侧为中径预览 d₂（core/thread 实时计算），点击行跳 p03 并带 family/spec/d/p。
- * 全量行数锚点（W3 冻结表，逐文件数出）：metric 149 / trapezoid 41 / pipe 13 / unified 20。
+ *   七族页签（普通 M / 梯形 Tr / 55° 管 / 美制 UN / 密封管 R / 锥管 NPT / 蜗杆）+ 族内全量列表 + 族内搜索；
+ *   行右侧为中径预览 d₂（core/thread 实时计算；蜗杆为轴向齿距 px=π·m），点击行跳 p03 并带 family/spec/d/p。
+ * 全量行数锚点（W3 冻结表 + W8-A 三新族/Tr 补行，逐文件数出）：metric 149 / trapezoid 53 / pipe 13 /
+ *   unified 20 / sealpipe 15 / npt 14 / worm 15。
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createRouter, type Router } from '../src/ui/router';
@@ -86,8 +87,8 @@ function clickCustomCalc(): void {
   button.click();
 }
 
-describe('p02 结构保真与四族列表', () => {
-  it('顶栏 / 四族页签 / 搜索 / 筛选 / 说明逐块存在', async () => {
+describe('p02 结构保真与七族列表', () => {
+  it('顶栏 / 七族页签 / 搜索 / 筛选 / 说明逐块存在', async () => {
     await router.navigate('p02');
 
     // TopBar 的 h1 内同时含标题文本节点与徽标，标题取首个文本节点
@@ -95,7 +96,7 @@ describe('p02 结构保真与四族列表', () => {
     expect(page().querySelector('.rc-topbar .la-badge')?.textContent).toBe('GB/T 193');
     expect(
       [...page().querySelectorAll('.la-seg .rc-seg__item')].map((item) => item.textContent),
-    ).toEqual(['普通 M', '梯形 Tr', '55° 管', '美制 UN']);
+    ).toEqual(['普通 M', '梯形 Tr', '55° 管', '美制 UN', '密封管 R', '锥管 NPT', '蜗杆']);
     expect(page().querySelector('.rc-input__label')?.textContent).toBe('搜索');
     expect(
       [...page().querySelectorAll('.rc-p02__chips .la-chip')].map((chip) => chip.textContent),
@@ -108,13 +109,13 @@ describe('p02 结构保真与四族列表', () => {
     );
   });
 
-  it('四族页签逐族渲染全量行数：149 / 41 / 13 / 20', async () => {
+  it('七族页签逐族渲染全量行数：149 / 53 / 13 / 20 / 15 / 14 / 15', async () => {
     await router.navigate('p02');
 
     expect(rows()).toHaveLength(149); // threads-metric.json：149 行（W3-C1）
 
     tabButton('梯形 Tr').click();
-    expect(rows()).toHaveLength(41); // threads-trapezoid.json：41 行（W3-C2）
+    expect(rows()).toHaveLength(53); // threads-trapezoid.json：41 行（W3-C2）+ 12 行最大螺距（W8-A）
     expect(page().querySelector('.rc-topbar .la-badge')?.textContent).toBe('GB/T 5796');
 
     tabButton('55° 管').click();
@@ -124,6 +125,18 @@ describe('p02 结构保真与四族列表', () => {
     tabButton('美制 UN').click();
     expect(rows()).toHaveLength(20); // threads-unified.json：20 行（W3-C3）
     expect(page().querySelector('.rc-topbar .la-badge')?.textContent).toBe('ASME B1.1');
+
+    tabButton('密封管 R').click();
+    expect(rows()).toHaveLength(15); // threads-sealpipe.json：15 行 R1/16–R6（W8-A）
+    expect(page().querySelector('.rc-topbar .la-badge')?.textContent).toBe('GB/T 7306');
+
+    tabButton('锥管 NPT').click();
+    expect(rows()).toHaveLength(14); // threads-npt.json：14 行 NPT1/16–NPT4（W8-A）
+    expect(page().querySelector('.rc-topbar .la-badge')?.textContent).toBe('GB/T 12716');
+
+    tabButton('蜗杆').click();
+    expect(rows()).toHaveLength(15); // threads-worm.json：15 个标准模数（W8-A）
+    expect(page().querySelector('.rc-topbar .la-badge')?.textContent).toBe('GB/T 10087');
 
     tabButton('普通 M').click();
     expect(rows()).toHaveLength(149);
@@ -181,7 +194,7 @@ describe('p02 族内搜索与筛选', () => {
     expect(rows()).toHaveLength(110); // 149 − 39
 
     tabButton('梯形 Tr').click();
-    expect(rows()).toHaveLength(41);
+    expect(rows()).toHaveLength(53);
     expect(filterChip('粗牙').disabled).toBe(true);
     expect(filterChip('细牙').disabled).toBe(true);
   });
@@ -230,6 +243,85 @@ describe('p02 导航（p02 → p03 传参约定）', () => {
     expect(params.get('spec')).toBe('G1/2');
     expect(params.get('d')).toBe('20.955');
     expect(Number(params.get('p'))).toBeCloseTo(25.4 / 14, 12);
+  });
+});
+
+describe('p02 三新族（W8-A · V3-1/V3-2）', () => {
+  it('页签容器注入横向滚动样式（390px 容纳七签）', async () => {
+    await router.navigate('p02');
+    const style = document.getElementById('rc-p02-styles')?.textContent ?? '';
+    expect(style).toContain('overflow-x: auto');
+    expect(style).toContain('.la-seg');
+  });
+
+  it('密封管 R：R1/16 预览 d₂=7.142，点击带 family=sealpipe', async () => {
+    await router.navigate('p02');
+    tabButton('密封管 R').click();
+
+    // d₂ = 7.723 − 0.6403×0.907142857… = 7.142156… → 7.142（55° 常数，基准平面处）
+    expect(rowNames()[0]).toBe('R1/16');
+    expect(rows()[0]?.querySelector('.rc-lrow__value')?.textContent).toBe('7.142');
+    expect(page().querySelector('.rc-sub')?.textContent).toBe(
+      '右侧为中径预览 d₂ / mm · 选中查看完整结果',
+    );
+
+    rows()[0]?.click();
+    await vi.waitFor(() => expect(router.current()).toBe('p03'));
+    const params = new URLSearchParams(window.location.hash.split('?')[1] ?? '');
+    expect(params.get('family')).toBe('sealpipe');
+    expect(params.get('spec')).toBe('R1/16');
+    expect(params.get('d')).toBe('7.723');
+    expect(Number(params.get('p'))).toBeCloseTo(25.4 / 28, 12);
+  });
+
+  it('锥管 NPT：NPT1/16 预览 d₂=7.284，点击带 family=npt', async () => {
+    await router.navigate('p02');
+    tabButton('锥管 NPT').click();
+
+    // d₂ = 7.895 − 0.6495×0.940740740… = 7.283988… → 7.284（60° 常数，基准平面处）
+    expect(rowNames()[0]).toBe('NPT1/16');
+    expect(rows()[0]?.querySelector('.rc-lrow__value')?.textContent).toBe('7.284');
+
+    rows()[0]?.click();
+    await vi.waitFor(() => expect(router.current()).toBe('p03'));
+    const params = new URLSearchParams(window.location.hash.split('?')[1] ?? '');
+    expect(params.get('family')).toBe('npt');
+    expect(params.get('spec')).toBe('NPT1/16');
+    expect(params.get('d')).toBe('7.895');
+    expect(Number(params.get('p'))).toBeCloseTo(25.4 / 27, 12);
+  });
+
+  it('蜗杆：右侧显示 px=π·m（m2→6.283），说明文案切 px，点击带 family=worm', async () => {
+    await router.navigate('p02');
+    tabButton('蜗杆').click();
+
+    expect(page().querySelector('.rc-sub')?.textContent).toBe(
+      '右侧为轴向齿距 px / mm · 选中查看几何结果',
+    );
+    // px = π×1 = 3.141592… → 3.142（首行 m1）
+    expect(rowNames()[0]).toBe('m1');
+    expect(rows()[0]?.querySelector('.rc-lrow__value')?.textContent).toBe('3.142');
+    const m2 = rows().find((row) => row.querySelector('.rc-lrow__name')?.textContent === 'm2');
+    // px = π×2 = 6.283185… → 6.283
+    expect(m2?.querySelector('.rc-lrow__value')?.textContent).toBe('6.283');
+
+    m2?.click();
+    await vi.waitFor(() => expect(router.current()).toBe('p03'));
+    const params = new URLSearchParams(window.location.hash.split('?')[1] ?? '');
+    expect(params.get('family')).toBe('worm');
+    expect(params.get('spec')).toBe('m2');
+    expect(params.get('d')).toBe('2');
+    expect(params.get('p')).toBe('2');
+  });
+
+  it('切回普通 M 恢复 d₂ 说明文案', async () => {
+    await router.navigate('p02');
+    tabButton('蜗杆').click();
+    expect(page().querySelector('.rc-sub')?.textContent).toContain('轴向齿距');
+    tabButton('普通 M').click();
+    expect(page().querySelector('.rc-sub')?.textContent).toBe(
+      '右侧为中径预览 d₂ / mm · 选中查看完整结果',
+    );
   });
 });
 

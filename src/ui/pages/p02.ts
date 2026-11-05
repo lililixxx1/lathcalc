@@ -27,22 +27,35 @@ import {
   injectStyle,
 } from '../components';
 import { listThreads } from '../../core/lookup';
-import { threadDimensions } from '../../core/thread';
+import { threadDimensions, wormGeometry } from '../../core/thread';
 import type { FlankAngle, ThreadFamily, ThreadRow } from '../../core/types';
 import metricRows from '../../data/threads-metric.json';
 import trapezoidRows from '../../data/threads-trapezoid.json';
 import pipeRows from '../../data/threads-pipe.json';
 import unifiedRows from '../../data/threads-unified.json';
+import sealpipeRows from '../../data/threads-sealpipe.json';
+import nptRows from '../../data/threads-npt.json';
+import wormRows from '../../data/threads-worm.json';
 
-/** 四族数据（W3 冻结表；行数 149/41/13/20 由测试逐族断言） */
+/** 七族数据（W3 冻结表 + W8-A 三新族；行数 149/53/13/20/15/14/15 由测试逐族断言） */
 const ALL_ROWS: ThreadRow[] = [
   ...(metricRows as unknown as ThreadRow[]),
   ...(trapezoidRows as unknown as ThreadRow[]),
   ...(pipeRows as unknown as ThreadRow[]),
   ...(unifiedRows as unknown as ThreadRow[]),
+  ...(sealpipeRows as unknown as ThreadRow[]),
+  ...(nptRows as unknown as ThreadRow[]),
+  ...(wormRows as unknown as ThreadRow[]),
 ];
 
-type RouteFamily = 'metric' | 'trapezoid' | 'pipe' | 'unified';
+type RouteFamily =
+  | 'metric'
+  | 'trapezoid'
+  | 'pipe'
+  | 'unified'
+  | 'sealpipe'
+  | 'npt'
+  | 'worm';
 /** 粗牙筛选（仅 metric 有意义；non-metric 页签下禁用） */
 type CoarseFilter = 'all' | 'coarse' | 'fine';
 
@@ -62,11 +75,22 @@ const FAMILY_TABS: readonly FamilyTab[] = [
   { value: 'trapezoid', label: '梯形 Tr', dataFamily: 'trapezoid', standard: 'GB/T 5796' },
   { value: 'pipe', label: '55° 管', dataFamily: 'pipe55', standard: 'GB/T 7307' },
   { value: 'unified', label: '美制 UN', dataFamily: 'unified', standard: 'ASME B1.1' },
+  { value: 'sealpipe', label: '密封管 R', dataFamily: 'sealpipe', standard: 'GB/T 7306' },
+  { value: 'npt', label: '锥管 NPT', dataFamily: 'npt', standard: 'GB/T 12716' },
+  { value: 'worm', label: '蜗杆', dataFamily: 'worm', standard: 'GB/T 10087' },
 ];
+
+const HINT_D2 = '右侧为中径预览 d₂ / mm · 选中查看完整结果';
+const HINT_WORM = '右侧为轴向齿距 px / mm · 选中查看几何结果';
 
 const CSS = `
 .rc-p02__body { padding-top: 4px; }
+/* 七签在 390px 下容纳不下（WAVE-PLAN-V3 §1）：页签容器横向滚动，子项不压缩 */
+.rc-p02__body .la-seg { overflow-x: auto; scrollbar-width: none; }
+.rc-p02__body .la-seg::-webkit-scrollbar { display: none; }
+.rc-p02__body .la-seg > .rc-seg__item { flex: 0 0 auto; padding-left: 10px; padding-right: 10px; }
 .rc-p02__chips { display: flex; gap: 7px; flex: 0 0 auto; }
+
 .rc-p02__listcard { flex: 1 1 auto; min-height: 0; display: flex; }
 .rc-p02__listcard .la-rowlist { flex: 1 1 auto; min-height: 0; overflow-y: auto; }
 .rc-p02__customrow { cursor: pointer; }
@@ -79,8 +103,9 @@ const CSS = `
 `;
 
 function flankAngleFor(family: ThreadFamily): FlankAngle {
-  if (family === 'pipe55') return 55;
+  if (family === 'pipe55' || family === 'sealpipe') return 55;
   if (family === 'trapezoid') return 30;
+  if (family === 'worm') return 40;
   return 60;
 }
 
@@ -111,6 +136,12 @@ function previewD2(row: ThreadRow): string {
     major: row.major,
     flankAngle: flankAngleFor(row.family),
   }).d2.toFixed(3);
+}
+
+/** 行右侧预览值：蜗杆显示轴向齿距 px=π·m（活算），其余族显示中径 d₂ */
+function previewValue(row: ThreadRow): string {
+  if (row.family === 'worm') return wormGeometry(row.pitch).axialPitch.toFixed(3);
+  return previewD2(row);
 }
 
 /** 设计稿静态「自定义规格…」行（docs/车工计算App-无限画布.html:1178）；W6-C3 激活为可展开输入（V2-8） */
@@ -146,11 +177,15 @@ const page: PageModule = {
       ariaLabel: '螺纹规格列表',
     });
     const customCard = Card({ tight: true, className: 'rc-p02__customcard' });
-    const hint = SubText('右侧为中径预览 d₂ / mm · 选中查看完整结果', { center: true });
+    const hint = SubText(HINT_D2, { center: true });
 
     function syncBadge(): void {
       const badge = top.querySelector<HTMLElement>('.la-badge');
       if (badge) badge.textContent = activeTab().standard;
+    }
+
+    function syncHint(): void {
+      hint.textContent = family === 'worm' ? HINT_WORM : HINT_D2;
     }
 
     function buildSearch(): void {
@@ -320,11 +355,12 @@ const page: PageModule = {
       const rows = filteredRows();
       const items = rows.map((row) => {
         const name = displayName(row);
-        const d2 = previewD2(row);
+        const value = previewValue(row);
+        const valueLabel = row.family === 'worm' ? '轴向齿距' : '中径';
         return ListRow({
           name,
-          value: d2,
-          ariaLabel: `${name}，中径 ${d2} 毫米`,
+          value,
+          ariaLabel: `${name}，${valueLabel} ${value} 毫米`,
           onClick: () => {
             void ctx.navigate('p03', {
               family: tab.value,
@@ -348,6 +384,7 @@ const page: PageModule = {
         query = '';
         pitchMode = false;
         syncBadge();
+        syncHint();
         buildSearch();
         buildChips();
         renderList();
@@ -358,6 +395,7 @@ const page: PageModule = {
     buildSearch();
     buildChips();
     renderCustom();
+    syncHint();
     renderList();
 
     ctx.root.append(createPage({ id: 'p02', top, body }));

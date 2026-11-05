@@ -1,0 +1,114 @@
+[
+  {
+    "family": "npt",
+    "designation": "NPT1/16",
+    "pitch": 0.9407407407407407,
+    "major": 7.895,
+    "tpi": 27,
+    "source": "GB/T 12716-2011 表（164580 转载）；gewinde-normen.de NPT 表校核"
+  },
+  {
+    "family": "npt",
+    "designation": "NPT1/8",
+    "pitch": 0.9407407407407407,
+    "major": 10.242,
+    "tpi": 27,
+    "source": "GB/T 12716-2011 表（164580 转载）；gewinde-normen.de NPT 表校核"
+  },
+  {
+    "family": "npt",
+    "designation": "NPT1/4",
+    "pitch": 1.411111111111111,
+    "major": 13.616,
+    "tpi": 18,
+    "source": "GB/T 12716-2011 表（164580 转载）；gewinde-normen.de NPT 表校核"
+  },
+  {
+    "family": "npt",
+    "designation": "NPT3/8",
+    "pitch": 1.411111111111111,
+    "major": 17.055,
+    "tpi": 18,
+    "source": "GB/T 12716-2011 表（164580 转载）；gewinde-normen.de NPT 表校核"
+  },
+  {
+    "family": "npt",
+    "designation": "NPT1/2",
+    "pitch": 1.8142857142857143,
+    "major": 21.223,
+    "tpi": 14,
+    "source": "GB/T 12716-2011 表（164580 转载）；gewinde-normen.de NPT 表校核"
+  },
+  {
+    "family": "npt",
+    "designation": "NPT3/4",
+    "pitch": 1.8142857142857143,
+    "major": 26.568,
+    "tpi": 14,
+    "source": "GB/T 12716-2011 表（164580 转载）；gewinde-normen.de NPT 表校核"
+  },
+  {
+    "family": "npt",
+    "designation": "NPT1",
+    "pitch": 2.2086956521739127,
+    "major": 33.228,
+    "tpi": 11.5,
+    "source": "GB/T 12716-2011 表（164580 转载）；gewinde-normen.de NPT 表校核"
+  },
+  {
+    "family": "npt",
+    "designation": "NPT1 1/4",
+    "pitch": 2.2086956521739127,
+    "major": 41.985,
+    "tpi": 11.5,
+    "source": "GB/T 12716-2011 表（164580 转载）；gewinde-normen.de NPT 表校核"
+  },
+  {
+    "family": "npt",
+    "designation": "NPT1 1/2",
+    "pitch": 2.2086956521739127,
+    "major": 48.054,
+    "tpi": 11.5,
+    "source": "GB/T 12716-2011 表（164580 转载）；gewinde-normen.de NPT 表校核"
+  },
+  {
+    "family": "npt",
+    "designation": "NPT2",
+    "pitch": 2.2086956521739127,
+    "major": 60.092,
+    "tpi": 11.5,
+    "source": "GB/T 12716-2011 表（164580 转载）；gewinde-normen.de NPT 表校核"
+  },
+  {
+    "family": "npt",
+    "designation": "NPT2 1/2",
+    "pitch": 3.175,
+    "major": 72.699,
+    "tpi": 8,
+    "source": "GB/T 12716-2011 表（164580 转载）；gewinde-normen.de NPT 表校核"
+  },
+  {
+    "family": "npt",
+    "designation": "NPT3",
+    "pitch": 3.175,
+    "major": 88.608,
+    "tpi": 8,
+    "source": "GB/T 12716-2011 表（164580 转载）；gewinde-normen.de NPT 表校核"
+  },
+  {
+    "family": "npt",
+    "designation": "NPT3 1/2",
+    "pitch": 3.175,
+    "major": 101.316,
+    "tpi": 8,
+    "source": "GB/T 12716-2011 表（164580 转载）；gewinde-normen.de NPT 表校核"
+  },
+  {
+    "family": "npt",
+    "designation": "NPT4",
+    "pitch": 3.175,
+    "major": 113.973,
+    "tpi": 8,
+    "source": "GB/T 12716-2011 表（164580 转载）；gewinde-normen.de NPT 表校核"
+  }
+]

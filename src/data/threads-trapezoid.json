@@ -134,6 +134,13 @@
   },
   {
     "family": "trapezoid",
+    "designation": "Tr22×8",
+    "pitch": 8,
+    "major": 22,
+    "source": "GB/T 5796.2-2005 表1 最大螺距档（经 GB/T 5796.3-2005 表）；Autodesk Fusion ISO Metric Trapezoidal 表校核"
+  },
+  {
+    "family": "trapezoid",
     "designation": "Tr24×3",
     "pitch": 3,
     "major": 24,
@@ -145,6 +152,13 @@
     "pitch": 5,
     "major": 24,
     "source": "GB/T 5796.2/5796.3-2005；DIN 103"
+  },
+  {
+    "family": "trapezoid",
+    "designation": "Tr24×8",
+    "pitch": 8,
+    "major": 24,
+    "source": "GB/T 5796.2-2005 表1 最大螺距档（经 GB/T 5796.3-2005 表）；Autodesk Fusion ISO Metric Trapezoidal 表校核"
   },
   {
     "family": "trapezoid",
@@ -162,6 +176,13 @@
   },
   {
     "family": "trapezoid",
+    "designation": "Tr26×8",
+    "pitch": 8,
+    "major": 26,
+    "source": "GB/T 5796.2-2005 表1 最大螺距档（经 GB/T 5796.3-2005 表）；Autodesk Fusion ISO Metric Trapezoidal 表校核"
+  },
+  {
+    "family": "trapezoid",
     "designation": "Tr28×3",
     "pitch": 3,
     "major": 28,
@@ -173,6 +194,13 @@
     "pitch": 5,
     "major": 28,
     "source": "GB/T 5796.2/5796.3-2005；DIN 103"
+  },
+  {
+    "family": "trapezoid",
+    "designation": "Tr28×8",
+    "pitch": 8,
+    "major": 28,
+    "source": "GB/T 5796.2-2005 表1 最大螺距档（经 GB/T 5796.3-2005 表）；Autodesk Fusion ISO Metric Trapezoidal 表校核"
   },
   {
     "family": "trapezoid",
@@ -190,6 +218,13 @@
   },
   {
     "family": "trapezoid",
+    "designation": "Tr30×10",
+    "pitch": 10,
+    "major": 30,
+    "source": "GB/T 5796.2-2005 表1 最大螺距档（经 GB/T 5796.3-2005 表）；Autodesk Fusion ISO Metric Trapezoidal 表校核"
+  },
+  {
+    "family": "trapezoid",
     "designation": "Tr32×3",
     "pitch": 3,
     "major": 32,
@@ -201,6 +236,13 @@
     "pitch": 6,
     "major": 32,
     "source": "GB/T 5796.2/5796.3-2005；DIN 103"
+  },
+  {
+    "family": "trapezoid",
+    "designation": "Tr32×10",
+    "pitch": 10,
+    "major": 32,
+    "source": "GB/T 5796.2-2005 表1 最大螺距档（经 GB/T 5796.3-2005 表）；Autodesk Fusion ISO Metric Trapezoidal 表校核"
   },
   {
     "family": "trapezoid",
@@ -218,6 +260,13 @@
   },
   {
     "family": "trapezoid",
+    "designation": "Tr34×10",
+    "pitch": 10,
+    "major": 34,
+    "source": "GB/T 5796.2-2005 表1 最大螺距档（经 GB/T 5796.3-2005 表）；Autodesk Fusion ISO Metric Trapezoidal 表校核"
+  },
+  {
+    "family": "trapezoid",
     "designation": "Tr36×3",
     "pitch": 3,
     "major": 36,
@@ -229,6 +278,13 @@
     "pitch": 6,
     "major": 36,
     "source": "GB/T 5796.2/5796.3-2005；DIN 103"
+  },
+  {
+    "family": "trapezoid",
+    "designation": "Tr36×10",
+    "pitch": 10,
+    "major": 36,
+    "source": "GB/T 5796.2-2005 表1 最大螺距档（经 GB/T 5796.3-2005 表）；Autodesk Fusion ISO Metric Trapezoidal 表校核"
   },
   {
     "family": "trapezoid",
@@ -246,6 +302,13 @@
   },
   {
     "family": "trapezoid",
+    "designation": "Tr38×10",
+    "pitch": 10,
+    "major": 38,
+    "source": "GB/T 5796.2-2005 表1 最大螺距档（经 GB/T 5796.3-2005 表）；Autodesk Fusion ISO Metric Trapezoidal 表校核"
+  },
+  {
+    "family": "trapezoid",
     "designation": "Tr40×3",
     "pitch": 3,
     "major": 40,
@@ -257,6 +320,13 @@
     "pitch": 7,
     "major": 40,
     "source": "GB/T 5796.2/5796.3-2005；DIN 103"
+  },
+  {
+    "family": "trapezoid",
+    "designation": "Tr40×10",
+    "pitch": 10,
+    "major": 40,
+    "source": "GB/T 5796.2-2005 表1 最大螺距档（经 GB/T 5796.3-2005 表）；Autodesk Fusion ISO Metric Trapezoidal 表校核"
   },
   {
     "family": "trapezoid",
@@ -274,6 +344,13 @@
   },
   {
     "family": "trapezoid",
+    "designation": "Tr42×10",
+    "pitch": 10,
+    "major": 42,
+    "source": "GB/T 5796.2-2005 表1 最大螺距档（经 GB/T 5796.3-2005 表）；Autodesk Fusion ISO Metric Trapezoidal 表校核"
+  },
+  {
+    "family": "trapezoid",
     "designation": "Tr44×3",
     "pitch": 3,
     "major": 44,
@@ -285,5 +362,12 @@
     "pitch": 7,
     "major": 44,
     "source": "GB/T 5796.2/5796.3-2005；DIN 103"
+  },
+  {
+    "family": "trapezoid",
+    "designation": "Tr44×12",
+    "pitch": 12,
+    "major": 44,
+    "source": "GB/T 5796.2-2005 表1 最大螺距档（经 GB/T 5796.3-2005 表）；Autodesk Fusion ISO Metric Trapezoidal 表校核"
   }
 ]

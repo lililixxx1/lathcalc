@@ -1,0 +1,19 @@
+$ NO_COLOR=1 npx vitest run --maxWorkers=2 test/thread.test.ts test/data-sealpipe.test.ts test/data-npt.test.ts test/data-worm.test.ts test/data-trapezoid.test.ts test/ui-p02.test.ts test/ui-p03.test.ts
+
+ RUN  v3.2.7 <TREE>
+
+ ✓ test/ui-p03.test.ts (14 tests) 482ms
+ ✓ test/data-trapezoid.test.ts (11 tests) 7ms
+ ✓ test/thread.test.ts (13 tests) 5ms
+ ✓ test/ui-p02.test.ts (19 tests) 1216ms
+ ✓ test/data-sealpipe.test.ts (7 tests) 4ms
+ ✓ test/data-npt.test.ts (6 tests) 4ms
+ ✓ test/data-worm.test.ts (5 tests) 4ms
+
+ Test Files  7 passed (7)
+      Tests  75 passed (75)
+   Start at  09:02:20
+   Duration  2.50s (transform 256ms, setup 0ms, collect 258ms, tests 1.72s, environment 934ms, prepare 629ms)
+
+
+REAL_EXIT=0

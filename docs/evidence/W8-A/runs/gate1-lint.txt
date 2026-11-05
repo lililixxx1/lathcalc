@@ -1,0 +1,7 @@
+$ npm run lint
+
+> lathcalc@0.2.0 lint
+> eslint .
+
+
+REAL_EXIT=0

@@ -1,0 +1,114 @@
+$ node docs/evidence/W8-A/tools/data-crosscheck.mjs
+# threads-trapezoid.json  rows=53  expected=53  family=trapezoid
+threads-trapezoid.json | Tr8×1.5 | P=1.5 d=8 | - | GB/T 5796.2/5796.3-2005 | DIN 103 | OK
+threads-trapezoid.json | Tr9×1.5 | P=1.5 d=9 | - | GB/T 5796.2/5796.3-2005 | DIN 103 | OK
+threads-trapezoid.json | Tr9×2 | P=2 d=9 | - | GB/T 5796.2/5796.3-2005 | DIN 103 | OK
+threads-trapezoid.json | Tr10×1.5 | P=1.5 d=10 | - | GB/T 5796.2/5796.3-2005 | DIN 103 | OK
+threads-trapezoid.json | Tr10×2 | P=2 d=10 | - | GB/T 5796.2/5796.3-2005 | DIN 103 | OK
+threads-trapezoid.json | Tr11×2 | P=2 d=11 | - | GB/T 5796.2/5796.3-2005 | DIN 103 | OK
+threads-trapezoid.json | Tr11×3 | P=3 d=11 | - | GB/T 5796.2/5796.3-2005 | DIN 103 | OK
+threads-trapezoid.json | Tr12×2 | P=2 d=12 | - | GB/T 5796.2/5796.3-2005 | DIN 103 | OK
+threads-trapezoid.json | Tr12×3 | P=3 d=12 | - | GB/T 5796.2/5796.3-2005 | DIN 103 | OK
+threads-trapezoid.json | Tr14×2 | P=2 d=14 | - | GB/T 5796.2/5796.3-2005 | DIN 103 | OK
+threads-trapezoid.json | Tr14×3 | P=3 d=14 | - | GB/T 5796.2/5796.3-2005 | DIN 103 | OK
+threads-trapezoid.json | Tr16×2 | P=2 d=16 | - | GB/T 5796.2/5796.3-2005 | DIN 103 | OK
+threads-trapezoid.json | Tr16×4 | P=4 d=16 | - | GB/T 5796.2/5796.3-2005 | DIN 103 | OK
+threads-trapezoid.json | Tr18×2 | P=2 d=18 | - | GB/T 5796.2/5796.3-2005 | DIN 103 | OK
+threads-trapezoid.json | Tr18×4 | P=4 d=18 | - | GB/T 5796.2/5796.3-2005 | DIN 103 | OK
+threads-trapezoid.json | Tr20×2 | P=2 d=20 | - | GB/T 5796.2/5796.3-2005 | DIN 103 | OK
+threads-trapezoid.json | Tr20×4 | P=4 d=20 | - | GB/T 5796.2/5796.3-2005 | DIN 103 | OK
+threads-trapezoid.json | Tr22×3 | P=3 d=22 | - | GB/T 5796.2/5796.3-2005 | DIN 103 | OK
+threads-trapezoid.json | Tr22×5 | P=5 d=22 | - | GB/T 5796.2/5796.3-2005 | DIN 103 | OK
+threads-trapezoid.json | Tr22×8 | P=8 d=22 | - | GB/T 5796.2-2005 表1 最大螺距档（经 GB/T 5796.3-2005 表） | Autodesk Fusion ISO Metric Trapezoidal 表校核 | OK
+threads-trapezoid.json | Tr24×3 | P=3 d=24 | - | GB/T 5796.2/5796.3-2005 | DIN 103 | OK
+threads-trapezoid.json | Tr24×5 | P=5 d=24 | - | GB/T 5796.2/5796.3-2005 | DIN 103 | OK
+threads-trapezoid.json | Tr24×8 | P=8 d=24 | - | GB/T 5796.2-2005 表1 最大螺距档（经 GB/T 5796.3-2005 表） | Autodesk Fusion ISO Metric Trapezoidal 表校核 | OK
+threads-trapezoid.json | Tr26×3 | P=3 d=26 | - | GB/T 5796.2/5796.3-2005 | DIN 103 | OK
+threads-trapezoid.json | Tr26×5 | P=5 d=26 | - | GB/T 5796.2/5796.3-2005 | DIN 103 | OK
+threads-trapezoid.json | Tr26×8 | P=8 d=26 | - | GB/T 5796.2-2005 表1 最大螺距档（经 GB/T 5796.3-2005 表） | Autodesk Fusion ISO Metric Trapezoidal 表校核 | OK
+threads-trapezoid.json | Tr28×3 | P=3 d=28 | - | GB/T 5796.2/5796.3-2005 | DIN 103 | OK
+threads-trapezoid.json | Tr28×5 | P=5 d=28 | - | GB/T 5796.2/5796.3-2005 | DIN 103 | OK
+threads-trapezoid.json | Tr28×8 | P=8 d=28 | - | GB/T 5796.2-2005 表1 最大螺距档（经 GB/T 5796.3-2005 表） | Autodesk Fusion ISO Metric Trapezoidal 表校核 | OK
+threads-trapezoid.json | Tr30×3 | P=3 d=30 | - | GB/T 5796.2/5796.3-2005 | DIN 103 | OK
+threads-trapezoid.json | Tr30×6 | P=6 d=30 | - | GB/T 5796.2/5796.3-2005 | DIN 103 | OK
+threads-trapezoid.json | Tr30×10 | P=10 d=30 | - | GB/T 5796.2-2005 表1 最大螺距档（经 GB/T 5796.3-2005 表） | Autodesk Fusion ISO Metric Trapezoidal 表校核 | OK
+threads-trapezoid.json | Tr32×3 | P=3 d=32 | - | GB/T 5796.2/5796.3-2005 | DIN 103 | OK
+threads-trapezoid.json | Tr32×6 | P=6 d=32 | - | GB/T 5796.2/5796.3-2005 | DIN 103 | OK
+threads-trapezoid.json | Tr32×10 | P=10 d=32 | - | GB/T 5796.2-2005 表1 最大螺距档（经 GB/T 5796.3-2005 表） | Autodesk Fusion ISO Metric Trapezoidal 表校核 | OK
+threads-trapezoid.json | Tr34×3 | P=3 d=34 | - | GB/T 5796.2/5796.3-2005 | DIN 103 | OK
+threads-trapezoid.json | Tr34×6 | P=6 d=34 | - | GB/T 5796.2/5796.3-2005 | DIN 103 | OK
+threads-trapezoid.json | Tr34×10 | P=10 d=34 | - | GB/T 5796.2-2005 表1 最大螺距档（经 GB/T 5796.3-2005 表） | Autodesk Fusion ISO Metric Trapezoidal 表校核 | OK
+threads-trapezoid.json | Tr36×3 | P=3 d=36 | - | GB/T 5796.2/5796.3-2005 | DIN 103 | OK
+threads-trapezoid.json | Tr36×6 | P=6 d=36 | - | GB/T 5796.2/5796.3-2005 | DIN 103 | OK
+threads-trapezoid.json | Tr36×10 | P=10 d=36 | - | GB/T 5796.2-2005 表1 最大螺距档（经 GB/T 5796.3-2005 表） | Autodesk Fusion ISO Metric Trapezoidal 表校核 | OK
+threads-trapezoid.json | Tr38×3 | P=3 d=38 | - | GB/T 5796.2/5796.3-2005 | DIN 103 | OK
+threads-trapezoid.json | Tr38×7 | P=7 d=38 | - | GB/T 5796.2/5796.3-2005 | DIN 103 | OK
+threads-trapezoid.json | Tr38×10 | P=10 d=38 | - | GB/T 5796.2-2005 表1 最大螺距档（经 GB/T 5796.3-2005 表） | Autodesk Fusion ISO Metric Trapezoidal 表校核 | OK
+threads-trapezoid.json | Tr40×3 | P=3 d=40 | - | GB/T 5796.2/5796.3-2005 | DIN 103 | OK
+threads-trapezoid.json | Tr40×7 | P=7 d=40 | - | GB/T 5796.2/5796.3-2005 | DIN 103 | OK
+threads-trapezoid.json | Tr40×10 | P=10 d=40 | - | GB/T 5796.2-2005 表1 最大螺距档（经 GB/T 5796.3-2005 表） | Autodesk Fusion ISO Metric Trapezoidal 表校核 | OK
+threads-trapezoid.json | Tr42×3 | P=3 d=42 | - | GB/T 5796.2/5796.3-2005 | DIN 103 | OK
+threads-trapezoid.json | Tr42×7 | P=7 d=42 | - | GB/T 5796.2/5796.3-2005 | DIN 103 | OK
+threads-trapezoid.json | Tr42×10 | P=10 d=42 | - | GB/T 5796.2-2005 表1 最大螺距档（经 GB/T 5796.3-2005 表） | Autodesk Fusion ISO Metric Trapezoidal 表校核 | OK
+threads-trapezoid.json | Tr44×3 | P=3 d=44 | - | GB/T 5796.2/5796.3-2005 | DIN 103 | OK
+threads-trapezoid.json | Tr44×7 | P=7 d=44 | - | GB/T 5796.2/5796.3-2005 | DIN 103 | OK
+threads-trapezoid.json | Tr44×12 | P=12 d=44 | - | GB/T 5796.2-2005 表1 最大螺距档（经 GB/T 5796.3-2005 表） | Autodesk Fusion ISO Metric Trapezoidal 表校核 | OK
+
+# threads-sealpipe.json  rows=15  expected=15  family=sealpipe
+threads-sealpipe.json | R1/16 | P=0.9071428571428571 d=7.723 | 28 | GB/T 7306.1-2000 表1（基面大径） | BSPT 厂商表（supergaging.com）校核 | OK
+threads-sealpipe.json | R1/8 | P=0.9071428571428571 d=9.728 | 28 | GB/T 7306.1-2000 表1（基面大径） | BSPT 厂商表（supergaging.com）校核 | OK
+threads-sealpipe.json | R1/4 | P=1.3368421052631578 d=13.157 | 19 | GB/T 7306.1-2000 表1（基面大径） | BSPT 厂商表（supergaging.com）校核 | OK
+threads-sealpipe.json | R3/8 | P=1.3368421052631578 d=16.662 | 19 | GB/T 7306.1-2000 表1（基面大径） | BSPT 厂商表（supergaging.com）校核 | OK
+threads-sealpipe.json | R1/2 | P=1.8142857142857143 d=20.955 | 14 | GB/T 7306.1-2000 表1（基面大径） | BSPT 厂商表（supergaging.com）校核 | OK
+threads-sealpipe.json | R3/4 | P=1.8142857142857143 d=26.441 | 14 | GB/T 7306.1-2000 表1（基面大径） | BSPT 厂商表（supergaging.com）校核 | OK
+threads-sealpipe.json | R1 | P=2.309090909090909 d=33.249 | 11 | GB/T 7306.1-2000 表1（基面大径） | BSPT 厂商表（supergaging.com）校核 | OK
+threads-sealpipe.json | R1 1/4 | P=2.309090909090909 d=41.91 | 11 | GB/T 7306.1-2000 表1（基面大径） | BSPT 厂商表（supergaging.com）校核 | OK
+threads-sealpipe.json | R1 1/2 | P=2.309090909090909 d=47.803 | 11 | GB/T 7306.1-2000 表1（基面大径） | BSPT 厂商表（supergaging.com）校核 | OK
+threads-sealpipe.json | R2 | P=2.309090909090909 d=59.614 | 11 | GB/T 7306.1-2000 表1（基面大径） | BSPT 厂商表（supergaging.com）校核 | OK
+threads-sealpipe.json | R2 1/2 | P=2.309090909090909 d=75.184 | 11 | GB/T 7306.1-2000 表1（基面大径） | BSPT 厂商表（supergaging.com）校核 | OK
+threads-sealpipe.json | R3 | P=2.309090909090909 d=87.884 | 11 | GB/T 7306.1-2000 表1（基面大径） | BSPT 厂商表（supergaging.com）校核 | OK
+threads-sealpipe.json | R4 | P=2.309090909090909 d=113.03 | 11 | GB/T 7306.1-2000 表1（基面大径） | BSPT 厂商表（supergaging.com）校核 | OK
+threads-sealpipe.json | R5 | P=2.309090909090909 d=138.43 | 11 | GB/T 7306.1-2000 表1（基面大径） | BSPT 厂商表（supergaging.com）校核 | OK
+threads-sealpipe.json | R6 | P=2.309090909090909 d=163.83 | 11 | GB/T 7306.1-2000 表1（基面大径） | BSPT 厂商表（supergaging.com）校核 | OK
+
+# threads-npt.json  rows=14  expected=14  family=npt
+threads-npt.json | NPT1/16 | P=0.9407407407407407 d=7.895 | 27 | GB/T 12716-2011 表（164580 转载） | gewinde-normen.de NPT 表校核 | OK
+threads-npt.json | NPT1/8 | P=0.9407407407407407 d=10.242 | 27 | GB/T 12716-2011 表（164580 转载） | gewinde-normen.de NPT 表校核 | OK
+threads-npt.json | NPT1/4 | P=1.411111111111111 d=13.616 | 18 | GB/T 12716-2011 表（164580 转载） | gewinde-normen.de NPT 表校核 | OK
+threads-npt.json | NPT3/8 | P=1.411111111111111 d=17.055 | 18 | GB/T 12716-2011 表（164580 转载） | gewinde-normen.de NPT 表校核 | OK
+threads-npt.json | NPT1/2 | P=1.8142857142857143 d=21.223 | 14 | GB/T 12716-2011 表（164580 转载） | gewinde-normen.de NPT 表校核 | OK
+threads-npt.json | NPT3/4 | P=1.8142857142857143 d=26.568 | 14 | GB/T 12716-2011 表（164580 转载） | gewinde-normen.de NPT 表校核 | OK
+threads-npt.json | NPT1 | P=2.2086956521739127 d=33.228 | 11.5 | GB/T 12716-2011 表（164580 转载） | gewinde-normen.de NPT 表校核 | OK
+threads-npt.json | NPT1 1/4 | P=2.2086956521739127 d=41.985 | 11.5 | GB/T 12716-2011 表（164580 转载） | gewinde-normen.de NPT 表校核 | OK
+threads-npt.json | NPT1 1/2 | P=2.2086956521739127 d=48.054 | 11.5 | GB/T 12716-2011 表（164580 转载） | gewinde-normen.de NPT 表校核 | OK
+threads-npt.json | NPT2 | P=2.2086956521739127 d=60.092 | 11.5 | GB/T 12716-2011 表（164580 转载） | gewinde-normen.de NPT 表校核 | OK
+threads-npt.json | NPT2 1/2 | P=3.175 d=72.699 | 8 | GB/T 12716-2011 表（164580 转载） | gewinde-normen.de NPT 表校核 | OK
+threads-npt.json | NPT3 | P=3.175 d=88.608 | 8 | GB/T 12716-2011 表（164580 转载） | gewinde-normen.de NPT 表校核 | OK
+threads-npt.json | NPT3 1/2 | P=3.175 d=101.316 | 8 | GB/T 12716-2011 表（164580 转载） | gewinde-normen.de NPT 表校核 | OK
+threads-npt.json | NPT4 | P=3.175 d=113.973 | 8 | GB/T 12716-2011 表（164580 转载） | gewinde-normen.de NPT 表校核 | OK
+
+# threads-worm.json  rows=15  expected=15  family=worm
+threads-worm.json | m1 | m=1 | px=3.141593 | h1=2.200000 | GB/T 10088-2018 模数系列 | GB/T 10085-1988 表（jlcfa 转载）与 mechtool 匹配表校核 | OK
+threads-worm.json | m1.25 | m=1.25 | px=3.926991 | h1=2.750000 | GB/T 10088-2018 模数系列 | GB/T 10085-1988 表（jlcfa 转载）与 mechtool 匹配表校核 | OK
+threads-worm.json | m1.6 | m=1.6 | px=5.026548 | h1=3.520000 | GB/T 10088-2018 模数系列 | GB/T 10085-1988 表（jlcfa 转载）与 mechtool 匹配表校核 | OK
+threads-worm.json | m2 | m=2 | px=6.283185 | h1=4.400000 | GB/T 10088-2018 模数系列 | GB/T 10085-1988 表（jlcfa 转载）与 mechtool 匹配表校核 | OK
+threads-worm.json | m2.5 | m=2.5 | px=7.853982 | h1=5.500000 | GB/T 10088-2018 模数系列 | GB/T 10085-1988 表（jlcfa 转载）与 mechtool 匹配表校核 | OK
+threads-worm.json | m3.15 | m=3.15 | px=9.896017 | h1=6.930000 | GB/T 10088-2018 模数系列 | GB/T 10085-1988 表（jlcfa 转载）与 mechtool 匹配表校核 | OK
+threads-worm.json | m4 | m=4 | px=12.566371 | h1=8.800000 | GB/T 10088-2018 模数系列 | GB/T 10085-1988 表（jlcfa 转载）与 mechtool 匹配表校核 | OK
+threads-worm.json | m5 | m=5 | px=15.707963 | h1=11.000000 | GB/T 10088-2018 模数系列 | GB/T 10085-1988 表（jlcfa 转载）与 mechtool 匹配表校核 | OK
+threads-worm.json | m6.3 | m=6.3 | px=19.792034 | h1=13.860000 | GB/T 10088-2018 模数系列 | GB/T 10085-1988 表（jlcfa 转载）与 mechtool 匹配表校核 | OK
+threads-worm.json | m8 | m=8 | px=25.132741 | h1=17.600000 | GB/T 10088-2018 模数系列 | GB/T 10085-1988 表（jlcfa 转载）与 mechtool 匹配表校核 | OK
+threads-worm.json | m10 | m=10 | px=31.415927 | h1=22.000000 | GB/T 10088-2018 模数系列 | GB/T 10085-1988 表（jlcfa 转载）与 mechtool 匹配表校核 | OK
+threads-worm.json | m12.5 | m=12.5 | px=39.269908 | h1=27.500000 | GB/T 10088-2018 模数系列 | GB/T 10085-1988 表（jlcfa 转载）与 mechtool 匹配表校核 | OK
+threads-worm.json | m16 | m=16 | px=50.265482 | h1=35.200000 | GB/T 10088-2018 模数系列 | GB/T 10085-1988 表（jlcfa 转载）与 mechtool 匹配表校核 | OK
+threads-worm.json | m20 | m=20 | px=62.831853 | h1=44.000000 | GB/T 10088-2018 模数系列 | GB/T 10085-1988 表（jlcfa 转载）与 mechtool 匹配表校核 | OK
+threads-worm.json | m25 | m=25 | px=78.539816 | h1=55.000000 | GB/T 10088-2018 模数系列 | GB/T 10085-1988 表（jlcfa 转载）与 mechtool 匹配表校核 | OK
+
+ROWS_OK=true
+FAMILIES_OK=true
+SOURCE_SPLIT_OK=true
+PITCH_TPI_OK=true
+WORM_GEOMETRY_OK=true
+DATA_JUDGMENT: PASS
+
+REAL_EXIT=0
