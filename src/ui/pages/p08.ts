@@ -42,6 +42,9 @@ const CSS = `
 .rc-p08__presets { display: flex; flex-wrap: wrap; gap: 7px; }
 .rc-p08__fithead { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 4px; }
 .rc-p08__fitcard { margin-top: 6px; }
+/* W12 A4-W5：la-eyebrow 全局 text-transform:uppercase 会把配合代号 g6/k6/p6 显示成大写，
+   GB/T 1800.1 轴公差带代号须小写——配合卡域内关闭大写变换 */
+.rc-p08__fitcard .la-eyebrow { text-transform: none; }
 `;
 
 type FitBand = 'g6' | 'k6' | 'p6';

@@ -35,8 +35,9 @@ const CSS = `
 .rc-p15__body { padding-top: 2px; }
 .rc-p15__tabs { flex: 0 0 auto; }
 .rc-p15__scroll { flex: 1 1 auto; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 9px; padding-bottom: 4px; }
-.rc-p15__form { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.rc-p15__form .la-input { min-width: 0; }
+/* W12 A4-W1/W2/W4b：两列 1fr 时列宽 ~170px，label+unit 挤占后 19px 值区仅 ~2–3 字符宽
+   （40→"4"、-100→"-10…"、360→"36" 裁值）——改单列，值区全宽；滚容器 .rc-p15__scroll 纵向兜底 */
+.rc-p15__form { display: grid; grid-template-columns: 1fr; gap: 8px; }
 .rc-p15__form .la-input .lab { font-size: 11.5px; }
 .rc-p15__program { display: flex; flex-direction: column; gap: 9px; flex: 0 0 auto; }
 .rc-p15__program:empty { display: none; }

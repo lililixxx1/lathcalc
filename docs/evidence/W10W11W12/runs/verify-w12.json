@@ -1,0 +1,150 @@
+{
+  "ok_a3": true,
+  "ok_a4": true,
+  "runtimeExceptions": [],
+  "consoleErrors": [],
+  "a3": {
+    "elapsedMs": 1138,
+    "budgetMs": 30000,
+    "ok": true,
+    "steps": [
+      {
+        "name": "p02 切「密封管 R」页签 → 点 R1/16 行 → p03",
+        "ms": 93,
+        "ok": true
+      },
+      {
+        "name": "p03 断言基面值 d₂=7.142 / d₁=6.561 + 「基准平面」标注",
+        "ms": 2,
+        "ok": true,
+        "values": {
+          "d2": "7.142",
+          "d1": "6.561"
+        }
+      },
+      {
+        "name": "回 p02 切「蜗杆」→ 点 m2 行 → p03",
+        "ms": 27,
+        "ok": true
+      },
+      {
+        "name": "p03 断言蜗杆 px=6.283 / h₁=4.4 / 无三针卡",
+        "ms": 2,
+        "ok": true,
+        "values": {
+          "px": "6.283",
+          "h1": "4.400"
+        }
+      },
+      {
+        "name": "p04 带 M30×3.5 → 切 GSK → 988TA 默认两行（mm 小数）",
+        "ms": 27,
+        "ok": true,
+        "lines": [
+          "G76 P021060 Q0.1 R0.05",
+          "G76 X26.211 Z-30. P1.894 Q0.4 F3.5"
+        ]
+      },
+      {
+        "name": "切 980TDc → 增量两行（Q1000 / P18944 Q4000）",
+        "ms": 4,
+        "ok": true,
+        "lines": [
+          "G76 P021060 Q1000 R0.05",
+          "G76 X26.211 Z-30. P18944 Q4000 F3.5"
+        ]
+      },
+      {
+        "name": "切 HNC + 直进循环 → G82 单行 + 分刀行注",
+        "ms": 180,
+        "ok": true,
+        "lines": [
+          "G82 X26.211 Z-30. I0 R0 E0 C1 P0 F3.5"
+        ]
+      },
+      {
+        "name": "p08 输入 Ø30 → 点 H7/g6 → 配合卡 +7 … +41 μm（clearance）",
+        "ms": 182,
+        "ok": true,
+        "fit": {
+          "head": "配合实算 Ø30 H7/g6",
+          "range": "+7 … +41"
+        },
+        "badge": "间隙"
+      },
+      {
+        "name": "v0.3 p04 锥管族 R1/16（L 缺省 9.6）→ FANUC 行2 逐字符 R-0.3 P581 Q200",
+        "ms": 8,
+        "ok": true,
+        "lines": [
+          "G76 P021060 Q100 R0.05",
+          "G76 X6.561 Z-9.6 R-0.3 P581 Q200 F0.907"
+        ]
+      },
+      {
+        "name": "v0.3 p04 锥管切 KND → R-300 整数μ（0.001mm 口径）",
+        "ms": 8,
+        "ok": true,
+        "lines": [
+          "G76 P021060 Q100 R50",
+          "G76 X6.561 Z-9.6 R-300 P581 Q200 F0.907"
+        ]
+      },
+      {
+        "name": "v0.3 p08 Ø600 → H7/g6 → >500 段配合卡 +22 … +136（W10-A 解锁）",
+        "ms": 171,
+        "ok": true,
+        "fit": {
+          "head": "配合实算 Ø600 H7/g6",
+          "range": "+22 … +136"
+        }
+      },
+      {
+        "name": "v0.3 p15 宏程序库 → 四模板 chip + 椭圆宏行（W11-A）",
+        "ms": 15,
+        "ok": true,
+        "lines": 15
+      },
+      {
+        "name": "v0.3 p16 挂轮 → 默认 8 行 + top1 精确；URL ?p=3.175&t=12 → top1 20/55 / 455.52 ppm（W11-B）",
+        "ms": 326,
+        "ok": true,
+        "imperialTop1": "20/55 × 40/550.264463455.52"
+      }
+    ]
+  },
+  "a4": {
+    "shots": [
+      {
+        "name": "p04-taper-fanuc",
+        "hash": "#/p04?family=sealpipe&spec=R1%2F16&d=7.723&p=0.9071428571428571"
+      },
+      {
+        "name": "p04-taper-knd",
+        "hash": "#/p04?family=sealpipe&spec=R1%2F16&d=7.723&p=0.9071428571428571&system=knd"
+      },
+      {
+        "name": "p08-fit-600",
+        "hash": "#/p08"
+      },
+      {
+        "name": "p15-macro-ellipse",
+        "hash": "#/p15?tpl=ellipse"
+      },
+      {
+        "name": "p15-macro-oilslot",
+        "hash": "#/p15?tpl=oilslot"
+      },
+      {
+        "name": "p16-gear-default",
+        "hash": "#/p16"
+      },
+      {
+        "name": "p16-gear-imperial",
+        "hash": "#/p16?p=3.175&t=12"
+      }
+    ],
+    "ok": true
+  },
+  "ok_all": true
+}

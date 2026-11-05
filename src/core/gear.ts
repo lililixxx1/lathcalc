@@ -14,11 +14,12 @@ import type { GearTrainFn, GearTrainInput, GearTrainSolution } from './types';
 /** 结果条数（V4.1 §3：排序后取前 8）。 */
 const MAX_RESULTS = 8;
 
-/** 输入域校验：P/T > 0；齿数去重后 ≥4 且全部 > 0（集合去重排序由实现负责）。 */
+/** 输入域校验：P/T > 0；齿数去重后 ≥4、全部 > 0 且为整数（齿轮无半齿；集合去重排序由实现负责）。 */
 function normalizeTeeth(availableTeeth: readonly number[]): number[] {
   for (const tooth of availableTeeth) {
-    if (!Number.isFinite(tooth) || tooth <= 0) {
-      throw new Error('挂轮：齿数必须为正数（每个可用齿数须 > 0）');
+    // G2-W11 Minor-1：非整数齿数（如 20.5）不拦会产出小数齿挂轮组
+    if (!Number.isFinite(tooth) || tooth <= 0 || !Number.isInteger(tooth)) {
+      throw new Error('挂轮：齿数必须为正整数（每个可用齿数须 > 0 且为整数）');
     }
   }
   const teeth = [...new Set(availableTeeth)].sort((left, right) => left - right);

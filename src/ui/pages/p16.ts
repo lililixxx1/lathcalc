@@ -214,8 +214,11 @@ const page: PageModule = {
         teethError = error instanceof Error ? error.message : '自定义齿数解析失败';
       }
 
+      // G2-W11 Minor-2：默认预填五倍组须用户可见地明示「数学示例，非任何机床标配齿轮组」
       setInfo.textContent =
-        teethError === '' ? `已用齿数 ${teeth.length} 枚：${teeth.join(' ')}` : teethError;
+        teethError === ''
+          ? `已用齿数 ${teeth.length} 枚：${teeth.join(' ')}${teeth.join(' ') === DEFAULT_TEETH ? '（数学示例集合，非任何机床标配齿轮组）' : ''}`
+          : teethError;
 
       resultsWrap.replaceChildren(resultLabel);
       if (!pValid || !tValid) {

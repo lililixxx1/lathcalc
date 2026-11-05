@@ -129,11 +129,11 @@ describe('p15 宏程序库 · 四模板', () => {
   it('参数域报错：a=0 → 显示含「参数」错误并撤下程序卡；恢复后重新生成', async () => {
     await router.navigate('p15');
     const input = page().querySelector<HTMLInputElement>('.rc-input__field[name="a"]');
-    if (!input) throw new Error('长半轴 a 输入框未渲染');
+    if (!input) throw new Error('X 半轴 a 输入框未渲染');
 
     input.value = '0';
     input.dispatchEvent(new Event('input', { bubbles: true }));
-    // 0 < min=1 → core 抛「参数「长半轴 a」超出范围 1–500mm」
+    // 0 < min=1 → core 抛「参数「X 半轴 a」超出范围 1–500mm」（W12 A4-W4a 轴命名）
     expect(page().querySelector('.rc-p15__error')?.textContent).toContain('参数');
     expect(page().querySelector('.rc-codecard')).toBeNull();
 

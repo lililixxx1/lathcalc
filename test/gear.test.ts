@@ -151,6 +151,12 @@ describe('gear 挂轮计算（W11-B 实现）', () => {
     ).toThrow(/挂轮/);
   });
 
+  it('域校验：非整数齿数（如 20.5）→ throw（G2-W11 Minor-1：齿轮无半齿）', () => {
+    expect(() =>
+      solveGearTrain({ workpiecePitch: 1.5, leadscrewPitch: 6, availableTeeth: [20.5, 20, 40, 60] }),
+    ).toThrow('挂轮：齿数必须为正整数（每个可用齿数须 > 0 且为整数）');
+  });
+
   it('重复齿数去重后 ≥4：正常穷举（去重由实现负责）', () => {
     const solutions = solveGearTrain({
       workpiecePitch: 1.5,

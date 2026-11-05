@@ -157,6 +157,9 @@ const CSS = `
 .rc-p04__controls { display: flex; flex-direction: column; gap: 9px; flex: 0 0 auto; }
 /* 六格参数在 390px 下保持单行（设计稿 3 列紧凑排布） */
 .rc-p04__body .rc-param { padding: 7px 8px; gap: 4px; }
+/* W12 A4-W6：组件值格 overflow-wrap:anywhere 会在 KND 口径注（0.001mm）内部断词，
+   p04 域内回落标准折行（全角括号前后可断、0.001mm 整词不断） */
+.rc-p04__body .rc-param__value { overflow-wrap: normal; }
 `;
 
 function readFamily(value: string | null): RouteFamily | null {
