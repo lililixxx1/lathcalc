@@ -1,0 +1,54 @@
+$ FORCE_COLOR=0 CI=1 npx vitest run --maxWorkers=2
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m<TREE>[39m
+
+ [32m✓[39m test/ui-p02.test.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 1023[2mms[22m[39m
+   [33m[2m✓[22m[39m p02 结构保真与四族列表[2m > [22m顶栏 / 四族页签 / 搜索 / 筛选 / 说明逐块存在 [33m 314[2mms[22m[39m
+ [32m✓[39m test/ui-p01.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 1225[2mms[22m[39m
+   [33m[2m✓[22m[39m p01 导航[2m > [22m10 个入口分别导航到 p02/p04/p05/p07/p08/p09/p10/p11/p12/p13 [33m 642[2mms[22m[39m
+ [32m✓[39m test/ui-p06.test.ts [2m([22m[2m10 tests[22m[2m)[22m[33m 336[2mms[22m[39m
+ [32m✓[39m test/ui-p04.test.ts [2m([22m[2m22 tests[22m[2m)[22m[33m 477[2mms[22m[39m
+ [32m✓[39m test/ui-p03.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 270[2mms[22m[39m
+ [32m✓[39m test/ui-p05.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 290[2mms[22m[39m
+ [32m✓[39m test/ui-router.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 272[2mms[22m[39m
+ [32m✓[39m test/ui-p12.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 257[2mms[22m[39m
+ [32m✓[39m test/ui-p08.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 185[2mms[22m[39m
+ [32m✓[39m test/ui-p07.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 212[2mms[22m[39m
+ [32m✓[39m test/ui-p13.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 127[2mms[22m[39m
+ [32m✓[39m test/ui-p09.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 164[2mms[22m[39m
+ [32m✓[39m test/ui-p14.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 170[2mms[22m[39m
+ [32m✓[39m test/ui-p11.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 202[2mms[22m[39m
+ [32m✓[39m test/ui-p10.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 138[2mms[22m[39m
+ [32m✓[39m test/ui-components.test.ts [2m([22m[2m26 tests[22m[2m)[22m[32m 49[2mms[22m[39m
+ [32m✓[39m test/ui-source.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 517[2mms[22m[39m
+   [33m[2m✓[22m[39m UI 源码契约[2m > [22m14 页 loader 在无 DOM 环境均可解析，且模块含 title/render [33m 499[2mms[22m[39m
+ [32m✓[39m test/ui-store.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m test/data-it.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m test/data-gcode-ref.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m test/arc-cases-b.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m test/data-metric.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m test/data-unified.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m test/triangle.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m test/data-materials.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m test/data-pipe.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m test/gcode.test.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m test/data-fundamental-deviations.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m test/taper.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m test/fit-tolerance.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m test/data-trapezoid.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m test/arc-cases-a.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m test/thread.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m test/data-morse.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m test/speed.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m test/tolerance.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m test/lookup.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m test/data-densities.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m test/weight.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m test/arc.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 2[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m40 passed[39m[22m[90m (40)[39m
+[2m      Tests [22m [1m[32m407 passed[39m[22m[90m (407)[39m
+[2m   Start at [22m 08:49:08
+[2m   Duration [22m 15.89s[2m (transform 960ms, setup 0ms, collect 1.27s, tests 6.07s, environment 10.25s, prepare 4.95s)[22m
+
+REAL_EXIT=0
