@@ -1,0 +1,46 @@
+{
+  "ok": true,
+  "ms": 1428,
+  "budgetMs": 30000,
+  "shots": [
+    "p06-ac01-annot-390x844",
+    "p06-ac05-annot-390x844",
+    "p06-ac06-annot-390x844",
+    "p06-ac12-annot-390x844"
+  ],
+  "labelChecks": [
+    {
+      "id": "AC01",
+      "labels": [
+        "R",
+        "α",
+        "Ø"
+      ]
+    },
+    {
+      "id": "AC05",
+      "labels": [
+        "R",
+        "stepX",
+        "stepZ"
+      ]
+    },
+    {
+      "id": "AC06",
+      "labels": [
+        "R",
+        "dX",
+        "dZ"
+      ]
+    },
+    {
+      "id": "AC12",
+      "labels": [
+        "R",
+        "孔径"
+      ]
+    }
+  ],
+  "exceptions": 0,
+  "consoleErrors": 0
+}

@@ -7,6 +7,8 @@
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createRouter, type Router } from '../src/ui/router';
+import { arcCaseGraphic } from '../src/ui/pages/p05';
+import type { ArcCaseId } from '../src/core/types';
 
 let app: HTMLElement;
 let router: Router;
@@ -122,5 +124,70 @@ describe('p05 工况图库', () => {
     p05Page()?.querySelector<HTMLElement>('.rc-topbar__back')?.click();
     await vi.waitFor(() => expect(router.current()).toBe('p01'));
     expect(app.querySelector('.la-page[data-page="p01"]')).not.toBeNull();
+  });
+});
+
+/**
+ * v0.3.1 · WAVE-PLAN-V4.2 §3 冻结标注表（用户反馈「图形没有标注」）：
+ * hero 变体 = 圆心灰点 + 圆心↔橙点虚线 + 尺寸线 + 符号文字；thumb 维持纯线稿。
+ * 文字为符号不带数值（设计稿 mock 数值维持不采用）。
+ */
+const HERO_LABELS: Record<ArcCaseId, readonly string[]> = {
+  AC01: ['R', 'α', 'Ø'],
+  AC02: ['R1', 'R2', 'dZ'],
+  AC03: ['R1', 'R2', 'dZ'],
+  AC04: ['R1', 'R2', 'α', 'L'],
+  AC05: ['R', 'stepX', 'stepZ'],
+  AC06: ['R', 'dX', 'dZ'],
+  AC07: ['R', 'dX', 'dZ'],
+  AC08: ['R', 'dZ'],
+  AC09: ['R', 'α'],
+  AC10: ['R', 'lead'],
+  AC11: ['R'],
+  AC12: ['R', '孔径'],
+};
+
+describe('p05 hero 标注层（v0.3.1 · V4.2）', () => {
+  it('12/12 案 hero：文字键集 = §3 冻结表，含圆心灰点与虚线半径', () => {
+    for (const entry of CASES) {
+      const id = entry.id as ArcCaseId;
+      const svg = arcCaseGraphic(id, 'hero');
+      const container = document.createElement('div');
+      container.innerHTML = svg;
+      const el = container.querySelector('svg');
+      expect(el, id).not.toBeNull();
+
+      const texts = Array.from(el?.querySelectorAll('text') ?? []).map((node) => node.textContent);
+      expect(texts, id).toEqual([...HERO_LABELS[id]]);
+
+      // 圆心灰点（token 色）与虚线半径（dasharray）齐备
+      expect(el?.querySelector('circle[fill="var(--la-sub)"]'), id).not.toBeNull();
+      expect(svg, id).toContain('stroke-dasharray="1.6 1.2"');
+    }
+  });
+
+  it('thumb 回归：纯线稿零 text、零虚线（64×34 放不下标注，锚点行在卡上）', () => {
+    for (const entry of CASES) {
+      const svg = arcCaseGraphic(entry.id as ArcCaseId);
+      expect(svg, entry.id).not.toContain('<text');
+      expect(svg, entry.id).not.toContain('stroke-dasharray');
+      expect(svg, entry.id).not.toContain('var(--la-sub)');
+    }
+  });
+
+  it('hero 色值契约：零内联十六进制，全部 var()/currentColor/none（契约 §4.2）', () => {
+    for (const entry of CASES) {
+      const svg = arcCaseGraphic(entry.id as ArcCaseId, 'hero');
+      expect(svg, entry.id).not.toMatch(/#[0-9a-fA-F]{3,8}\b/);
+    }
+  });
+
+  it('p06 集成：hero 大图带标注文字入页（AC01 图上可见 R/α/Ø）', async () => {
+    await router.navigate('p06', { case: 'AC01' });
+    const p06 = app.querySelector<HTMLElement>('.la-page[data-page="p06"]');
+    const texts = Array.from(p06?.querySelectorAll('.rc-p06__diagram svg text') ?? []).map(
+      (node) => node.textContent,
+    );
+    expect(texts).toEqual(['R', 'α', 'Ø']);
   });
 });

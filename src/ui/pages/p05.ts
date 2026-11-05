@@ -14,6 +14,9 @@
  *
  * 视觉：缩略示意图 1:1 取自设计稿 p05（64×34 viewBox）；设计稿十六进制色值
  * 替换为 currentColor / var(--la-accent)（契约 §4.2 / ui-source 扫描要求）。
+ * v0.3.1（WAVE-PLAN-V4.2，用户反馈「图形没有标注」）：hero 变体增标注层
+ * （圆心/虚线半径/尺寸线/符号文字，坐标表 §3 冻结）——推翻 W4-C3-03 的几何半；
+ * mock 数值标注维持不采用（示例值几何不可能，见 DEVIATIONS G0 阻塞 1）。
  */
 import { arcCasesA } from '../../core/arc-cases-a';
 import { arcCasesB } from '../../core/arc-cases-b';
@@ -40,6 +43,184 @@ const CSS = `
 
 /** 12 工况（顺序 = 设计稿 p05 图库顺序 AC01 → AC12） */
 const ARC_CASES: readonly ArcCaseSolver[] = [...arcCasesA, ...arcCasesB];
+
+/**
+ * hero 标注层（v0.3.1，WAVE-PLAN-V4.2 §3 冻结坐标表；thumb 不标注）。
+ * 圆心坐标由 GRAPHICS 弧参数解析导出（AC02/03/11 为 circle 显式）；
+ * 虚线 = 圆心↔既有橙点；文字为符号（R/R1/α/dZ…）不带数值——
+ * 设计稿 mock 数值标注维持不采用（W4-C3-03 数值半维持、几何半推翻）。
+ */
+interface AnnoSpec {
+  /** 灰色圆心点 */
+  centers?: readonly (readonly [number, number])[];
+  /** 虚线（d 属性） */
+  dashes?: readonly string[];
+  /** 细实线尺寸线（d 属性） */
+  dims?: readonly string[];
+  /** 符号文字（文字, x, y=基线） */
+  labels?: readonly (readonly [string, number, number])[];
+}
+
+const ANNOTATIONS: Record<ArcCaseId, AnnoSpec> = {
+  AC01: {
+    centers: [[31, 12]],
+    dashes: ['M31 12V25'],
+    dims: ['M57 12V25', 'M55.7 12H58.3', 'M55.7 25H58.3'],
+    labels: [
+      ['R', 33.5, 19.5],
+      ['α', 46, 16.5],
+      ['Ø', 58.8, 19.5],
+    ],
+  },
+  AC02: {
+    centers: [
+      [21, 17],
+      [43, 17],
+    ],
+    dashes: ['M21 17H43'],
+    dims: ['M21 31H43', 'M21 29.7V32.3', 'M43 29.7V32.3'],
+    labels: [
+      ['R1', 19.7, 23.5],
+      ['R2', 41.7, 21.5],
+      ['dZ', 30.3, 30.2],
+    ],
+  },
+  AC03: {
+    centers: [
+      [24, 17],
+      [41, 17],
+    ],
+    dashes: ['M24 17H41'],
+    dims: ['M24 31.2H41', 'M24 29.9V32.5', 'M41 29.9V32.5'],
+    labels: [
+      ['R1', 22.7, 23.5],
+      ['R2', 40.7, 21.5],
+      ['dZ', 30.3, 30.4],
+    ],
+  },
+  AC04: {
+    centers: [
+      [3, 21],
+      [37, 26],
+    ],
+    dashes: ['M3 21L26 18', 'M37 26L26 18'],
+    labels: [
+      ['R1', 6, 6.5],
+      ['R2', 43, 25.5],
+      ['α', 23, 11.5],
+      ['L', 28, 21.8],
+    ],
+  },
+  AC05: {
+    centers: [[23, 17]],
+    dashes: ['M23 17H32'],
+    dims: [
+      'M19.5 17V26',
+      'M18.2 17H20.8',
+      'M18.2 26H20.8',
+      'M21.5 27.8H33.5',
+      'M21.5 26.5V29.1',
+      'M33.5 26.5V29.1',
+    ],
+    labels: [
+      ['R', 26.5, 15.2],
+      ['stepX', 9, 22.5],
+      ['stepZ', 24, 31.8],
+    ],
+  },
+  AC06: {
+    centers: [[19, 11]],
+    dashes: ['M19 11H32'],
+    dims: [
+      'M19 28.2H32',
+      'M19 26.9V29.5',
+      'M32 26.9V29.5',
+      'M55 11V24',
+      'M53.7 11H56.3',
+      'M53.7 24H56.3',
+    ],
+    labels: [
+      ['R', 24, 9.2],
+      ['dX', 56.9, 18.5],
+      ['dZ', 24, 32.2],
+    ],
+  },
+  AC07: {
+    centers: [[23, 24]],
+    dashes: ['M23 24H36'],
+    dims: [
+      'M23 9.4H36',
+      'M23 8.1V10.7',
+      'M36 8.1V10.7',
+      'M20 11V24',
+      'M18.7 11H21.3',
+      'M18.7 24H21.3',
+    ],
+    labels: [
+      ['R', 29, 22.2],
+      ['dX', 13, 18.5],
+      ['dZ', 26.5, 8.2],
+    ],
+  },
+  AC08: {
+    centers: [[18, 18]],
+    dashes: ['M18 18H29'],
+    dims: ['M18 30.5H29', 'M18 29.2V31.8', 'M29 29.2V31.8'],
+    labels: [
+      ['R', 23.5, 16.2],
+      ['dZ', 31.5, 31],
+    ],
+  },
+  AC09: {
+    centers: [[30, 17]],
+    dashes: ['M30 17H40'],
+    labels: [
+      ['R', 34.5, 15.2],
+      ['α', 21, 13.5],
+    ],
+  },
+  AC10: {
+    centers: [[22, 24]],
+    dashes: ['M22 10V24'],
+    dims: ['M46.8 10V16', 'M45.5 10H48.1', 'M45.5 16H48.1'],
+    labels: [
+      ['R', 24.5, 13.8],
+      ['lead', 48.6, 13.8],
+    ],
+  },
+  AC11: {
+    centers: [[26, 17]],
+    dashes: ['M26 17H36'],
+    labels: [['R', 31, 15.2]],
+  },
+  AC12: {
+    centers: [[28, 18]],
+    dashes: ['M28 18H37'],
+    dims: ['M12 5.2H37', 'M12 3.9V6.5', 'M37 3.9V6.5'],
+    labels: [
+      ['R', 32, 16.2],
+      ['孔径', 20.5, 3.9],
+    ],
+  },
+};
+
+/** hero 标注层 SVG 片段（V4.2 §2 契约：全 token 色、无内联十六进制） */
+function annotationLayer(id: ArcCaseId): string {
+  const anno = ANNOTATIONS[id];
+  const centers = (anno.centers ?? [])
+    .map(([x, y]) => `<circle cx="${x}" cy="${y}" r="0.9" fill="var(--la-sub)" stroke="none"/>`)
+    .join('');
+  const dashes = (anno.dashes ?? [])
+    .map((d) => `<path d="${d}" stroke="var(--la-sub)" stroke-width="0.35" stroke-dasharray="1.6 1.2"/>`)
+    .join('');
+  const dims = (anno.dims ?? [])
+    .map((d) => `<path d="${d}" stroke="var(--la-sub)" stroke-width="0.3"/>`)
+    .join('');
+  const labels = (anno.labels ?? [])
+    .map(([text, x, y]) => `<text x="${x}" y="${y}" font-size="3.2" fill="var(--la-sub)" stroke="none">${text}</text>`)
+    .join('');
+  return centers + dashes + dims + labels;
+}
 
 interface GraphicSpec {
   /** 设计稿 p05 的 SVG path / circle 标记（受信内部字符串） */
@@ -107,7 +288,8 @@ export function arcCaseGraphic(id: ArcCaseId, variant: 'thumb' | 'hero' = 'thumb
   const pointRadius = hero ? 1 : 2.4;
   const width = hero ? 220 : 64;
   const height = hero ? 102 : 34;
-  return `<svg viewBox="0 0 64 34" width="${width}" height="${height}" fill="none" stroke="currentColor" stroke-width="${strokeWidth}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${graphic.paths}<circle cx="${graphic.point[0]}" cy="${graphic.point[1]}" r="${pointRadius}" fill="var(--la-accent)" stroke="none"/></svg>`;
+  const annotations = hero ? annotationLayer(id) : '';
+  return `<svg viewBox="0 0 64 34" width="${width}" height="${height}" fill="none" stroke="currentColor" stroke-width="${strokeWidth}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${annotations}${graphic.paths}<circle cx="${graphic.point[0]}" cy="${graphic.point[1]}" r="${pointRadius}" fill="var(--la-accent)" stroke="none"/></svg>`;
 }
 
 /** 图库磁贴：Tile compact + 名称/锚点参数两行（组合既有原子件，不新增组件）。 */
