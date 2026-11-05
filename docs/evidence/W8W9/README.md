@@ -8,7 +8,7 @@
 
 主仓根目录串行复跑，全部 exit 0：`npm run lint`（0 error）/ `npx tsc --noEmit`（0）/
 `npx vitest run --maxWorkers=2`（44 files / 477 tests）/ `npm run build`（PWA precache 39）。
-原始输出见 `runs/gate-*.txt`（W9 终跑）。
+原始输出见 `runs/gate-final.txt`（W9 终跑；build 段完整输出系 G3 Minor-2 处置后补齐）。
 
 ## A2 黄金用例
 
@@ -56,7 +56,7 @@ p04×3（GSK 988TA/980TDc/HNC G82）、p08×1（H7/g6 配合卡）、p13×2（�
 | 文件 | 内容 |
 | --- | --- |
 | `tools/verify-w8.mjs` | A3 链流 + A4 截图工装（CDP，Emulation 390×844@2x） |
-| `runs/verify-w8.json` | A3/A4 机器报告（ok_all / 565ms / 11 shots / 0 exceptions） |
+| `runs/verify-w8.json` | A3/A4 机器报告（ok_all / 566ms / 11 shots / 0 exceptions） |
 | `runs/*.png` ×11 | 390×844 @2x 截图 |
-| `runs/gate-*.txt` | W9 终跑四门禁原始输出 + REAL_EXIT |
+| `runs/gate-final.txt` | W9 终跑四门禁原始输出 + REAL_EXIT（build 段 G3 处置后全量） |
 | `runs/a4-verdict.md` | vision-reader 判定汇总 |

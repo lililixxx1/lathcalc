@@ -15,6 +15,58 @@ REAL_EXIT=0
 
 REAL_EXIT=0
 == gate 4/4: vite build ==
+（G3 Minor-2 处置：原档此段仅存末两行产物节选，precache 数值无对应原始行；
+以下为 G3 复跑核验后的完整输出，build exit 0 / precache 39 与原终跑一致）
+> lathcalc@0.2.1 build
+> vite build
+
+vite v7.3.7 building client environment for production...
+transforming...
+✓ 69 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/registerSW.js                    0.13 kB
+dist/manifest.webmanifest             0.35 kB
+dist/index.html                       0.71 kB │ gzip: 0.42 kB
+dist/assets/index-BLh4fxfH.css        1.15 kB │ gzip: 0.62 kB
+dist/assets/speed-CWlMox2k.js         0.29 kB │ gzip: 0.20 kB
+dist/assets/arc-BXF2nq1s.js           0.32 kB │ gzip: 0.25 kB
+dist/assets/lookup-zXJH-NWF.js        0.75 kB │ gzip: 0.37 kB
+dist/assets/CodeCard-hN6CdTZS.js      0.85 kB │ gzip: 0.45 kB
+dist/assets/WarnCard-0Lx4ueXA.js      0.89 kB │ gzip: 0.50 kB
+dist/assets/Button-CsEnSPil.js        0.95 kB │ gzip: 0.59 kB
+dist/assets/ParamGrid-D1ofsXGw.js     1.09 kB │ gzip: 0.56 kB
+dist/assets/thread-BchTwMa6.js        1.43 kB │ gzip: 0.69 kB
+dist/assets/InputRow-BKMVgcA9.js      1.62 kB │ gzip: 0.84 kB
+dist/assets/Card-aaTrv3UP.js          1.68 kB │ gzip: 0.67 kB
+dist/assets/Accordion-BYvxYenP.js     1.77 kB │ gzip: 0.97 kB
+dist/assets/StatBlock-BkOlVcVu.js     1.96 kB │ gzip: 0.68 kB
+dist/assets/ResultCard-C0uHzcqG.js    1.98 kB │ gzip: 0.93 kB
+dist/assets/Tile-CmjMfa3m.js          2.08 kB │ gzip: 0.91 kB
+dist/assets/ListRow-CnM6u8Ce.js       2.17 kB │ gzip: 0.94 kB
+dist/assets/SegChip-56icfUDH.js       2.43 kB │ gzip: 1.06 kB
+dist/assets/p01-Dp_TRVuR.js           3.12 kB │ gzip: 1.67 kB
+dist/assets/p03-CZylSt3b.js           6.24 kB │ gzip: 2.81 kB
+dist/assets/p02-DyznqAv5.js           6.35 kB │ gzip: 2.91 kB
+dist/assets/p11-CFvKUlb8.js           6.88 kB │ gzip: 2.87 kB
+dist/assets/p09-CYtTPXPG.js           7.35 kB │ gzip: 3.39 kB
+dist/assets/PageShell-BB8W3Keq.js     7.50 kB │ gzip: 2.73 kB
+dist/assets/p06-DTGAIRgk.js           8.16 kB │ gzip: 3.69 kB
+dist/assets/p10-Co0Pqv4F.js           8.20 kB │ gzip: 2.65 kB
+dist/assets/p13-upPxY7qR.js           8.32 kB │ gzip: 2.49 kB
+dist/assets/p04-DsF7Ncme.js           8.41 kB │ gzip: 3.47 kB
+dist/assets/p05-D0drVYZ9.js           8.54 kB │ gzip: 3.50 kB
+dist/assets/p08-1VneZccc.js           9.37 kB │ gzip: 3.85 kB
+dist/assets/p12-BknowRko.js           9.70 kB │ gzip: 4.02 kB
+dist/assets/p07-CjWsYltH.js           9.88 kB │ gzip: 3.84 kB
+dist/assets/p14-u2Se_IYD.js          11.34 kB │ gzip: 4.48 kB
+dist/assets/index-B7lZHnpw.js         11.48 kB │ gzip: 4.85 kB
+dist/assets/threads-worm-DzhMdKev.js  41.97 kB │ gzip: 2.94 kB
+✓ built in 431ms
+
+PWA v1.3.0
+mode      generateSW
+precache  39 entries (192.70 KiB)
 files generated
   dist/sw.js
   dist/workbox-9c191d2f.js
