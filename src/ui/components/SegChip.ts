@@ -71,6 +71,8 @@ export function Segmented(props: SegmentedProps): HTMLElement {
         other.classList.toggle('on', selected);
         other.setAttribute('aria-selected', selected ? 'true' : 'false');
       }
+      // 横滑页签（如 p02 七族）选中项可能停在视口外，滚入视口；非溢出场景 nearest 为 no-op（V3-A4-01）
+      button.scrollIntoView({ inline: 'nearest', block: 'nearest' });
       props.onChange?.(option.value);
     });
     buttons.push(button);

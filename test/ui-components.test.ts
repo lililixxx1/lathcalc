@@ -4,7 +4,7 @@
  *
  * 每个组件至少 1 例；断言打到 DOM 结构 / 类名 / 文本 / 事件行为（无恒真断言）。
  */
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
   Accordion,
   Badge,
@@ -136,11 +136,15 @@ describe('SegChip', () => {
     expect(items[0]?.getAttribute('aria-selected')).toBe('true');
     expect(items[1]?.getAttribute('aria-selected')).toBe('false');
 
-    items[1]?.click();
+    const target = items[1];
+    if (!target) throw new Error('页签项缺失');
+    const intoView = vi.spyOn(target, 'scrollIntoView'); // V3-A4-01：横滑页签选中项滚入视口
+    target.click();
     expect(changes).toEqual(['tr']);
     expect(items[1]?.classList.contains('on')).toBe(true);
     expect(items[0]?.classList.contains('on')).toBe(false);
     expect(items[1]?.getAttribute('aria-selected')).toBe('true');
+    expect(intoView).toHaveBeenCalledWith({ inline: 'nearest', block: 'nearest' });
 
     const small = Segmented({
       options: [{ value: 'it7', label: 'IT7' }],

@@ -143,6 +143,6 @@
 | `runs/03-vitest.txt` | `npx vitest run --maxWorkers=2` 原始输出 + `REAL_EXIT=0` |
 | `runs/04-build.txt` | `npm run build` 原始输出 + `REAL_EXIT=0` |
 | `runs/05-write-scope-diff.txt` | 基线 `b9f6b3a` 导出逐文件比对结果 |
-| `runs/06-diff-numstat.txt` | 4 个在单文件 added/deleted 行数 |
+| `runs/06-diff-numstat.txt` | 4 个在单文件 added/deleted 行数（附属性 diff 统计档，非验收命令档，无 REAL_EXIT——G2-W8 Minor-2 括注） |
 | `runs/07-env.txt` | Node / npm / tsc / vitest / eslint 版本 |
 | `recompute.mjs` | 双盲复算脚本（独立实现，可单独重跑） |

@@ -1,0 +1,127 @@
+{
+  "ok_a3": true,
+  "ok_a4": true,
+  "runtimeExceptions": [],
+  "consoleErrors": [],
+  "a3": {
+    "elapsedMs": 566,
+    "budgetMs": 30000,
+    "ok": true,
+    "steps": [
+      {
+        "name": "p02 切「密封管 R」页签 → 点 R1/16 行 → p03",
+        "ms": 94,
+        "ok": true
+      },
+      {
+        "name": "p03 断言基面值 d₂=7.142 / d₁=6.561 + 「基准平面」标注",
+        "ms": 2,
+        "ok": true,
+        "values": {
+          "d2": "7.142",
+          "d1": "6.561"
+        }
+      },
+      {
+        "name": "回 p02 切「蜗杆」→ 点 m2 行 → p03",
+        "ms": 18,
+        "ok": true
+      },
+      {
+        "name": "p03 断言蜗杆 px=6.283 / h₁=4.4 / 无三针卡",
+        "ms": 1,
+        "ok": true,
+        "values": {
+          "px": "6.283",
+          "h1": "4.400"
+        }
+      },
+      {
+        "name": "p04 带 M30×3.5 → 切 GSK → 988TA 默认两行（mm 小数）",
+        "ms": 20,
+        "ok": true,
+        "lines": [
+          "G76 P021060 Q0.1 R0.05",
+          "G76 X26.211 Z-30. P1.894 Q0.4 F3.5"
+        ]
+      },
+      {
+        "name": "切 980TDc → 增量两行（Q1000 / P18944 Q4000）",
+        "ms": 2,
+        "ok": true,
+        "lines": [
+          "G76 P021060 Q1000 R0.05",
+          "G76 X26.211 Z-30. P18944 Q4000 F3.5"
+        ]
+      },
+      {
+        "name": "切 HNC + 直进循环 → G82 单行 + 分刀行注",
+        "ms": 162,
+        "ok": true,
+        "lines": [
+          "G82 X26.211 Z-30. I0 R0 E0 C1 P0 F3.5"
+        ]
+      },
+      {
+        "name": "p08 输入 Ø30 → 点 H7/g6 → 配合卡 +7 … +41 μm（clearance）",
+        "ms": 174,
+        "ok": true,
+        "fit": {
+          "head": "配合实算 Ø30 H7/g6",
+          "range": "+7 … +41"
+        },
+        "badge": "间隙"
+      }
+    ]
+  },
+  "a4": {
+    "shots": [
+      {
+        "name": "p02-seven-tabs",
+        "hash": "#/p02"
+      },
+      {
+        "name": "p02-sealpipe",
+        "hash": "#/p02"
+      },
+      {
+        "name": "p02-worm",
+        "hash": "#/p02"
+      },
+      {
+        "name": "p03-sealpipe-r116",
+        "hash": "#/p03?family=sealpipe&spec=R1%2F16&d=7.723&p=0.907"
+      },
+      {
+        "name": "p03-worm-m2",
+        "hash": "#/p03?family=worm&spec=m2&d=2&p=2"
+      },
+      {
+        "name": "p04-gsk-988ta",
+        "hash": "#/p04?family=metric&spec=M30%20%C3%97%203.5&d=30&p=3.5&system=gsk"
+      },
+      {
+        "name": "p04-gsk-980tdc",
+        "hash": "#/p04?family=metric&spec=M30%20%C3%97%203.5&d=30&p=3.5&system=gsk&gskmodel=980tdc"
+      },
+      {
+        "name": "p04-hnc-g82",
+        "hash": "#/p04?family=metric&spec=M30%20%C3%97%203.5&d=30&p=3.5&system=hnc&cycle=g92"
+      },
+      {
+        "name": "p08-fit-h7g6",
+        "hash": "#/p08"
+      },
+      {
+        "name": "p13-drill",
+        "hash": "#/p13"
+      },
+      {
+        "name": "p13-hardness",
+        "hash": "#/p13"
+      }
+    ],
+    "ok": true
+  },
+  "ok_all": true
+}

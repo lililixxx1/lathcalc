@@ -1,0 +1,21 @@
+== gate 1/4: eslint ==
+
+> lathcalc@0.2.1 lint
+> eslint .
+
+REAL_EXIT=0
+== gate 2/4: tsc --noEmit ==
+REAL_EXIT=0
+== gate 3/4: vitest run ==
+
+[2m Test Files [22m [1m[32m44 passed[39m[22m[90m (44)[39m
+[2m      Tests [22m [1m[32m477 passed[39m[22m[90m (477)[39m
+[2m   Start at [22m 09:55:48
+[2m   Duration [22m 13.15s[2m (transform 787ms, setup 0ms, collect 1.08s, tests 5.55s, environment 7.86s, prepare 3.97s)[22m
+
+REAL_EXIT=0
+== gate 4/4: vite build ==
+files generated
+  dist/sw.js
+  dist/workbox-9c191d2f.js
+REAL_EXIT=0

@@ -322,13 +322,14 @@ ensureBaseStyles()         // 基础样式 + #app 视口高度
 
 | 链路 | 键 | 含义 | 示例 |
 | --- | --- | --- | --- |
-| p02 → p03 | `family` | `metric` \| `trapezoid` \| `pipe` \| `unified`（自定义规格随当前族页签） | `metric` |
+| p02 → p03 | `family` | `metric` \| `trapezoid` \| `pipe` \| `unified` \| `sealpipe` \| `npt` \| `worm`（七族页签，W8-A；自定义规格随当前族页签） | `metric` |
 | | `spec` | 规格显示名；自定义规格形如 `自定义 Ø30×3.5`（W6-C3，V2-5：仅 d+P 不做 tpi） | `M30 × 3.5` |
 | | `d` | 大径 mm | `30` |
 | | `p` | 螺距 mm | `3.5` |
 | p03 → p04 | `family` `spec` `d` `p` | 同上四键原样带出；p04 用 core 重算 | 同上 |
-| | `system` | 数控系统 `fanuc` \| `gsk` \| `knd` \| `hnc`，默认 `fanuc`（W6-C2；禁用组合自动回落 fanuc） | `knd` |
-| | `cycle` | 循环形式 `g76` \| `g92`，默认 `g76`（W6-C2，V2-7） | `g92` |
+| | `system` | 数控系统 `fanuc` \| `gsk` \| `knd` \| `hnc`，默认 `fanuc`（W6-C2；W8-B 四系统 × 两形式全可用，原「禁用组合回落 fanuc」作废） | `knd` |
+| | `cycle` | 循环形式 `g76` \| `g92`，默认 `g76`（W6-C2，V2-7；`g92` 在 hnc 下生成 G82，W8-B/V3-4） | `g92` |
+| | `gskmodel` | GSK 型号 `988ta` \| `980tdc`，默认 `988ta`；仅 GSK + G76 形式出现型号页签，非法/缺省回落 `988ta`（防死状态，W8-B；W6-C2-04 先例） | `980tdc` |
 | p01 最近使用 → p03 等 | thread 同上四键；speed/weight/triangle 传各自原始输入键 | 动态历史 chip，kind→页：`thread→p03 / speed→p09 / weight→p11 / triangle→p12`（未知落 p14；W5 集成①，空历史回落静态示例） | `#/p03?family=metric&spec=M30+%C3%97+3.5&d=30&p=3.5` |
 | p01 → p09 | `d` `vc` `f` | 工件直径 mm / 线速度 m·min⁻¹ / 每转进给 mm（W6-C3；f>0 时显示 vf=f·n 实算卡） | `#/p09?d=50&vc=150&f=0.2` |
 | p01 → p07 | `mode` `morse` | `mode` = `calc`（默认）\| `morse`；`morse` = 0–6 | `#/p07?mode=morse&morse=4` |
