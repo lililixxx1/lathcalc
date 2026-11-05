@@ -31,6 +31,8 @@ export const PAGE_IDS = [
   'p12',
   'p13',
   'p14',
+  'p15',
+  'p16',
 ] as const;
 
 export type PageId = (typeof PAGE_IDS)[number];
@@ -105,6 +107,8 @@ export const PAGES: Readonly<Record<PageId, PageLoader>> = {
   p12: () => import('./pages/p12').then((module) => module.default),
   p13: () => import('./pages/p13').then((module) => module.default),
   p14: () => import('./pages/p14').then((module) => module.default),
+  p15: () => import('./pages/p15').then((module) => module.default),
+  p16: () => import('./pages/p16').then((module) => module.default),
 };
 
 const RC_ROUTER_CSS = `

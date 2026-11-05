@@ -23,6 +23,8 @@ const TILE_NAMES = [
   '重量',
   '三角',
   '速查',
+  '宏程序库',
+  '挂轮计算',
 ];
 
 const TILE_SUBS = [
@@ -36,6 +38,8 @@ const TILE_SUBS = [
   '圆钢 · 六方 · 管',
   '解三角形',
   'G 代码 · 钻头 · 硬度',
+  '椭圆 · 网纹 · 油槽 · 切槽',
+  '英制螺纹 · 误差 ppm',
 ];
 
 const TILE_TARGETS: PageId[] = [
@@ -126,7 +130,7 @@ describe('p01 结构保真', () => {
     expect(grid?.getAttribute('aria-label')).toBe('功能入口');
 
     const tiles = [...page.querySelectorAll<HTMLElement>('.la-grid2 .la-tile')];
-    expect(tiles).toHaveLength(10);
+    expect(tiles).toHaveLength(12);
     expect(tiles.map((tile) => tile.querySelector('.tname')?.textContent)).toEqual(TILE_NAMES);
     expect(tiles.map((tile) => tile.querySelector('.tsub')?.textContent)).toEqual(TILE_SUBS);
     for (const tile of tiles) expect(tile.querySelector('.ticon svg')).not.toBeNull();

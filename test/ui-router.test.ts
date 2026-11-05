@@ -2,7 +2,7 @@
 /**
  * W4-C1 · Hash 路由契约测试
  *
- * 覆盖：解析 / 生成、14 页可达、参数传递、清理回调逆序、非法路由回退、错误卡、stop 清空。
+ * 覆盖：解析 / 生成、16 页可达（W11 预置扩 p15/p16）、参数传递、清理回调逆序、非法路由回退、错误卡、stop 清空。
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
@@ -65,7 +65,7 @@ describe('createRouter', () => {
     expect(document.title).toBe('首页 · 车工算 LathCalc');
   });
 
-  it('可导航全部 14 页（占位页可达）', async () => {
+  it('可导航全部 16 页（占位页可达，p15/p16 为 W11 stub）', async () => {
     router = createRouter({ root: app });
     await router.start();
 
@@ -76,7 +76,7 @@ describe('createRouter', () => {
       expect(app.querySelector('.la-page')?.getAttribute('data-page')).toBe(pageId);
       expect(app.querySelector('.la-page')).not.toBeNull();
     }
-    expect(PAGE_IDS).toHaveLength(14);
+    expect(PAGE_IDS).toHaveLength(16); // W11 预置扩 p15/p16（V4.1 §1b）
   });
 
   // 占位页断言已按卡拆分至 test/placeholder-w4c2..c5.test.ts（Lead 转红拆分，2026-11-03）：

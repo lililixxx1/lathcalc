@@ -2,7 +2,7 @@
  * W4-C1 · UI 源码契约扫描（node 环境，无 DOM）
  *
  * 断言：无十六进制色值字面量、无硬编码字体栈、la- token 引用全部存在、
- * 七件必需组件齐套、14 页 loader 可在无 DOM 环境加载。
+ * 七件必需组件齐套、16 页 loader 可在无 DOM 环境加载（W11 预置扩 p15/p16）。
  */
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
@@ -107,9 +107,9 @@ describe('UI 源码契约', () => {
     }
   });
 
-  it('14 页 loader 在无 DOM 环境均可解析，且模块含 title/render', async () => {
-    expect(PAGE_IDS).toHaveLength(14);
-    expect(Object.keys(PAGES)).toHaveLength(14);
+  it('16 页 loader 在无 DOM 环境均可解析，且模块含 title/render', async () => {
+    expect(PAGE_IDS).toHaveLength(16); // W11 预置扩 p15/p16（V4.1 §1b）
+    expect(Object.keys(PAGES)).toHaveLength(16);
     for (const pageId of PAGE_IDS) {
       const module = await PAGES[pageId]();
       expect(module.title.length).toBeGreaterThan(0);

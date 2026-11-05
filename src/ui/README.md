@@ -42,7 +42,7 @@ src/ui/
     index.ts            barrel：页面统一从 '../components' 引入
   pages/
     p01.ts              首页（本卡完整实现）
-    p02.ts … p14.ts     占位骨架（各自卡填充）
+    p02.ts … p14.ts     占位骨架（各自卡填充）；p15/p16.ts stub（W11 契约预置）
 ```
 
 ### 1.1 组件范式（写死）
@@ -69,7 +69,7 @@ src/ui/
 #/<pageId>[?key=value&key2=value2]
 ```
 
-- 合法 `pageId` 仅 `p01`–`p14`（大小写敏感）。
+- 合法 `pageId` 仅 `p01`–`p16`（大小写敏感）。
 - 缺省 / 非法 hash → 回退 `p01`，启动时用 `history.replaceState` 规范化为 `#/p01`。
 - 参数值经 `URLSearchParams` 编解码；`navigate()` 自动编码。
 - 页面内读取：`ctx.params.get('d')`；数值字符串自行 `Number(...)` + 校验。
@@ -92,6 +92,8 @@ src/ui/
 | p12 | 三角 | `pages/p12.ts` | W4-C5 |
 | p13 | 速查 | `pages/p13.ts` | W4-C5 |
 | p14 | 收藏 · 历史 · 分享 | `pages/p14.ts` | W4-C5 |
+| p15 | 宏程序库 | `pages/p15.ts` | W11-A（stub 预置） |
+| p16 | 挂轮计算 | `pages/p16.ts` | W11-B（stub 预置） |
 
 注册表在 `router.ts` 的 `PAGES`；`PAGES[id]()` 动态 `import()`（构建按页分 chunk）。
 **C2–C5 不修改注册表**（页面 ID / 标题已冻结）。
@@ -106,7 +108,7 @@ export interface PageModule {
 
 export interface PageContext {
   root: HTMLElement;                 // 本页专用 .rc-route 节点
-  pageId: PageId;                    // 'p01' … 'p14'
+  pageId: PageId;                    // 'p01' … 'p16'
   params: URLSearchParams;           // hash 查询参数
   navigate(pageId, params?): Promise<void>;
   onCleanup(fn: () => void): void;   // 离开本页时逆序执行

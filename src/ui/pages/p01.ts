@@ -7,7 +7,7 @@
  *
  * 导航映射（冻结）：
  *   螺纹→p02 / G76→p04 / 圆弧切点→p05 / 锥度·莫氏→p07 / 公差→p08
- *   转速→p09 / 切削参数→p10 / 重量→p11 / 三角→p12 / 速查→p13 / 收藏→p14
+ *   转速→p09 / 切削参数→p10 / 重量→p11 / 三角→p12 / 速查→p13 / 宏程序→p15 / 挂轮→p16 / 收藏→p14
  */
 import type { PageContext, PageId, PageModule, PageParams } from '../router';
 import { listHistory } from '../store';
@@ -54,6 +54,8 @@ const HOME_ENTRIES: readonly HomeEntry[] = [
   { icon: 'weight', name: '重量', sub: '圆钢 · 六方 · 管', page: 'p11' },
   { icon: 'tri', name: '三角', sub: '解三角形', page: 'p12' },
   { icon: 'book', name: '速查', sub: 'G 代码 · 钻头 · 硬度', page: 'p13' },
+  { icon: 'gcode', name: '宏程序库', sub: '椭圆 · 网纹 · 油槽 · 切槽', page: 'p15' },
+  { icon: 'cutting', name: '挂轮计算', sub: '英制螺纹 · 误差 ppm', page: 'p16' },
 ];
 
 interface RecentEntry {

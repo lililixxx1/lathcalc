@@ -367,3 +367,60 @@ export interface GcodeRefRow {
   code: string;
   desc: string;
 }
+
+// ===== 宏程序库（WAVE-PLAN-V4 §3 / V4.1 §1a，W11-A 实现）=====
+export type MacroTemplateId = 'ellipse' | 'knurl' | 'oilslot' | 'groove';
+
+export interface MacroParamSpec {
+  /** 参数键（宏行内 #变量名映射由实现定） */
+  key: string;
+  /** 中文显示名 */
+  label: string;
+  /** 单位（mm / °） */
+  unit: string;
+  defaultValue: number;
+  min: number;
+  max: number;
+}
+
+/** 自研参数化宏（FANUC B 类宏变量语义，#1–#33 局部变量）；无外部数据依赖（PROVENANCE 披露口径：自研参数化模板） */
+export interface MacroTemplateSpec {
+  id: MacroTemplateId;
+  /** 中文名 */
+  name: string;
+  params: readonly MacroParamSpec[];
+  /** 参数说明+算式（可验，每条一句） */
+  notes: readonly string[];
+}
+
+/** lines = 宏程序行（WHILE/END 循环体，非展开点列）；disclaimer 复用 G76_DISCLAIMER（报告 §7.4 原句） */
+export type MacroBuildFn = (id: MacroTemplateId, input: Record<string, number>) => G76Program;
+
+// ===== 挂轮（WAVE-PLAN-V4 §3 / V4.1 §1a，W11-B 实现）=====
+export interface GearTrainInput {
+  /** 工件螺距/导程 mm */
+  workpiecePitch: number;
+  /** 机床丝杠导程 mm */
+  leadscrewPitch: number;
+  /** 可用齿轮齿数集合（升序去重，≥4 个） */
+  availableTeeth: number[];
+}
+
+export interface GearTrainSolution {
+  /** i = (a/b)×(c/d)，a/b 与 c/d 为两级齿轮副（同值齿数需两件齿轮，结果表下注说明） */
+  a: number;
+  b: number;
+  c: number;
+  d: number;
+  /** 实际传动比 = (a/b)×(c/d) */
+  ratio: number;
+  /** e = |i_target − ratio| / i_target × 10⁶（ppm） */
+  errorPpm: number;
+}
+
+/**
+ * 目标比 i_target = workpiecePitch / leadscrewPitch（工件转一转走 P，丝杠转一转走 T）。
+ * 返回按 (errorPpm 升序, a+b+c+d 升序, (a,b,c,d) 字典序) 排序的前 8 组；
+ * workpiecePitch/leadscrewPitch ≤ 0、齿数 <4 个、含 ≤0 齿数 → throw（不臆造）。
+ */
+export type GearTrainFn = (input: GearTrainInput) => GearTrainSolution[];
