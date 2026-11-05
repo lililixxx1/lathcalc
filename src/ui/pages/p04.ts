@@ -313,8 +313,9 @@ function codeComment(
   if (cycle === 'g76' && system === 'gsk') {
     parts.push(GSK_MODEL_COMMENT[gskModel]);
   }
-  // G0-v0.3 复核观察 1：FANUC G92 的 R 位系三系统同串先例外推，必须显式披露
-  if (taper && cycle === 'g92' && system !== 'hnc') {
+  // G0-v0.3 复核观察 1（G2-W10 Minor-3 作用域精确化）：仅 FANUC 的 G92 R 位系三系统
+  // 同串先例外推；GSK/KND 的 G92 R 格式系手册明载（g76-dialects.md §1 行2/行6，非外推）
+  if (taper && cycle === 'g92' && system === 'fanuc') {
     parts.push('FANUC R 位系 W6 三系统同串先例外推');
   }
   return parts.join(' · ');

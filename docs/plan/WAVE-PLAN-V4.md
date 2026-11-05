@@ -69,7 +69,7 @@ if (p.taperRadiusMM !== undefined && p.taperRadiusMM !== 0) {
   - 牙深 P（μm）：0.6403×0.9071428571=0.5808436→**581**（thread.ts:29 h1Factor；FANUC/KND μm=Math.round(mm×1000)，gcode.ts:36）
   - 锚点程序行（逐字符断言，Z=−9.6、taper=−9.6/32=**−0.3**、首刀测试输入 0.2→Q200）：
     - FANUC 行2：`G76 X6.561 Z-9.6 R-0.3 P581 Q200 F0.907`
-    - GSK 980TDc 行2：`G76 X6.561 Z-9.6 R-0.3 P5808 Q2000 F0.907`（P=round(0.5808436×10⁴)=5808，gcode.ts:60 先乘后舍；R 保持 mm）
+    - GSK 980TDc 行2：`G76 X6.561 Z-9.6 R-0.3 P5808 Q2000 F0.907`（P=round(0.5808436×10⁴)=5808，gcode.ts:79-81 toGskIncrement 先乘后舍；R 保持 mm——行号勘正系 G2-W10 Minor-1）
     - HNC G82：`G82 X6.561 Z-9.6 I-0.3 R0 E0 C1 P0 F0.907`
     - G92（FANUC/GSK/KND）：`G92 X6.561 Z-9.6 R-0.3 F0.907`
   - 数值纪律注：首刀 0.2 与 L=9.6 为**冻结测试输入**（非推导值；选 9.6 使 −L/32=−0.3 落三位小数内无舍入、避开 KND μm 半值边界 −312.5）；R1/16 各基值来源=threads-sealpipe.json row0 + thread.ts 常数

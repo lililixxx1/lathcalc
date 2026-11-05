@@ -235,6 +235,16 @@ describe('p08 公差配合', () => {
     expect(fitChip('k6').classList.contains('on')).toBe(false);
   });
 
+  it('>500 段成功路径（G2-W10 Minor-2）：Ø600 H7/g6 → 间隙卡（+22…+136）', async () => {
+    await router.navigate('p08', { d: 600 });
+    clickFitChip('g6');
+    // Ø600 落 (500,630]（W10-A 新八段）：IT7=70、IT6=44、g=−22 → ei=−22−44=−66。
+    // Xmin=0−(−22)=+22；Xmax=70−(−66)=+136。
+    // 来源：tolerance-it.json >500–630 行 + fundamental-deviations.json g 带值（GB/T 1800.3/ISO 286-1 双源）。
+    expect(fitValues()).toEqual(['+70', '0', '−22', '−66', '+22 … +136']);
+    expect(fitBadge()).toBe('间隙');
+  });
+
   it('配合卡随基本尺寸重算：Ø30 g6 → Ø100 g6（−12/−34、+12…+69）', async () => {
     await router.navigate('p08', { d: 30 });
     clickFitChip('g6');

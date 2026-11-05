@@ -636,13 +636,17 @@ describe('p04 锥管族 W10-C · R1/16 金值锚点', () => {
     );
   });
 
-  it('G92 锚点行：FANUC/GSK/KND 同串 + 「先例外推」披露句', async () => {
+  it('G92 锚点行：FANUC/GSK/KND 同串；外推披露句仅 FANUC（Minor-3 精确化）', async () => {
     for (const system of ['fanuc', 'gsk', 'knd'] as const) {
       await router.navigate('p04', { ...R116_PARAMS, system, cycle: 'g92' });
       expect(codeLines()).toEqual(['G92 X6.561 Z-9.6 R-0.3 F0.907']);
-      expect(page().querySelector('.rc-codecard__comment')?.textContent).toContain(
-        'FANUC R 位系 W6 三系统同串先例外推',
-      );
+      const comment = page().querySelector('.rc-codecard__comment')?.textContent ?? '';
+      if (system === 'fanuc') {
+        // 仅 FANUC 系先例外推；GSK/KND 的 G92 R 格式手册明载（g76-dialects.md §1 行2/行6）
+        expect(comment).toContain('FANUC R 位系 W6 三系统同串先例外推');
+      } else {
+        expect(comment).not.toContain('先例外推');
+      }
     }
   });
 
