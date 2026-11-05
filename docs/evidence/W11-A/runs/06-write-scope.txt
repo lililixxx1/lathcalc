@@ -1,0 +1,27 @@
+baseline=c138d76
+tracked_files=520
+allowed_changed=4
+changed_in_scope=4
+  M src/core/macro.ts
+  M src/ui/README.md
+  M src/ui/pages/p15.ts
+  M test/macro.test.ts
+changed_out_of_scope=0
+new_in_scope=13
+  A docs/evidence/W11-A/README.md
+  A docs/evidence/W11-A/audit-scope.mjs
+  A docs/evidence/W11-A/oilslot-research.md
+  A docs/evidence/W11-A/recompute.mjs
+  A docs/evidence/W11-A/runs/01-tsc.txt
+  A docs/evidence/W11-A/runs/02-lint.txt
+  A docs/evidence/W11-A/runs/03-vitest.txt
+  A docs/evidence/W11-A/runs/04-build.txt
+  A docs/evidence/W11-A/runs/05-recompute.txt
+  A docs/evidence/W11-A/runs/06-write-scope.txt
+  A docs/evidence/W11-A/runs/07-summary.txt
+  A docs/evidence/W11-A/summarize.mjs
+  A test/ui-p15.test.ts
+new_out_of_scope=0
+missing_in_tree=0
+VERDICT=PASS（changed_in_scope=4/4；new_in_scope=13；越界改动=0；越界新增=0；缺失=0）
+REAL_EXIT=0

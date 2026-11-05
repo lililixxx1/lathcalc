@@ -1,0 +1,13 @@
+baseline=c138d76
+tracked_files=520
+allowed_changed=4
+changed_in_scope=4
+  M src/core/gear.ts
+  M src/ui/README.md
+  M src/ui/pages/p16.ts
+  M test/gear.test.ts
+changed_out_of_scope=0
+new_files_out_of_scope=0
+missing_in_tree=0
+VERDICT=PASS
+REAL_EXIT=0

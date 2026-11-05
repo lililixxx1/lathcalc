@@ -1,0 +1,16 @@
+| 证据档 | REAL_EXIT / VERDICT |
+| --- | --- |
+| 01-tsc.txt | REAL_EXIT=0 |
+| 02-lint.txt | REAL_EXIT=0 |
+| 03-vitest.txt | REAL_EXIT=0 |
+| 04-build.txt | REAL_EXIT=0 |
+| 05-gear-test.txt | REAL_EXIT=0 |
+| 06-ui-p16-test.txt | REAL_EXIT=0 |
+| 07-recompute.txt | REAL_EXIT=0 / VERDICT=PASS (8/8 断言) |
+| 08-write-scope.txt | REAL_EXIT=0 / VERDICT=PASS |
+
+VITEST=47 files / 524 tests
+RECOMPUTE=PASS
+WRITE_SCOPE=PASS
+VERDICT=PASS（四门禁 REAL_EXIT 全 0 = true；锚点复算 = PASS；写范围 = PASS）
+REAL_EXIT=0

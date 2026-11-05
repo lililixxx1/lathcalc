@@ -1424,3 +1424,13 @@ Autodesk Fusion ISO Metric Trapezoidal 表校核`，与基线 41 行的 DIN 103 
 ## 3. 复跑方式
 
 `npx vitest run --maxWorkers=2 test/data-trapezoid.test.ts`
+
+---
+
+## 宏程序库 macro.ts（W11-A，2026-11-05）
+
+自研参数化模板（无外部数据依赖）：`src/core/macro.ts` 四模板（椭圆/网纹/油槽/切槽）为
+参数化生成，无标准表 / 外部数据录入；椭圆锚点 a=15、b=25、Δt=15° 为 WAVE-PLAN-V4.1 §2
+算例输入。油槽模板检索未达多源一致门槛（唯一具体结构系同一文章转载），按计划冻结的
+自研正弦结构实现并披露「自研近似结构，非标准工艺文件」——检索记录见
+`docs/evidence/W11-A/oilslot-research.md`。挂轮（W11-B）无数据录入（B 出口零数据依赖）。

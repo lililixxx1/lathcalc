@@ -42,7 +42,7 @@ src/ui/
     index.ts            barrel：页面统一从 '../components' 引入
   pages/
     p01.ts              首页（本卡完整实现）
-    p02.ts … p14.ts     占位骨架（各自卡填充）；p15/p16.ts stub（W11 契约预置）
+    p02.ts … p16.ts     各自卡填充（p15/p16 由 W11 契约预置 stub 起步）
 ```
 
 ### 1.1 组件范式（写死）
@@ -92,8 +92,8 @@ src/ui/
 | p12 | 三角 | `pages/p12.ts` | W4-C5 |
 | p13 | 速查 | `pages/p13.ts` | W4-C5 |
 | p14 | 收藏 · 历史 · 分享 | `pages/p14.ts` | W4-C5 |
-| p15 | 宏程序库 | `pages/p15.ts` | W11-A（stub 预置） |
-| p16 | 挂轮计算 | `pages/p16.ts` | W11-B（stub 预置） |
+| p15 | 宏程序库 | `pages/p15.ts` | W11-A（已完成） |
+| p16 | 挂轮计算 | `pages/p16.ts` | W11-B（已完成） |
 
 注册表在 `router.ts` 的 `PAGES`；`PAGES[id]()` 动态 `import()`（构建按页分 chunk）。
 **C2–C5 不修改注册表**（页面 ID / 标题已冻结）。
@@ -341,6 +341,8 @@ ensureBaseStyles()         // 基础样式 + #app 视口高度
 | p08 公差直达 | `d` `grade` | 公称直径 mm / 精度等级号（v0.1 W4-C4 实现，W6 波末补登） | `#/p08?d=30&grade=7` |
 | p01 → p04 | （无） | G76 首页直达；p04 容忍空参数降级为「请先选型」+ 引导按钮回 p02（W6-C2 维持 W4-C2 冻结行为；带参时见上 `system`/`cycle`） | `#/p04` |
 | p05 → p06 | `case` | 工况号 `AC01`–`AC12`（W4-C3 冻结；非法值由 p06 选择器兜底） | `#/p06?case=AC01` |
+| p15 模板直达 | `tpl` | 宏模板 `ellipse`（默认）\| `knurl` \| `oilslot` \| `groove`；缺省/非法回落 `ellipse`（W11-A；页面内切换不写回 hash） | `#/p15?tpl=ellipse` |
+| p16 挂轮直达 | `p` `t` | 工件螺距 P mm / 丝杠导程 T mm；缺省或非法回落 1.5 / 6（W11-B，V4.1 §3） | `#/p16?p=3.175&t=12` |
 
 推荐调用：
 

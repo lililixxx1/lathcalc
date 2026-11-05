@@ -1,0 +1,30 @@
+ellipse(a=15,b=25,t=15°): X=28.97777478867205 → 28.978; Z=6.4704761275630185 → 6.470
+[PASS] ellipse X(t=15°) to 3dp: actual=28.978 expected=28.978
+[PASS] ellipse Z(t=15°) to 3dp: actual=6.470 expected=6.470
+[PASS] ellipse X(t=0°): actual=30 expected=30
+[PASS] ellipse Z(t=0°): actual=0 expected=0
+[PASS] ellipse closure X(t=360°): actual=30 expected=30
+[PASS] ellipse closure Z(t=360°): actual=-6.123233995736766e-15 expected=0
+groove layers: ⌈2/0.5⌉ = 4
+[PASS] groove layers: actual=4 expected=4
+groove Z positions: 0, -2.5, -5, -7 (span=7, step=2.5, W=10, toolW=3, overlap=0.5)
+[PASS] groove step = toolW − overlap: actual=2.5 expected=2.5
+[PASS] groove last position = z0 − (W − toolW): actual=-7 expected=-7
+[PASS] groove coverage end = last − toolW = z0 − W: actual=-10 expected=-10
+[PASS] groove position count = ⌈span/step⌉ + 1: actual=4 expected=4
+[PASS] groove adjacent overlap = toolW − step: actual=0.5 expected=0.5
+knurl layers: ⌈0.6/0.2⌉ = 3; X=49.8, 49.599999999999994, 49.4
+[PASS] knurl layers: actual=3 expected=3
+[PASS] knurl layer count from path: actual=3 expected=3
+[PASS] knurl last X = D − H: actual=49.4 expected=49.4
+[PASS] knurl first X = D − ΔX: actual=49.8 expected=49.8
+oilslot phase diff: 360×(20/2)/20 = 180°
+[PASS] oilslot phase diff: actual=180 expected=180
+  Z=0: base X=40.000, shifted X=40.000
+  Z=5: base X=43.000, shifted X=37.000
+  Z=10: base X=40.000, shifted X=40.000
+[PASS] oilslot shifted = 2X0 − base at Z=P/4: actual=37 expected=37
+
+RESULT: 18/18 checks passed
+VERDICT=PASS
+REAL_EXIT=0
