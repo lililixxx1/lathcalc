@@ -1,0 +1,5 @@
+GATE lint | npm run lint | REAL_EXIT=0 | PASS
+GATE tsc | npx tsc --noEmit | REAL_EXIT=0 | PASS
+GATE vitest | npx vitest run --maxWorkers=2 | REAL_EXIT=0 | PASS
+GATE build | npm run build | REAL_EXIT=0 | PASS
+JUDGMENT | ALL GATES PASS (exit 0)

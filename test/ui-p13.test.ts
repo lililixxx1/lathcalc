@@ -1,10 +1,12 @@
 // @vitest-environment happy-dom
 /**
- * W4-C5 · p13 速查页测试
+ * W4-C5 · p13 速查页测试（W8-D 扩展钻头 / 硬度页签）
  *
  * 设计稿区块：5 项分类分段 / G 代码列表卡 10 行 / 底部说明。
  * 数据锚：src/data/gcode-ref.json（10 行）经 core/lookup.gcodeRef 排序后原样展示；
  * G76 行 desc 的「仅 FANUC；GSK/KND/华中待补」注记必须逐字可见。
+ * W8-D：钻头页签 25 行（M1.6–M48），硬度页签 10 行（HRC 20–65 步进 5）；
+ * 两页签行内点按复制对齐 G 代码页签；螺纹 / 莫氏引导空态保持 W4-C5 冻结文案。
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createRouter, type Router } from '../src/ui/router';
@@ -25,6 +27,16 @@ function page(): HTMLElement {
 
 function rows(): HTMLElement[] {
   return [...page().querySelectorAll<HTMLElement>('.rc-p13__list .la-lrow')];
+}
+
+function rowNames(): string[] {
+  return rows().map(
+    (row) => row.querySelector('.rc-lrow__name, .rc-lrow__mono')?.textContent ?? '',
+  );
+}
+
+function rowValues(): string[] {
+  return rows().map((row) => row.querySelector('.rc-lrow__value')?.textContent ?? '');
 }
 
 function clickSeg(label: string): void {
@@ -108,10 +120,81 @@ describe('p13 复制与分类切换', () => {
     expect(rows()).toHaveLength(10);
   });
 
-  it('钻头 / 硬度空态文案不含伪造数值', () => {
+  it('钻头 / 硬度页签渲染数据表（原空态文案移除）', () => {
     clickSeg('钻头');
-    expect(page().querySelector('.rc-p13__list')?.textContent).toContain('钻头分类暂无数据');
+    expect(rows()).toHaveLength(25);
+    const drillText = page().querySelector('.rc-p13__list')?.textContent ?? '';
+    expect(drillText).not.toContain('钻头分类暂无数据');
+    expect(drillText).not.toContain('暂无数据');
+
     clickSeg('硬度');
-    expect(page().querySelector('.rc-p13__list')?.textContent).toContain('硬度换算暂无数据');
+    expect(rows()).toHaveLength(10);
+    const hardnessText = page().querySelector('.rc-p13__list')?.textContent ?? '';
+    expect(hardnessText).not.toContain('硬度换算暂无数据');
+    expect(hardnessText).not.toContain('暂无数据');
+  });
+
+  it('钻头页签：首末行 designation 与三锚点钻头值', () => {
+    clickSeg('钻头');
+    const names = rowNames();
+    expect(names[0]).toBe('M1.6×0.35');
+    expect(names[names.length - 1]).toBe('M48×5.0');
+    const values = rowValues();
+    expect(values).toHaveLength(25);
+    expect(names[values.indexOf('5.0')]).toBe('M6×1.0');
+    expect(names[values.indexOf('8.5')]).toBe('M10×1.5');
+    expect(names[values.indexOf('10.2')]).toBe('M12×1.75');
+    expect(page().querySelector('.rc-p13__foot')?.textContent).toBe('点按复制代码 · 内容持续补充');
+  });
+
+  it('硬度页签：首末行 HRC 与固定近似对照脚注', () => {
+    clickSeg('硬度');
+    const names = rowNames();
+    expect(names[0]).toBe('HRC 20');
+    expect(names[names.length - 1]).toBe('HRC 65');
+    const values = rowValues();
+    expect(values[0]).toBe('HB 225 · HV 226');
+    expect(values[values.length - 1]).toBe('HB — · HV 822');
+    expect(page().querySelector('.rc-p13__foot')?.textContent).toBe(
+      '换算值为近似对照，以标准原表为准',
+    );
+  });
+
+  it('点按钻头行复制底孔直径（M6×1.0 → 5.0）', () => {
+    const writeText = vi.fn<(text: string) => Promise<void>>().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, 'clipboard', {
+      value: { writeText },
+      configurable: true,
+    });
+
+    clickSeg('钻头');
+    const m6 = rows().find((row) => row.querySelector('.rc-lrow__name')?.textContent === 'M6×1.0');
+    m6?.click();
+    expect(writeText).toHaveBeenCalledTimes(1);
+    expect(writeText).toHaveBeenCalledWith('5.0');
+  });
+
+  it('点按硬度行复制换算值（HRC 20 → HB 225 · HV 226）', () => {
+    const writeText = vi.fn<(text: string) => Promise<void>>().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, 'clipboard', {
+      value: { writeText },
+      configurable: true,
+    });
+
+    clickSeg('硬度');
+    const hrc20 = rows().find((row) => row.querySelector('.rc-lrow__name')?.textContent === 'HRC 20');
+    hrc20?.click();
+    expect(writeText).toHaveBeenCalledTimes(1);
+    expect(writeText).toHaveBeenCalledWith('HRC 20 · HB 225 · HV 226');
+  });
+
+  it('莫氏空态保持 W4-C5 冻结文案；切回 G 代码恢复 10 行', () => {
+    clickSeg('莫氏');
+    expect(rows()).toHaveLength(0);
+    expect(page().querySelector('.rc-p13__list')?.textContent).toContain(
+      '莫氏锥度请使用「锥度 · 莫氏」页查询',
+    );
+    clickSeg('G 代码');
+    expect(rows()).toHaveLength(10);
   });
 });

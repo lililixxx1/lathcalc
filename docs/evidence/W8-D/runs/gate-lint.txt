@@ -1,0 +1,9 @@
+COMMAND: npm run lint
+CWD: <TREE>
+--- RAW OUTPUT ---
+
+> lathcalc@0.2.0 lint
+> eslint .
+
+
+REAL_EXIT=0

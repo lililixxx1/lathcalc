@@ -1,0 +1,177 @@
+[
+  {
+    "designation": "M1.6×0.35",
+    "major": 1.6,
+    "pitch": 0.35,
+    "drill": 1.25,
+    "source": "GB/T 20330-2006 表1（粗牙，MOD ISO 2306:1972）；threadspec.org 核对"
+  },
+  {
+    "designation": "M2×0.4",
+    "major": 2,
+    "pitch": 0.4,
+    "drill": 1.6,
+    "source": "GB/T 20330-2006 表1（粗牙，MOD ISO 2306:1972）；threadspec.org 核对"
+  },
+  {
+    "designation": "M2.5×0.45",
+    "major": 2.5,
+    "pitch": 0.45,
+    "drill": 2.05,
+    "source": "GB/T 20330-2006 表1（粗牙，MOD ISO 2306:1972）；threadspec.org 核对"
+  },
+  {
+    "designation": "M3×0.5",
+    "major": 3,
+    "pitch": 0.5,
+    "drill": 2.5,
+    "source": "GB/T 20330-2006 表1（粗牙，MOD ISO 2306:1972）；threadspec.org 核对"
+  },
+  {
+    "designation": "M3.5×0.6",
+    "major": 3.5,
+    "pitch": 0.6,
+    "drill": 2.9,
+    "source": "GB/T 20330-2006 表1（粗牙，MOD ISO 2306:1972）；threadspec.org 核对"
+  },
+  {
+    "designation": "M4×0.7",
+    "major": 4,
+    "pitch": 0.7,
+    "drill": 3.3,
+    "source": "GB/T 20330-2006 表1（粗牙，MOD ISO 2306:1972）；threadspec.org 核对"
+  },
+  {
+    "designation": "M5×0.8",
+    "major": 5,
+    "pitch": 0.8,
+    "drill": 4.2,
+    "source": "GB/T 20330-2006 表1（粗牙，MOD ISO 2306:1972）；threadspec.org 核对"
+  },
+  {
+    "designation": "M6×1.0",
+    "major": 6,
+    "pitch": 1,
+    "drill": 5,
+    "source": "GB/T 20330-2006 表1（粗牙，MOD ISO 2306:1972）；threadspec.org 核对"
+  },
+  {
+    "designation": "M8×1.25",
+    "major": 8,
+    "pitch": 1.25,
+    "drill": 6.8,
+    "source": "GB/T 20330-2006 表1（粗牙，MOD ISO 2306:1972）；threadspec.org 核对"
+  },
+  {
+    "designation": "M10×1.5",
+    "major": 10,
+    "pitch": 1.5,
+    "drill": 8.5,
+    "source": "GB/T 20330-2006 表1（粗牙，MOD ISO 2306:1972）；threadspec.org 核对"
+  },
+  {
+    "designation": "M12×1.75",
+    "major": 12,
+    "pitch": 1.75,
+    "drill": 10.2,
+    "source": "GB/T 20330-2006 表1（粗牙，MOD ISO 2306:1972）；threadspec.org 核对"
+  },
+  {
+    "designation": "M14×2.0",
+    "major": 14,
+    "pitch": 2,
+    "drill": 12,
+    "source": "GB/T 20330-2006 表1（粗牙，MOD ISO 2306:1972）；threadspec.org 核对"
+  },
+  {
+    "designation": "M16×2.0",
+    "major": 16,
+    "pitch": 2,
+    "drill": 14,
+    "source": "GB/T 20330-2006 表1（粗牙，MOD ISO 2306:1972）；threadspec.org 核对"
+  },
+  {
+    "designation": "M18×2.5",
+    "major": 18,
+    "pitch": 2.5,
+    "drill": 15.5,
+    "source": "GB/T 20330-2006 表1（粗牙，MOD ISO 2306:1972）；threadspec.org 核对"
+  },
+  {
+    "designation": "M20×2.5",
+    "major": 20,
+    "pitch": 2.5,
+    "drill": 17.5,
+    "source": "GB/T 20330-2006 表1（粗牙，MOD ISO 2306:1972）；threadspec.org 核对"
+  },
+  {
+    "designation": "M22×2.5",
+    "major": 22,
+    "pitch": 2.5,
+    "drill": 19.5,
+    "source": "GB/T 20330-2006 表1（粗牙，MOD ISO 2306:1972）；threadspec.org 核对"
+  },
+  {
+    "designation": "M24×3.0",
+    "major": 24,
+    "pitch": 3,
+    "drill": 21,
+    "source": "GB/T 20330-2006 表1（粗牙，MOD ISO 2306:1972）；threadspec.org 核对"
+  },
+  {
+    "designation": "M27×3.0",
+    "major": 27,
+    "pitch": 3,
+    "drill": 24,
+    "source": "GB/T 20330-2006 表1（粗牙，MOD ISO 2306:1972）；threadspec.org 核对"
+  },
+  {
+    "designation": "M30×3.5",
+    "major": 30,
+    "pitch": 3.5,
+    "drill": 26.5,
+    "source": "GB/T 20330-2006 表1（粗牙，MOD ISO 2306:1972）；threadspec.org 核对"
+  },
+  {
+    "designation": "M33×3.5",
+    "major": 33,
+    "pitch": 3.5,
+    "drill": 29.5,
+    "source": "GB/T 20330-2006 表1（粗牙，MOD ISO 2306:1972）；threadspec.org 核对"
+  },
+  {
+    "designation": "M36×4.0",
+    "major": 36,
+    "pitch": 4,
+    "drill": 32,
+    "source": "GB/T 20330-2006 表1（粗牙，MOD ISO 2306:1972）；threadspec.org 核对"
+  },
+  {
+    "designation": "M39×4.0",
+    "major": 39,
+    "pitch": 4,
+    "drill": 35,
+    "source": "GB/T 20330-2006 表1（粗牙，MOD ISO 2306:1972）；threadspec.org 核对"
+  },
+  {
+    "designation": "M42×4.5",
+    "major": 42,
+    "pitch": 4.5,
+    "drill": 37.5,
+    "source": "GB/T 20330-2006 表1（粗牙，MOD ISO 2306:1972）；threadspec.org 核对"
+  },
+  {
+    "designation": "M45×4.5",
+    "major": 45,
+    "pitch": 4.5,
+    "drill": 40.5,
+    "source": "GB/T 20330-2006 表1（粗牙，MOD ISO 2306:1972）；threadspec.org 核对"
+  },
+  {
+    "designation": "M48×5.0",
+    "major": 48,
+    "pitch": 5,
+    "drill": 43,
+    "source": "GB/T 20330-2006 表1（粗牙，MOD ISO 2306:1972）；threadspec.org 核对"
+  }
+]
