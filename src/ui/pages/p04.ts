@@ -18,14 +18,20 @@
  *     988TA（P/Q/R 均 mm 半径小数）/ 980TDc（P/Q 为 0.0001mm 增量 №.182.7，R=mm）。
  *   G92 直进形式：四系统全可用；HNC 生成 G82 单循环（G92 在 HNC 是工件坐标系设定）。
  * 原「GSK 暂不生成」「华中请用 G82」两态置灰提示及回落 FANUC 逻辑随解灰整体移除。
+ * W10-C（WAVE-PLAN-V4 §2）：锥管族 sealpipe/npt 解禁——锥管模式显示「螺纹长度 L」输入行
+ *   （URL 键 l），taperRadiusMM = −L/32（1:16 直径锥比 → 半径差 = L×(1/16)/2）；
+ *   终点 = 基准平面 Z−L / 基面小径 X，起点 = 小端 Z0（V4 §2 方向约定）。
+ *   蜗杆仍不出程序（p03 不显示按钮；p04 遇 family=worm 落「请先选型」降级）。
  * URL 键：system=fanuc|gsk|knd|hnc（默认 fanuc）、cycle=g76|g92（默认 g76）、
- *   gskmodel=988ta|980tdc（默认 988ta，非法值同缺省回落——防死状态）。
+ *   gskmodel=988ta|980tdc（默认 988ta，非法值同缺省回落——防死状态）、
+ *   l=锥管螺纹长度 mm（仅 sealpipe/npt 生效；缺省/非法回落 9.6）。
  */
 import type { PageContext, PageModule } from '../router';
 import {
   Button,
   CodeCard,
   Eyebrow,
+  InputRow,
   ParamGrid,
   Segmented,
   SubText,
@@ -48,7 +54,7 @@ import type {
   ThreadSpec,
 } from '../../core/types';
 
-type RouteFamily = 'metric' | 'trapezoid' | 'pipe' | 'unified';
+type RouteFamily = 'metric' | 'trapezoid' | 'pipe' | 'unified' | 'sealpipe' | 'npt';
 type CycleForm = 'g76' | 'g92';
 
 interface FamilyMeta {
@@ -61,7 +67,15 @@ const FAMILY_META: Record<RouteFamily, FamilyMeta> = {
   trapezoid: { dataFamily: 'trapezoid', flankAngle: 30 },
   pipe: { dataFamily: 'pipe55', flankAngle: 55 },
   unified: { dataFamily: 'unified', flankAngle: 60 },
+  // W10-C：锥管族与 p03/p02 同源（p02 页签 value 逐字一致）
+  sealpipe: { dataFamily: 'sealpipe', flankAngle: 55 },
+  npt: { dataFamily: 'npt', flankAngle: 60 },
 };
+
+/** 锥管族：程序需输出锥度位（R/I）并显示「螺纹长度 L」输入行 */
+function isTaperFamily(family: RouteFamily): boolean {
+  return family === 'sealpipe' || family === 'npt';
+}
 
 interface ThreadParams {
   family: RouteFamily;
@@ -121,12 +135,24 @@ const G82_ROW_NOTE = 'G82 为单循环行，完整螺纹需后续 X 递减分刀
 const END_Z_MM = -30;
 const FIRST_CUT_MM = 0.4;
 
+/**
+ * 锥管族冻结示例参数（WAVE-PLAN-V4 §2 W10-C 数字纪律注）：
+ * L = 9.6 mm 为冻结测试输入（非推导值；使 −L/32 = −0.3 落三位小数内无舍入，
+ * 且避开 KND 0.001mm 半值边界 −312.5）；首刀 0.2 mm → Q200，与四锚点行同源。
+ * 用户可在「螺纹长度 L」输入行改写（URL 键 l）。
+ */
+const DEFAULT_TAPER_LENGTH_MM = 9.6;
+const TAPER_FIRST_CUT_MM = 0.2;
+
 const P_BITS_NOTE = 'P021060 = 02 精车次数 · 10 退尾量（倒角量）· 60 刀尖角';
 
 const CSS = `
 .rc-p04__body { padding-top: 2px; }
 .rc-p04__meta { display: flex; align-items: center; gap: 8px; flex: 0 0 auto; }
 .rc-p04__pnote { white-space: pre-line; }
+/* 程序区挂载点：display:contents 让子节点继续参与 .la-body 的 flex 布局（L 输入时只刷新区块） */
+.rc-p04__program { display: contents; }
+.rc-p04__tapernote { line-height: 1.55; overflow-wrap: anywhere; }
 /* 系统页签 +（GSK 型号页签）+ 循环形式页签纵向排布 */
 .rc-p04__controls { display: flex; flex-direction: column; gap: 9px; flex: 0 0 auto; }
 /* 六格参数在 390px 下保持单行（设计稿 3 列紧凑排布） */
@@ -134,7 +160,14 @@ const CSS = `
 `;
 
 function readFamily(value: string | null): RouteFamily | null {
-  if (value === 'metric' || value === 'trapezoid' || value === 'pipe' || value === 'unified') {
+  if (
+    value === 'metric' ||
+    value === 'trapezoid' ||
+    value === 'pipe' ||
+    value === 'unified' ||
+    value === 'sealpipe' ||
+    value === 'npt'
+  ) {
     return value;
   }
   return null;
@@ -165,6 +198,21 @@ function readCycle(value: string | null): CycleForm {
 /** URL gskmodel 键（默认 988ta；非法值回落默认——防死状态，同 W6-C2-04 先例） */
 function readGskModel(value: string | null): GskModel {
   return value === '980tdc' ? '980tdc' : '988ta';
+}
+
+/** URL l 键（锥管螺纹长度 mm）：缺省 / 非正 / 非数字回落 9.6（V4 §2 W10-C 冻结算例输入） */
+function readTaperLength(value: string | null): number {
+  const length = Number(value);
+  if (!Number.isFinite(length) || length <= 0) return DEFAULT_TAPER_LENGTH_MM;
+  return length;
+}
+
+/** 显示数值：最多 3 位小数、去尾零（与 core/gcode 的 formatNumber 同口径） */
+function formatMM(value: number): string {
+  const rounded = Math.round(value * 1000) / 1000;
+  let text = (Object.is(rounded, -0) ? 0 : rounded).toFixed(3).replace(/0+$/, '');
+  if (text.endsWith('.')) text = text.slice(0, -1);
+  return text;
 }
 
 /** 从程序行反解参数（单一事实源；首 token 前缀匹配） */
@@ -248,16 +296,49 @@ function metaRow(): HTMLElement {
   return row;
 }
 
-/** 代码卡注释：按系统生成；KND / GSK + G76 追加口径注（R2 裁决条件 / V3-3） */
-function codeComment(system: CncSystem, cycle: CycleForm, gskModel: GskModel): string {
+/** 代码卡注释：按系统生成；KND / GSK + G76 追加口径注（R2 裁决条件 / V3-3 / W10-C 锥度） */
+function codeComment(
+  system: CncSystem,
+  cycle: CycleForm,
+  gskModel: GskModel,
+  taper: boolean,
+): string {
   const base = `系统不同，P/Q/R 含义不同 — ${SYSTEM_COMMENT[system]}`;
+  const parts = [base];
   if (cycle === 'g76' && system === 'knd') {
-    return `${base} · 按 KND-1000T 口径（P/Q/R=0.001mm）`;
+    parts.push('按 KND-1000T 口径（P/Q/R=0.001mm）');
+    // 上报留痕（W10-C 上报条件①）：R(i) 单位无手册逐字单位句，按全 P/Q/R 口径推定
+    if (taper) parts.push('R(i) 按 KND 全 P/Q/R 0.001mm 口径推定');
   }
   if (cycle === 'g76' && system === 'gsk') {
-    return `${base} · ${GSK_MODEL_COMMENT[gskModel]}`;
+    parts.push(GSK_MODEL_COMMENT[gskModel]);
   }
-  return base;
+  // G0-v0.3 复核观察 1：FANUC G92 的 R 位系三系统同串先例外推，必须显式披露
+  if (taper && cycle === 'g92' && system !== 'hnc') {
+    parts.push('FANUC R 位系 W6 三系统同串先例外推');
+  }
+  return parts.join(' · ');
+}
+
+/**
+ * 锥度位与推导式（程序卡下方展示；WAVE-PLAN-V4 §2 W10-C 方向约定）：
+ * 锥度位 = 起点半径 − 终点半径 = −L/32；HNC 位名 I，其余 R。
+ * KND G76 按 0.001mm 整数 μ 输出（推定口径，代码卡注释同步披露）。
+ */
+function taperNoteText(system: CncSystem, cycle: CycleForm, lengthMM: number): string {
+  const taper = -lengthMM / 32;
+  const word = system === 'hnc' ? 'I' : 'R';
+  const shown =
+    system === 'knd' && cycle === 'g76'
+      ? `${word}${Math.round(taper * 1000)}（0.001mm 口径）`
+      : `${word}${formatMM(taper)}`;
+  // 推导式用排版负号（−）与「−L/32」一致；程序行仍为 ASCII 减号（逐字符锚点）
+  const derived = formatMM(taper).replace(/^-/, '−');
+  return [
+    `锥度位 ${word} = −L/32 = −${formatMM(lengthMM)}/32 = ${derived} mm`,
+    `（程序写作 ${shown}；1:16 锥比 = 直径:长度 → 半径差 = L×(1/16)/2 = L/32`,
+    `；终点 = 基准平面 Z−${formatMM(lengthMM)} / 基面小径 X，起点 = 小端 Z0）`,
+  ].join('');
 }
 
 export const title = 'G76 参考程序';
@@ -317,30 +398,15 @@ const page: PageModule = {
         },
       });
 
-    const render = (): void => {
-      const badge = top.querySelector<HTMLElement>('.la-badge');
-      if (badge) badge.textContent = SYSTEM_BADGE[state.system];
+    // 锥管螺纹长度 L：state 常驻；输入时只刷新程序区，不重建输入行（避免丢焦点）
+    let taperLengthMM = readTaperLength(ctx.params.get('l'));
+    const programSlot = document.createElement('div');
+    programSlot.className = 'rc-p04__program';
 
-      const model = modelRow();
-      controls.replaceChildren(systemsRow(), ...(model ? [model] : []), cycleRow());
-
-      if (!params) {
-        // 首页 G76 直达（#/p04，无参数）：容忍空参数并提示先选型（README §5.2）
-        body.replaceChildren(
-          controls,
-          WarnCard({
-            text: '未选择螺纹规格。请先在「螺纹 · 选型」中选择规格，再生成 G76 程序。',
-          }),
-          Button({
-            label: '去螺纹选型',
-            icon: 'thread',
-            onClick: () => {
-              void ctx.navigate('p02');
-            },
-          }),
-        );
-        return;
-      }
+    /** 按当前 system / cycle / 长度重算程序区（坐标系与参数卡均从 core 输出反解） */
+    const renderProgram = (): void => {
+      if (!params) return;
+      const taper = isTaperFamily(params.family);
 
       const spec: ThreadSpec = {
         family: params.dataFamily,
@@ -352,28 +418,36 @@ const page: PageModule = {
       const dims = threadDimensions(spec);
       // 实际单边牙深：d₁ 来自 core ⇒ (d − d₁)/2；M30×3.5 = 1.894375 → P1894（非 H₁ 路径 1895）
       const threadDepthMM = (params.d - dims.d1) / 2;
+      // 锥管族（V4 §2）：终点 = 基准平面 Z−L / 基面小径 X，起点 = 小端 Z0，
+      // taperRadiusMM = 起点半径 − 终点半径 = −L/32；首刀取冻结算例 0.2 mm（Q200）。
       const g76Params: G76Params = {
         minorDiameter: dims.d1,
-        endZ: END_Z_MM,
+        endZ: taper ? -taperLengthMM : END_Z_MM,
         threadDepthMM,
-        firstCutDepthMM: FIRST_CUT_MM,
+        firstCutDepthMM: taper ? TAPER_FIRST_CUT_MM : FIRST_CUT_MM,
         lead: params.p,
+        ...(taper ? { taperRadiusMM: -taperLengthMM / 32 } : {}),
       };
 
       if (state.cycle === 'g92') {
         // HNC 的直进循环是 G82（G92 在 HNC = 工件坐标系设定，§1 行4 负结论）；
-        // 其余三系统仍为 G92 单行（§1 行2/行6）。
+        // 其余三系统仍为 G92 单行（§1 行2/行6）。锥管族 G92 的 R 为 mm（V4 锚点）。
         const program = g92Cycle(g76Params, state.system);
         const rowNote = state.system === 'hnc' ? G82_ROW_NOTE : G92_ROW_NOTE;
-        body.replaceChildren(
-          controls,
-          metaRow(),
+        programSlot.replaceChildren(
           ParamGrid({ items: buildG92ParamItems(program), ariaLabel: 'G92 参数' }),
           CodeCard({
             lines: program.lines,
-            comment: codeComment(state.system, state.cycle, state.gskModel),
+            comment: codeComment(state.system, state.cycle, state.gskModel, taper),
             ariaLabel: state.system === 'hnc' ? 'G82 直进循环程序' : 'G92 直进循环程序',
           }),
+          ...(taper
+            ? [
+                SubText(taperNoteText(state.system, state.cycle, taperLengthMM), {
+                  className: 'rc-p04__tapernote',
+                }),
+              ]
+            : []),
           SubText(rowNote, { className: 'rc-p04__pnote' }),
           Button({
             variant: 'ghost',
@@ -401,18 +475,23 @@ const page: PageModule = {
       const pnote =
         state.system === 'hnc' ? depthNote : `${P_BITS_NOTE}\n${depthNote}`;
 
-      body.replaceChildren(
-        controls,
-        metaRow(),
+      programSlot.replaceChildren(
         ParamGrid({
           items: buildG76ParamItems(program, state.system, state.gskModel),
           ariaLabel: 'G76 参数',
         }),
         CodeCard({
           lines: program.lines,
-          comment: codeComment(state.system, state.cycle, state.gskModel),
+          comment: codeComment(state.system, state.cycle, state.gskModel, taper),
           ariaLabel: state.system === 'hnc' ? 'G76 单行式程序' : 'G76 两行式程序',
         }),
+        ...(taper
+          ? [
+              SubText(taperNoteText(state.system, state.cycle, taperLengthMM), {
+                className: 'rc-p04__tapernote',
+              }),
+            ]
+          : []),
         SubText(pnote, { className: 'rc-p04__pnote' }),
         Button({
           variant: 'ghost',
@@ -424,6 +503,58 @@ const page: PageModule = {
         }),
         WarnCard({ text: G76_DISCLAIMER }),
       );
+    };
+
+    const render = (): void => {
+      const badge = top.querySelector<HTMLElement>('.la-badge');
+      if (badge) badge.textContent = SYSTEM_BADGE[state.system];
+
+      const model = modelRow();
+      controls.replaceChildren(systemsRow(), ...(model ? [model] : []), cycleRow());
+
+      if (!params) {
+        // 首页 G76 直达（#/p04，无参数）：容忍空参数并提示先选型（README §5.2）
+        body.replaceChildren(
+          controls,
+          WarnCard({
+            text: '未选择螺纹规格。请先在「螺纹 · 选型」中选择规格，再生成 G76 程序。',
+          }),
+          Button({
+            label: '去螺纹选型',
+            icon: 'thread',
+            onClick: () => {
+              void ctx.navigate('p02');
+            },
+          }),
+        );
+        return;
+      }
+
+      // 锥管族：螺纹长度 L 输入行（URL 键 l；缺省/非法回落 9.6）
+      const lengthRow = isTaperFamily(params.family)
+        ? InputRow({
+            label: '螺纹长度 L',
+            value: formatMM(taperLengthMM),
+            unit: 'mm',
+            name: 'taperLength',
+            ariaLabel: '螺纹长度 L',
+            onInput: (value) => {
+              const next = Number(value);
+              if (Number.isFinite(next) && next > 0) {
+                taperLengthMM = next;
+                renderProgram();
+              }
+            },
+          })
+        : null;
+
+      body.replaceChildren(
+        controls,
+        metaRow(),
+        ...(lengthRow ? [lengthRow] : []),
+        programSlot,
+      );
+      renderProgram();
     };
 
     render();

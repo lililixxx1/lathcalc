@@ -362,6 +362,121 @@ describe('g92Cycle · 单行直进循环（WAVE-PLAN-V2 §4 G92 锚，G0-B2 行�
   });
 });
 
+/**
+ * 锥管锚点（WAVE-PLAN-V4 §2 W10-C，算例 R1/16、L=9.6，禁裸值）：
+ *   基面大径 d = 7.723（threads-sealpipe.json row0）
+ *   P = 25.4/28 = 0.907142857…（28 tpi）
+ *   基面小径 X = 7.723 − 1.2806×0.907142857… = 6.561312… → 6.561
+ *   牙深 = 0.6403×0.907142857… = 0.580843… → 581 μm（FANUC/KND）/ P5808（980TDc）/ K0.581（HNC）
+ *   锥度 = −L/32 = −9.6/32 = −0.3（GB/T 7306.1/12716 锥比 1:16 → 半径差 = L×(1/16)/2）
+ *   首刀 = 0.2 mm（冻结测试输入）→ Q200 / Q2000
+ */
+const R116_P = 25.4 / 28;
+const R116_TAPER: G76Params = {
+  minorDiameter: 7.723 - 1.2806 * R116_P, // 6.561312857…
+  endZ: -9.6,
+  threadDepthMM: 0.6403 * R116_P, // 0.580843571…
+  firstCutDepthMM: 0.2,
+  lead: R116_P,
+  taperRadiusMM: -9.6 / 32, // −0.3
+};
+
+describe('锥管族 G76/G92 锥度位 · W10-C 四锚点（R1/16、L=9.6）', () => {
+  it('FANUC 行2 逐字符：G76 X6.561 Z-9.6 R-0.3 P581 Q200 F0.907', () => {
+    const program = fanucG76(R116_TAPER);
+    expect(program.lines).toHaveLength(2);
+    expect(program.lines).toEqual([
+      'G76 P021060 Q100 R0.05',
+      'G76 X6.561 Z-9.6 R-0.3 P581 Q200 F0.907',
+    ]);
+    expect(program.disclaimer).toBe(G76_DISCLAIMER);
+  });
+
+  it('GSK 980TDc 行2 逐字符：R 保持 mm，P5808 Q2000', () => {
+    expect(g76Dialect(R116_TAPER, 'gsk', '980tdc').lines).toEqual([
+      'G76 P021060 Q1000 R0.05',
+      'G76 X6.561 Z-9.6 R-0.3 P5808 Q2000 F0.907',
+    ]);
+  });
+
+  it('HNC G82 逐字符：I0 处替换为 I-0.3', () => {
+    expect(g92Cycle(R116_TAPER, 'hnc').lines).toEqual([
+      'G82 X6.561 Z-9.6 I-0.3 R0 E0 C1 P0 F0.907',
+    ]);
+  });
+
+  it('G92 三系统同串逐字符：G92 X6.561 Z-9.6 R-0.3 F0.907', () => {
+    for (const system of [undefined, 'fanuc', 'gsk', 'knd'] as const) {
+      expect(g92Cycle(R116_TAPER, system).lines).toEqual([
+        'G92 X6.561 Z-9.6 R-0.3 F0.907',
+      ]);
+    }
+  });
+
+  it('GSK 988TA 行2：P/Q 保持 mm 小数，锥度 R-0.3 同为 mm', () => {
+    expect(g76Dialect(R116_TAPER, 'gsk', '988ta').lines).toEqual([
+      'G76 P021060 Q0.1 R0.05',
+      'G76 X6.561 Z-9.6 R-0.3 P0.581 Q0.2 F0.907',
+    ]);
+  });
+
+  it('HNC G76 单行：I 位写入锥度（起点相对终点半径差为负）', () => {
+    expect(g76Dialect(R116_TAPER, 'hnc').lines).toEqual([
+      'G76 C2 R0 E0 A60 X6.561 Z-9.6 I-0.3 K0.581 U0.05 V0.1 Q0.2 P0 F0.907',
+    ]);
+  });
+
+  it('KND G76 行2：R(i) 按 0.001mm 口径推定输出整数 μ（−0.3 → R-300）', () => {
+    expect(g76Dialect(R116_TAPER, 'knd').lines).toEqual([
+      'G76 P021060 Q100 R50',
+      'G76 X6.561 Z-9.6 R-300 P581 Q200 F0.907',
+    ]);
+  });
+
+  it('恒等式仍成立：g76Dialect(p,"fanuc") ≡ fanucG76(p)（含锥度）', () => {
+    expect(g76Dialect(R116_TAPER, 'fanuc').lines).toEqual(fanucG76(R116_TAPER).lines);
+    expect(g76Dialect(R116_TAPER, 'fanuc').disclaimer).toBe(fanucG76(R116_TAPER).disclaimer);
+  });
+});
+
+describe('锥度位向后兼容 · 缺省/0 = 直螺纹（v0.2 行逐字符不变）', () => {
+  it('taperRadiusMM 缺省与显式 0 输出相同（三入口）', () => {
+    const omitted: G76Params = { ...M30X35 };
+    const zero: G76Params = { ...M30X35, taperRadiusMM: 0 };
+    expect(fanucG76(zero).lines).toEqual(fanucG76(omitted).lines);
+    expect(g76Dialect(zero, 'knd').lines).toEqual(g76Dialect(omitted, 'knd').lines);
+    expect(g76Dialect(zero, 'gsk', '980tdc').lines).toEqual(
+      g76Dialect(omitted, 'gsk', '980tdc').lines,
+    );
+    expect(g76Dialect(zero, 'hnc').lines).toEqual(g76Dialect(omitted, 'hnc').lines);
+    expect(g92Cycle(zero).lines).toEqual(g92Cycle(omitted).lines);
+    expect(g92Cycle(zero, 'hnc').lines).toEqual(g92Cycle(omitted, 'hnc').lines);
+  });
+
+  it('直螺纹不出现锥度字（R 仅出现于行1精修余量 / G92 无 R）', () => {
+    const [line1 = '', line2 = ''] = fanucG76(M30X35).lines;
+    expect(line1).toBe('G76 P021060 Q100 R0.05');
+    expect(line2).toBe('G76 X26.211 Z-30. P1894 Q400 F3.5');
+    expect(g92Cycle(M30X35).lines).toEqual(['G92 X26.211 Z-30. F3.5']);
+    expect(g92Cycle(M30X35, 'hnc').lines).toEqual([
+      'G82 X26.211 Z-30. I0 R0 E0 C1 P0 F3.5',
+    ]);
+  });
+
+  it('GSK 缺型号仍 throw（锥度参数不绕过型号前置）', () => {
+    expect(() => g76Dialect(R116_TAPER, 'gsk')).toThrow(
+      'GSK 需先选型号（988TA mm / 980TDc 增量）',
+    );
+  });
+
+  it('正锥度原样输出 R0.3（方向由调用方契约决定，core 不改符号）', () => {
+    const positive: G76Params = { ...R116_TAPER, taperRadiusMM: 0.3 };
+    expect(fanucG76(positive).lines[1]).toBe(
+      'G76 X6.561 Z-9.6 R0.3 P581 Q200 F0.907',
+    );
+  });
+});
+
 describe('g92Cycle · HNC G82 单循环（WAVE-PLAN-V3 V3-4；g76-dialects.md §1 行4）', () => {
   it('M30×3.5 单行金值逐字符：G82 X26.211 Z-30. I0 R0 E0 C1 P0 F3.5', () => {
     const program = g92Cycle(M30X35, 'hnc');

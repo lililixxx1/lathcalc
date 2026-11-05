@@ -24,6 +24,25 @@ function formatNumber(value: number, minDecimals = 0): string {
 }
 
 /**
+ * 锥度位取值（WAVE-PLAN-V4 §2 W10-C 实现）：taperRadiusMM 缺省 / 0 = 直螺纹 → null；
+ * 显式非 0 → 原值（起点半径 − 终点半径，常规锥螺纹为负，V4 §2 方向约定）。
+ */
+function taperValue(p: G76Params): number | null {
+  const taper = p.taperRadiusMM;
+  if (taper === undefined || taper === 0) return null;
+  return taper;
+}
+
+/**
+ * mm 口径锥度位（两行式行2 / G92 的 R(i)，HNC 用 I 另处理）：
+ * 直螺纹返回空串（拼接后行内容与 v0.2 逐字符一致）；锥螺纹返回 ` R-0.3`（最多三位小数）。
+ */
+function taperWordMM(p: G76Params): string {
+  const taper = taperValue(p);
+  return taper === null ? '' : ` R${formatNumber(taper)}`;
+}
+
+/**
  * FANUC 两行式 G76（模板冻结，逐词输出，不做方言分支）：
  *   行1：G76 P021060 Q100 R{精修余量}
  *        P 前六位按设计稿 p04 冻结原样输出；Q100 = 最小切深 0.1 mm × 1000。
@@ -32,13 +51,13 @@ function formatNumber(value: number, minDecimals = 0): string {
  * 免责文案随程序一起返回（报告 §7.4）。
  */
 export function fanucG76(p: G76Params): G76Program {
-  assertNoTaper(p);
   const finishAllowance = p.finishAllowanceMM ?? 0.05;
   const depthUM = Math.round(p.threadDepthMM * 1000);
   const firstCutUM = Math.round(p.firstCutDepthMM * 1000);
   const lines = [
     `G76 P021060 Q100 R${formatNumber(finishAllowance)}`,
-    `G76 X${formatAxis(p.minorDiameter)} Z${formatAxis(p.endZ)} P${depthUM} Q${firstCutUM} F${formatNumber(p.lead, 1)}`,
+    // 锥螺纹：X Z 后插 R(i)（mm 三位小数，WAVE-PLAN-V4 §2 W10-C；直螺纹不输出，逐字符不变）
+    `G76 X${formatAxis(p.minorDiameter)} Z${formatAxis(p.endZ)}${taperWordMM(p)} P${depthUM} Q${firstCutUM} F${formatNumber(p.lead, 1)}`,
   ];
   return { lines, disclaimer: G76_DISCLAIMER };
 }
@@ -48,17 +67,6 @@ export function fanucG76(p: G76Params): G76Program {
  * 来源：docs/research/g76-dialects.md §1 行1 示例；与 FANUC 行1 `Q100`（0.1 mm）同值。
  */
 const GSK_MIN_CUT_MM = 0.1;
-
-/**
- * 锥度位 panic 桩（WAVE-PLAN-V4 §1 契约预置，W10-C 填实现）：
- * taperRadiusMM 显式非 0 即抛——fanucG76 / g76Dialect / g92Cycle 三入口同守
- * （g92Cycle 入口一致性系 G0-v0.3 复核观察 2 顺手补齐）。
- */
-function assertNoTaper(p: G76Params): void {
-  if (p.taperRadiusMM !== undefined && p.taperRadiusMM !== 0) {
-    throw new Error('PANIC: 锥螺纹 taperRadiusMM 未实现（W10-C 待实现）');
-  }
-}
 
 /**
  * GSK 980TDc 最小输入增量 0.0001 mm（状态参数 №.182.7 的增量档）。
@@ -86,27 +94,34 @@ function toGskIncrement(valueMM: number): number {
  * 免责文案随程序一起返回（报告 §7.4）。
  */
 export function g76Dialect(p: G76Params, system: CncSystem, gskModel?: GskModel): G76Program {
-  assertNoTaper(p);
   switch (system) {
     case 'fanuc':
       return fanucG76(p);
     case 'knd': {
       // KND-1000T 0.001 mm 口径：R50 = 0.05×1000；P1894 = 1894.375→Math.round；
-      // Q400 = 0.4×1000。行2 与 FANUC 同串（g76-dialects.md §1 行5）。
+      // Q400 = 0.4×1000。直螺纹行2 与 FANUC 同串（g76-dialects.md §1 行5）。
+      // 锥度 R(i)：手册源 [8] 参数表未逐字标单位，示例 R200=0.2mm 与 0.001mm 自洽；
+      // 按「KND 全 P/Q/R 0.001mm」口径推定输出整数 μ（−0.3 → R-300），双源摘录见
+      // docs/evidence/W10-C/knd-ri-sources.md 并上报。
       const finishAllowance = p.finishAllowanceMM ?? 0.05;
+      const taper = taperValue(p);
+      const taperWord = taper === null ? '' : ` R${Math.round(taper * 1000)}`;
       const lines = [
         `G76 P021060 Q100 R${Math.round(finishAllowance * 1000)}`,
-        `G76 X${formatAxis(p.minorDiameter)} Z${formatAxis(p.endZ)} P${Math.round(p.threadDepthMM * 1000)} Q${Math.round(p.firstCutDepthMM * 1000)} F${formatNumber(p.lead, 1)}`,
+        `G76 X${formatAxis(p.minorDiameter)} Z${formatAxis(p.endZ)}${taperWord} P${Math.round(p.threadDepthMM * 1000)} Q${Math.round(p.firstCutDepthMM * 1000)} F${formatNumber(p.lead, 1)}`,
       ];
       return { lines, disclaimer: G76_DISCLAIMER };
     }
     case 'hnc': {
       // HNC 单行式（g76-dialects.md §1 行3 冻结示例逐字）：
-      // C2 R0 E0 A60 / I0 / V0.1 / P0 为模板常量（直螺纹、冻结示例参数，禁跨方言等效改写）；
+      // C2 R0 E0 A60 / V0.1 / P0 为模板常量（直螺纹、冻结示例参数，禁跨方言等效改写）；
+      // I 为起点相对终点半径差（直螺纹 I0，常规锥螺纹为负——V4 §2 方向约定同值）；
       // K/U/Q 为 mm 半径口径三位小数（K1.894、U0.05、Q0.4）。
       const finishAllowance = p.finishAllowanceMM ?? 0.05;
+      const taper = taperValue(p);
+      const taperText = taper === null ? '0' : formatNumber(taper);
       const lines = [
-        `G76 C2 R0 E0 A60 X${formatAxis(p.minorDiameter)} Z${formatAxis(p.endZ)} I0 K${formatNumber(p.threadDepthMM)} U${formatNumber(finishAllowance)} V0.1 Q${formatNumber(p.firstCutDepthMM)} P0 F${formatNumber(p.lead, 1)}`,
+        `G76 C2 R0 E0 A60 X${formatAxis(p.minorDiameter)} Z${formatAxis(p.endZ)} I${taperText} K${formatNumber(p.threadDepthMM)} U${formatNumber(finishAllowance)} V0.1 Q${formatNumber(p.firstCutDepthMM)} P0 F${formatNumber(p.lead, 1)}`,
       ];
       return { lines, disclaimer: G76_DISCLAIMER };
     }
@@ -127,12 +142,13 @@ export function g76Dialect(p: G76Params, system: CncSystem, gskModel?: GskModel)
               // R(d) 精修余量两型号均保持 mm（§1 行1 单位注）。
               `G76 P021060 Q${minCutInc} R${formatNumber(finishAllowance)}`,
               // P(k)=1.894375×10⁴→18944；Q(Δd)=0.4×10⁴→4000；X/Z/F 写法同 FANUC。
-              `G76 X${formatAxis(p.minorDiameter)} Z${formatAxis(p.endZ)} P${toGskIncrement(p.threadDepthMM)} Q${toGskIncrement(p.firstCutDepthMM)} F${formatNumber(p.lead, 1)}`,
+              // 锥度 R(i) 亦保持 mm（§1 行1：980TDc 增量只作用 P/Q，V4 §2 W10-C 已冻）。
+              `G76 X${formatAxis(p.minorDiameter)} Z${formatAxis(p.endZ)}${taperWordMM(p)} P${toGskIncrement(p.threadDepthMM)} Q${toGskIncrement(p.firstCutDepthMM)} F${formatNumber(p.lead, 1)}`,
             ]
           : [
               // P/Q 为 mm 半径小数（非 μm 整数）：P(k)=1.894375→1.894（三位）、Q(Δd)=0.4。
               `G76 P021060 Q${minCut} R${formatNumber(finishAllowance)}`,
-              `G76 X${formatAxis(p.minorDiameter)} Z${formatAxis(p.endZ)} P${formatNumber(p.threadDepthMM)} Q${formatNumber(p.firstCutDepthMM)} F${formatNumber(p.lead, 1)}`,
+              `G76 X${formatAxis(p.minorDiameter)} Z${formatAxis(p.endZ)}${taperWordMM(p)} P${formatNumber(p.threadDepthMM)} Q${formatNumber(p.firstCutDepthMM)} F${formatNumber(p.lead, 1)}`,
             ];
       return { lines, disclaimer: G76_DISCLAIMER };
     }
@@ -150,16 +166,19 @@ export function g76Dialect(p: G76Params, system: CncSystem, gskModel?: GskModel)
  * C 头数 / P 起始角为直螺纹模板值；其余/缺省保持 FANUC 格式（v0.2 既有测试零改）。
  */
 export function g92Cycle(p: G76Params, system?: CncSystem): G76Program {
-  assertNoTaper(p);
+  const taper = taperValue(p);
   if (system === 'hnc') {
     const lines = [
       // 直螺纹模板：I0（无锥度）、R0/E0（无退尾）、C1（单头）、P0（起始角 0）。
-      `G82 X${formatAxis(p.minorDiameter)} Z${formatAxis(p.endZ)} I0 R0 E0 C1 P0 F${formatNumber(p.lead, 1)}`,
+      // 锥螺纹：I0 处替换为锥度值（起点相对终点半径差，V4 §2 W10-C）。
+      `G82 X${formatAxis(p.minorDiameter)} Z${formatAxis(p.endZ)} I${taper === null ? '0' : formatNumber(taper)} R0 E0 C1 P0 F${formatNumber(p.lead, 1)}`,
     ];
     return { lines, disclaimer: G76_DISCLAIMER };
   }
+  // FANUC / GSK / KND 同串（§1 行2/行6）；锥螺纹在 Z 后插 R(i)（mm）。FANUC 的 R 位
+  // 系「W6 三系统同串」先例外推（G0-v0.3 复核观察 1），口径注由 p04 披露。
   const lines = [
-    `G92 X${formatAxis(p.minorDiameter)} Z${formatAxis(p.endZ)} F${formatNumber(p.lead, 1)}`,
+    `G92 X${formatAxis(p.minorDiameter)} Z${formatAxis(p.endZ)}${taperWordMM(p)} F${formatNumber(p.lead, 1)}`,
   ];
   return { lines, disclaimer: G76_DISCLAIMER };
 }

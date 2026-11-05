@@ -14,6 +14,10 @@
  *   蜗杆：走 core/thread.wormGeometry（px=π·m、h₁=2.2·m、ZA 40°），
  *   不走 threadDimensions / threeWireM，不显示三针卡（V3-2）。
  * 收藏：点击顶栏星标派发 `lathcalc:save`（跨卡契约，W4-C5 store.ts 监听）。
+ *
+ * W10-C（WAVE-PLAN-V4 §2，DEFERRED #20）：sealpipe/npt 两族「生成 G76 程序」按钮解禁——
+ *   正常跳转 p04 并带 family/spec/d/p（锥度位由 p04 按 L/32 活算，数据表不存锥度）；
+ *   蜗杆（模数制、非标准牙型）仍不显示按钮（V3-2 行为不变）。
  */
 import type { PageContext, PageModule } from '../router';
 import {
@@ -380,6 +384,8 @@ const page: PageModule = {
       ...(taperNote ? [taperNote] : []),
       ResultCard({ items: wireItems, ariaLabel: '三针测量' }),
       Accordion({ content: formulaHtml(params, dims, wireM), open: true }),
+      // W10-C：sealpipe/npt 与其他族同路径跳 p04（锥管模式由 p04 显示 L 输入并输出锥度位）；
+      // 蜗杆在上方提前 return，按钮维持隐藏。
       Button({
         label: '生成 G76 程序',
         onClick: () => {

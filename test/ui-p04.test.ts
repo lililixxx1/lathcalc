@@ -46,6 +46,12 @@ function page(): HTMLElement {
   return el;
 }
 
+function page03(): HTMLElement {
+  const el = app.querySelector<HTMLElement>('.la-page[data-page="p03"]');
+  if (!el) throw new Error('p03 未渲染');
+  return el;
+}
+
 function codeLines(): string[] {
   return [...page().querySelectorAll<HTMLElement>('.rc-codecard__line')].map(
     (line) => line.textContent ?? '',
@@ -550,5 +556,160 @@ describe('W4-C2 金测链：p02 选型 → p03 结果 → p04 G76', () => {
       'G76 P021060 Q100 R0.05',
       'G76 X26.211 Z-30. P1894 Q400 F3.5',
     ]);
+  });
+});
+
+/**
+ * W10-C 锥管族 UI 锚点（WAVE-PLAN-V4 §2，算例 R1/16、L=9.6）：
+ *   d=7.723、P=25.4/28=0.907142857…；d₁=6.561312…→X6.561；牙深 0.580843…→P581；
+ *   锥度 = −L/32 = −9.6/32 = −0.3；首刀 0.2 → Q200（p04 锥管族冻结示例参数）。
+ */
+const R116_PARAMS = { family: 'sealpipe', spec: 'R1/16', d: 7.723, p: 25.4 / 28 };
+const NPT116_PARAMS = { family: 'npt', spec: 'NPT1/16', d: 7.895, p: 25.4 / 27 };
+
+describe('p04 锥管族 W10-C · R1/16 金值锚点', () => {
+  it('默认 L=9.6（URL 无 l）：FANUC 行2 逐字符 G76 X6.561 Z-9.6 R-0.3 P581 Q200 F0.907', async () => {
+    await router.navigate('p04', R116_PARAMS);
+
+    expect(codeLines()).toEqual([
+      'G76 P021060 Q100 R0.05',
+      'G76 X6.561 Z-9.6 R-0.3 P581 Q200 F0.907',
+    ]);
+  });
+
+  it('锥管模式显示「螺纹长度 L」输入行（值 9.6）与锥度推导式', async () => {
+    await router.navigate('p04', R116_PARAMS);
+
+    const input = page().querySelector<HTMLInputElement>('input[name="taperLength"]');
+    expect(input?.value).toBe('9.6');
+    const note = page().querySelector('.rc-p04__tapernote')?.textContent ?? '';
+    expect(note).toContain('锥度位 R = −L/32 = −9.6/32 = −0.3 mm');
+    expect(note).toContain('1:16 锥比 = 直径:长度 → 半径差 = L×(1/16)/2 = L/32');
+    expect(note).toContain('程序写作 R-0.3');
+    expect(note).toContain('终点 = 基准平面 Z−9.6 / 基面小径 X，起点 = 小端 Z0');
+  });
+
+  it('URL l=16 直达：Z-16、锥度 −16/32=−0.5', async () => {
+    await router.navigate('p04', { ...R116_PARAMS, l: 16 });
+
+    // FANUC 轴写法：整数 Z 保留小数点（formatAxis(-16) → Z-16.）
+    expect(codeLines()[1]).toBe('G76 X6.561 Z-16. R-0.5 P581 Q200 F0.907');
+    expect(page().querySelector('.rc-p04__tapernote')?.textContent).toContain(
+      '锥度位 R = −L/32 = −16/32 = −0.5 mm',
+    );
+  });
+
+  it('L 输入行即时更新程序区且输入框不被重建（值保持 16）', async () => {
+    await router.navigate('p04', R116_PARAMS);
+    const input = page().querySelector<HTMLInputElement>('input[name="taperLength"]');
+    if (!input) throw new Error('L 输入行缺失');
+
+    input.value = '16';
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+
+    expect(codeLines()[1]).toBe('G76 X6.561 Z-16. R-0.5 P581 Q200 F0.907');
+    expect(page().querySelector<HTMLInputElement>('input[name="taperLength"]')).toBe(input);
+    expect(input.value).toBe('16');
+  });
+
+  it('GSK 980TDc 锚点行逐字符：R 保持 mm，P5808 Q2000', async () => {
+    await router.navigate('p04', { ...R116_PARAMS, system: 'gsk', gskmodel: '980tdc' });
+
+    expect(codeLines()).toEqual([
+      'G76 P021060 Q1000 R0.05',
+      'G76 X6.561 Z-9.6 R-0.3 P5808 Q2000 F0.907',
+    ]);
+    expect(page().querySelector('.rc-codecard__comment')?.textContent).toContain(
+      '按 GSK980TDc 口径（P/Q=0.0001mm 增量 №.182.7，R=mm）',
+    );
+  });
+
+  it('HNC G92 → G82 锚点行逐字符（I-0.3）', async () => {
+    await router.navigate('p04', { ...R116_PARAMS, system: 'hnc', cycle: 'g92' });
+
+    expect(codeLines()).toEqual(['G82 X6.561 Z-9.6 I-0.3 R0 E0 C1 P0 F0.907']);
+    expect(page().querySelector('.rc-p04__tapernote')?.textContent).toContain(
+      '锥度位 I = −L/32 = −9.6/32 = −0.3 mm',
+    );
+    expect(page().querySelector('.rc-codecard')?.getAttribute('aria-label')).toBe(
+      'G82 直进循环程序',
+    );
+  });
+
+  it('G92 锚点行：FANUC/GSK/KND 同串 + 「先例外推」披露句', async () => {
+    for (const system of ['fanuc', 'gsk', 'knd'] as const) {
+      await router.navigate('p04', { ...R116_PARAMS, system, cycle: 'g92' });
+      expect(codeLines()).toEqual(['G92 X6.561 Z-9.6 R-0.3 F0.907']);
+      expect(page().querySelector('.rc-codecard__comment')?.textContent).toContain(
+        'FANUC R 位系 W6 三系统同串先例外推',
+      );
+    }
+  });
+
+  it('KND G76：R-300（0.001mm 推定）+ 推定口径注', async () => {
+    await router.navigate('p04', { ...R116_PARAMS, system: 'knd' });
+
+    expect(codeLines()).toEqual([
+      'G76 P021060 Q100 R50',
+      'G76 X6.561 Z-9.6 R-300 P581 Q200 F0.907',
+    ]);
+    const comment = page().querySelector('.rc-codecard__comment')?.textContent ?? '';
+    expect(comment).toContain('按 KND-1000T 口径（P/Q/R=0.001mm）');
+    expect(comment).toContain('R(i) 按 KND 全 P/Q/R 0.001mm 口径推定');
+    expect(page().querySelector('.rc-p04__tapernote')?.textContent).toContain(
+      '程序写作 R-300（0.001mm 口径）',
+    );
+  });
+
+  it('直螺纹族不出现锥度推导式与 L 输入行（回归）', async () => {
+    await router.navigate('p04', M30_PARAMS);
+
+    expect(page().querySelector('.rc-p04__tapernote')).toBeNull();
+    expect(page().querySelector('input[name="taperLength"]')).toBeNull();
+  });
+});
+
+describe('p03 → p04 锥管族跳转链路（W10-C；蜗杆行为不变）', () => {
+  it('p03 密封管 R1/16 点「生成 G76 程序」→ p04 出锥度程序', async () => {
+    await router.navigate('p03', R116_PARAMS);
+    expect(page03().textContent).toContain('基准平面处直径（GB/T 7306，1:16 锥）');
+
+    page03().querySelector<HTMLButtonElement>('.rc-btn')?.click();
+    await vi.waitFor(() => expect(router.current()).toBe('p04'));
+
+    expect(codeLines()).toEqual([
+      'G76 P021060 Q100 R0.05',
+      'G76 X6.561 Z-9.6 R-0.3 P581 Q200 F0.907',
+    ]);
+  });
+
+  it('p03 锥管 NPT1/16 点「生成 G76 程序」→ p04 出锥度程序', async () => {
+    await router.navigate('p03', NPT116_PARAMS);
+    expect(page03().textContent).toContain('基准平面处直径（GB/T 12716，1:16 锥）');
+
+    page03().querySelector<HTMLButtonElement>('.rc-btn')?.click();
+    await vi.waitFor(() => expect(router.current()).toBe('p04'));
+
+    // X = 7.895 − 1.0825×(25.4/27) = 6.876648… → 6.877；P = 0.509176… → 509 μm
+    expect(codeLines()).toEqual([
+      'G76 P021060 Q100 R0.05',
+      'G76 X6.877 Z-9.6 R-0.3 P509 Q200 F0.941',
+    ]);
+  });
+
+  it('p03 蜗杆态仍无 G76 按钮（W10-C 不放开模数制）', async () => {
+    await router.navigate('p03', { family: 'worm', spec: 'm2', d: 2, p: 2 });
+
+    expect(page03().querySelector('.rc-btn')).toBeNull();
+    expect(page03().querySelector('.rc-resultcard')?.getAttribute('aria-label')).toBe('蜗杆几何');
+  });
+
+  it('p04 直达 family=worm：不输出程序，落「请先选型」降级', async () => {
+    await router.navigate('p04', { family: 'worm', spec: 'm2', d: 2, p: 2 });
+
+    expect(page().querySelector('.rc-codecard')).toBeNull();
+    expect(page().querySelector('.rc-warn__text')?.textContent).toBe(
+      '未选择螺纹规格。请先在「螺纹 · 选型」中选择规格，再生成 G76 程序。',
+    );
   });
 });

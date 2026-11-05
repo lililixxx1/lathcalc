@@ -1,0 +1,15 @@
+| 证据档 | REAL_EXIT | 门禁 |
+| --- | --- | --- |
+| 01-tsc.txt | 0 | 是 |
+| 02-lint.txt | 0 | 是 |
+| 03-vitest.txt | 0 | 是 |
+| 04-build.txt | 0 | 是 |
+| 05-recompute.txt | 0 | 否 |
+| 06-summary.txt | N/A | 否 |
+| 07-write-scope.txt | 0 | 否 |
+| 08-env.txt | 0 | 否 |
+| knd-ri-book118.txt | 0 | 否 |
+
+VITEST=44 files / 502 tests
+VERDICT=PASS（四门禁 REAL_EXIT 全 0 = true）
+REAL_EXIT=0

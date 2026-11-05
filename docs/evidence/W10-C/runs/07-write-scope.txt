@@ -1,0 +1,14 @@
+baseline=bd1d74d
+tracked_files=461
+allowed_write_scope=6
+changed_in_scope=6
+  M src/core/gcode.ts
+  M src/ui/README.md
+  M src/ui/pages/p03.ts
+  M src/ui/pages/p04.ts
+  M test/gcode.test.ts
+  M test/ui-p04.test.ts
+changed_out_of_scope=0
+missing_in_tree=0
+VERDICT=PASS
+REAL_EXIT=0

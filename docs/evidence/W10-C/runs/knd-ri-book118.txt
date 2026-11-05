@@ -1,0 +1,8 @@
+# KND-1000T 手册页取回（W10-C KND R(i) 单位复核）
+- URL：https://max.book118.com/html/2015/1001/26496342.shtm
+- 日期：2026-11-05
+- 命令：curl -s -L --max-time 30 -w "\nHTTP_CODE=%{http_code}\n" <URL> -o <tmp.html>
+- HTTP_CODE=200；页大小 54547 bytes
+- grep "G76" 命中 0 行：该页为目录/封面预览，§14.2.7 正文（303 页）需登录/VIP，无法取回逐字单位句。
+- 结论：源 [8] 原文仅能引用树内 docs/research/g76-dialects.md §2.1 已存档的逐字摘录（W6-C1 取证）。
+REAL_EXIT=0
