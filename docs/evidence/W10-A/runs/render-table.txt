@@ -1,0 +1,3 @@
+wrote docs\evidence\W10-A\dual-source-table.md: 144/144 cells consistent
+
+REAL_EXIT=0

@@ -1,0 +1,6 @@
+
+> lathcalc@0.2.1 lint
+> eslint .
+
+
+REAL_EXIT=0

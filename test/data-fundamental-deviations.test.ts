@@ -94,8 +94,8 @@ describe('data/fundamental-deviations.json（GB/T 1800.1 轴基本偏差 g/k/p�
     }
   });
 
-  it('分段口径与 tolerance-it.json 一致：前 13 段边界逐段相同（左开右闭，首段 (0,3]）', () => {
-    expect(IT_ROWS).toHaveLength(13);
+  it('分段口径与 tolerance-it.json 一致：21 段边界逐段相同（左开右闭，首段 (0,3]）', () => {
+    expect(IT_ROWS).toHaveLength(21);
     for (let i = 0; i < IT_ROWS.length; i += 1) {
       expect(segmentOf(bands[i]!.band)).toEqual(IT_ROWS[i]!.segment);
     }

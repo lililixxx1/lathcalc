@@ -1,0 +1,45 @@
+W10-A · fitTolerance >500 independent recalculation
+
+Ø600 H7/g6
+  IT7=70、IT6=44；基本偏差 g=-22 μm
+  孔：EI=0、ES=+IT7=+70
+  轴：es=-22、ei=es−IT6=-22−44=-66
+  Xmin=EI−es=0−(-22)=22
+  Xmax=ES−ei=70−(-66)=136
+  类别=间隙
+
+Ø1000 H7/k6
+  IT7=90、IT6=56；基本偏差 k=0 μm
+  孔：EI=0、ES=+IT7=+90
+  轴：ei=0、es=ei+IT6=0+56=56
+  Xmin=EI−es=0−(56)=-56
+  Xmax=ES−ei=90−(0)=90
+  类别=过渡
+
+Ø2000 H7/p6
+  IT7=150、IT6=92；基本偏差 p=170 μm
+  孔：EI=0、ES=+IT7=+150
+  轴：ei=170、es=ei+IT6=170+92=262
+  Xmin=EI−es=0−(262)=-262
+  Xmax=ES−ei=150−(170)=-20
+  类别=过盈
+
+Ø500.001 H7/g6
+  IT7=70、IT6=44；基本偏差 g=-22 μm
+  孔：EI=0、ES=+IT7=+70
+  轴：es=-22、ei=es−IT6=-22−44=-66
+  Xmin=EI−es=0−(-22)=22
+  Xmax=ES−ei=70−(-66)=136
+  类别=间隙
+
+Ø3150 H7/g6
+  IT7=210、IT6=135；基本偏差 g=-38 μm
+  孔：EI=0、ES=+IT7=+210
+  轴：es=-38、ei=es−IT6=-38−135=-173
+  Xmin=EI−es=0−(-38)=38
+  Xmax=ES−ei=210−(-173)=383
+  类别=间隙
+
+RESULT: PASS (5 cases, 0 diffs)
+
+REAL_EXIT=0

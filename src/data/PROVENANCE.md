@@ -2,7 +2,7 @@
 
 | 表 | 片段 | 主源 | 副源数 | 对拍分歧 | 状态 |
 | --- | --- | --- | --- | --- | --- |
-| tolerance-it.json | provenance/tolerance-it.md | GB/T 1800.1-2020 表1（2009 同值，降级已批） | 6 | 1 格（IT9 (400,500]，裁决 155） | 已合并 |
+| tolerance-it.json | provenance/tolerance-it.md（W10-A 增量见 §7） | ≤500：GB/T 1800.1-2020 表1（2009 同值，降级已批）；>500：GB/T 1800.3-1998 转写 + ISO 286-1:2010 | ≤500 6；>500 2 | ≤500 1 格（IT9 (400,500]，裁决 155）；>500 0 格（144 格一致） | 已合并 |
 | threads-unified.json | provenance/threads-unified.md | ASME B1.1（付费原文未取回，两独立公开表互证，降级已批） | 2 | 0 行 | 已合并 |
 | gcode-ref.json | provenance/gcode-ref.md | 设计稿 p13 行集 + FANUC 语义字典（官方 403 降级） | 2 | 0 行 | 已合并 |
 | morse.json | provenance/morse.md | GB/T 1443-2016（付费原文未取回，两独立参考表互证，降级已批） | 2 | 0 行（±0 対拍；半角 DMS 公式导出） | 已合并 |
@@ -123,10 +123,21 @@
 
 ## 6. 结论
 
-1. `data/tolerance-it.json`：13 段 × IT5–IT12 = **104 个值全部非空**，段界 `(lo,hi]` 连续覆盖 `(0,500]`。
+1. `data/tolerance-it.json`：**21 段**（≤500 13 段 × IT5–IT12 = 104 值 + >500 8 段 × IT1–IT18 = 144 值，共 **248 个值全部非空**），段界 `(lo,hi]` 连续覆盖 `(0,3150]`；>500 双源核对见 §7。
 2. 双源互证：主源 104 值 + 6 个副源共 483 个可比单元格，**仅 1 格分歧**（IT9 `(400,500]`，已按 Lead 裁决 2 采用 155；孤值源 160 判转抄错误）。
 3. 3 段独立交叉复验（`(30,50]`、`(10,18]`、`(400,500]`）：逐值一致，见 §3。
 4. 主源降级（2009 全文不可得 → 2020 同值表）已获 Lead 批准并披露，见 §0。
+
+## 7. W10-A 增量：>500–3150 段（IT1–IT18，2026-11-05）
+
+- 范围：`tolerance-it.json` 由 13 段扩至 21 段；新增 >500–630 / >630–800 / >800–1000 / >1000–1250 / >1250–1600 / >1600–2000 / >2000–2500 / >2500–3150 共 8 粗段，左开右闭；段界与 `fundamental-deviations.json` 的 21 段逐段相同。
+- 等级：两源对 >500 段共同覆盖 **IT1–IT18（18 级）**。GB/T 1800.3-1998 转写原表注「基本尺寸大于 500mm 的 IT1 至 IT5 的标准公差数值为试行」；ISO 286-1:2010 实现中 IT01/IT0 在 >500 段未定义，IT1–IT18 有值。按冻结口径「两源交集」取 IT1–IT18；与派工单预注册预期「IT6–IT16 附近」不同，以实查为准并如实披露。
+- 单位：μm。源 A 原表 IT12–IT18 以 mm 列出，已 ×1000 换算为整数 μm（如 0.7 mm → 700 μm）。
+- 双源：源 A = GB/T 1800.3-1998《标准公差数值》公开转写（mechtool.cn，<https://www.mechtool.cn/drawingandaccuracy/drawingandaccuracy_standardtolerancevalues.html>，快照 SHA-256 `787b58cc9724ca99368d5fcd8805a09a0b27bc0299f9f5e7a48ef320fdacf47d`）；源 B = ISO 286-1:2010 Table 1 表值实现 `thefhiter/tolerance-handbook` · `js/engine/iso286.js`（<https://raw.githubusercontent.com/thefhiter/tolerance-handbook/main/js/engine/iso286.js>，快照 SHA-256 `cbb867f71054ad09b7ae937a02d0fd79629f97583bbe14839c330886a0193cdb`）。两源均覆盖 21 段 × IT1–IT18。
+- 对拍：>500 段 8 × 18 = **144 格**，A/B/入库值三向逐格一致，**0 差异**；≤500 段另以源 B 对 IT5–IT12 复核 **104 格**，0 差异（源保真旁证，不改既有值）。原始输出 `docs/evidence/W10-A/runs/source-extraction.txt`、`runs/dual-source-verify.txt`；逐格表 `docs/evidence/W10-A/dual-source-table.md`。
+- `fitTolerance` >500 实算（抽 3 组，算式见 `docs/evidence/W10-A/README.md`）：Ø600 H7/g6 +22…+136 间隙；Ø1000 H7/k6 −56…+90 过渡；Ø2000 H7/p6 −262…−20 过盈；边界 Ø500.001、Ø3150 按 (lo,hi] 落段。
+- 新增行 `source` 字段：「GB/T 1800.1-2020 表1（IT 数值同 GB/T 1800.3-1998 / ISO 286-1:2010；>500 段 IT1–IT5 为试行）」。
+- 测试：`test/data-it.test.ts` 12 例；`test/fit-tolerance.test.ts` 10 例（>500 三组 + 边界；原 9 例零删）。
 
 # PROVENANCE 片段 · threads-unified.json（UNC/UNF 统一螺纹常用表）
 

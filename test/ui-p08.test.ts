@@ -177,7 +177,7 @@ describe('p08 公差配合', () => {
 
   it('超出表范围：输入区提示，不渲染三联卡、无 NaN', async () => {
     await router.navigate('p08');
-    setNominal('600');
+    setNominal('3150.001');
     const page = currentPage();
     expect(page.querySelector('.rc-p08__hint')).not.toBeNull();
     expect(page.querySelector('.rc-p08__hint')?.textContent).toContain('内置公差表范围');
@@ -265,7 +265,7 @@ describe('p08 公差配合', () => {
     clickFitChip('g6');
     expect(fitValues()).toHaveLength(5);
 
-    setNominal('600');
+    setNominal('3150.001');
     expect(currentPage().querySelector('.rc-p08__fit .rc-resultcard')).toBeNull();
     expect(fitChip('g6').disabled).toBe(true);
 

@@ -1,0 +1,376 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m<TREE>[39m
+
+ [32m✓[39m test/ui-p01.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 1181[2mms[22m[39m
+   [33m[2m✓[22m[39m p01 导航[2m > [22m10 个入口分别导航到 p02/p04/p05/p07/p08/p09/p10/p11/p12/p13 [33m 633[2mms[22m[39m
+ [32m✓[39m test/ui-p02.test.ts [2m([22m[2m19 tests[22m[2m)[22m[33m 1296[2mms[22m[39m
+   [33m[2m✓[22m[39m p02 结构保真与七族列表[2m > [22m顶栏 / 七族页签 / 搜索 / 筛选 / 说明逐块存在 [33m 322[2mms[22m[39m
+ [32m✓[39m test/ui-p06.test.ts [2m([22m[2m10 tests[22m[2m)[22m[33m 326[2mms[22m[39m
+ [32m✓[39m test/ui-p04.test.ts [2m([22m[2m30 tests[22m[2m)[22m[33m 448[2mms[22m[39m
+ [32m✓[39m test/ui-p03.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 277[2mms[22m[39m
+ [32m✓[39m test/ui-p05.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 269[2mms[22m[39m
+ [32m✓[39m test/ui-router.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 207[2mms[22m[39m
+ [32m✓[39m test/ui-p13.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 161[2mms[22m[39m
+ [32m✓[39m test/ui-p12.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 179[2mms[22m[39m
+ [31m❯[39m test/ui-p08.test.ts [2m([22m[2m12 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 197[2mms[22m[39m
+   [32m✓[39m p08 公差配合[2m > [22m默认 Ø40 IT7 H：+0.025 / 0.000 / 0.025（段 (30,50] IT7=25 μm）[32m 56[2mms[22m[39m
+   [32m✓[39m p08 公差配合[2m > [22mØ18 IT7 → T=0.018（段 (10,18]，18 μm；边界含 18）[32m 12[2mms[22m[39m
+   [32m✓[39m p08 公差配合[2m > [22m分段边界：Ø50 → (30,50] 0.025；Ø50.001 → (50,80] 0.030[32m 9[2mms[22m[39m
+   [32m✓[39m p08 公差配合[2m > [22mIT6 / IT8 切换：Ø40 → 0.016 / 0.039[32m 12[2mms[22m[39m
+   [32m✓[39m p08 公差配合[2m > [22m轴 h：es=0 / ei=−T，标签切换为 es / ei[32m 10[2mms[22m[39m
+   [32m✓[39m p08 公差配合[2m > [22mURL 传参 d=18&grade=7 生效[32m 14[2mms[22m[39m
+[31m   [31m×[31m p08 公差配合[2m > [22m超出表范围：输入区提示，不渲染三联卡、无 NaN[39m[32m 11[2mms[22m[39m
+[31m     → expected null not to be null[39m
+   [32m✓[39m p08 公差配合[2m > [22m常用配合 chips 可点激活：默认 Ø40 点 H7/g6 → 间隙卡（孔 0/+25、轴 −9/−25、+9…+50）[32m 11[2mms[22m[39m
+   [32m✓[39m p08 公差配合[2m > [22mH7/g6·k6·p6 Ø30 金值（逐项）：+7/+41、−15/+19、−35/−1，类别徽标与静态标签一致[32m 17[2mms[22m[39m
+   [32m✓[39m p08 公差配合[2m > [22m配合卡随基本尺寸重算：Ø30 g6 → Ø100 g6（−12/−34、+12…+69）[32m 10[2mms[22m[39m
+   [32m✓[39m p08 公差配合[2m > [22m「怎么算的」补配合两行算式：Xmin=EI−es、Xmax=ES−ei 代入实值（Ø30 g6）[32m 20[2mms[22m[39m
+[31m   [31m×[31m p08 公差配合[2m > [22m配合卡在超范围输入时清除且 chips 置灰；恢复有效尺寸后可按以重算[39m[32m 13[2mms[22m[39m
+[31m     → expected <div …(2)>…(5)</div> to be null[39m
+ [32m✓[39m test/ui-p07.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 153[2mms[22m[39m
+ [32m✓[39m test/ui-p09.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 137[2mms[22m[39m
+ [32m✓[39m test/ui-p14.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 126[2mms[22m[39m
+ [32m✓[39m test/ui-p11.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 145[2mms[22m[39m
+ [32m✓[39m test/ui-p10.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 104[2mms[22m[39m
+ [32m✓[39m test/ui-components.test.ts [2m([22m[2m26 tests[22m[2m)[22m[32m 35[2mms[22m[39m
+ [32m✓[39m test/ui-store.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m test/ui-source.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 470[2mms[22m[39m
+   [33m[2m✓[22m[39m UI 源码契约[2m > [22m14 页 loader 在无 DOM 环境均可解析，且模块含 title/render [33m 455[2mms[22m[39m
+ [32m✓[39m test/data-it.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m test/data-gcode-ref.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m test/gcode.test.ts [2m([22m[2m32 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m test/ref-tables.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m test/data-trapezoid.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m test/data-materials.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m test/arc-cases-b.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m test/triangle.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m test/data-unified.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [31m❯[39m test/data-fundamental-deviations.test.ts [2m([22m[2m6 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 11[2mms[22m[39m
+   [32m✓[39m data/fundamental-deviations.json（GB/T 1800.1 轴基本偏差 g/k/p）[2m > [22m全表规模：21 段 × g/k/p 三列，source 标注 GB/T 1800.1[32m 2[2mms[22m[39m
+   [32m✓[39m data/fundamental-deviations.json（GB/T 1800.1 轴基本偏差 g/k/p）[2m > [22m21 段 × 3 列逐值对拍（来源 A GB/T 1800.3-1998 表 / 来源 B ISO 286-1:2010）[32m 0[2mms[22m[39m
+   [32m✓[39m data/fundamental-deviations.json（GB/T 1800.1 轴基本偏差 g/k/p）[2m > [22m端别纪律：g=es 恒为负；k=ei 非负；p=ei 为正；全部为 μm 整数[32m 2[2mms[22m[39m
+[31m   [31m×[31m data/fundamental-deviations.json（GB/T 1800.1 轴基本偏差 g/k/p）[2m > [22m分段口径与 tolerance-it.json 一致：前 13 段边界逐段相同（左开右闭，首段 (0,3]）[39m[32m 7[2mms[22m[39m
+[31m     → expected [ { segment: [ +0, 3 ], …(2) }, …(20) ] to have a length of 13 but got 21[39m
+   [32m✓[39m data/fundamental-deviations.json（GB/T 1800.1 轴基本偏差 g/k/p）[2m > [22m金测段 >18–30：g=−7（es）、k=+2（ei）、p=+22（ei）——与派工单冻结值一致[32m 0[2mms[22m[39m
+   [32m✓[39m data/fundamental-deviations.json（GB/T 1800.1 轴基本偏差 g/k/p）[2m > [22m其他尺寸段锚点：>6–10 / >80–120 / >400–500 / >2500–3150[32m 0[2mms[22m[39m
+ [32m✓[39m test/thread.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m test/fit-tolerance.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m test/arc-cases-a.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m test/data-metric.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m test/data-sealpipe.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m test/taper.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m test/data-worm.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m test/data-npt.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m test/data-pipe.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m test/tolerance.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m test/lookup.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m test/data-morse.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m test/data-densities.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m test/weight.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m test/speed.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m test/arc.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 2[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 3 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m test/data-fundamental-deviations.test.ts[2m > [22mdata/fundamental-deviations.json（GB/T 1800.1 轴基本偏差 g/k/p）[2m > [22m分段口径与 tolerance-it.json 一致：前 13 段边界逐段相同（左开右闭，首段 (0,3]）
+[31m[1mAssertionError[22m: expected [ { segment: [ +0, 3 ], …(2) }, …(20) ] to have a length of 13 but got 21[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 13[39m
+[31m+ 21[39m
+
+[36m [2m❯[22m test/data-fundamental-deviations.test.ts:[2m98:21[22m[39m
+    [90m 96| [39m
+    [90m 97| [39m  [34mit[39m([32m'分段口径与 tolerance-it.json 一致：前 13 段边界逐段相同（左开右闭，首段 (0,3]）'[39m[33m,[39m () [33m=>[39m {
+    [90m 98| [39m    [34mexpect[39m([33mIT_ROWS[39m)[33m.[39m[34mtoHaveLength[39m([34m13[39m)[33m;[39m
+    [90m   | [39m                    [31m^[39m
+    [90m 99| [39m    [35mfor[39m ([35mlet[39m i [33m=[39m [34m0[39m[33m;[39m i [33m<[39m [33mIT_ROWS[39m[33m.[39mlength[33m;[39m i [33m+=[39m [34m1[39m) {
+    [90m100| [39m      [34mexpect[39m([34msegmentOf[39m(bands[i][33m![39m[33m.[39mband))[33m.[39m[34mtoEqual[39m([33mIT_ROWS[39m[i][33m![39m[33m.[39msegment)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m test/ui-p08.test.ts[2m > [22mp08 公差配合[2m > [22m超出表范围：输入区提示，不渲染三联卡、无 NaN
+[31m[1mAssertionError[22m: expected null not to be null[39m
+[36m [2m❯[22m test/ui-p08.test.ts:[2m182:53[22m[39m
+    [90m180| [39m    [34msetNominal[39m([32m'600'[39m)[33m;[39m
+    [90m181| [39m    [35mconst[39m page [33m=[39m [34mcurrentPage[39m()[33m;[39m
+    [90m182| [39m    [34mexpect[39m(page[33m.[39m[34mquerySelector[39m([32m'.rc-p08__hint'[39m))[33m.[39mnot[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m   | [39m                                                    [31m^[39m
+    [90m183| [39m    expect(page.querySelector('.rc-p08__hint')?.textContent).toContain…
+    [90m184| [39m    [34mexpect[39m(page[33m.[39m[34mquerySelector[39m([32m'.rc-stattriple'[39m))[33m.[39m[34mtoBeNull[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m test/ui-p08.test.ts[2m > [22mp08 公差配合[2m > [22m配合卡在超范围输入时清除且 chips 置灰；恢复有效尺寸后可按以重算
+[31m[1mAssertionError[22m: expected <div …(2)>…(5)</div> to be null[39m
+
+[32m- Expected:[39m 
+null
+
+[31m+ Received:[39m 
+<div
+  aria-label="配合极限偏差与间隙/过盈"
+  class="la-card tight rc-resultcard"
+>
+  <div
+    class="la-resrow rc-resultcard__row"
+    data-label="孔 H7 上偏差 ES"
+  >
+    <span
+      class="la-reslab rc-resultcard__label"
+    >
+      孔 H7 上偏差 ES
+    </span>
+    <span
+      class="la-resval la-num rc-resultcard__value"
+    >
+      +70
+    </span>
+    <span
+      class="la-unit rc-resultcard__unit"
+    >
+      μm
+    </span>
+    <button
+      aria-label="复制 孔 H7 上偏差 ES"
+      class="la-copy rc-copy rc-resultcard__copy"
+      type="button"
+    >
+      <svg
+        aria-hidden="true"
+        fill="none"
+        height="15"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="1.7"
+        viewBox="0 0 24 24"
+        width="15"
+      >
+        <rect
+          height="10.5"
+          rx="2"
+          width="10.5"
+          x="9"
+          y="9"
+        />
+        <path
+          d="M5.5 14.5v-8a2 2 0 0 1 2-2h8"
+        />
+      </svg>
+    </button>
+  </div>
+  <div
+    class="la-resrow rc-resultcard__row"
+    data-label="孔 H7 下偏差 EI"
+  >
+    <span
+      class="la-reslab rc-resultcard__label"
+    >
+      孔 H7 下偏差 EI
+    </span>
+    <span
+      class="la-resval la-num rc-resultcard__value"
+    >
+      0
+    </span>
+    <span
+      class="la-unit rc-resultcard__unit"
+    >
+      μm
+    </span>
+    <button
+      aria-label="复制 孔 H7 下偏差 EI"
+      class="la-copy rc-copy rc-resultcard__copy"
+      type="button"
+    >
+      <svg
+        aria-hidden="true"
+        fill="none"
+        height="15"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="1.7"
+        viewBox="0 0 24 24"
+        width="15"
+      >
+        <rect
+          height="10.5"
+          rx="2"
+          width="10.5"
+          x="9"
+          y="9"
+        />
+        <path
+          d="M5.5 14.5v-8a2 2 0 0 1 2-2h8"
+        />
+      </svg>
+    </button>
+  </div>
+  <div
+    class="la-resrow rc-resultcard__row"
+    data-label="轴 g6 上偏差 es"
+  >
+    <span
+      class="la-reslab rc-resultcard__label"
+    >
+      轴 g6 上偏差 es
+    </span>
+    <span
+      class="la-resval la-num rc-resultcard__value"
+    >
+      −22
+    </span>
+    <span
+      class="la-unit rc-resultcard__unit"
+    >
+      μm
+    </span>
+    <button
+      aria-label="复制 轴 g6 上偏差 es"
+      class="la-copy rc-copy rc-resultcard__copy"
+      type="button"
+    >
+      <svg
+        aria-hidden="true"
+        fill="none"
+        height="15"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="1.7"
+        viewBox="0 0 24 24"
+        width="15"
+      >
+        <rect
+          height="10.5"
+          rx="2"
+          width="10.5"
+          x="9"
+          y="9"
+        />
+        <path
+          d="M5.5 14.5v-8a2 2 0 0 1 2-2h8"
+        />
+      </svg>
+    </button>
+  </div>
+  <div
+    class="la-resrow rc-resultcard__row"
+    data-label="轴 g6 下偏差 ei"
+  >
+    <span
+      class="la-reslab rc-resultcard__label"
+    >
+      轴 g6 下偏差 ei
+    </span>
+    <span
+      class="la-resval la-num rc-resultcard__value"
+    >
+      −66
+    </span>
+    <span
+      class="la-unit rc-resultcard__unit"
+    >
+      μm
+    </span>
+    <button
+      aria-label="复制 轴 g6 下偏差 ei"
+      class="la-copy rc-copy rc-resultcard__copy"
+      type="button"
+    >
+      <svg
+        aria-hidden="true"
+        fill="none"
+        height="15"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="1.7"
+        viewBox="0 0 24 24"
+        width="15"
+      >
+        <rect
+          height="10.5"
+          rx="2"
+          width="10.5"
+          x="9"
+          y="9"
+        />
+        <path
+          d="M5.5 14.5v-8a2 2 0 0 1 2-2h8"
+        />
+      </svg>
+    </button>
+  </div>
+  <div
+    class="la-resrow rc-resultcard__row"
+    data-label="配合 Xmin–Xmax"
+  >
+    <span
+      class="la-reslab rc-resultcard__label"
+    >
+      配合 Xmin–Xmax
+    </span>
+    <span
+      class="la-resval la-num rc-resultcard__value"
+    >
+      +22 … +136
+    </span>
+    <span
+      class="la-unit rc-resultcard__unit"
+    >
+      μm
+    </span>
+    <button
+      aria-label="复制 配合 Xmin–Xmax"
+      class="la-copy rc-copy rc-resultcard__copy"
+      type="button"
+    >
+      <svg
+        aria-hidden="true"
+        fill="none"
+        height="15"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="1.7"
+        viewBox="0 0 24 24"
+        width="15"
+      >
+        <rect
+          height="10.5"
+          rx="2"
+          width="10.5"
+          x="9"
+          y="9"
+        />
+        <path
+          d="M5.5 14.5v-8a2 2 0 0 1 2-2h8"
+        />
+      </svg>
+    </button>
+  </div>
+</div>
+
+[36m [2m❯[22m test/ui-p08.test.ts:[2m269:72[22m[39m
+    [90m267| [39m
+    [90m268| [39m    [34msetNominal[39m([32m'600'[39m)[33m;[39m
+    [90m269| [39m    expect(currentPage().querySelector('.rc-p08__fit .rc-resultcard'))…
+    [90m   | [39m                                                                       [31m^[39m
+    [90m270| [39m    [34mexpect[39m([34mfitChip[39m([32m'g6'[39m)[33m.[39mdisabled)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m271| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m42 passed[39m[22m[90m (44)[39m
+[2m      Tests [22m [1m[31m3 failed[39m[22m[2m | [22m[1m[32m479 passed[39m[22m[90m (482)[39m
+[2m   Start at [22m 11:28:22
+[2m   Duration [22m 14.29s[2m (transform 863ms, setup 0ms, collect 1.22s, tests 5.88s, environment 8.58s, prepare 4.36s)[22m
+
+
+REAL_EXIT=1

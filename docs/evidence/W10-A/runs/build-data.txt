@@ -1,0 +1,3 @@
+appended 8 segments (IT1–IT18) -> src\data\tolerance-it.json
+
+REAL_EXIT=0

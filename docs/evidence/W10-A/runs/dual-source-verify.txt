@@ -1,0 +1,31 @@
+W10-A dual-source verify · tolerance-it.json
+data: src\data\tolerance-it.json
+source record: docs\evidence\W10-A\runs\source-values.json
+segments in data: 21 | segments in source record: 21
+
+(0,3]          IT5–IT12  8 grades × 3 = 24 comparisons, 0 diffs
+(3,6]          IT5–IT12  8 grades × 3 = 24 comparisons, 0 diffs
+(6,10]         IT5–IT12  8 grades × 3 = 24 comparisons, 0 diffs
+(10,18]        IT5–IT12  8 grades × 3 = 24 comparisons, 0 diffs
+(18,30]        IT5–IT12  8 grades × 3 = 24 comparisons, 0 diffs
+(30,50]        IT5–IT12  8 grades × 3 = 24 comparisons, 0 diffs
+(50,80]        IT5–IT12  8 grades × 3 = 24 comparisons, 0 diffs
+(80,120]       IT5–IT12  8 grades × 3 = 24 comparisons, 0 diffs
+(120,180]      IT5–IT12  8 grades × 3 = 24 comparisons, 0 diffs
+(180,250]      IT5–IT12  8 grades × 3 = 24 comparisons, 0 diffs
+(250,315]      IT5–IT12  8 grades × 3 = 24 comparisons, 0 diffs
+(315,400]      IT5–IT12  8 grades × 3 = 24 comparisons, 0 diffs
+(400,500]      IT5–IT12  8 grades × 3 = 24 comparisons, 0 diffs
+(500,630]      IT1–IT18  18 grades × 3 = 54 comparisons, 0 diffs
+(630,800]      IT1–IT18  18 grades × 3 = 54 comparisons, 0 diffs
+(800,1000]     IT1–IT18  18 grades × 3 = 54 comparisons, 0 diffs
+(1000,1250]    IT1–IT18  18 grades × 3 = 54 comparisons, 0 diffs
+(1250,1600]    IT1–IT18  18 grades × 3 = 54 comparisons, 0 diffs
+(1600,2000]    IT1–IT18  18 grades × 3 = 54 comparisons, 0 diffs
+(2000,2500]    IT1–IT18  18 grades × 3 = 54 comparisons, 0 diffs
+(2500,3150]    IT1–IT18  18 grades × 3 = 54 comparisons, 0 diffs
+
+A vs B vs data: 248 cells (744 comparisons), 0 diffs/failures
+RESULT: PASS
+
+REAL_EXIT=0

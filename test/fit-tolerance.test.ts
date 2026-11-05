@@ -6,7 +6,7 @@
  *   轴 g6：es=表值（负）、ei=es−IT6；k6/p6：ei=表值（正）、es=ei+IT6；
  *   Xmin=EI−es、Xmax=ES−ei（间隙为正 / 过盈为负）。
  *   fitType：Xmin≥0 且 Xmax≥0=clearance；Xmax≤0=interference；其余=transition。
- * IT 值来自 src/data/tolerance-it.json（>18–30 段 IT6=13、IT7=21 μm）；
+ * IT 值来自 src/data/tolerance-it.json（>18–30 段 IT6=13、IT7=21 μm；W10-A 起 >500–3150 亦可查）；
  * 基本偏差来自 src/data/fundamental-deviations.json（>18–30 段 g=−7、k=+2、p=+22 μm）。
  * 逐值算式见各 it() 注释；与派工单金值逐位对照。
  */
@@ -156,14 +156,60 @@ describe('fitTolerance：H7/g6·k6·p6 常用配合实算（μm）', () => {
     for (const nominal of [0, -5, Number.NaN, Number.POSITIVE_INFINITY]) {
       expect(() => fitTolerance({ nominal, shaftBand: 'g6' })).toThrowError(/PANIC/);
     }
-    // IT 表仅到 ≤500；基本偏差表虽到 3150，但无 IT 值不可实算。
-    for (const nominal of [500.001, 600, 3150]) {
-      expect(() => fitTolerance({ nominal, shaftBand: 'g6' })).toThrowError(/PANIC/);
-    }
+    // W10-A：IT 表已扩至 >500–3150，500.001/600/3150 均可实算；越界判据改为 >3150。
+    expect(() => fitTolerance({ nominal: 3150.001, shaftBand: 'g6' })).toThrowError(/PANIC/);
+    expect(() => fitTolerance({ nominal: 4000, shaftBand: 'g6' })).toThrowError(/PANIC/);
     // 运行时非法轴代号（类型层外调用）。
     expect(() =>
       fitTolerance({ nominal: 30, shaftBand: 'x6' as unknown as FitInput['shaftBand'] }),
     ).toThrowError(/PANIC/);
+  });
+
+  it('>500 段三组实算：Ø600 H7/g6、Ø1000 H7/k6、Ø2000 H7/p6（表值同源：IT 表 + 基本偏差表）', () => {
+    // 表值来源：
+    //   IT 表（src/data/tolerance-it.json，W10-A 双源核对）
+    //     (500,630]：IT6=44、IT7=70；(800,1000]：IT6=56、IT7=90；(1600,2000]：IT6=92、IT7=150。
+    //   基本偏差（src/data/fundamental-deviations.json，W8-C 双源核对）
+    //     >500–630：g=−22；>800–1000：k=0；>1600–2000：p=+170。
+    // 算式（tolerance.ts）：g6 ei=es−IT6；k6/p6 es=ei+IT6；Xmin=EI−es、Xmax=ES−ei。
+
+    // 组 1 Ø600 落 (500,630]：孔 H7 = 0/+70；g6 es=−22、ei=−22−44=−66。
+    // Xmin=0−(−22)=+22；Xmax=70−(−66)=+136 → 间隙。
+    expectFit(600, 'g6', {
+      holeLower: 0, holeUpper: 70,
+      shaftUpper: -22, shaftLower: -66,
+      min: 22, max: 136, type: 'clearance',
+    });
+
+    // 组 2 Ø1000 落 (800,1000]：孔 H7 = 0/+90；k6 ei=0、es=0+56=+56。
+    // Xmin=0−56=−56；Xmax=90−0=+90 → 过渡。
+    expectFit(1000, 'k6', {
+      holeLower: 0, holeUpper: 90,
+      shaftUpper: 56, shaftLower: 0,
+      min: -56, max: 90, type: 'transition',
+    });
+
+    // 组 3 Ø2000 落 (1600,2000]：孔 H7 = 0/+150；p6 ei=+170、es=170+92=+262。
+    // Xmin=0−262=−262；Xmax=150−170=−20 → 过盈。
+    expectFit(2000, 'p6', {
+      holeLower: 0, holeUpper: 150,
+      shaftUpper: 262, shaftLower: 170,
+      min: -262, max: -20, type: 'interference',
+    });
+
+    // 边界：Ø500.001 落 (500,630]，与 Ø600 同段（g6 −22/−66、+22…+136）。
+    expectFit(500.001, 'g6', {
+      holeLower: 0, holeUpper: 70,
+      shaftUpper: -22, shaftLower: -66,
+      min: 22, max: 136, type: 'clearance',
+    });
+    // 边界：Ø3150 落末段 (2500,3150]：IT6=135、IT7=210、g=−38。
+    // g6 ei=−38−135=−173；Xmin=+38；Xmax=210−(−173)=+383。
+    expectFit(3150, 'g6', {
+      holeLower: 0, holeUpper: 210,
+      shaftUpper: -38, shaftLower: -173,
+      min: 38, max: 383, type: 'clearance',
+    });
   });
 
   it('全部返回字段为 μm 整数（无浮点尾差）', () => {
