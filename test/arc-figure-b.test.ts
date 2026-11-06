@@ -125,9 +125,9 @@ describe('arc-figure-b · AC07 凸圆弧收尾', () => {
     const mid = { x: (fig.point.x + centerOf(fig).x) / 2, y: (fig.point.y + centerOf(fig).y) / 2 };
     expect(fig.labels[0]!.x).toBeCloseTo(mid.x, 6);
     expect(fig.labels[0]!.y).toBeCloseTo(mid.y - 3, 6);
-    // Ø 锚：圆柱中点上方 −3
+    // Ø 锚：圆柱中点线下 +3（A4-R1/V4.4-06：原上方−3 限高映射下溢出 viewBox 被裁）
     expect(fig.labels[1]!.x).toBeCloseTo(m.x((dZ - 2.8 * R + (dZ + R)) / 2), 6);
-    expect(fig.labels[1]!.y).toBeCloseTo(m.y(dX / 2) - 3, 6);
+    expect(fig.labels[1]!.y).toBeCloseTo(m.y(dX / 2) + 3, 6);
     // Z 锚：(map(dZ), y_axis+3)
     expect(fig.labels[2]!.x).toBeCloseTo(m.x(dZ), 6);
     expect(fig.labels[2]!.y).toBeCloseTo(fig.axis.y1 + 3, 6);

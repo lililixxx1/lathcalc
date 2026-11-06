@@ -154,7 +154,9 @@ export function figureAC07(input: Record<string, number>): FigureView {
       valueLabel(
         `Ø${fmtFigureValue(dX)}`,
         a.map.toView({ z: (zLeft + T1.z) / 2, r: dX / 2 }).x,
-        a.map.toView({ z: 0, r: dX / 2 }).y - 3,
+        // A4-R1（V4.4-06）：原「上方−3」在限高映射下顶线已居 y≈3.5，标签溢出
+        // viewBox 被裁——改圆柱线下方+3，与 AC05（Ø 小径下）/AC12（Ø 孔壁下）同规
+        a.map.toView({ z: 0, r: dX / 2 }).y + 3,
       ),
       valueLabel(`Z${fmtFigureValue(dZ)}`, a.map.toView({ z: dZ, r: 0 }).x, a.axisY + 3),
     ],

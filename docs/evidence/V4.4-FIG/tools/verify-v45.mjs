@@ -19,7 +19,7 @@ const CHROME = process.env.CHROME ?? 'chrome';
 const DEBUG_PORT = Number(process.env.CDP_PORT ?? 9353);
 const BUDGET_MS = 180_000;
 
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms);
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 /** 12 案 × 两输入（第二组输入可达性算式见 WAVE-PLAN-V4.4 §4 各案约束：如
  *  AC02 需 0<dZ<R1+R2（10<14）、AC06 需 |c|<2R（√145≈12.04<16）、AC08 需 |dZ|≤2R） */

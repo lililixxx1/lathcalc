@@ -95,7 +95,7 @@ z 范围（V4.4-04④）。
 
 | 案 | 输入(默认) | 轮廓（实线） | 参照 | 标签 |
 | --- | --- | --- | --- | --- |
-| AC07 凸圆弧收尾 | R,dX,dZ (5,30,−30) | 圆柱 (z_left,dX/2)→T1，z_left=dZ−2.8R；弧 T1→T2；端面 T2→(dZ,0)；轴线=轮廓 z 范围 | 点C；线C↔T2 | R at mid(T2v,Cv)+3·rotScreen(unit(T2v−Cv))；Ø{dX} at 圆柱中点上方−3；Z{dZ} at (map(dZ), y_axis+3)（绝对 Z，V4.4-02） |
+| AC07 凸圆弧收尾 | R,dX,dZ (5,30,−30) | 圆柱 (z_left,dX/2)→T1，z_left=dZ−2.8R；弧 T1→T2；端面 T2→(dZ,0)；轴线=轮廓 z 范围 | 点C；线C↔T2 | R at mid(T2v,Cv)+3·rotScreen(unit(T2v−Cv))；Ø{dX} at 圆柱中点线下+3（A4-R1/V4.4-06 勘正：原「上方−3」限高映射下顶线居 y≈3.5，标签溢出 viewBox 被裁；AC05/AC12 同为线下规）；Z{dZ} at (map(dZ), y_axis+3)（绝对 Z，V4.4-02） |
 | AC08 端面切弧 | R,dZ (6,−4) | 端面 (0,0)→(0,r_t+1.9R)；弧 E→T；轴线=(dZ,0)→(0,0) | 点C；线C↔T | R at mid(Tv,Cv)+3·rotScreen(unit(Tv−Cv))；dZ={v} at (map(dZ), y_axis+3) |
 | AC09 锥面切弧 | R,α (5,30) | 端面 (0,0)→(0,d+1.9R)；弧 F→T；锥面 T→T+2.4R·u，u=(cosα,sinα)；轴线=(0,0)→(锥面末端 z,0) | 点C；线C↔T | R at mid(Tv,Cv)+3·rotScreen(unit(Tv−Cv))；α{v}° at 锥面段中点−2.2·rotScreen(u_view) |
 | AC10 螺纹入口 | R,lead (5,3.5) | 圆柱 (−2.4R,R)→T；弧 E→T；轴线=(−2.4R,0)→(lead,0) | refCircle(C,R) 虚线整圆；点C；线C↔T | R at Cv−(R·s+2.2)·(1,0)；lead={v} at mid(Tv,Ev)+(0,3.5) |
