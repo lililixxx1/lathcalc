@@ -1,0 +1,3 @@
+# command: npx tsc --noEmit
+# cwd: <TREE>
+REAL_EXIT=0
