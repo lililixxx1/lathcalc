@@ -166,7 +166,15 @@ export function buildTriangleFigure(result: TriangleResult, alt?: TriangleResult
     else marks.push(...rightMarks(C, A, B));
   }
 
-  // 基线 SVG text y=基线，顶点标签上移半字高（font-size 11 → +4 视觉居中）
+  // 基线 SVG text y=基线，顶点标签上移半字高（font-size 11 → +4 视觉居中）；
+  // 标签钳位入界（A4-R1/V4.5-08）：高瘦/扁宽三角的外法向/外角平分向偏移可能把
+  // 标签推出 viewBox（AC07 同族教训——锚法偏移必须先验边界余量），钳位只影响
+  // 本会越界的极端案。y∈[9,101] 保字高/降部；x∈[20,200] 保 anchor=middle 半宽。
+  const clamp = (l: TriLabel): TriLabel => ({
+    text: l.text,
+    x: Math.min(Math.max(l.x, 20), 200),
+    y: Math.min(Math.max(l.y, 9), 101),
+  });
   const lift = (label: TriLabel, dy: number): TriLabel => ({ ...label, y: label.y + dy });
   const labels: TriLabel[] = [
     sideLabel(`a ${fmtSide(result.a)}`, B, C, A),
@@ -175,7 +183,7 @@ export function buildTriangleFigure(result: TriangleResult, alt?: TriangleResult
     lift(vertexLabel(`A ${fmtDeg(result.A)}°`, A, B, C), 4),
     lift(vertexLabel(`B ${fmtDeg(result.B)}°`, B, A, C), 4),
     lift(vertexLabel(`C ${fmtDeg(result.C)}°`, C, A, B), 4),
-  ];
+  ].map(clamp);
 
   return { segs, altSegs, rightMarks: marks, labels, scale: map.s };
 }
