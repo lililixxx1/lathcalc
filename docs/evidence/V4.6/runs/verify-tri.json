@@ -1,0 +1,115 @@
+{
+  "ok": true,
+  "ms": 1210,
+  "budgetMs": 120000,
+  "shots": [
+    "p12-sss-default-390x844",
+    "p12-sss-131415-390x844",
+    "p12-sas-a-390x844",
+    "p12-sas-b-390x844",
+    "p12-asa-a-390x844",
+    "p12-asa-b-390x844",
+    "p12-ssa-dual-390x844",
+    "p12-ssa-nosol-390x844"
+  ],
+  "labelChecks": [
+    {
+      "id": "sss-default",
+      "texts": [
+        "a 30",
+        "b 40",
+        "c 50",
+        "A 36.9°",
+        "B 53.1°",
+        "C 90°"
+      ],
+      "keptFrame": false
+    },
+    {
+      "id": "sss-131415",
+      "texts": [
+        "a 13",
+        "b 14",
+        "c 15",
+        "A 53.1°",
+        "B 59.5°",
+        "C 67.4°"
+      ],
+      "keptFrame": false
+    },
+    {
+      "id": "sas-40-50-36.87",
+      "texts": [
+        "a 30",
+        "b 40",
+        "c 50",
+        "A 36.9°",
+        "B 53.1°",
+        "C 90°"
+      ],
+      "keptFrame": false
+    },
+    {
+      "id": "sas-40-50-60",
+      "texts": [
+        "a 45.83",
+        "b 40",
+        "c 50",
+        "A 60°",
+        "B 49.1°",
+        "C 70.9°"
+      ],
+      "keptFrame": false
+    },
+    {
+      "id": "asa-36.87-53.13-50",
+      "texts": [
+        "a 30",
+        "b 40",
+        "c 50",
+        "A 36.9°",
+        "B 53.1°",
+        "C 90°"
+      ],
+      "keptFrame": false
+    },
+    {
+      "id": "asa-30-45-40",
+      "texts": [
+        "a 20.71",
+        "b 29.28",
+        "c 40",
+        "A 30°",
+        "B 45°",
+        "C 105°"
+      ],
+      "keptFrame": false
+    },
+    {
+      "id": "ssa-dual",
+      "texts": [
+        "a 40",
+        "b 66.46",
+        "c 50",
+        "A 36.9°",
+        "B 94.5°",
+        "C 48.6°"
+      ],
+      "keptFrame": false
+    },
+    {
+      "id": "ssa-no-solution",
+      "texts": [
+        "a 40",
+        "b 66.46",
+        "c 50",
+        "A 36.9°",
+        "B 94.5°",
+        "C 48.6°"
+      ],
+      "keptFrame": true
+    }
+  ],
+  "exceptions": 0,
+  "consoleErrors": 0
+}

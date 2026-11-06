@@ -184,30 +184,42 @@ describe('triangle-figure · SSA 双解叠画（V4.5-04）', () => {
 
 /* ================================================================= 防御 */
 
-describe('triangle-figure · 标签钳位入界（A4-R1/V4.5-08）', () => {
+describe('triangle-figure · 标签钳位入界（A4-R1/V4.5-08，V4.6-01 收紧）', () => {
   it('高瘦三角（10/10/2，顶点贴内框顶）顶部角标签被钳回字高界内', () => {
-    // 底 c=2、h=√(100−1)=9.9499 → s=72/9.9499（h 限制）→ 顶点 y=16，
-    // C 标签未钳位 ≈7.4（越界）→ 钳 9
+    // 独立复算：底 c=2、x=(100+4−100)/4=1、h=√99=9.9499 → s=72/9.9499（h 限制）
+    // → C=(110,16)；C 顶点标签未钳位 y=16−13+4=7.0（越字高界）→ 钳 9
     const fig = buildTriangleFigure({ a: 10, b: 10, c: 2, A: 84.26, B: 84.26, C: 11.48, area: 9.95, right: false });
     for (const l of fig.labels) {
-      expect(l.x).toBeGreaterThanOrEqual(20);
-      expect(l.x).toBeLessThanOrEqual(200);
+      expect(l.x).toBeGreaterThanOrEqual(27);
+      expect(l.x).toBeLessThanOrEqual(193);
       expect(l.y).toBeGreaterThanOrEqual(9);
       expect(l.y).toBeLessThanOrEqual(101);
     }
     const cLabel = fig.labels.find((l) => l.text.startsWith('C'))!;
-    expect(cLabel.y).toBe(9); // 钳位生效（未钳 ≈7.4 越界）
+    expect(cLabel.y).toBe(9); // 钳位生效（未钳 7.0 越界）
   });
 
-  it('扁宽三角（19/10/10，底边贴内框左右极）两侧角标签被钳回半宽界内', () => {
-    // w=19、h=√9.75=3.1224 → s=188/19（w 限制）→ A=(16,88) B=(204,88)
+  it('扁宽三角（19/10/10）左侧 C 顶点与右侧角标签被钳回字宽界内', () => {
+    // 独立复算：底 c=10、x=(100+100−361)/20=−8.05、h=√(100−64.8025)=5.9327；
+    // 三顶点 x∈[−8.05,10] → w=18.05、s=188/18.05=10.4155 → 屏幕 A=(99.845,88)、
+    // B=(204,88)、C=(16,26.207)——左极点 (16,88) 是 C 不是 A。未钳位：C 标签
+    // x=4.447、B 标签 x=216.836、A 标签 y=104.350，均越界 → 全部钳回
     const fig = buildTriangleFigure({ a: 19, b: 10, c: 10, A: 143.6, B: 18.2, C: 18.2, area: 29.66, right: false });
     for (const l of fig.labels) {
-      expect(l.x).toBeGreaterThanOrEqual(20);
-      expect(l.x).toBeLessThanOrEqual(200);
+      expect(l.x).toBeGreaterThanOrEqual(27);
+      expect(l.x).toBeLessThanOrEqual(193);
       expect(l.y).toBeGreaterThanOrEqual(9);
       expect(l.y).toBeLessThanOrEqual(101);
     }
+  });
+
+  it('长标签（SAS b40 c50 A60° → `a 45.83` 7 字符）按实长收紧右界 x≤193', () => {
+    const output = solveTriangleBy({ b: 40, c: 50, A: 60 });
+    const fig = buildTriangleFigure(output.solutions[0]!);
+    const a = fig.labels.find((l) => l.text === 'a 45.83')!;
+    expect(a.x).toBeLessThanOrEqual(193);
+    // 字宽保守估：0.58em×7×11=44.66 → 半宽 22.33；x=193 右缘 215.33 ≤218.5
+    expect(a.x + (0.58 * 11 * 7) / 2).toBeLessThanOrEqual(218.5);
   });
 });
 

@@ -167,12 +167,15 @@ export function buildTriangleFigure(result: TriangleResult, alt?: TriangleResult
   }
 
   // 基线 SVG text y=基线，顶点标签上移半字高（font-size 11 → +4 视觉居中）；
-  // 标签钳位入界（A4-R1/V4.5-08）：高瘦/扁宽三角的外法向/外角平分向偏移可能把
-  // 标签推出 viewBox（AC07 同族教训——锚法偏移必须先验边界余量），钳位只影响
-  // 本会越界的极端案。y∈[9,101] 保字高/降部；x∈[20,200] 保 anchor=middle 半宽。
+  // 标签钳位入界（A4-R1/V4.5-08，V4.6-01 按最坏字宽收紧）：高瘦/扁宽三角的外法向/
+  // 外角平分向偏移可能把标签推出 viewBox（AC07 同族教训——锚法偏移必须先验边界
+  // 余量）。标签格式上限 8 字符（如 `A 143.6°`），font-size 11 按 0.58em/字符保守
+  // 估宽 → 半宽 ≈25.5；x∈[27,193] 保右缘 ≤218.5 / 左缘 ≥1.5（viewBox 宽 220），
+  // y∈[9,101] 保字高与降部。V4.5-08 的 x∈[20,200] 只按 anchor 半宽估算，未计
+  // `a 45.83` 这类 7 字符标签实长（x=200 时右缘 ≈222 越界）。
   const clamp = (l: TriLabel): TriLabel => ({
     text: l.text,
-    x: Math.min(Math.max(l.x, 20), 200),
+    x: Math.min(Math.max(l.x, 27), 193),
     y: Math.min(Math.max(l.y, 9), 101),
   });
   const lift = (label: TriLabel, dy: number): TriLabel => ({ ...label, y: label.y + dy });

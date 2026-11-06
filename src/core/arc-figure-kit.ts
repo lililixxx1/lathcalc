@@ -1,8 +1,11 @@
 /**
  * arc-figure-kit.ts · 参数化图形共享几何工具（V4.4 契约预置，Lead 冻结）
  *
- * 自 arc-figure.ts 原样迁出（零逻辑改动，18 条既有测试即回归）；arc-figure-a2/b
- * 两个实现文件只从本模块取工具，避免与 dispatcher 循环依赖。
+ * 自 arc-figure.ts 原样迁出（搬迁部分零逻辑改动，18 条既有测试即回归）；V4.4 起
+ * 本模块含一处**受控增量**：sampleArc 补跨度内四向 cardinal 极值（一般弧 <180° 时
+ * 弧极值可落在均匀采样点之间，bbox 必须含极值才紧；四分之一弧行为与 V4.3 一致，
+ * 详见 sampleArc 注）。arc-figure-a2/b 两个实现文件只从本模块取工具，避免与
+ * dispatcher 循环依赖。
  *
  *  ===== 冻结约定（V4.3 §1/§2 + V4.4 §2 增量，全文见 docs/plan/WAVE-PLAN-V4.4.md）=====
  *  - 求解单源：solveFor 按 solver.inputs 择键调 core solve()，不传 rearToolPost；

@@ -1,0 +1,192 @@
+{
+  "ok": true,
+  "ms": 2542,
+  "budgetMs": 180000,
+  "shots": [
+    "p06-ac01-param-a-390x844",
+    "p06-ac01-param-b-390x844",
+    "p06-ac02-param-a-390x844",
+    "p06-ac02-param-b-390x844",
+    "p06-ac03-param-a-390x844",
+    "p06-ac03-param-b-390x844",
+    "p06-ac04-param-a-390x844",
+    "p06-ac04-param-b-390x844",
+    "p06-ac05-param-a-390x844",
+    "p06-ac05-param-b-390x844",
+    "p06-ac06-param-a-390x844",
+    "p06-ac06-param-b-390x844",
+    "p06-ac07-param-a-390x844",
+    "p06-ac07-param-b-390x844",
+    "p06-ac08-param-a-390x844",
+    "p06-ac08-param-b-390x844",
+    "p06-ac09-param-a-390x844",
+    "p06-ac09-param-b-390x844",
+    "p06-ac10-param-a-390x844",
+    "p06-ac10-param-b-390x844",
+    "p06-ac11-param-a-390x844",
+    "p06-ac11-param-b-390x844",
+    "p06-ac12-param-a-390x844",
+    "p06-ac12-param-b-390x844",
+    "p05-gallery-regression-390x844"
+  ],
+  "labelChecks": [
+    {
+      "id": "AC01",
+      "first": [
+        "R5",
+        "α45°",
+        "Ø36"
+      ],
+      "second": [
+        "R12",
+        "α30°",
+        "Ø50"
+      ],
+      "figureChanged": true
+    },
+    {
+      "id": "AC02",
+      "first": [
+        "R1=10",
+        "R2=15",
+        "dZ=15"
+      ],
+      "second": [
+        "R1=8",
+        "R2=6",
+        "dZ=10"
+      ],
+      "figureChanged": true
+    },
+    {
+      "id": "AC03",
+      "first": [
+        "R1=25",
+        "R2=10",
+        "dZ=9"
+      ],
+      "second": [
+        "R1=20",
+        "R2=5",
+        "dZ=6"
+      ],
+      "figureChanged": true
+    },
+    {
+      "id": "AC04",
+      "first": [
+        "R1=5",
+        "R2=3",
+        "α45°"
+      ],
+      "second": [
+        "R1=4",
+        "R2=6",
+        "α30°"
+      ],
+      "figureChanged": true
+    },
+    {
+      "id": "AC05",
+      "first": [
+        "R4",
+        "Ø20",
+        "Z-10"
+      ],
+      "second": [
+        "R8",
+        "Ø28",
+        "Z-16"
+      ],
+      "figureChanged": true
+    },
+    {
+      "id": "AC06",
+      "first": [
+        "R10",
+        "dX=12",
+        "dZ=8"
+      ],
+      "second": [
+        "R8",
+        "dX=16",
+        "dZ=9"
+      ],
+      "figureChanged": true
+    },
+    {
+      "id": "AC07",
+      "first": [
+        "R5",
+        "Ø30",
+        "Z-30"
+      ],
+      "second": [
+        "R4",
+        "Ø40",
+        "Z-20"
+      ],
+      "figureChanged": true
+    },
+    {
+      "id": "AC08",
+      "first": [
+        "R6",
+        "dZ=-4"
+      ],
+      "second": [
+        "R8",
+        "dZ=6"
+      ],
+      "figureChanged": true
+    },
+    {
+      "id": "AC09",
+      "first": [
+        "R5",
+        "α30°"
+      ],
+      "second": [
+        "R3",
+        "α45°"
+      ],
+      "figureChanged": true
+    },
+    {
+      "id": "AC10",
+      "first": [
+        "R5",
+        "lead=3.5"
+      ],
+      "second": [
+        "R8",
+        "lead=4"
+      ],
+      "figureChanged": true
+    },
+    {
+      "id": "AC11",
+      "first": [
+        "R10"
+      ],
+      "second": [
+        "R6"
+      ],
+      "figureChanged": "labels-only（单参数自相似案，登记裁决）"
+    },
+    {
+      "id": "AC12",
+      "first": [
+        "R3",
+        "Ø20"
+      ],
+      "second": [
+        "R5",
+        "Ø28"
+      ],
+      "figureChanged": true
+    }
+  ],
+  "exceptions": 0,
+  "consoleErrors": 0
+}

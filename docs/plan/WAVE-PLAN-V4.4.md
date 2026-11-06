@@ -59,7 +59,8 @@ export interface FigureView {
   cross = (x2−x1)(cy−y1) − (y2−y1)(cx−x1)；**sweep = cross > 0 ? 1 : 0**；
   以 AC01=1 / AC05=0 为 pinned 用例（V4.3 已上线行为）。
 - **bbox 点集增量**：refCircles 计四极值点 (cx±r, cy) 与 (cx, cy±r)；实线整圆 2 半圆
-  弧走 sampleArc(22.5°) 自含极值。标签锚点不计（V4.3 同）。
+  弧走 sampleArc（均匀 5 点 + **跨度内 cardinal 四向极值**——V4.4 增量，一般弧 <180°
+  时极值可落在均匀采样点之间；整圆半圆/四分之一弧均自含极值）。标签锚点不计（V4.3 同）。
 - p05.ts `arcCaseParametricSVG` 增 refCircles 层（色 var(--la-sub)，dasharray 同
   refDashes），层序置于 refDashes 同级。
 - 桩文件：`src/core/arc-figure-a2.ts`（figureAC02/03/04/06，桩=throw 'V4.4 A2 not

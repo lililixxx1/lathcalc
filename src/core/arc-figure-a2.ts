@@ -47,6 +47,21 @@ const subView = (a: ViewPoint, b: ViewPoint): ViewPoint => ({ x: a.x - b.x, y: a
 /** 无轴线案（AC02/03/04，V4.4-03）：零长退化段，装配层 p05 已跳过渲染 */
 const NO_AXIS: ViewSeg = { x1: 0, y1: 0, x2: 0, y2: 0 };
 
+/** 标签框估算（p05/p06 装配 font-size=3.2；0.58em/字符保守估宽，字高 1.05em）。
+ *  仅用于 V4.6 标签避让判定，不参与几何/映射——映射仍是纯数值恒等式。 */
+const LABEL_FONT = 3.2;
+const LABEL_CHAR_W = 0.58 * LABEL_FONT;
+const labelBox = (l: ViewLabel): { x0: number; x1: number; y0: number; y1: number } => {
+  const w = l.text.length * LABEL_CHAR_W;
+  const x0 = l.anchor === 'middle' ? l.x - w / 2 : l.x;
+  return { x0, x1: x0 + w, y0: l.y - 0.8 * LABEL_FONT, y1: l.y + 0.25 * LABEL_FONT };
+};
+const boxesOverlap = (a: ViewLabel, b: ViewLabel, pad = 0): boolean => {
+  const A = labelBox(a);
+  const B = labelBox(b);
+  return A.x0 < B.x1 + pad && B.x0 < A.x1 + pad && A.y0 < B.y1 + pad && B.y0 < A.y1 + pad;
+};
+
 /* ------------------------------------------------------------------ AC02 */
 
 /** AC02 两圆弧外切（§3）：整圆1(C1,R1)、整圆2(C2,R2) 各 2 半圆 + 圆心点 + 连心虚线 +
@@ -155,8 +170,29 @@ export function figureAC03(input: Record<string, number>): FigureView {
   const e = unitView(subView(C2v, C1v));
   const s = map.scale;
 
-  // §3 标签锚法：R1 在 C1 外侧沿 −e；R2 在 C2 圆内 (0,+2.8)（A4 仲裁，避免压圆1）；
-  // dZ 在圆心中点下方（圆1 底 +3）
+  // §3 标签锚法：R1 在 C1 外侧沿 −e；R2 圆内垂直居中（V4.6-03：原 +2.8 基线下沉，
+  // 小圆内文字框底边切弧）——但文字宽 > 小圆直径时圆内无论如何都压弧（A4-R1 FAIL：
+  // R2=5 时左右弧切 R/5 笔画 + 圆心点叠字）→ 改为**圆外右侧 + 水平虚线引线到小圆
+  // 右缘**（引线走 refDashes 层，p05 层序在实线之下）；dZ 在圆心中点下方（圆1 底 +3）
+  const r2Text = `R2=${fmtFigureValue(R2)}`;
+  const r2W = r2Text.length * LABEL_CHAR_W;
+  const r2H = 1.05 * LABEL_FONT;
+  let r2Label: ViewLabel;
+  let r2Leader: WSeg | null = null;
+  if (2 * R2 * s >= r2W + 1.0) {
+    // 圆内放得下（默认 R2=10：直径 10.8 > 字宽 7.42）→ 垂直居中
+    r2Label = { text: r2Text, x: C2v.x, y: C2v.y + 1.0, anchor: 'middle' };
+  } else {
+    // 圆外右侧：文字框整体推到外圆（C1,R1）之外，留 0.8 余量；右缘钳位 ≤59
+    const dy = Math.max(0, Math.abs(C1v.y - C2v.y) - r2H / 2);
+    const need = Math.sqrt(Math.max(0, (R1 * s + 0.8) ** 2 - dy * dy));
+    const x = Math.min(C1v.x + need + r2W / 2, 59 - r2W / 2);
+    r2Label = { text: r2Text, x, y: C2v.y, anchor: 'middle' };
+    r2Leader = {
+      from: { z: C2.z + R2, r: C2.r }, // 小圆右缘
+      to: { z: C2.z + (x - r2W / 2 - C2v.x) / s, r: C2.r }, // 标签左缘
+    };
+  }
   const labels: ViewLabel[] = [
     {
       text: `R1=${fmtFigureValue(R1)}`,
@@ -164,12 +200,7 @@ export function figureAC03(input: Record<string, number>): FigureView {
       y: C1v.y - (R1 * s + 2.2) * e.y,
       anchor: 'middle',
     },
-    {
-      text: `R2=${fmtFigureValue(R2)}`,
-      x: C2v.x,
-      y: C2v.y + 2.8,
-      anchor: 'middle',
-    },
+    r2Label,
     {
       text: `dZ=${fmtFigureValue(dZ)}`,
       x: (C1v.x + C2v.x) / 2,
@@ -182,7 +213,10 @@ export function figureAC03(input: Record<string, number>): FigureView {
     segs: [],
     arcs: arcs.map((a) => arcView(map, a)),
     axis: NO_AXIS,
-    refDashes: refDashes.map((d) => segView(map, d)),
+    refDashes: [
+      ...refDashes.map((d) => segView(map, d)),
+      ...(r2Leader ? [segView(map, r2Leader)] : []),
+    ],
     refCircles: [],
     centerDots: centerDots.map((p) => map.toView(p)),
     radiusDashes: [],
@@ -250,31 +284,53 @@ export function figureAC04(input: Record<string, number>): FigureView {
   const C2v = map.toView(C2);
   const s = map.scale;
 
-  // §3 标签锚法：R1/R2 在虚半径中点 +2.6·rotScreen(单位半径向量)；
-  // α 用 V4.3 α 式（斜线屏幕方向 u_view=(cosα,−sinα)，标签在 P1 反向 −2.2）
+  // §3 标签锚法：R1/R2 在虚半径中点沿 rotScreen(单位半径向量) 外移；V4.6-02b：
+  // 偏移 2.6 → 5.4——2.6 时字框被 C↔P 灰虚线穿过（A4-R1 WARN：R1=5 的 5 顶 /
+  // R1=4 的 =4 字隙），5.4 实测框线距离 0.91–0.97（两输入），仍在 64×34 内框内。
+  // α 用 V4.3 α 式（斜线屏幕方向 u_view=(cosα,−sinα)，标签在 P1 反向 −2.2）。
+  // V4.6-02：α 初位与 R1 标签框相交（两输入实测 ≈3.2×2.9 / 4.7×3.0 单位）——
+  // 按 0.64/步对角右上避让，直到与 R1/R2 框不重叠（留 0.4 净空）且字框不含圆心点
+  // （r=0.9 + 0.5 余量），上限 8 步；仍贴 P1 外侧上方，锚法语义不变。
   const r1Dir = rotScreen(unitView(subView(P1v, C1v)));
   const r2Dir = rotScreen(unitView(subView(P2v, C2v)));
   const uView = rotScreen({ x: Math.cos(alpha), y: -Math.sin(alpha) });
-  const labels: ViewLabel[] = [
-    {
-      text: `R1=${fmtFigureValue(R1)}`,
-      x: midView(C1v, P1v).x + 2.6 * r1Dir.x,
-      y: midView(C1v, P1v).y + 2.6 * r1Dir.y,
-      anchor: 'middle',
-    },
-    {
-      text: `R2=${fmtFigureValue(R2)}`,
-      x: midView(C2v, P2v).x + 2.6 * r2Dir.x,
-      y: midView(C2v, P2v).y + 2.6 * r2Dir.y,
-      anchor: 'middle',
-    },
-    {
-      text: `α${fmtFigureValue(alphaDeg)}°`,
-      x: P1v.x - 2.2 * uView.x,
-      y: P1v.y - 2.2 * uView.y,
-      anchor: 'middle',
-    },
-  ];
+  const r1Label: ViewLabel = {
+    text: `R1=${fmtFigureValue(R1)}`,
+    x: midView(C1v, P1v).x + 5.4 * r1Dir.x,
+    y: midView(C1v, P1v).y + 5.4 * r1Dir.y,
+    anchor: 'middle',
+  };
+  const r2Label: ViewLabel = {
+    text: `R2=${fmtFigureValue(R2)}`,
+    x: midView(C2v, P2v).x + 5.4 * r2Dir.x,
+    y: midView(C2v, P2v).y + 5.4 * r2Dir.y,
+    anchor: 'middle',
+  };
+  const alphaLabel: ViewLabel = {
+    text: `α${fmtFigureValue(alphaDeg)}°`,
+    x: P1v.x - 2.2 * uView.x,
+    y: P1v.y - 2.2 * uView.y,
+    anchor: 'middle',
+  };
+  // 按 0.64/步（对角 0.905）向右上避让，直到与 R1/R2 框不重叠（留 0.4 净空）
+  // 且字框不含任何圆心点（r=0.9 + 0.5 余量）；仍贴 P1 外侧上方，锚法语义不变。
+  // （V4.6-02 修正：只上移会落到 C1 圆心点上，A4-R2 判 α30° 不可读。）
+  const dotHit = (l: ViewLabel): boolean => {
+    const b = labelBox(l);
+    return [C1v, C2v].some(
+      (c) => b.x0 < c.x + 1.4 && c.x - 1.4 < b.x1 && b.y0 < c.y + 1.4 && c.y - 1.4 < b.y1,
+    );
+  };
+  for (
+    let i = 0;
+    i < 8 && (boxesOverlap(alphaLabel, r1Label, 0.4) || boxesOverlap(alphaLabel, r2Label, 0.4) || dotHit(alphaLabel));
+    i += 1
+  ) {
+    alphaLabel.x += 0.64;
+    alphaLabel.y -= 0.64;
+  }
+  alphaLabel.y = Math.max(alphaLabel.y, 4.2); // 不越内框顶（[4,60]×[3.5,30.5]）
+  const labels: ViewLabel[] = [r1Label, r2Label, alphaLabel];
 
   const refCircles: ViewCircle[] = [
     { cx: C1v.x, cy: C1v.y, r: R1 * s },
@@ -342,8 +398,11 @@ export function figureAC06(input: Record<string, number>): FigureView {
   const exitEndV = map.toView(exit.to);
 
   // §3 标签锚法：R 在 C↔E 虚半径中点 +3·rotScreen(单位半径向量)；
-  // dX 在出口段末端 +(0,3)；dZ 在轴线下方 [S,E] 中点
+  // dX 在出口端点右侧（V4.6-04：原正下方 `+3` 被出口斜线穿框）——半宽按
+  // 0.58em×字符数推算，右缘钳位 ≤59（内框右界 60）；dZ 在轴线下方 [S,E] 中点
   const rDir = rotScreen(unitView(subView(Ev, Cv)));
+  const dXText = `dX=${fmtFigureValue(dX)}`;
+  const dXHalf = (dXText.length * LABEL_CHAR_W) / 2;
   const labels: ViewLabel[] = [
     {
       text: `R${fmtFigureValue(R)}`,
@@ -352,9 +411,9 @@ export function figureAC06(input: Record<string, number>): FigureView {
       anchor: 'middle',
     },
     {
-      text: `dX=${fmtFigureValue(dX)}`,
-      x: exitEndV.x,
-      y: exitEndV.y + 3,
+      text: dXText,
+      x: Math.min(exitEndV.x + dXHalf + 1.0, 59 - dXHalf),
+      y: exitEndV.y + 3.2,
       anchor: 'middle',
     },
     {

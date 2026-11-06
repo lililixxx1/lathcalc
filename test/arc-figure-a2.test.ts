@@ -703,7 +703,7 @@ describe('arc-figure-a2 · AC06 凹圆弧切入', () => {
   it('A4-R1 裁轴：非默认 R10/dX16/dZ6 入口起点 r<0，裁后段端点全在轴线 r≥0 侧', () => {
     // 算式：c=(z=6,r=8)，cL=10，u=(0.6,0.8)，M=(3,4)，q=√75=8.660254，
     //   n=(−0.8,0.6)，C=(−3.928203,9.196152)；
-    //   tS=rot90ccw(S−C)/R=(9.196152,−3.928203)/10 → entryStart=(−22.0708,−9.4277)
+    //   tS=rot90ccw(S−C)/R=(9.196152,3.928203)/10 → entryStart=(−22.0708,−9.4277)
     const R = 10;
     const dX = 16;
     const dZ = 6;
@@ -736,5 +736,109 @@ describe('arc-figure-a2 · AC06 凹圆弧切入', () => {
     expect(() => buildArcFigure('AC06', { R: 10, dX: 12 })).toThrow(
       /missing or non-finite: dZ/,
     );
+  });
+});
+
+/* ===================================================== V4.6 标签避让（A4 观察项） */
+
+describe('V4.6 标签打磨：框距/避让（WAVE-PLAN-V4.6 §1 裁决）', () => {
+  const FONT = 3.2; // p05/p06 装配 font-size（viewBox 单位）
+  const CHAR_W = 1.9; // 保守字宽（> 实现侧 0.58em=1.856，框偏大=更严格）
+  const box = (l: { text: string; x: number; y: number; anchor?: string }) => {
+    const w = l.text.length * CHAR_W;
+    const x0 = l.anchor === 'middle' ? l.x - w / 2 : l.x;
+    return { x0, x1: x0 + w, y0: l.y - 0.8 * FONT, y1: l.y + 0.25 * FONT };
+  };
+  const overlap = (
+    a: { text: string; x: number; y: number; anchor?: string },
+    b: { text: string; x: number; y: number; anchor?: string },
+  ) => {
+    const A = box(a);
+    const B = box(b);
+    return A.x0 < B.x1 && B.x0 < A.x1 && A.y0 < B.y1 && B.y0 < A.y1;
+  };
+
+  it('AC04 两输入：α 与 R1/R2 标签框不相交、R1/R2 不被灰虚线穿框（V4.6-02）', () => {
+    const dashDist = (
+      s: { x1: number; y1: number; x2: number; y2: number },
+      b: { x0: number; x1: number; y0: number; y1: number },
+    ) => {
+      let min = Infinity;
+      for (let i = 0; i <= 200; i += 1) {
+        const t = i / 200;
+        const px = s.x1 + (s.x2 - s.x1) * t;
+        const py = s.y1 + (s.y2 - s.y1) * t;
+        const dx = Math.max(b.x0 - px, 0, px - b.x1);
+        const dy = Math.max(b.y0 - py, 0, py - b.y1);
+        min = Math.min(min, Math.hypot(dx, dy));
+      }
+      return min;
+    };
+    for (const input of [
+      { R1: 5, R2: 3, angle: 45 },
+      { R1: 4, R2: 6, angle: 30 },
+    ]) {
+      const fig = buildArcFigure('AC04', input);
+      const [r1, r2, alpha] = fig.labels;
+      expect(overlap(alpha!, r1!)).toBe(false);
+      expect(overlap(alpha!, r2!)).toBe(false);
+      // 与 R1 至少一个方向净空 ≥0.35（实现侧 pad 0.4）
+      const A = box(alpha!);
+      const B = box(r1!);
+      const gap = Math.max(B.x0 - A.x1, A.x0 - B.x1, B.y0 - A.y1, A.y0 - B.y1);
+      expect(gap).toBeGreaterThan(0.35);
+      // 字框不得覆盖圆心点（r=0.9；A4-R2 曾判 α30° 被圆心点遮挡不可读）
+      for (const dot of fig.centerDots) {
+        const hit =
+          A.x0 < dot.x + 0.9 && dot.x - 0.9 < A.x1 && A.y0 < dot.y + 0.9 && dot.y - 0.9 < A.y1;
+        expect(hit).toBe(false);
+      }
+      // 偏移 5.4：框线距离实测 ≥0.9（保守框仍 ≥0.8）——2.6 时为 0（穿框）
+      expect(dashDist(fig.radiusDashes[0]!, box(r1!))).toBeGreaterThan(0.5);
+      expect(dashDist(fig.radiusDashes[1]!, box(r2!))).toBeGreaterThan(0.5);
+    }
+  });
+
+  it('AC03 R2=5：圆内放不下 → 标签整体移到外圆外 + 水平虚线引线（V4.6-03）', () => {
+    // 小圆直径 6.75 < 字宽 7.42，圆内必压弧（A4-R1 FAIL）→ 圆外右侧 + 引线
+    const fig = buildArcFigure('AC03', { R1: 20, R2: 5, dZ: 6 });
+    const c1 = fig.centerDots[0]!;
+    const c2 = fig.centerDots[1]!;
+    const r1 = fig.refCircles[0]?.r ?? 20 * fig.scale;
+    const r2 = fig.labels[1]!;
+    const b = box(r2);
+    // 最近点在外圆之外（0.5 余量，测试框宽用保守 1.9 → 比实现侧更严）
+    const nx = Math.max(b.x0, Math.min(c1.x, b.x1));
+    const ny = Math.max(b.y0, Math.min(c1.y, b.y1));
+    expect(Math.hypot(nx - c1.x, ny - c1.y)).toBeGreaterThan(r1 + 0.5);
+    expect(b.x1).toBeLessThanOrEqual(60);
+    // 引线存在且水平（小圆右缘 → 标签左缘）
+    expect(fig.refDashes).toHaveLength(2);
+    const leader = fig.refDashes[1]!;
+    expect(leader.y1).toBeCloseTo(leader.y2, 9);
+    expect(leader.x2).toBeCloseTo(b.x0, 0);
+    expect(leader.x1).toBeCloseTo(c2.x + 5 * fig.scale, 6);
+  });
+
+  it('AC03 默认 R2=10：圆内放得下 → 垂直居中、无引线（回归）', () => {
+    const fig = buildArcFigure('AC03', { R1: 25, R2: 10, dZ: 9 });
+    const c2 = fig.centerDots[1]!;
+    const r2 = fig.labels[1]!;
+    expect(Math.abs(r2.y - 0.95 - c2.y)).toBeLessThanOrEqual(1.1);
+    expect(fig.refDashes).toHaveLength(1);
+  });
+
+  it('AC06 两输入：dX 标签框在出口端点右侧、与出口段横向间隙 ≥0.5（V4.6-04）', () => {
+    for (const input of [
+      { R: 10, dX: 12, dZ: 8 },
+      { R: 8, dX: 16, dZ: 9 },
+    ]) {
+      const fig = buildArcFigure('AC06', input);
+      const exit = fig.segs[fig.segs.length - 1]!; // 出口段（末段）
+      const dX = fig.labels[1]!;
+      const b = box(dX);
+      expect(b.x0 - exit.x2).toBeGreaterThanOrEqual(0.5);
+      expect(b.x1).toBeLessThanOrEqual(60); // 内框右界
+    }
   });
 });
