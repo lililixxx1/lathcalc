@@ -180,6 +180,83 @@ describe('p12 输入校验', () => {
   });
 });
 
+describe('p12 示意图参数化（V4.5）', () => {
+  function diagramPaths(): (string | null)[] {
+    return [...page().querySelectorAll('.rc-p12__diagram svg path')].map((n) =>
+      n.getAttribute('d'),
+    );
+  }
+
+  function diagramTexts(): string[] {
+    return [...page().querySelectorAll('.rc-p12__diagram svg text')].map((n) => n.textContent ?? '');
+  }
+
+  it('入页即参数化：30/40/50 三边坐标金锚（A=(35,88) B=(185,88) C=(131,16)），非静态稿', () => {
+    const paths = diagramPaths();
+    expect(paths).toContain('M35 88L185 88'); // 底边 c（计划 §3 金锚）
+    expect(paths.join(' ')).not.toContain('M28 86'); // 静态稿已不使用
+    expect(diagramTexts().sort()).toEqual([
+      'A 36.9°', 'B 53.1°', 'C 90°', 'a 30', 'b 40', 'c 50',
+    ]);
+  });
+
+  it('改输入图变：13/14/15 → path d 集变化且标签真值（图随值重建，V4.5-01）', () => {
+    const before = diagramPaths();
+    setSide('a', '13');
+    setSide('b', '14');
+    setSide('c', '15');
+    expect(diagramPaths()).not.toEqual(before);
+    const texts = diagramTexts().sort();
+    expect(texts).toContain('a 13');
+    expect(texts).toContain('C 67.4°');
+  });
+
+  it('缺值保上一帧（V4.5-06）：清空 b 后图形不变，提示回归', () => {
+    setSide('a', '13');
+    setSide('b', '14');
+    setSide('c', '15');
+    const good = diagramPaths();
+    setSide('b', '');
+    expect(diagramPaths()).toEqual(good);
+    expect(page().querySelector('.rc-p12__hint')?.textContent).toBe('输入三边 a / b / c');
+  });
+
+  it('无解保上一帧：1/2/10 提示「三边不能构成三角形」且图形不变', () => {
+    const good = diagramPaths();
+    setSide('a', '1');
+    setSide('b', '2');
+    setSide('c', '10');
+    expect(page().querySelector('.rc-p12__hint')?.textContent).toBe('三边不能构成三角形');
+    expect(diagramPaths()).toEqual(good);
+  });
+
+  it('SSA 双解：解₂ 三边虚线叠画（stroke-dasharray ≥3 段，V4.5-04）', async () => {
+    await router.navigate('p12', { mode: 'ssa' });
+    setField('a', '40');
+    setField('c', '50');
+    setField('A', '36.87');
+    const dashed = page().querySelectorAll('.rc-p12__diagram svg path[stroke-dasharray]');
+    expect(dashed.length).toBeGreaterThanOrEqual(3);
+    const texts = diagramTexts().sort();
+    expect(texts).toContain('B 94.5°'); // 解₁（锐角 C 在前）真值
+    expect(texts).toContain('b 66.46');
+  });
+
+  it('直角标记：30/40/50 在 C 顶点呈小方块两段（V4.5-05）', () => {
+    // 解₁ 三边实线 + 直角方块两段 = 5 path；虚线组为 0
+    const solid = page().querySelectorAll('.rc-p12__diagram svg path:not([stroke-dasharray])');
+    expect(solid.length).toBe(5); // 三边 + 两段方块
+  });
+
+  it('装配色值契约：零内联十六进制，token 色 + currentColor（契约 §4.2）', () => {
+    const svg = page().querySelector('.rc-p12__diagram svg');
+    const markup = svg?.outerHTML ?? '';
+    expect(markup).not.toMatch(/#[0-9a-fA-F]{3,8}\b/);
+    expect(markup).toContain('var(--la-sub)');
+    expect(svg?.getAttribute('stroke')).toBe('currentColor');
+  });
+});
+
 describe('p12 多模式解算（W6-C4）', () => {
   it('SAS：切换后三输入 b/c/A；b=40,c=50,A=36.87 → 边 a=30.00、直角', () => {
     clickSeg('sas');

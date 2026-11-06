@@ -9,9 +9,15 @@
  *   SSS → a,b,c；SAS → b,c,A；SSA → a,c,A；ASA → A,B,c（字段集钉死）。
  *   SSA 双解时两结果卡并列、锐角解在前（V2-3）；无解提示「构不成三角形」。
  * 计算：core/triangle.solveTriangleBy（SSS 内部复用 v0.1 solveTriangle）。
+ *
+ * v0.6.0（WAVE-PLAN-V4.5，用户反馈 #3「三角 没有图形变化」）：示意图参数化——
+ * 解算成功即按 core/triangle-figure 重建（任意模式解后六值齐备，一通用生成器）；
+ * 标签回显真值（V4.5-01）；SSA 双解解₂ 虚线叠画（V4.5-04）；直角顶点小方块
+ * （V4.5-05）；缺值 / 无解保上一帧（V4.5-06）；静态稿降级为初值兜底帧。
  */
 import type { TriangleInput, TriangleResult, TriangleSolveOutput } from '../../core/types';
 import { solveTriangleBy } from '../../core/triangle';
+import { buildTriangleFigure, type TriFigureView } from '../../core/triangle-figure';
 import type { PageContext, PageModule } from '../router';
 import {
   Accordion,
@@ -104,7 +110,7 @@ function parseField(raw: string): number | undefined {
   return Number.isFinite(value) && value > 0 ? value : undefined;
 }
 
-/** 设计稿 p12 示意图（静态几何 + 实时边值标签，色值走 token / currentColor）。 */
+/** 设计稿 p12 示意图（静态几何；v0.6.0 起仅作初值解析失败的兜底帧，V4.5 §0）。 */
 function diagramMarkup(sides: Record<SideKey, string>): string {
   const label = (key: SideKey): string => {
     const raw = sides[key].trim();
@@ -121,6 +127,30 @@ function diagramMarkup(sides: Record<SideKey, string>): string {
       <text x="190" y="82" font-size="11" fill="var(--la-sub)" stroke="none">B</text>
     </svg>
   `;
+}
+
+/**
+ * 参数化三角示意图装配（V4.5：零几何，坐标全来自 core/triangle-figure）。
+ * 层序：SSA 解₂ 虚线 → 直角方块 → 解₁ 三边 → 标签；色值走 token / currentColor。
+ */
+function parametricDiagramSVG(view: TriFigureView): string {
+  const n2 = (v: number): number => Math.round(v * 100) / 100;
+  const d = (s: { x1: number; y1: number; x2: number; y2: number }): string =>
+    `M${n2(s.x1)} ${n2(s.y1)}L${n2(s.x2)} ${n2(s.y2)}`;
+  const altSegs = view.altSegs
+    .map((s) => `<path d="${d(s)}" stroke="var(--la-sub)" stroke-dasharray="5 4"/>`)
+    .join('');
+  const marks = view.rightMarks
+    .map((s) => `<path d="${d(s)}" stroke="var(--la-sub)" stroke-width="1.2"/>`)
+    .join('');
+  const segs = view.segs.map((s) => `<path d="${d(s)}"/>`).join('');
+  const labels = view.labels
+    .map(
+      (l) =>
+        `<text x="${n2(l.x)}" y="${n2(l.y)}" font-size="11" fill="var(--la-sub)" stroke="none" text-anchor="middle">${escapeHtml(l.text)}</text>`,
+    )
+    .join('');
+  return `<svg viewBox="0 0 220 104" width="100%" height="94" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${altSegs}${marks}${segs}${labels}</svg>`;
 }
 
 function formulaHtml(result: TriangleResult, sides: TriangleInput): string {
@@ -177,12 +207,25 @@ const page: PageModule = {
     const accWrap = document.createElement('div');
     accWrap.className = 'rc-p12__formula';
 
+    /** v0.1 静态兜底帧（V4.5 §0：初值解析失败时保底；解算成功后不再使用）。 */
     function renderDiagram(): void {
       diagramCard.innerHTML = diagramMarkup({
         a: state.values.a,
         b: state.values.b,
         c: state.values.c,
       });
+    }
+
+    /** 解算成功即重绘参数化图（V4.5-06；SSA 双解叠画解₂ 虚线，V4.5-04）。 */
+    function paintFigure(output: TriangleSolveOutput): void {
+      const primary = output.solutions[0];
+      if (!primary) return;
+      try {
+        const alt = output.solutions.length > 1 ? output.solutions[1] : undefined;
+        diagramCard.innerHTML = parametricDiagramSVG(buildTriangleFigure(primary, alt));
+      } catch {
+        /* 退化防御：保上一帧（提示已在结果区） */
+      }
     }
 
     function showHint(message: string): void {
@@ -297,9 +340,11 @@ const page: PageModule = {
           return;
         }
         renderLegacy(result, input);
+        paintFigure(output); // 解算成功重绘（V4.5-06）
         return;
       }
       renderMultiMode(output, state.mode);
+      paintFigure(output);
     }
 
     function renderParams(): void {
@@ -320,7 +365,7 @@ const page: PageModule = {
           if (field.kind === 'side') input.dataset.side = field.key;
           input.addEventListener('input', () => {
             state.values[field.key] = input.value;
-            renderDiagram();
+            // 参数化重绘统一走 renderResult 解算成功路径（V4.5-06；缺值保上一帧）
             renderResult();
           });
           label.append(key, input);
@@ -336,8 +381,7 @@ const page: PageModule = {
       onChange: (value) => {
         state.mode = modeFromParam(value);
         renderParams();
-        renderDiagram();
-        renderResult();
+        renderResult(); // 模式切换后解算成功才重绘（缺值保上一帧，V4.5-06）
       },
     });
 

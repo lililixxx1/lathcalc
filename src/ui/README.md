@@ -89,7 +89,7 @@ src/ui/
 | p09 | 转速 · 线速度 | `pages/p09.ts` | W4-C4 |
 | p10 | 切削参数 | `pages/p10.ts` | W4-C4 |
 | p11 | 重量 | `pages/p11.ts` | W4-C5 |
-| p12 | 三角 | `pages/p12.ts` | W4-C5 |
+| p12 | 三角 | `pages/p12.ts` | W4-C5；V4.5 起示意图参数化（`core/triangle-figure.ts`，解算成功重建；SSA 双解虚线叠画 + 直角方块；静态稿为兜底帧） |
 | p13 | 速查 | `pages/p13.ts` | W4-C5 |
 | p14 | 收藏 · 历史 · 分享 | `pages/p14.ts` | W4-C5 |
 | p15 | 宏程序库 | `pages/p15.ts` | W11-A（已完成） |
