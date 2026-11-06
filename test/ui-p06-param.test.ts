@@ -1,9 +1,10 @@
 // @vitest-environment happy-dom
 /**
- * ui-p06-param.test.ts · p06 参数化大图集成（V4.3 试点：AC01/AC05）
+ * ui-p06-param.test.ts · p06 参数化大图集成（V4.3 试点 → V4.4 全 12 案）
  *
  * 断言：入页即参数化值标签 → 改输入图动（path d 变 + 标签变）→ 非法输入保上一帧
- * + WarnCard → AC05 同 → AC02 静态回归（10 案维持 v0.3.1 符号层）→ 装配色值契约。
+ * + WarnCard → AC05 同 → AC02 参数化（V4.4-05 集成翻转：原静态回归例按计划 §5
+ * 登记改语义——标签=输入真值 + 改输入图动）→ 装配色值契约。
  */
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { createRouter, type Router } from '../src/ui/router';
@@ -41,7 +42,7 @@ function setInput(name: string, value: string): void {
   el.dispatchEvent(new Event('input'));
 }
 
-describe('p06 参数化大图（V4.3 试点）', () => {
+describe('p06 参数化大图（V4.3 试点 → V4.4 全 12 案）', () => {
   it('AC01 入页即参数化：R5/α45°/Ø36 值标签 + 弧 A 命令 + 橙点 token', async () => {
     await router.navigate('p06', { case: 'AC01' });
     expect(diagramTexts()).toEqual(['R5', 'α45°', 'Ø36']);
@@ -77,12 +78,14 @@ describe('p06 参数化大图（V4.3 试点）', () => {
     expect(diagramPaths()).not.toEqual(before);
   });
 
-  it('AC02 静态回归：非试点案维持 v0.3.1 符号层，改输入图不动', async () => {
+  it('AC02 参数化（V4.4-05 集成翻转）：值标签回显输入真值，改输入图动', async () => {
     await router.navigate('p06', { case: 'AC02' });
-    expect(diagramTexts()).toEqual(['R1', 'R2', 'dZ']);
+    // V4.4-02：多字符键等号防误读（R1=10 而非 R110）；默认 R1/R2/dZ = 10/15/15
+    expect(diagramTexts()).toEqual(['R1=10', 'R2=15', 'dZ=15']);
     const before = diagramPaths();
-    setInput('R1', '12');
-    expect(diagramPaths()).toEqual(before); // 静态 hero 不随输入重绘
+    setInput('R1', '8');
+    expect(diagramTexts()).toEqual(['R1=8', 'R2=15', 'dZ=15']);
+    expect(diagramPaths()).not.toEqual(before); // 图随输入重绘（V4.4 推广主张）
   });
 
   it('装配色值契约：参数化 SVG 零内联十六进制，token 色 + currentColor（契约 §4.2）', () => {

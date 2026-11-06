@@ -10,8 +10,8 @@
  *    避免与本分发器循环依赖）。
  *  - AC02/03/04/06 → arc-figure-a2.ts；AC07–AC12 → arc-figure-b.ts。
  *  - 本文件：FigureView 契约 + AC01/AC05 试点实现 + buildArcFigure 分发。
- *  - PARAMETRIC_CASES 在 Lead 集成提交前保持 ['AC01','AC05']（V4.4-05：
- *    p06 门控用它，避免主仓出现半参数化中间态）。
+ *  - PARAMETRIC_CASES 于 Lead 集成提交翻全 12 案（V4.4-05，v0.5.0）；
+ *    此前保持 ['AC01','AC05'] 以避免主仓半参数化中间态。
  */
 import type {
   ParametricCaseId,
@@ -47,8 +47,22 @@ import { figureAC07, figureAC08, figureAC09, figureAC10, figureAC11, figureAC12 
 export type { ParametricCaseId, ViewCircle } from './arc-figure-kit';
 export { fmtFigureValue } from './arc-figure-kit';
 
-/** p06 大图参数化门控：试点翻转时机见 V4.4-05（Lead 集成提交一次翻全 12 案） */
-export const PARAMETRIC_CASES: readonly ParametricCaseId[] = ['AC01', 'AC05'];
+/** p06 大图参数化门控：V4.4-05 集成翻转——全 12 案参数化（v0.5.0）；
+ *  静态 hero/ANNOTATIONS 保留为初值解析失败的兜底帧（计划 §0） */
+export const PARAMETRIC_CASES: readonly ParametricCaseId[] = [
+  'AC01',
+  'AC02',
+  'AC03',
+  'AC04',
+  'AC05',
+  'AC06',
+  'AC07',
+  'AC08',
+  'AC09',
+  'AC10',
+  'AC11',
+  'AC12',
+];
 
 /** 参数化图形规格（全部已映射到 viewBox 64×34；样式层归 p05 装配） */
 export interface FigureView {

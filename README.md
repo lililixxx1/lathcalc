@@ -29,7 +29,7 @@
 ```bash
 npm install
 npm run dev      # 开发
-npm test         # 572 项测试（vitest）
+npm test         # 628 项测试（vitest）
 npm run lint     # eslint（0 error）
 npm run build    # 生产构建（PWA，dist/）
 npm run preview  # 本地预览构建产物
@@ -62,8 +62,9 @@ Vite + TypeScript + vitest，零框架（原生 TS + DOM），零运行时依赖
 ## 截图对拍
 
 `docs/evidence/W5/runs/` 内含 14 页 390×844 实现截图与设计稿基准图，逐页对拍留档；
-v0.4.0 起圆弧切点 p06 大图（AC01/AC05 试点）**随输入参数实时重建**、图上标注回显输入
-真值（`src/core/arc-figure.ts` 纯函数规格；两输入对拍证据见 `docs/evidence/V4.3-FIG/`）；
+v0.5.0 起圆弧切点 p06 大图**全 12 工况随输入参数实时重建**、图上标注回显输入
+真值（`src/core/arc-figure.ts` 纯函数规格；两输入对拍证据见 `docs/evidence/V4.4-FIG/`，
+v0.4.0 试点 AC01/AC05 证据在 `docs/evidence/V4.3-FIG/`）；
 v0.2 改动五页（p02/p04/p07/p09/p12）的复拍与新态截图在 `docs/evidence/W6W7/runs/`。
 
 ## 许可

@@ -83,7 +83,7 @@ src/ui/
 | p03 | 螺纹 · 结果 | `pages/p03.ts` | W4-C2 |
 | p04 | G76 参考程序 | `pages/p04.ts` | W4-C2 |
 | p05 | 圆弧切点 · 工况图库 | `pages/p05.ts` | W4-C3 |
-| p06 | 圆弧 · 切点计算 | `pages/p06.ts` | W4-C3；V4.3 起大图参数化试点（AC01/AC05，`core/arc-figure.ts` + `p05.arcCaseParametricSVG`，onInput 重建；余 10 案静态 hero） |
+| p06 | 圆弧 · 切点计算 | `pages/p06.ts` | W4-C3；V4.4 起大图全 12 案参数化（`core/arc-figure.ts` + `p05.arcCaseParametricSVG`，onInput 重建；静态 hero 留作初值解析失败兜底帧） |
 | p07 | 锥度 · 莫氏 | `pages/p07.ts` | W4-C4 |
 | p08 | 公差配合 | `pages/p08.ts` | W4-C4 |
 | p09 | 转速 · 线速度 | `pages/p09.ts` | W4-C4 |

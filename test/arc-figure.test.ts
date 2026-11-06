@@ -201,8 +201,11 @@ describe('arc-figure · AC05 台阶倒圆', () => {
 });
 
 describe('arc-figure · 契约面', () => {
-  it('PARAMETRIC_CASES = [AC01, AC05]（试点两案，推广另立计划）', () => {
-    expect(PARAMETRIC_CASES).toEqual(['AC01', 'AC05']);
+  it('PARAMETRIC_CASES = 全 12 案（V4.4-05 集成翻转，v0.5.0；AC01–AC12 升序）', () => {
+    expect(PARAMETRIC_CASES).toEqual([
+      'AC01', 'AC02', 'AC03', 'AC04', 'AC05', 'AC06',
+      'AC07', 'AC08', 'AC09', 'AC10', 'AC11', 'AC12',
+    ]);
   });
 
   it('fmtFigureValue：去尾零 / 整数无点 / −0 归 0（与 fmtCoord 同规则）', () => {

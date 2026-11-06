@@ -18,7 +18,9 @@
  *
  * v0.4.0（WAVE-PLAN-V4.3 试点）：AC01/AC05 大图参数化——onInput 求解成功即重建
  * diagram innerHTML（core/arc-figure.ts 规格 + p05 装配）；求解异常保上一帧
- * （结果区已呈 WarnCard）。其余 10 案维持 v0.3.1 静态 hero 符号标注。
+ * （结果区已呈 WarnCard）。
+ * v0.5.0（WAVE-PLAN-V4.4 推广，V4.4-05）：参数化扩至全 12 案（PARAMETRIC_CASES
+ * 门控翻全量）；静态 hero/ANNOTATIONS 保留为初值解析失败的兜底帧（计划 §0）。
  */
 import { buildArcFigure, PARAMETRIC_CASES, type ParametricCaseId } from '../../core/arc-figure';
 import { arcCasesA } from '../../core/arc-cases-a';
@@ -245,7 +247,7 @@ function renderCase(ctx: PageContext, arcCase: ArcCaseSolver): void {
   diagram.innerHTML = arcCaseGraphic(arcCase.id, 'hero');
   const diagramCard = Card({ className: 'rc-p06__diagram-card', children: [diagram] });
 
-  // V4.3 试点：参数化案大图随输入重建；非试点案恒静态（本函数零重绘）
+  // V4.3 试点 → V4.4 全 12 案：参数化大图随输入重建（V4.4-05 翻全量后全命中）
   const parametric = (PARAMETRIC_CASES as readonly string[]).includes(arcCase.id);
   function paintFigure(input: Record<string, number>): void {
     if (!parametric) return;
