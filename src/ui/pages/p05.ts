@@ -309,8 +309,16 @@ export function arcCaseParametricSVG(fig: FigureView): string {
     `M${n2(s.x1)} ${n2(s.y1)}L${n2(s.x2)} ${n2(s.y2)}`;
   const dash = (s: { x1: number; y1: number; x2: number; y2: number }): string =>
     `<path d="${segD(s)}" stroke="var(--la-sub)" stroke-width="0.35" stroke-dasharray="1.6 1.2"/>`;
-  const axis = `<path d="${segD(fig.axis)}" stroke="var(--la-sub)" stroke-width="0.4"/>`;
+  // 无轴线案（AC02/03/04，V4.4-03）axis 为零长退化段——round linecap 会渲染成点，跳过
+  const zeroAxis = fig.axis.x1 === fig.axis.x2 && fig.axis.y1 === fig.axis.y2;
+  const axis = zeroAxis ? '' : `<path d="${segD(fig.axis)}" stroke="var(--la-sub)" stroke-width="0.4"/>`;
   const refDashes = fig.refDashes.map(dash).join('');
+  const refCircles = fig.refCircles
+    .map(
+      (c) =>
+        `<circle cx="${n2(c.cx)}" cy="${n2(c.cy)}" r="${n2(c.r)}" stroke="var(--la-sub)" stroke-width="0.35" stroke-dasharray="1.6 1.2"/>`,
+    )
+    .join('');
   const radiusDashes = fig.radiusDashes.map(dash).join('');
   const centers = fig.centerDots
     .map((c) => `<circle cx="${n2(c.x)}" cy="${n2(c.y)}" r="0.9" fill="var(--la-sub)" stroke="none"/>`)
@@ -329,7 +337,7 @@ export function arcCaseParametricSVG(fig: FigureView): string {
     )
     .join('');
   const point = `<circle cx="${n2(fig.point.x)}" cy="${n2(fig.point.y)}" r="1" fill="var(--la-accent)" stroke="none"/>`;
-  return `<svg viewBox="0 0 64 34" width="220" height="102" fill="none" stroke="currentColor" stroke-width="0.55" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${axis}${refDashes}${radiusDashes}${centers}${segs}${arcs}${labels}${point}</svg>`;
+  return `<svg viewBox="0 0 64 34" width="220" height="102" fill="none" stroke="currentColor" stroke-width="0.55" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${axis}${refDashes}${refCircles}${radiusDashes}${centers}${segs}${arcs}${labels}${point}</svg>`;
 }
 
 /** 图库磁贴：Tile compact + 名称/锚点参数两行（组合既有原子件，不新增组件）。 */
