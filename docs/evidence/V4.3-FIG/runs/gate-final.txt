@@ -1,0 +1,15 @@
+== 四门禁（R1 修复后终态，2026-11-06；四命令各自单独整句执行，退出码实时 echo 捕获均为 0） ==
+-- npx tsc --noEmit --
+X=0
+-- npx eslint . --
+X=0
+-- npx vitest run --
+[2m Test Files [22m [1m[32m50 passed[39m[22m[90m (50)[39m
+[2m      Tests [22m [1m[32m572 passed[39m[22m[90m (572)[39m
+[2m   Duration [22m 15.78s[2m (transform 927ms, setup 0ms, collect 1.31s, tests 6.89s, environment 9.42s, prepare 4.59s)[22m
+X=0
+-- npm run build --
+files generated
+  dist/sw.js
+  dist/workbox-9c191d2f.js
+X=0

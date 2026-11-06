@@ -15,7 +15,12 @@
  * 默认参数来源（均为树内黄金用例，见 test/arc-cases-a.test.ts / arc-cases-b.test.ts）：
  *   AC01 :57 ｜ AC02 :100 ｜ AC03 :144 ｜ AC04 :188 ｜ AC05 :235 ｜ AC06 :280
  *   AC07 :73 ｜ AC08 :104 ｜ AC09 :135 ｜ AC10 :171 ｜ AC11 :201 ｜ AC12 :230
+ *
+ * v0.4.0（WAVE-PLAN-V4.3 试点）：AC01/AC05 大图参数化——onInput 求解成功即重建
+ * diagram innerHTML（core/arc-figure.ts 规格 + p05 装配）；求解异常保上一帧
+ * （结果区已呈 WarnCard）。其余 10 案维持 v0.3.1 静态 hero 符号标注。
  */
+import { buildArcFigure, PARAMETRIC_CASES, type ParametricCaseId } from '../../core/arc-figure';
 import { arcCasesA } from '../../core/arc-cases-a';
 import { arcCasesB } from '../../core/arc-cases-b';
 import type { ArcCaseId, ArcCaseSolver, ArcSolution } from '../../core/types';
@@ -37,7 +42,7 @@ import {
   injectStyle,
 } from '../components';
 import type { PageContext, PageModule } from '../router';
-import { arcCaseGraphic } from './p05';
+import { arcCaseGraphic, arcCaseParametricSVG } from './p05';
 
 export const title = '圆弧 · 切点计算';
 
@@ -240,6 +245,28 @@ function renderCase(ctx: PageContext, arcCase: ArcCaseSolver): void {
   diagram.innerHTML = arcCaseGraphic(arcCase.id, 'hero');
   const diagramCard = Card({ className: 'rc-p06__diagram-card', children: [diagram] });
 
+  // V4.3 试点：参数化案大图随输入重建；非试点案恒静态（本函数零重绘）
+  const parametric = (PARAMETRIC_CASES as readonly string[]).includes(arcCase.id);
+  function paintFigure(input: Record<string, number>): void {
+    if (!parametric) return;
+    try {
+      diagram.innerHTML = arcCaseParametricSVG(buildArcFigure(arcCase.id as ParametricCaseId, input));
+    } catch {
+      /* 求解失败保上一帧；结果区已呈 WarnCard（V4.3 §5） */
+    }
+  }
+  if (parametric) {
+    const initial: Record<string, number> = {};
+    let valid = true;
+    for (const key of arcCase.inputs) {
+      const raw = (state.values[key] ?? '').trim();
+      const v = Number(raw);
+      if (raw === '' || !Number.isFinite(v)) valid = false;
+      else initial[key] = v;
+    }
+    if (valid) paintFigure(initial); // 缺省为黄金用例，不可达兜底：维持静态 hero
+  }
+
   const form = document.createElement('div');
   form.className = 'rc-p06__form';
   for (const key of arcCase.inputs) {
@@ -316,6 +343,8 @@ function renderCase(ctx: PageContext, arcCase: ArcCaseSolver): void {
       resultHost.append(WarnCard({ text: errorText(error) }));
       return;
     }
+    // 前刀架求解成功即重绘参数化大图（几何与刀架无关，V4.3 §1；rear 只翻判向标签）
+    paintFigure(input);
 
     let solution = front;
     if (state.rear) {

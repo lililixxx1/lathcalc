@@ -1,0 +1,52 @@
+{
+  "ok": true,
+  "ms": 986,
+  "budgetMs": 40000,
+  "shots": [
+    "p06-ac01-param-a-390x844",
+    "p06-ac01-param-b-390x844",
+    "p06-ac05-param-a-390x844",
+    "p06-ac05-param-b-390x844",
+    "p06-ac02-static-390x844"
+  ],
+  "labelChecks": [
+    {
+      "id": "AC01",
+      "first": [
+        "R5",
+        "α45°",
+        "Ø36"
+      ],
+      "second": [
+        "R12",
+        "α30°",
+        "Ø50"
+      ],
+      "figureChanged": true
+    },
+    {
+      "id": "AC05",
+      "first": [
+        "R4",
+        "Ø20",
+        "Z-10"
+      ],
+      "second": [
+        "R8",
+        "Ø28",
+        "Z-16"
+      ],
+      "figureChanged": true
+    },
+    {
+      "id": "AC02",
+      "static": [
+        "R1",
+        "R2",
+        "dZ"
+      ]
+    }
+  ],
+  "exceptions": 0,
+  "consoleErrors": 0
+}

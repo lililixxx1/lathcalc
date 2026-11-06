@@ -17,7 +17,12 @@
  * v0.3.1（WAVE-PLAN-V4.2，用户反馈「图形没有标注」）：hero 变体增标注层
  * （圆心/虚线半径/尺寸线/符号文字，坐标表 §3 冻结）——推翻 W4-C3-03 的几何半；
  * mock 数值标注维持不采用（示例值几何不可能，见 DEVIATIONS G0 阻塞 1）。
+ * v0.4.0（WAVE-PLAN-V4.3，用户反馈「图形能否随数值变化」试点）：新增
+ * arcCaseParametricSVG——参数化图形装配（AC01/AC05 试点，规格 core/arc-figure.ts），
+ * 数值标签回显求解器真值（V4.3-01 再裁决：形值同源，非 mock）；静态 10 案与
+ * 全部 thumb 不变。
  */
+import type { FigureView } from '../../core/arc-figure';
 import { arcCasesA } from '../../core/arc-cases-a';
 import { arcCasesB } from '../../core/arc-cases-b';
 import type { ArcCaseId, ArcCaseSolver } from '../../core/types';
@@ -290,6 +295,41 @@ export function arcCaseGraphic(id: ArcCaseId, variant: 'thumb' | 'hero' = 'thumb
   const height = hero ? 102 : 34;
   const annotations = hero ? annotationLayer(id) : '';
   return `<svg viewBox="0 0 64 34" width="${width}" height="${height}" fill="none" stroke="currentColor" stroke-width="${strokeWidth}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${annotations}${graphic.paths}<circle cx="${graphic.point[0]}" cy="${graphic.point[1]}" r="${pointRadius}" fill="var(--la-accent)" stroke="none"/></svg>`;
+}
+
+/**
+ * 参数化工况图形 SVG（V4.3 试点：AC01/AC05；spec 由 core/arc-figure.ts 生成）。
+ * chrome 与 hero 一致（viewBox 64×34 / 220×102 / 线宽 0.55 / token 色）；
+ * 层序：轴线/虚线/圆心 → 轮廓 → 值标签（最上，保读性）→ 橙点。
+ * 数字两位定点（n2），坐标全来自 core 已映射值，本函数零几何。
+ */
+export function arcCaseParametricSVG(fig: FigureView): string {
+  const n2 = (v: number): number => Math.round(v * 100) / 100;
+  const segD = (s: { x1: number; y1: number; x2: number; y2: number }): string =>
+    `M${n2(s.x1)} ${n2(s.y1)}L${n2(s.x2)} ${n2(s.y2)}`;
+  const dash = (s: { x1: number; y1: number; x2: number; y2: number }): string =>
+    `<path d="${segD(s)}" stroke="var(--la-sub)" stroke-width="0.35" stroke-dasharray="1.6 1.2"/>`;
+  const axis = `<path d="${segD(fig.axis)}" stroke="var(--la-sub)" stroke-width="0.4"/>`;
+  const refDashes = fig.refDashes.map(dash).join('');
+  const radiusDashes = fig.radiusDashes.map(dash).join('');
+  const centers = fig.centerDots
+    .map((c) => `<circle cx="${n2(c.x)}" cy="${n2(c.y)}" r="0.9" fill="var(--la-sub)" stroke="none"/>`)
+    .join('');
+  const segs = fig.segs.map((s) => `<path d="${segD(s)}"/>`).join('');
+  const arcs = fig.arcs
+    .map(
+      (a) =>
+        `<path d="M${n2(a.x1)} ${n2(a.y1)}A${n2(a.rx)} ${n2(a.rx)} 0 0 ${a.sweep} ${n2(a.x2)} ${n2(a.y2)}"/>`,
+    )
+    .join('');
+  const labels = fig.labels
+    .map(
+      (l) =>
+        `<text x="${n2(l.x)}" y="${n2(l.y)}" font-size="3.2" fill="var(--la-sub)" stroke="none" text-anchor="${l.anchor}">${l.text}</text>`,
+    )
+    .join('');
+  const point = `<circle cx="${n2(fig.point.x)}" cy="${n2(fig.point.y)}" r="1" fill="var(--la-accent)" stroke="none"/>`;
+  return `<svg viewBox="0 0 64 34" width="220" height="102" fill="none" stroke="currentColor" stroke-width="0.55" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${axis}${refDashes}${radiusDashes}${centers}${segs}${arcs}${labels}${point}</svg>`;
 }
 
 /** 图库磁贴：Tile compact + 名称/锚点参数两行（组合既有原子件，不新增组件）。 */

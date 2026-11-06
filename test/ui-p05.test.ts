@@ -182,12 +182,13 @@ describe('p05 hero 标注层（v0.3.1 · V4.2）', () => {
     }
   });
 
-  it('p06 集成：hero 大图带标注文字入页（AC01 图上可见 R/α/Ø）', async () => {
+  it('p06 集成：AC01 大图入页为参数化值标签（V4.3-01：R5/α45°/Ø36，缺省黄金输入）', async () => {
     await router.navigate('p06', { case: 'AC01' });
     const p06 = app.querySelector<HTMLElement>('.la-page[data-page="p06"]');
     const texts = Array.from(p06?.querySelectorAll('.rc-p06__diagram svg text') ?? []).map(
       (node) => node.textContent,
     );
-    expect(texts).toEqual(['R', 'α', 'Ø']);
+    // V4.3 试点：AC01 参数化图形回显求解器真值（缺省 R5/α45/Ø36），非 v0.3.1 符号层
+    expect(texts).toEqual(['R5', 'α45°', 'Ø36']);
   });
 });
