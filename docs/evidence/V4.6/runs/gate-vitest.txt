@@ -1,5 +1,5 @@
 
-[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90mC:/Users/Administrator/Desktop/ccc/q-novel/CNC Machinist Calculator[39m
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m<REPO>[39m
 
  [32m✓[39m test/ui-p01.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 1136[2mms[22m[39m
    [33m[2m✓[22m[39m p01 导航[2m > [22m10 个入口分别导航到 p02/p04/p05/p07/p08/p09/p10/p11/p12/p13 [33m 619[2mms[22m[39m
