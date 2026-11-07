@@ -92,6 +92,15 @@ runs/ 为 G2-C-01 修复后终态复跑值）
   --maxWorkers=2`（686/686）；`CHROME=... node tools/verify-gear.mjs
   http://localhost:4173/ <临时目录>`（ok=true）；grep
   "45 / y_c≤108\|74+52+10\|y_b≥35" 于 plan+core（零命中）。
+- **复判轮（reviewer 二审）**：C-01 三要素独立复算逐位一致（29.2319/
+  124.9220/44.0）、四门禁与 verify-gear（ok=true、1459ms）亲跑全绿 →
+  **C-01 关账**；新条件 **C-02**：C-01 复跑门禁时退出码落 shell 输出未回档，
+  四份 gate-*.txt 丢失 REAL_EXIT 行（gate-tsc.txt 空档），违反 A1「REAL_EXIT
+  留证」——**C-02 已修**：四门禁各自整句重跑并以 `echo "REAL_EXIT=$?" >>`
+  追加（四档均 REAL_EXIT=0、路径已脱敏、686/686）；顺手同步 reviewer Minor-1
+ （计划 §1 V4.8-02 残留「y≤136」→138，BOT_DY 12 陈值，零行为影响）；
+  Minor-2（轴注字顶 139.7 缺推导来源）按 reviewer 建议登记下波；源码零改动，
+  dist hash 不变（index-Zi7NOGKU.js，重跑 build 确定性同 hash）。
 
 ## 非缺陷登记（存量观察，不修复）
 

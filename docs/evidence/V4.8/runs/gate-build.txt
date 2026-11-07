@@ -47,7 +47,7 @@ computing gzip size...
 [2mdist/[22m[36massets/p08-B3MQ7RlW.js           [39m[1m[2m15.22 kB[22m[1m[22m[2m │ gzip: 6.09 kB[22m
 [2mdist/[22m[36massets/p06-CoIwd8x4.js           [39m[1m[2m21.52 kB[22m[1m[22m[2m │ gzip: 8.18 kB[22m
 [2mdist/[22m[36massets/threads-worm-DzhMdKev.js  [39m[1m[2m41.97 kB[22m[1m[22m[2m │ gzip: 2.94 kB[22m
-[32m✓ built in 501ms[39m
+[32m✓ built in 503ms[39m
 
 PWA v1.3.0
 mode      generateSW
@@ -55,3 +55,4 @@ precache  42 entries (241.83 KiB)
 files generated
   dist/sw.js
   dist/workbox-9c191d2f.js
+REAL_EXIT=0
