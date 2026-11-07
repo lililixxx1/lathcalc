@@ -281,8 +281,10 @@ function threadFigureSVG(view: ThreadFigureView): string {
     }
     return `<tspan fill="var(--la-sub)">${escapeHtml(label.slice(0, split))}</tspan> <tspan fill="currentColor" font-weight="600">${escapeHtml(label.slice(split + 1))}</tspan>`;
   };
-  // A4 勘正：标签列右锚（带右缘 ≤210 + 最长标签 39.44u + 净空；core 头注同款推导）
-  const LABEL_COL_X = 254;
+  // A4 勘正：标签列右锚（G2 勘正 254→256：真实最长标签 9 西文字符 'd₂ 36.500'
+  // est. 44.37u → est. 左缘 211.6，距满幅带右缘 210 净空 1.6u；10 字符仅手工
+  // URL 极端案可造，est. 口径触界、真实字宽 ~0.45em 下净空 ≥5u——core 头注同款）
+  const LABEL_COL_X = 256;
   const lineLabel = (label: string, y: number): string =>
     `<text x="${n2(LABEL_COL_X)}" y="${n2(Math.max(12, y - 3))}" font-size="8.5" text-anchor="end" stroke="none">${labelText(label)}</text>`;
 

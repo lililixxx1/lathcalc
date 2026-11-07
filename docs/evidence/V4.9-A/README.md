@@ -81,7 +81,12 @@
 4. **蜗杆高度预算口径**：计划 k 式按 96/(d−d₁) 书写，蜗杆无 d；按计划自身锚
    （min(12.732, 21.82)，96/4.4=21.82）实现为 96/h₁（带高），与锚一致。
 5. **契约 §2 逐字段核对：零增删**（ThreadFigureInput / ThreadFigureView /
-   THREAD_FIGURE_VIEW / buildThreadFigure 签名与字段语义均按 §2）。实现定义的
+   THREAD_FIGURE_VIEW / buildThreadFigure 签名与字段语义均按 §2）。
+   > **A4/G2 后记（2026-11-07）**：本条为收获时点陈述；A4 终轮勘正后
+   > THREAD_FIGURE_VIEW.width 220→262、视图模型增派生字段 `bandRight`、
+   > x0 改带左对齐——见顶层 docs/evidence/V4.9/README.md §三.2 与 G2 报告
+   > （bandRight 纯派生增量已双处披露；§2 预授权句字面只及 B 卡，G2 列 Minor）。
+   实现定义的
    填空项（计划未钉死，已在代码头注声明）：
    - diameterLines 蜗杆第三条（齿根线）label = `h₁ 4.400`（值=wormGeometry.wholeDepth
      toFixed(3)，齿根线恰在距齿顶 h₁ 处；§3 锚要求 `h₁ 4.400` 标签，契约无独立字段可载）；

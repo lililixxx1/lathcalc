@@ -40,7 +40,8 @@
   两端半牙 = 2.5P 跨度；蜗杆 2.5px），等比缩放
   `k = min(200/(2.5P), 96/(d−d₁))`（宽度约束 vs 高度约束取小；高度约束生效时
   横向不满幅如实呈现，V4.8-02 cap 同规）；牙型带竖向居中 cy=64，viewBox
-  220×140。**牙型构造全部由冻结常数 + 中径定义推导**（教科书精确，禁另立常数）：
+  262×140（A4 终轮勘正：原 220×140，右端牙侧斜线与右对齐 x=208 标签必然相交——线穿字；加宽并带左对齐 x0=10，
+  k 式与全部 y 锚不变，详 docs/evidence/V4.9/README.md §三.2）。**牙型构造全部由冻结常数 + 中径定义推导**（教科书精确，禁另立常数）：
   - 中径线处牙厚 = 槽宽 = P/2（中径定义，全族通用）→ 牙半宽 P/4 at d₂；
   - 牙侧自 (d₂, ±P/4) 与垂直线成 α/2 倾斜（α=flankAngle 全角）；
   - 牙顶宽 `w_crest = P/2 − (d−d₂)·tan(α/2)`、牙底宽 `w_root = P/2 − (d₂−d₁)·tan(α/2)`。
@@ -116,7 +117,7 @@ export interface ThreadFigureView {
   /** 基面竖虚线（锥管族） */
   gaugeLine: { x: number; y1: number; y2: number; label: string } | null;
 }
-export const THREAD_FIGURE_VIEW = { width: 220, height: 140 } as const;
+export const THREAD_FIGURE_VIEW = { width: 262, height: 140 } as const; // A4 勘正 220→262（实现另增派生字段 bandRight，已披露）
 export function buildThreadFigure(input: ThreadFigureInput): ThreadFigureView;
 
 // core/stock-figure.ts
@@ -163,7 +164,7 @@ export function buildSpeedFigure(input: SpeedFigureInput): SpeedFigureView;
 
 ## 3. 金锚（测试按公式独立复算，不复用实现常量；双盲：worker 执行时独立代入复核）
 
-### A 卡（thread-figure，viewBox 220×140、cy=64、k=min(200/(2.5P), 96/(d−d₁))）
+### A 卡（thread-figure，viewBox 262×140（A4 勘正，原 220）、cy=64、k=min(200/(2.5P), 96/(d−d₁))）
 
 - **M10×1.5（metric 60°）**：threadDimensions d₂=9.02575、d₁=8.37625（=10−
   0.6495×1.5 / 10−1.0825×1.5，core/thread.ts 常数）；k=min(53.333, 59.117)=
