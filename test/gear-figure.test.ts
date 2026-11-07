@@ -4,10 +4,11 @@
  * 布局公式（V4.8-02/03，测试按公式独立复算，不复用实现常量）：
  *   k = min(200/(2a+b+c+2d), 52/max(a,b,c,d))；r = k·z；
  *   O1 = 10+r_a；O2 = O1+r_a+r_b；O3 = O2+r_c+r_d；cy = 74；
- *   标签基线：a 上 74−r_a−6、d 下 74+r_d+10；b/c 清双缘（b 上 74−max(r_b,r_c)−6、
- *   c 下 74+max(r_b,r_c)+12，A4-R1/R2 修订）；同行守卫（|Δy|<10 且 |Δx|<半宽和）
- *   → b 上推 11 / c 下推 11；x 夹持 [半宽+2, 218−半宽]
- *   （半宽：西文 5.5/字符）；轴注 y=147。
+ *   标签基线：a 上 74−r_a−6、d 下 74+r_d+12（BOT_DY，A4-R2 修订）；b/c 清双缘
+ *   （b 上 74−max(r_b,r_c)−6、c 下 74+max(r_b,r_c)+12，A4-R1 修订）；同行守卫
+ *   （|Δy|<10 且 |Δx|<半宽和）→ b 上推 11 / c 下推 11，推后 y∈[12,138] 硬夹持
+ *   兜底（G2-C-01：半宽和随齿数位数增长，闭式界被证伪）；x 夹持 [半宽+2,
+ *   218−半宽]（半宽：西文 5.5/字符）；轴注 y=147。
  * 默认表 top1 排序键 (errorPpm, Σz, 字典序)（gear.ts 冻结）独立穷举复算：
  *   P=1.5/T=6 → 20/40×20/40（Σ=120 最小）；20/20×20/80 为第 6 行（cap 案）。
  */
@@ -185,6 +186,21 @@ describe('gear-figure 挂轮系视图模型', () => {
     expectClose(view.axisLine.x1, 6);
     expectClose(view.axisLine.x2, 210 + 4);
     expectClose(view.axisLine.y, CY);
+  });
+
+  it('守卫触发域闭合（G2-C-01）：多位数合成案推后不出上下界', () => {
+    // G2-V4.8 C-01 复测案（reviewer 独立复算留痕同值）：半宽和随位数增长，
+    // 推后界不由半宽和唯一决定——现实齿域实测界 + y∈[12,138] 硬夹持兜底。
+    const view1 = buildGearTrainFigure({ a: 1437, b: 125, c: 1701, d: 2691 });
+    const k1 = kOf(1437, 125, 1701, 2691);
+    const yB1 = labelOf(view1, 'b 125').y;
+    expectClose(yB1, 74 - 1437 * k1 - 6 - 11, 2); // 29.23：守卫推后未触夹持
+    expect(yB1).toBeGreaterThan(8.8); // 字顶 y−8.8 > 0 不出上框
+    const view2 = buildGearTrainFigure({ a: 2719, b: 1029, c: 111, d: 1460 });
+    const k2 = kOf(2719, 1029, 111, 1460);
+    const yC2 = labelOf(view2, 'c 111').y;
+    expectClose(yC2, 74 + 1460 * k2 + 12 + 11, 2); // 124.92：推后未触夹持
+    expect(yC2).toBeLessThan(138.2); // 基线在轴注字顶 147−8.8=138.2 之上不叠字
   });
 
   it('标签集完整性：4 齿轮签 anchor middle + 3 轴注 y=147（默认）', () => {

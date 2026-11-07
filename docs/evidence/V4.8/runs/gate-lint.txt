@@ -2,4 +2,3 @@
 > lathcalc@0.6.3 lint
 > eslint .
 
-REAL_EXIT=0
