@@ -222,3 +222,65 @@ describe('p09 进给 f / vf 卡（W6-C3 · WAVE-PLAN-V2 F6）', () => {
     expect(currentPage().querySelector('.rc-p09__vfcard')?.textContent).toContain('191.0');
   });
 });
+
+// V4.9 切速示意图（WAVE-PLAN-V4.9 §4 A2）：默认帧 + D=80 重绘 + 模式切换只改
+// 标签不改几何 + 非法输入保帧（V4.9-05）。图卡插在输入区后、标尺/结果卡前。
+describe('p09 切速示意图（V4.9-B）', () => {
+  function figureSvg(): SVGSVGElement {
+    const svg = currentPage().querySelector<SVGSVGElement>('.rc-p09__diagram svg');
+    if (!svg) throw new Error('p09 示意图未渲染');
+    return svg;
+  }
+
+  function figureTexts(): string[] {
+    return [...figureSvg().querySelectorAll('text')].map((el) => el.textContent ?? '').sort();
+  }
+
+  /** 全部几何元素坐标序列（线/圆的数值属性拼接，用于恒等比对）。 */
+  function geometrySignature(): string {
+    const svg = figureSvg();
+    const lines = [...svg.querySelectorAll('line')].map((line) =>
+      ['x1', 'y1', 'x2', 'y2'].map((key) => line.getAttribute(key)).join(','),
+    );
+    const circles = [...svg.querySelectorAll('circle')].map((circle) =>
+      ['cx', 'cy', 'r'].map((key) => circle.getAttribute(key)).join(','),
+    );
+    return JSON.stringify({ lines, circles });
+  }
+
+  it('默认帧：r=36 工件圆 + ⌀50/Vc 150/n 955 r/min 标签 + 4 线 3 箭头（§3 金锚）', async () => {
+    await router.navigate('p09');
+    // r = min(40, 36×50/50) = 36；n = 1000×150/(π×50) = 954.93 → '955'
+    expect(Number(figureSvg().querySelector('circle')?.getAttribute('r'))).toBeCloseTo(36, 6);
+    expect(figureTexts()).toEqual(['Vc 150', 'n 955 r/min', '⌀50']);
+    expect(figureSvg().querySelectorAll('circle')).toHaveLength(1);
+    expect(figureSvg().querySelectorAll('line')).toHaveLength(4); // 2 中心线 + D 尺寸线 + Vc 箭杆
+    expect(figureSvg().querySelectorAll('path')).toHaveLength(3); // D 双箭头 + Vc 单箭头
+    expect(figureSvg().getAttribute('viewBox')).toBe('0 0 220 120');
+  });
+
+  it('改 D 重绘：D 50→80 → r = min(40, 36×50/80) = 22.5，⌀80 标签逐字', async () => {
+    await router.navigate('p09');
+    setInput('d', '80');
+    expect(Number(figureSvg().querySelector('circle')?.getAttribute('r'))).toBeCloseTo(22.5, 6);
+    expect(figureTexts()).toEqual(['Vc 150', 'n 597 r/min', '⌀80']);
+  });
+
+  it('模式切换只改标签不改几何：Vc 150 → Vc 150.0，线/圆坐标恒等', async () => {
+    await router.navigate('p09');
+    const beforeGeometry = geometrySignature();
+    expect(figureTexts()).toEqual(['Vc 150', 'n 955 r/min', '⌀50']);
+    clickSegItem('vc');
+    expect(figureTexts()).toEqual(['Vc 150.0', 'n 955 r/min', '⌀50']);
+    expect(geometrySignature()).toBe(beforeGeometry);
+  });
+
+  it('非法输入保帧（V4.9-05）：D=0 时 svg outerHTML 恒等 + hint + 无 NaN', async () => {
+    await router.navigate('p09');
+    const before = figureSvg().outerHTML;
+    setInput('d', '0');
+    expect(currentPage().querySelector('.rc-p09__hint')).not.toBeNull();
+    expect(figureSvg().outerHTML).toBe(before);
+    expect(currentPage().textContent).not.toContain('NaN');
+  });
+});

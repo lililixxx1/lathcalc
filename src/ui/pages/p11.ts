@@ -9,11 +9,22 @@
  *   - 密度表 src/data/densities.json（13 行）经 core/lookup.findDensity；
  *   - 计算 core/weight.barWeight：m = ρ(g/cm³) × V(mm³) / 1e6。
  * 设计稿 1.54 kg 等数字为静态示例，按附录 C 以 core 实时计算值替换（不属偏离）。
+ *
+ * 料型示意图（WAVE-PLAN-V4.9，用户反馈 #6）：core/stock-figure 双视图（上横截面 +
+ * 下侧视长条，两视图各自等比）；页面零几何，坐标全来自 core/stock-figure；非法
+ * 输入保上一帧（V4.9-05，V4.8-04 同规）。图卡插在密度 chips（末组输入）之后、
+ * 单件重量结果卡之前（派工单「输入后、结果前」原则）。
  */
 import type { DensityRow, WeightShape } from '../../core/types';
 import { barWeight } from '../../core/weight';
 import { findDensity } from '../../core/lookup';
 import densitiesJson from '../../data/densities.json';
+import {
+  STOCK_FIGURE_VIEW,
+  buildStockFigure,
+  type StockFigureView,
+  type StockMark,
+} from '../../core/stock-figure';
 import type { PageContext, PageModule } from '../router';
 import {
   Accordion,
@@ -25,6 +36,7 @@ import {
   TopBar,
   createBody,
   createPage,
+  escapeHtml,
   injectStyle,
 } from '../components';
 
@@ -35,6 +47,9 @@ const CSS = `
 .rc-p11__statcard.la-card { padding: 2px 8px; }
 .rc-p11__statcard .rc-stat.la-card { background: transparent; border: 0; border-radius: 0; padding: 11px 8px 9px; }
 .rc-p11__result:empty, .rc-p11__formula:empty { display: none; }
+/* V4.9 料型示意图卡（同 p08/p16 示意图卡布局） */
+.rc-p11__diagram { padding: 10px; display: grid; place-items: center; }
+.rc-p11__diagram svg { color: var(--la-ink-body); }
 `;
 
 interface FieldDef {
@@ -146,6 +161,53 @@ function formulaHtml(
   );
 }
 
+/**
+ * 料型示意图 SVG 装配（V4.9：零几何，坐标全来自 core/stock-figure）。
+ * 层序：中心线十字（灰 dash-dot，仅圆/六方/管）→ 截面轮廓 → 侧视长条 →
+ * 标注（linear 双箭头 + 箭头造型；leader 细引线）→ 标签（双 tspan：代号 sub +
+ * 值 currentColor 600，p16 同款）。箭头三角（5×1.8）为装配层固定造型装饰，
+ * 由 core 标注线端点派生，不引入页面几何。
+ */
+function stockFigureSVG(view: StockFigureView): string {
+  const n2 = (v: number): number => Math.round(v * 100) / 100;
+  const figureText = (mark: StockMark): string => {
+    const spaceIndex = mark.label.indexOf(' ');
+    const code = spaceIndex < 0 ? mark.label.slice(0, 1) : mark.label.slice(0, spaceIndex);
+    const rest = spaceIndex < 0 ? mark.label.slice(1) : mark.label.slice(spaceIndex + 1);
+    const gap = spaceIndex < 0 ? '' : ' ';
+    return (
+      `<text x="${n2(mark.labelX)}" y="${n2(mark.labelY)}" font-size="8.5" stroke="none" text-anchor="${mark.anchor}">` +
+      `<tspan fill="var(--la-sub)">${escapeHtml(code)}</tspan>${gap}` +
+      `<tspan fill="currentColor" font-weight="600">${escapeHtml(rest)}</tspan></text>`
+    );
+  };
+  const dashLine = (line: { x1: number; y1: number; x2: number; y2: number }): string =>
+    `<line x1="${n2(line.x1)}" y1="${n2(line.y1)}" x2="${n2(line.x2)}" y2="${n2(line.y2)}" stroke="var(--la-sub)" stroke-width="0.8" stroke-dasharray="5 2.5 1.2 2.5"/>`;
+  const centerlines = view.centerlines
+    ? `${dashLine(view.centerlines.horizontal)}${dashLine(view.centerlines.vertical)}`
+    : '';
+  const section =
+    view.section.kind === 'circle'
+      ? `<circle cx="${n2(view.section.cx)}" cy="${n2(view.section.cy)}" r="${n2(view.section.r)}"/>`
+      : view.section.kind === 'ring'
+        ? `<circle cx="${n2(view.section.cx)}" cy="${n2(view.section.cy)}" r="${n2(view.section.rOuter)}"/><circle cx="${n2(view.section.cx)}" cy="${n2(view.section.cy)}" r="${n2(view.section.rInner)}"/>`
+        : `<polygon points="${view.section.points.map((point) => `${n2(point.x)},${n2(point.y)}`).join(' ')}"/>`;
+  const sideRect = `<rect x="${n2(view.sideView.x)}" y="${n2(view.sideView.y)}" width="${n2(view.sideView.width)}" height="${n2(view.sideView.height)}"/>`;
+  const marks = view.marks
+    .map((mark) => {
+      if (mark.kind === 'linear') {
+        // L 双箭头（尺寸线恒水平：两端箭头向外指）
+        const heads =
+          `<path d="M${n2(mark.x1)} ${n2(mark.y1)}L${n2(mark.x1 + 5)} ${n2(mark.y1 - 1.8)}L${n2(mark.x1 + 5)} ${n2(mark.y1 + 1.8)}Z" fill="currentColor" stroke="none"/>` +
+          `<path d="M${n2(mark.x2)} ${n2(mark.y1)}L${n2(mark.x2 - 5)} ${n2(mark.y1 - 1.8)}L${n2(mark.x2 - 5)} ${n2(mark.y1 + 1.8)}Z" fill="currentColor" stroke="none"/>`;
+        return `<line x1="${n2(mark.x1)}" y1="${n2(mark.y1)}" x2="${n2(mark.x2)}" y2="${n2(mark.y2)}" stroke-width="1"/>${heads}${figureText(mark)}`;
+      }
+      return `<line x1="${n2(mark.x1)}" y1="${n2(mark.y1)}" x2="${n2(mark.x2)}" y2="${n2(mark.y2)}" stroke="var(--la-sub)" stroke-width="0.8"/>${figureText(mark)}`;
+    })
+    .join('');
+  return `<svg viewBox="0 0 ${STOCK_FIGURE_VIEW.width} ${STOCK_FIGURE_VIEW.height}" width="100%" height="130" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true">${centerlines}${section}${sideRect}${marks}</svg>`;
+}
+
 export const title = '重量';
 
 const page: PageModule = {
@@ -169,6 +231,11 @@ const page: PageModule = {
     inputsWrap.className = 'rc-p11__grid';
     const densityWrap = document.createElement('div');
     densityWrap.className = 'rc-p11__density';
+    // V4.9 料型示意图卡：插在密度 chips（末组输入）之后、结果卡之前；非法输入保上一帧
+    const figureCard = Card({
+      className: 'rc-p11__diagram',
+      ariaLabel: '料型截面与侧视示意图（上：横截面，下：侧视长条）',
+    });
     const resultWrap = document.createElement('div');
     resultWrap.className = 'rc-p11__result';
     const accWrap = document.createElement('div');
@@ -203,10 +270,16 @@ const page: PageModule = {
             ],
           }),
         );
-        return;
+        return; // 非法输入：示意图保上一帧（V4.9-05）
       }
       const density = findDensity(DENSITY_ROWS, state.densityKey);
       const result = barWeight({ shape: state.shape, dims, density: density.density });
+      // 形值同源（V4.9-01）：图只吃页面既有输入 dims，不重算重量/体积
+      try {
+        figureCard.innerHTML = stockFigureSVG(buildStockFigure({ shape: state.shape, dims }));
+      } catch {
+        /* 退化防御：保上一帧（V4.9-05） */
+      }
       resultWrap.append(
         Card({
           className: 'rc-p11__statcard',
@@ -285,7 +358,7 @@ const page: PageModule = {
     renderResult();
 
     const body = createBody({ className: 'rc-p11__body' });
-    body.append(segWrap, inputsWrap, densityWrap, resultWrap, accWrap);
+    body.append(segWrap, inputsWrap, densityWrap, figureCard, resultWrap, accWrap);
 
     ctx.root.append(
       createPage({

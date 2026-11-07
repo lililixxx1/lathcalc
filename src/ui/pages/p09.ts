@@ -15,12 +15,23 @@
  *
  * 页面参数（README §5.2 冻结链路）：`d`（工件直径 mm）、`vc`（线速度 m·min⁻¹）、
  * `f`（每转进给 mm/r，可选；WAVE-PLAN-V2 §1 新增键）。
+ *
+ * 切速示意图（WAVE-PLAN-V4.9，用户反馈 #6）：core/speed-figure 工件圆 + Vc 切向
+ * 箭头（几何唯一驱动 = D）；Vc/n 标签文本由页面计算真值传入（形值同源 V4.9-01，
+ * rpm/vc 模式切换只改文本不改几何）；非法输入保上一帧（V4.9-05，V4.8-04 同规）。
+ * 图卡插在输入区之后、标尺/结果卡之前（派工单「输入后、结果前」原则）。
  */
 import type { PageContext, PageModule } from '../router';
 import type { KeypadKey } from '../components';
 import { feedRate, spindleSpeed, surfaceSpeed } from '../../core/speed';
 import {
+  SPEED_FIGURE_VIEW,
+  buildSpeedFigure,
+  type SpeedFigureView,
+} from '../../core/speed-figure';
+import {
   Accordion,
+  Card,
   InputRow,
   Keypad,
   ResultCard,
@@ -30,6 +41,7 @@ import {
   TopBar,
   createBody,
   createPage,
+  escapeHtml,
   injectStyle,
 } from '../components';
 
@@ -38,6 +50,9 @@ const CSS = `
 .rc-p09__input--active { border-color: var(--la-accent); }
 .rc-p09__hint { font-size: 12px; line-height: 1.55; color: var(--la-accent-ink); padding: 0 2px; }
 .rc-p09__result { display: flex; flex-direction: column; gap: 9px; }
+/* V4.9 切速示意图卡（同 p08/p16 示意图卡布局） */
+.rc-p09__diagram { padding: 10px; display: grid; place-items: center; }
+.rc-p09__diagram svg { color: var(--la-ink-body); }
 /* 真机矮屏兜底：390×844 下键盘四行完整（末行余量 72px，W7-A4 probe-scroll 实测），
    但矮屏（如 667px 高，body 内容区仅约 550px）f 卡态内容会超屏被 overflow:hidden 硬裁。
    页面级开纵滚：844 及以下内容不满屏时不触发滚动，不影响 W5 对拍基线。 */
@@ -79,6 +94,60 @@ function formatFeed(value: number): string {
   return text === '0' ? String(value) : text;
 }
 
+/**
+ * 切速示意图 SVG 装配（V4.9：零几何，坐标全来自 core/speed-figure；Vc/n 标签文本
+ * 由页面传入）。层序：中心线十字（灰 dash-dot）→ 工件圆 → D 双箭头 + 箭头造型 →
+ * Vc 切向箭头（单箭头，方向由 core 端点决定）→ 标签（双 tspan：代号 sub +
+ * 值 currentColor 600，p16 同款）。箭头三角（5×1.8）为装配层固定造型装饰，
+ * 由 core 线段端点派生，不引入页面几何。
+ */
+function speedFigureSVG(view: SpeedFigureView, vcLabel: string, nLabel: string): string {
+  const n2 = (v: number): number => Math.round(v * 100) / 100;
+  const figureText = (
+    label: string,
+    x: number,
+    y: number,
+    anchor: 'start' | 'middle' | 'end',
+  ): string => {
+    const spaceIndex = label.indexOf(' ');
+    const code = spaceIndex < 0 ? label.slice(0, 1) : label.slice(0, spaceIndex);
+    const rest = spaceIndex < 0 ? label.slice(1) : label.slice(spaceIndex + 1);
+    const gap = spaceIndex < 0 ? '' : ' ';
+    return (
+      `<text x="${n2(x)}" y="${n2(y)}" font-size="8.5" stroke="none" text-anchor="${anchor}">` +
+      `<tspan fill="var(--la-sub)">${escapeHtml(code)}</tspan>${gap}` +
+      `<tspan fill="currentColor" font-weight="600">${escapeHtml(rest)}</tspan></text>`
+    );
+  };
+  const dashLine = (line: { x1: number; y1: number; x2: number; y2: number }): string =>
+    `<line x1="${n2(line.x1)}" y1="${n2(line.y1)}" x2="${n2(line.x2)}" y2="${n2(line.y2)}" stroke="var(--la-sub)" stroke-width="0.8" stroke-dasharray="5 2.5 1.2 2.5"/>`;
+  // 水平尺寸线双箭头（两端向外指）
+  const dMark = view.diameterMark;
+  const dHeads =
+    `<path d="M${n2(dMark.x1)} ${n2(dMark.y)}L${n2(dMark.x1 + 5)} ${n2(dMark.y - 1.8)}L${n2(dMark.x1 + 5)} ${n2(dMark.y + 1.8)}Z" fill="currentColor" stroke="none"/>` +
+    `<path d="M${n2(dMark.x2)} ${n2(dMark.y)}L${n2(dMark.x2 - 5)} ${n2(dMark.y - 1.8)}L${n2(dMark.x2 - 5)} ${n2(dMark.y + 1.8)}Z" fill="currentColor" stroke="none"/>`;
+  const dLine = `<line x1="${n2(dMark.x1)}" y1="${n2(dMark.y)}" x2="${n2(dMark.x2)}" y2="${n2(dMark.y)}" stroke-width="1"/>`;
+  // Vc 单箭头：三角形箭头由 core 线段方向派生（旋转造型）
+  const angle = Math.atan2(view.vcArrow.y2 - view.vcArrow.y1, view.vcArrow.x2 - view.vcArrow.x1);
+  const ux = Math.cos(angle);
+  const uy = Math.sin(angle);
+  const baseX = view.vcArrow.x2 - 5 * ux;
+  const baseY = view.vcArrow.y2 - 5 * uy;
+  const vcHead =
+    `<path d="M${n2(view.vcArrow.x2)} ${n2(view.vcArrow.y2)}` +
+    `L${n2(baseX - 1.8 * uy)} ${n2(baseY + 1.8 * ux)}L${n2(baseX + 1.8 * uy)} ${n2(baseY - 1.8 * ux)}Z" fill="currentColor" stroke="none"/>`;
+  const vcLine = `<line x1="${n2(view.vcArrow.x1)}" y1="${n2(view.vcArrow.y1)}" x2="${n2(view.vcArrow.x2)}" y2="${n2(view.vcArrow.y2)}" stroke-width="1"/>`;
+  return (
+    `<svg viewBox="0 0 ${SPEED_FIGURE_VIEW.width} ${SPEED_FIGURE_VIEW.height}" width="100%" height="104" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">` +
+    `${dashLine(view.centerlines.horizontal)}${dashLine(view.centerlines.vertical)}` +
+    `<circle cx="${n2(view.circle.cx)}" cy="${n2(view.circle.cy)}" r="${n2(view.circle.r)}"/>` +
+    `${dLine}${dHeads}${figureText(dMark.label, dMark.labelX, dMark.labelY, dMark.anchor)}` +
+    `${vcLine}${vcHead}${figureText(vcLabel, view.vcArrow.labelX, view.vcArrow.labelY, 'start')}` +
+    figureText(nLabel, view.nLabel.x, view.nLabel.y, 'middle') +
+    `</svg>`
+  );
+}
+
 export const title = '转速 · 线速度';
 
 const page: PageModule = {
@@ -111,6 +180,12 @@ const page: PageModule = {
 
     const inputEls: Partial<Record<Field, HTMLInputElement>> = {};
     const rowEls: Partial<Record<Field, HTMLElement>> = {};
+
+    // V4.9 切速示意图卡：输入区之后、标尺/结果卡之前；非法输入保上一帧（V4.9-05）
+    const figureCard = Card({
+      className: 'rc-p09__diagram',
+      ariaLabel: '切速示意图（工件圆周与切削速度方向）',
+    });
 
     interface Calc {
       d: number;
@@ -154,7 +229,24 @@ const page: PageModule = {
         hint.textContent = '请输入大于 0 的工件直径；切削速度 / 转速需为非负数。';
         resultWrap.append(hint);
         scaleWrap.append(Scale({ value: 0, ariaLabel: '主轴转速区间 0–1500 r/min，当前不可计算' }));
-        return;
+        return; // 非法输入：示意图保上一帧（V4.9-05）
+      }
+
+      // 形值同源（V4.9-01）：Vc/n 标签文本 = 页面计算真值（rpm 模式 Vc 取输入规格化、
+      // vc 模式 Vc 与结果卡同为 toFixed(1)），几何唯一驱动 = d → 模式切换只改文本不改几何。
+      const vcText = state.mode === 'rpm' ? trimFixed(calc.vc, 6) : calc.vc.toFixed(1);
+      try {
+        figureCard.innerHTML = speedFigureSVG(
+          buildSpeedFigure({
+            d: calc.d,
+            vcLabel: `Vc ${vcText}`,
+            nLabel: `n ${calc.rpm.toFixed(0)} r/min`,
+          }),
+          `Vc ${vcText}`,
+          `n ${calc.rpm.toFixed(0)} r/min`,
+        );
+      } catch {
+        /* 退化防御：保上一帧（V4.9-05） */
       }
 
       // f 有效（有限且 > 0）才计算并显示 vf；空 / 0 / 负数一律不显示（诚实不伪造）。
@@ -363,6 +455,7 @@ const page: PageModule = {
     body.append(
       modeSeg,
       inputWrap,
+      figureCard,
       scaleWrap,
       resultWrap,
       accWrap,

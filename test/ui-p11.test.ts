@@ -182,3 +182,76 @@ describe('p11 输入校验', () => {
     expect(statText()).toBe('0.68kg');
   });
 });
+
+// V4.9 料型示意图（WAVE-PLAN-V4.9 §4 A2）：四形状图变（元素集/标签逐字）+
+// 改 D 重绘 + 非法输入保帧（V4.9-05）。图卡插在密度 chips 后、结果卡前。
+describe('p11 料型示意图（V4.9-B）', () => {
+  function figureSvg(): SVGSVGElement {
+    const svg = page().querySelector<SVGSVGElement>('.rc-p11__diagram svg');
+    if (!svg) throw new Error('p11 示意图未渲染');
+    return svg;
+  }
+
+  function figureTexts(): string[] {
+    return [...figureSvg().querySelectorAll('text')].map((el) => el.textContent ?? '').sort();
+  }
+
+  function figureCounts(): { circle: number; polygon: number; rect: number; line: number; path: number } {
+    const svg = figureSvg();
+    return {
+      circle: svg.querySelectorAll('circle').length,
+      polygon: svg.querySelectorAll('polygon').length,
+      rect: svg.querySelectorAll('rect').length,
+      line: svg.querySelectorAll('line').length,
+      path: svg.querySelectorAll('path').length,
+    };
+  }
+
+  it('四形状切换图变：元素集与标签集逐字（圆 1 圆 / 六方多边形 / 钢管双圆 / 平板矩形）', () => {
+    // 圆钢默认：截面圆 + 侧视 rect + 2 中心线 + D 引线 + L 尺寸线 + 2 箭头
+    expect(figureCounts()).toEqual({ circle: 1, polygon: 0, rect: 1, line: 4, path: 2 });
+    expect(figureTexts()).toEqual(['D 50', 'L 100']);
+
+    clickSeg('六方');
+    expect(figureCounts()).toEqual({ circle: 0, polygon: 1, rect: 1, line: 4, path: 2 });
+    expect(figureTexts()).toEqual(['L 100', 'S 20']);
+
+    clickSeg('钢管');
+    expect(figureCounts()).toEqual({ circle: 2, polygon: 0, rect: 1, line: 5, path: 2 });
+    expect(figureTexts()).toEqual(['D 60', 'L 100', 't 5']);
+
+    clickSeg('平板');
+    expect(figureCounts()).toEqual({ circle: 0, polygon: 1, rect: 1, line: 3, path: 2 });
+    expect(figureTexts()).toEqual(['L 200', 'T 10', 'W 100']);
+  });
+
+  it('改 D 重绘：圆钢 D 50→80 标签逐字更新，截面半径恒 34（ka=68/D 常量）', () => {
+    expect(figureTexts()).toEqual(['D 50', 'L 100']);
+    const circle = figureSvg().querySelector('circle');
+    expect(Number(circle?.getAttribute('r'))).toBeCloseTo(34, 6);
+    setInput('D', '80');
+    expect(figureTexts()).toEqual(['D 80', 'L 100']);
+    expect(Number(figureSvg().querySelector('circle')?.getAttribute('r'))).toBeCloseTo(34, 6);
+    expect(figureSvg().getAttribute('viewBox')).toBe('0 0 220 150');
+  });
+
+  it('非法输入保帧（V4.9-05）：空值与 2t≥D 前后 svg outerHTML 恒等 + 既有「—」提示', () => {
+    const before = figureSvg().outerHTML;
+    setInput('D', 'abc');
+    expect(statText()).toBe('—kg');
+    expect(figureSvg().outerHTML).toBe(before);
+
+    setInput('D', '50');
+    clickSeg('钢管');
+    const pipeFrame = figureSvg().outerHTML;
+    expect(figureTexts()).toEqual(['D 60', 'L 100', 't 5']);
+    setInput('t', '30');
+    expect(statText()).toBe('—kg');
+    expect(figureSvg().outerHTML).toBe(pipeFrame);
+    // 恢复合法定值 → 重绘成功（同参重绘逐位同帧）
+    setInput('t', '5');
+    expect(statText()).toBe('0.68kg');
+    expect(figureSvg().outerHTML).toBe(pipeFrame);
+    expect(figureTexts()).toEqual(['D 60', 'L 100', 't 5']);
+  });
+});
