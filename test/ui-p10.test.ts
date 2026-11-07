@@ -9,6 +9,9 @@
  * 数值口径：45 钢硬质合金 Vc=[120,180] → Ø50 转速
  *   1000×120/(π×50)=763.943769→764；1000×180/(π×50)=1145.915654→1146。
  *   高速钢 Vc=[25,35] → 159.154943→159；222.816920→223。
+ *
+ * V4.9 C 卡增组：切削三要素静态示意图（存在性 + 三要素文本 + 静态恒定），
+ * 布局锚见各 describe 头注释（p10.ts cuttingFigureCard 同源常量）。
  */
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { createRouter, type Router } from '../src/ui/router';
@@ -129,5 +132,55 @@ describe('p10 切削参数（示例库）', () => {
     expect(after).toHaveLength(14);
     expect(after[1]?.classList.contains('sel')).toBe(true);
     expect(after[0]?.classList.contains('sel')).toBe(false);
+  });
+});
+
+// WAVE-PLAN-V4.9 §3 C 卡（Lead 补位）：切削三要素静态示意图。
+// 布局冻结：viewBox 220×120；工件端面圆 cx=84/cy=62/r=38；车刀两矩形
+// （刀头 118..134×50..78 贴近圆缘 116 不切入、刀杆 134..208×58..74）；
+// Vc 圆顶切向箭头（线 56..98 y=19 + 右端三角）、ap 径向双箭头（线 98..110 y=62
+// + 双端三角，右顶点 116 恰在圆缘）、f 轴向箭头（线 128..160 y=84 + 左端三角）。
+describe('p10 切削三要素静态示意图（V4.9 C 卡）', () => {
+  it('图卡存在：工件圆 + 车刀两矩形 + 三要素标注 + 图例 + 装饰图 aria-hidden', async () => {
+    await router.navigate('p10');
+    const fig = currentPage().querySelector<HTMLElement>('.rc-p10__figurecard');
+    expect(fig).not.toBeNull();
+    expect(fig?.getAttribute('aria-label')).toContain('切削三要素');
+
+    const svg = fig?.querySelector('svg');
+    expect(svg?.getAttribute('viewBox')).toBe('0 0 220 120');
+    expect(svg?.getAttribute('aria-hidden')).toBe('true');
+
+    // 工件端面圆 1 + 车刀两矩形（刀头/刀杆）
+    expect(fig?.querySelectorAll('circle')).toHaveLength(1);
+    expect(fig?.querySelectorAll('rect')).toHaveLength(2);
+    expect(fig?.querySelector('circle')?.getAttribute('cx')).toBe('84');
+
+    // 三要素标注文本（SVG 文档序：Vc / ap / f）
+    const texts = [...(fig?.querySelectorAll('text') ?? [])].map((el) => el.textContent);
+    expect(texts).toEqual(['Vc', 'ap', 'f']);
+
+    // 箭头三角 4 枚：Vc 单端 1 + ap 双端 2 + f 单端 1（纯填充 path，stroke=none）
+    expect(fig?.querySelectorAll('path[stroke="none"]')).toHaveLength(4);
+
+    // 图例三要素中文名对照
+    const legend = fig?.querySelector<HTMLElement>('.rc-p10__legend');
+    expect(legend?.textContent).toContain('切削速度');
+    expect(legend?.textContent).toContain('进给量');
+    expect(legend?.textContent).toContain('背吃刀量');
+  });
+
+  it('静态恒定：切刀具材质 / 筛选分组后图卡为同一 DOM 节点（不重绘）', async () => {
+    await router.navigate('p10');
+    const svg1 = currentPage().querySelector('svg');
+    const card1 = currentPage().querySelector('.rc-p10__figurecard');
+
+    clickSegItem('hss');
+    clickChip('不锈钢');
+    clickChip('全部');
+
+    const card2 = currentPage().querySelector('.rc-p10__figurecard');
+    expect(card2).toBe(card1);
+    expect(currentPage().querySelector('svg')).toBe(svg1);
   });
 });

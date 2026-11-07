@@ -1,0 +1,67 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m<REPO>[39m
+
+ [32m✓[39m test/ui-p01.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 1113[2mms[22m[39m
+   [33m[2m✓[22m[39m p01 导航[2m > [22m10 个入口分别导航到 p02/p04/p05/p07/p08/p09/p10/p11/p12/p13 [33m 608[2mms[22m[39m
+ [32m✓[39m test/ui-p02.test.ts [2m([22m[2m19 tests[22m[2m)[22m[33m 1227[2mms[22m[39m
+ [32m✓[39m test/ui-p16.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 611[2mms[22m[39m
+ [32m✓[39m test/ui-p04.test.ts [2m([22m[2m43 tests[22m[2m)[22m[33m 624[2mms[22m[39m
+ [32m✓[39m test/ui-router.test.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 302[2mms[22m[39m
+ [32m✓[39m test/ui-p06.test.ts [2m([22m[2m10 tests[22m[2m)[22m[33m 371[2mms[22m[39m
+ [32m✓[39m test/ui-p10.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 122[2mms[22m[39m
+ [32m✓[39m test/ui-p05.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 256[2mms[22m[39m
+ [32m✓[39m test/ui-p03.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 274[2mms[22m[39m
+ [32m✓[39m test/ui-p12.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 250[2mms[22m[39m
+ [32m✓[39m test/ui-p08.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 217[2mms[22m[39m
+ [32m✓[39m test/ui-p13.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 183[2mms[22m[39m
+ [32m✓[39m test/ui-p07.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 152[2mms[22m[39m
+ [32m✓[39m test/ui-p11.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 142[2mms[22m[39m
+ [32m✓[39m test/ui-p15.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 134[2mms[22m[39m
+ [32m✓[39m test/ui-p09.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 150[2mms[22m[39m
+ [32m✓[39m test/ui-p14.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 148[2mms[22m[39m
+ [32m✓[39m test/ui-p06-param.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 103[2mms[22m[39m
+ [32m✓[39m test/ui-components.test.ts [2m([22m[2m26 tests[22m[2m)[22m[32m 36[2mms[22m[39m
+ [32m✓[39m test/ui-store.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m test/gear.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 153[2mms[22m[39m
+ [32m✓[39m test/arc-figure-a2.test.ts [2m([22m[2m28 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m test/ui-source.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 675[2mms[22m[39m
+   [33m[2m✓[22m[39m UI 源码契约[2m > [22m16 页 loader 在无 DOM 环境均可解析，且模块含 title/render [33m 656[2mms[22m[39m
+ [32m✓[39m test/data-it.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m test/data-gcode-ref.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m test/arc-figure-b.test.ts [2m([22m[2m32 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m test/macro.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m test/triangle-figure.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m test/gcode.test.ts [2m([22m[2m44 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m test/tolerance-figure.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m test/arc-cases-b.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m test/data-trapezoid.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m test/ref-tables.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m test/arc-figure.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m test/data-materials.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m test/triangle.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m test/gear-figure.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m test/data-unified.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m test/thread.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m test/data-morse.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m test/data-pipe.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m test/data-metric.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m test/arc-cases-a.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m test/data-fundamental-deviations.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m test/fit-tolerance.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m test/taper.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m test/data-npt.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m test/data-sealpipe.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m test/speed.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m test/data-worm.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m test/tolerance.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m test/lookup.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m test/data-densities.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m test/weight.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 2[2mms[22m[39m
+ [32m✓[39m test/arc.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 2[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m55 passed[39m[22m[90m (55)[39m
+[2m      Tests [22m [1m[32m688 passed[39m[22m[90m (688)[39m
+[2m   Start at [22m 14:06:36
+[2m   Duration [22m 17.24s[2m (transform 1.09s, setup 0ms, collect 1.49s, tests 7.48s, environment 9.93s, prepare 5.18s)[22m
+
+REAL_EXIT=0
