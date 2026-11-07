@@ -316,3 +316,96 @@ describe('p03 空参数降级', () => {
     await vi.waitFor(() => expect(router.current()).toBe('p02'));
   });
 });
+
+describe('p03 牙型剖面图（WAVE-PLAN-V4.9 A 卡）', () => {
+  it('metric M10×1.5：图卡位于 Eyebrow 之后、首张结果卡之前，标签 d/d₂/d₁/P/α 齐', async () => {
+    await router.navigate('p03', {
+      family: 'metric',
+      spec: 'M10 × 1.5',
+      d: 10,
+      p: 1.5,
+    });
+
+    const figure = page().querySelector('.rc-p03__figure');
+    expect(figure).not.toBeNull();
+    expect(figure?.getAttribute('aria-label')).toBe('螺纹牙型剖面示意图');
+    // 位置：Eyebrow 的下一个兄弟即图卡，图卡的下一个兄弟为首张 ResultCard
+    expect(page().querySelector('.rc-eyebrow')?.nextElementSibling).toBe(figure);
+    expect(figure?.nextElementSibling?.classList.contains('rc-resultcard')).toBe(true);
+    // 结构：1 条牙型折线 + 3 条直径虚线 + 1 条 P 双箭头线
+    expect(figure?.querySelectorAll('polyline')).toHaveLength(1);
+    expect(figure?.querySelectorAll('line')).toHaveLength(4);
+    const text = figure?.textContent ?? '';
+    expect(text).toContain('d 10.000');
+    expect(text).toContain('d₂ 9.026');
+    expect(text).toContain('d₁ 8.376');
+    expect(text).toContain('P 1.5');
+    expect(text).toContain('α 60°');
+  });
+
+  it('Tr40×7：标签 d₂ 36.500 / P 7 / α 30°', async () => {
+    await router.navigate('p03', {
+      family: 'trapezoid',
+      spec: 'Tr40 × 7',
+      d: 40,
+      p: 7,
+    });
+
+    const text = page().querySelector('.rc-p03__figure')?.textContent ?? '';
+    expect(text).toContain('d 40.000');
+    expect(text).toContain('d₂ 36.500');
+    expect(text).toContain('d₁ 32.000');
+    expect(text).toContain('P 7');
+    expect(text).toContain('α 30°');
+  });
+
+  it('G1/2（55° 管）：标签 d₂ 19.793 / d₁ 18.632 / P 1.814', async () => {
+    await router.navigate('p03', {
+      family: 'pipe',
+      spec: 'G1/2',
+      d: 20.955,
+      p: 25.4 / 14,
+    });
+
+    const text = page().querySelector('.rc-p03__figure')?.textContent ?? '';
+    expect(text).toContain('d 20.955');
+    expect(text).toContain('d₂ 19.793');
+    expect(text).toContain('d₁ 18.632');
+    expect(text).toContain('P 1.814');
+    expect(text).toContain('α 55°');
+  });
+
+  it('蜗杆 m2：标签 px 6.283 / h₁ 4.400 / α 40° / 分度线', async () => {
+    await router.navigate('p03', { family: 'worm', spec: 'm2', d: 2, p: 2 });
+
+    const figure = page().querySelector('.rc-p03__figure');
+    expect(figure?.getAttribute('aria-label')).toBe('蜗杆牙型剖面示意图');
+    const text = figure?.textContent ?? '';
+    expect(text).toContain('齿顶 +m');
+    expect(text).toContain('分度线');
+    expect(text).toContain('h₁ 4.400');
+    expect(text).toContain('px 6.283');
+    expect(text).toContain('α 40°');
+  });
+
+  it('sealpipe R1/2：基面竖虚线（.rc-p03__gauge）与「基面」标签', async () => {
+    await router.navigate('p03', {
+      family: 'sealpipe',
+      spec: 'R1/2',
+      d: 20.955,
+      p: 25.4 / 14,
+    });
+
+    const figure = page().querySelector('.rc-p03__figure');
+    expect(figure?.querySelector('.rc-p03__gauge')?.getAttribute('x1')).toBe('110.00');
+    expect(figure?.querySelector('.rc-p03__gauge')?.getAttribute('x2')).toBe('110.00');
+    const text = figure?.textContent ?? '';
+    expect(text).toContain('基面');
+    expect(text).toContain('d₂ 19.793');
+  });
+
+  it('无参数无图：空参数降级分支不渲染图卡（既有分支不动）', async () => {
+    await router.navigate('p03');
+    expect(page().querySelector('.rc-p03__figure')).toBeNull();
+  });
+});

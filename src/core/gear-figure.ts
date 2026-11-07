@@ -66,6 +66,9 @@ const R_CAP = 52;
 const TOP_DY = 6;
 const BOT_DY = 12; // A4-R2 修订：10 被字高 8.8 吃掉仅余 ~1.2 弧净空（2px@2x 紧贴），12 → 净空 3.2
 const LABEL_Y_MIN = 12; // G2-C-01：推后 b 签 y 硬下夹（字顶 12−8.8=3.2 ≥0 不出框）
+// 轴注字顶推导（V4.8 G2 Minor-2 补注，2026-11-07）：轴注 CJK 基线 SHAFT_LABEL_Y=147，
+// font 8 字形上伸 ≈8×0.91=7.28≈7.3 → 字顶 =147−7.3=139.7（0.91 = 常用 CJK 字面
+// em 占比估值；净空要求仅「不叠」故一位小数足够）
 const LABEL_Y_MAX = 138; // G2-C-01：推后 c 签 y 硬上夹（轴注字顶 ≈139.7，净空 1.7）
 const CENTERLINE_EXT = 4;
 const PUSH_DY = 11;

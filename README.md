@@ -29,7 +29,7 @@
 ```bash
 npm install
 npm run dev      # 开发
-npm test         # 686 项测试（vitest）
+npm test         # 726 项测试（vitest）
 npm run lint     # eslint（0 error）
 npm run build    # 生产构建（PWA，dist/）
 npm run preview  # 本地预览构建产物

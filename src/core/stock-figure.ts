@@ -104,7 +104,7 @@ const LABEL_GAP = 2;
 const LABEL_BASELINE_DY = 2.5;
 /** L 双箭头线距条底的间隙与其下标签基线间隙。 */
 const L_ARROW_DY = 3;
-const L_LABEL_DY = 8;
+const L_LABEL_DY = 9; // vision 预判轮修订：8 时 L 标签字顶距尺寸线 2px@2x（字高 8.5 顶距≈8−6.85），9 → 3.7px@2x；上限约束 round 案线 139+9=148 < 150
 /** 保守文字半宽：CJK 8.5/字符、其余 5.5/字符（gear-figure 同款估算，font 8.5 下偏保守）。 */
 const LATIN_CHAR_W = 5.5;
 const CJK_CHAR_W = 8.5;

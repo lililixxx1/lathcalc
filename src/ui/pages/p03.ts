@@ -3,7 +3,9 @@
  *
  * 设计稿区块（自上而下，docs/车工计算App-无限画布.html:1184-1204）：
  *   状态栏 → 顶栏（规格名 + 标准徽标 + 收藏）→ 族别 · 粗细牙 · 螺距眉标
- *   → 基本尺寸卡（d / d₂ / d₁ / H₁ / 底孔）→ 三针卡（d₀ / M；Tr 追加 ac）
+ *   → 牙型剖面示意图（WAVE-PLAN-V4.9 A 卡，用户反馈 #6：几何全在 core/thread-figure，
+ *   本页零几何 SVG 装配；锥管族加基面竖虚线）→ 基本尺寸卡（d / d₂ / d₁ / H₁ / 底孔）
+ *   → 三针卡（d₀ / M；Tr 追加 ac）
  *   → 「怎么算的」公式（默认展开，设计稿 acc(1)）→ 生成 G76 程序按钮 → Home 指示条
  *
  * 口径：d₂/d₁/H₁/底孔/最佳针径由 core/thread.threadDimensions 计算，
@@ -23,6 +25,7 @@ import type { PageContext, PageModule } from '../router';
 import {
   Accordion,
   Button,
+  Card,
   Eyebrow,
   ResultCard,
   SubText,
@@ -30,9 +33,15 @@ import {
   WarnCard,
   createBody,
   createPage,
+  escapeHtml,
   injectStyle,
 } from '../components';
 import { listThreads } from '../../core/lookup';
+import {
+  THREAD_FIGURE_VIEW,
+  buildThreadFigure,
+  type ThreadFigureView,
+} from '../../core/thread-figure';
 import {
   PROFILE_CONSTANTS,
   threeWireM,
@@ -110,6 +119,8 @@ interface ThreadParams {
 const CSS = `
 .rc-p03__body { padding-top: 2px; }
 .rc-p03__body .la-formula { overflow-wrap: anywhere; }
+.rc-p03__figure { padding: 10px; display: grid; place-items: center; }
+.rc-p03__figure svg { color: var(--la-ink-body); }
 `;
 
 function readFamily(value: string | null): RouteFamily | null {
@@ -253,6 +264,63 @@ function wormFormulaHtml(moduleMM: number): string {
   ].join('<br>');
 }
 
+/**
+ * 牙型剖面示意图 SVG 装配（WAVE-PLAN-V4.9 A 卡；零几何，坐标全来自 core/thread-figure 视图模型）：
+ * 牙型折线实线 → d/d₂/d₁（蜗杆为 齿顶/分度/齿根）水平虚线贯穿 [10,210] + 线上右侧标签
+ * （双 tspan：代号 sub + 值 currentColor 600，p16 先例；基线 = 线 y−3，core 保证 ≥12）→
+ * P/px 顶部双箭头 + 标签 → α 文字（sub 色，不画角弧）→ 锥管族基面竖虚线 + 「基面」标签。
+ */
+function threadFigureSVG(view: ThreadFigureView): string {
+  const n2 = (value: number): string => value.toFixed(2);
+  /** 线/箭头标签：含空格 → 双 tspan（代号 sub + 值 600）；否则整段 sub（分度线等纯名）。 */
+  const labelText = (label: string): string => {
+    const split = label.indexOf(' ');
+    if (split < 0) {
+      return `<tspan fill="var(--la-sub)">${escapeHtml(label)}</tspan>`;
+    }
+    return `<tspan fill="var(--la-sub)">${escapeHtml(label.slice(0, split))}</tspan> <tspan fill="currentColor" font-weight="600">${escapeHtml(label.slice(split + 1))}</tspan>`;
+  };
+  const lineLabel = (label: string, y: number): string =>
+    `<text x="${n2(208)}" y="${n2(Math.max(12, y - 3))}" font-size="8.5" text-anchor="end" stroke="none">${labelText(label)}</text>`;
+
+  const profile = `<polyline points="${view.profile
+    .map((point) => `${n2(point.x)},${n2(point.y)}`)
+    .join(' ')}" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>`;
+
+  const diameterLines = view.diameterLines
+    .map(
+      (line) =>
+        `<line x1="10" y1="${n2(line.y)}" x2="210" y2="${n2(line.y)}" stroke="var(--la-sub)" stroke-width="0.8" stroke-dasharray="4 2.5"/>${lineLabel(line.label, line.y)}`,
+    )
+    .join('');
+
+  const pitch = view.pitchMark;
+  const pitchSvg =
+    `<line x1="${n2(pitch.x1 + 4)}" y1="${n2(pitch.y)}" x2="${n2(pitch.x2 - 4)}" y2="${n2(pitch.y)}" stroke="currentColor" stroke-width="1"/>` +
+    `<polygon points="${n2(pitch.x1)},${n2(pitch.y)} ${n2(pitch.x1 + 4.5)},${n2(pitch.y - 2)} ${n2(pitch.x1 + 4.5)},${n2(pitch.y + 2)}" fill="currentColor" stroke="none"/>` +
+    `<polygon points="${n2(pitch.x2)},${n2(pitch.y)} ${n2(pitch.x2 - 4.5)},${n2(pitch.y - 2)} ${n2(pitch.x2 - 4.5)},${n2(pitch.y + 2)}" fill="currentColor" stroke="none"/>` +
+    `<text x="${n2((pitch.x1 + pitch.x2) / 2)}" y="${n2(Math.max(12, pitch.y - 3))}" font-size="8.5" text-anchor="middle" stroke="none">${labelText(pitch.label)}</text>`;
+
+  const flank = `<text x="${n2(view.flankMark.x)}" y="${n2(view.flankMark.y)}" font-size="8.5" text-anchor="middle" fill="var(--la-sub)" stroke="none">${escapeHtml(view.flankMark.label)}</text>`;
+
+  const gauge = view.gaugeLine
+    ? `<line class="rc-p03__gauge" x1="${n2(view.gaugeLine.x)}" y1="${n2(view.gaugeLine.y1)}" x2="${n2(view.gaugeLine.x)}" y2="${n2(view.gaugeLine.y2)}" stroke="var(--la-sub)" stroke-width="0.8" stroke-dasharray="5 2.5 1.2 2.5"/>` +
+      `<text x="${n2(view.gaugeLine.x)}" y="${n2(view.gaugeLine.y2 + 8)}" font-size="8.5" text-anchor="middle" fill="var(--la-sub)" stroke="none">${escapeHtml(view.gaugeLine.label)}</text>`
+    : '';
+
+  return `<svg viewBox="0 0 ${THREAD_FIGURE_VIEW.width} ${THREAD_FIGURE_VIEW.height}" width="100%" height="${THREAD_FIGURE_VIEW.height}" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">${profile}${diameterLines}${pitchSvg}${flank}${gauge}</svg>`;
+}
+
+/** 牙型剖面图卡（Eyebrow 之后、首张 ResultCard 之前；入参已过 readParams 校验，无保帧分支）。 */
+function threadFigureCard(view: ThreadFigureView, worm: boolean): HTMLElement {
+  const card = Card({
+    className: 'rc-p03__figure',
+    ariaLabel: worm ? '蜗杆牙型剖面示意图' : '螺纹牙型剖面示意图',
+  });
+  card.innerHTML = threadFigureSVG(view);
+  return card;
+}
+
 /** 收藏事件（跨卡契约：detail = {kind,title,params,ts,favorite?}；无监听方时无副作用） */
 function dispatchSave(params: ThreadParams): void {
   document.dispatchEvent(
@@ -328,6 +396,8 @@ const page: PageModule = {
       ];
       body.append(
         Eyebrow(eyebrowText(params, row)),
+        // V4.9 A 卡：牙型剖面图（分度线在 cy，齿顶 +m/齿根 −1.2m，px=π·m 同源 wormGeometry）
+        threadFigureCard(buildThreadFigure({ kind: 'worm', moduleMM }), true),
         ResultCard({ items: dimensionItems, ariaLabel: '蜗杆几何' }),
         Accordion({ content: wormFormulaHtml(moduleMM), open: true }),
       );
@@ -345,6 +415,19 @@ const page: PageModule = {
     const dims = threadDimensions(spec);
     const wireM = threeWireM(spec, dims.bestWire);
     const taper = params.dataFamily === 'sealpipe' || params.dataFamily === 'npt';
+
+    // V4.9 A 卡：牙型剖面图（d₂/d₁ 同源 threadDimensions；锥管族加基面竖虚线，不画锥度）。
+    // worm 族已在上方早退（FAMILY_META 仅 worm 映射 40°），此处牙型角必为 30/55/60。
+    const figureCard = threadFigureCard(
+      buildThreadFigure({
+        kind: 'thread',
+        major: params.d,
+        pitch: params.p,
+        flankAngle: params.flankAngle as 30 | 55 | 60,
+        gaugeLine: taper,
+      }),
+      false,
+    );
 
     const dimensionItems = [
       { label: '大径 d', value: format3(params.d), unit: 'mm' },
@@ -380,6 +463,7 @@ const page: PageModule = {
 
     body.append(
       Eyebrow(eyebrowText(params, row)),
+      figureCard,
       ResultCard({ items: dimensionItems, ariaLabel: '螺纹基本尺寸' }),
       ...(taperNote ? [taperNote] : []),
       ResultCard({ items: wireItems, ariaLabel: '三针测量' }),

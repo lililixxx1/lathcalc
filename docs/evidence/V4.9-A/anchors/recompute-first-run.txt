@@ -1,0 +1,87 @@
+# 首跑存档（2026-11-07）· 复算脚本自身缺陷披露（非实现/测试缺陷）
+
+> 本档为 recompute.mjs 首次成功运行（修正 wormGeom 漏 periodPx 的崩溃缺陷之后）的
+> 完整逐字输出。首跑 MATCH=41 FAIL=8，经逐项归因，8 个 FAIL 全部为**脚本侧**问题
+> （6 个 expected 转录值用了教科书/手算舍入值 + rootFactor 公式符号写反），
+> 实现代码与测试断言零改动；修正后终跑 MATCH=49 FAIL=0（recompute-output.txt）。
+> 全档披露，不弃不利档。
+
+## 首跑 8 FAIL 归因
+
+| 锚 | 首跑 derived | 首跑 expected | \|Δ\| | 归因 |
+| --- | --- | --- | --- | --- |
+| M10.crestPx | 10.000880 | 10.000000 | 8.80e-4 | 脚本转录误：expected 抄计划字面 10.00u（教科书 P/8·k 的 2 位呈现）；冻结常数构造实得 0.125011P·k=10.0009（计划 §1 构造代数注记同值），测试按公式断言一致 |
+| M10.rootPx | 20.000587 | 20.000000 | 5.87e-4 | 同上（0.249987P·k=20.0006，计划字面 20.00u） |
+| G12.x0 | 16.293925 | 16.294000 | 7.53e-5 | 脚本转录误：expected 手算舍入 16.2940；实得 16.2939（计划字面 x0=16.29 为 2 位呈现） |
+| G12.pitchSpan | 74.964860 | 74.964800 | 6.02e-5 | 脚本转录误：expected 截断 74.9648；实得 74.9649 |
+| Worm.crestPx | 21.463148 | 21.461600 | 1.55e-3 | 脚本转录误：expected 抄早期手算误值 21.4616；实得 21.4631（计划字面 21.46u 为 2 位呈现） |
+| Worm.rootPx | 17.755778 | 17.755600 | 1.78e-4 | 同上（实得 17.7558，计划字面 17.76u） |
+| Alg.f60_root | 0.749993 | 0.249987 | 5.00e-1 | 脚本公式符号写反：rootFactor 应为 0.5−(d1Factor−d2Factor)·tan(α/2)，误写 (d2Factor−d1Factor) |
+| Alg.f55_root | 0.833319 | 0.166681 | 6.67e-1 | 同上 |
+
+## 首跑原始输出（REAL_EXIT=1，逐字）
+
+```
+WAVE-PLAN-V4.9 §3 A 卡金锚独立复算（recompute.mjs，不 import src、不抄实现常数）
+判定容差 5e-5（对应测试 toBeCloseTo(…,4)）；文本锚全等。
+========================================================================================================================
+MATCH  M10.k                         derived=53.333333  expected=53.333300  |Δ|=3.33e-5  min(200/2.5P, 96/1.62375) 宽度约束
+MATCH  M10.y_d                       derived=20.700000  expected=20.700000  |Δ|=1.78e-14  64−(d−d₁)/2·k
+MATCH  M10.y_d2                      derived=72.660000  expected=72.660000  |Δ|=0.00e+0  牙顶+(d−d₂)·k（构造链）
+MATCH  M10.y_d1                      derived=107.300000  expected=107.300000  |Δ|=1.42e-14  64+(d−d₁)/2·k
+FAIL   M10.crestPx                   derived=10.000880  expected=10.000000  |Δ|=8.80e-4  (P/2−(d−d₂)·tan30°)·k = P/8·k
+FAIL   M10.rootPx                    derived=20.000587  expected=20.000000  |Δ|=5.87e-4  (P/2−(d₂−d₁)·tan30°)·k = P/4·k
+MATCH  M10.pitchSpan                 derived=80.000000  expected=80.000000  |Δ|=0.00e+0  P·k
+MATCH  M10.x0                        derived=10.000000  expected=10.000000  |Δ|=0.00e+0  (220−2.5P·k)/2 恰满幅
+MATCH  M10.label_d2                  derived="9.026"  expected="9.026"  d₂=9.02575 toFixed(3)
+MATCH  M10.label_d1                  derived="8.376"  expected="8.376"  d₁=8.37625 toFixed(3)
+MATCH  M10.label_P                   derived="P 1.5"  expected="P 1.5"  p03 formatPitch 同式
+MATCH  Tr.k                          derived=11.428571  expected=11.428600  |Δ|=2.86e-5  min(200/17.5, 96/8) 宽度约束
+MATCH  Tr.y_d                        derived=18.285714  expected=18.285700  |Δ|=1.43e-5  64−4·k
+MATCH  Tr.y_d2                       derived=58.285714  expected=58.285700  |Δ|=1.43e-5  牙顶+(d−d₂)·k（构造链）
+MATCH  Tr.y_d1                       derived=109.714286  expected=109.714300  |Δ|=1.43e-5  64+4·k
+MATCH  Tr.crestPx                    derived=29.282032  expected=29.282000  |Δ|=3.23e-5  3.5−3.5·tan15° → ×k
+MATCH  Tr.rootPx                     derived=26.219756  expected=26.219800  |Δ|=4.42e-5  3.5−4.5·tan15° → ×k
+MATCH  Tr.pitchSpan                  derived=80.000000  expected=80.000000  |Δ|=0.00e+0  P·k
+MATCH  G12.k                         derived=41.319214  expected=41.319200  |Δ|=1.43e-5  min(200/4.5357, 96/2.32337) 高度约束
+FAIL   G12.x0                        derived=16.293925  expected=16.294000  |Δ|=7.53e-5  横向 187.4119u 居中（不满幅）
+MATCH  G12.y_d                       derived=16.000000  expected=16.000000  |Δ|=0.00e+0  高度约束恰满 96
+MATCH  G12.y_d2                      derived=64.000000  expected=64.000000  |Δ|=0.00e+0  55°：d−d₂=d₂−d₁ → d₂ 线在带中
+MATCH  G12.y_d1                      derived=112.000000  expected=112.000000  |Δ|=0.00e+0  高度约束恰满 96
+MATCH  G12.crestPx                   derived=12.495212  expected=12.495200  |Δ|=1.17e-5  0.302407mm×k
+MATCH  G12.rootPx                    derived=12.495212  expected=12.495200  |Δ|=1.17e-5  55° 双侧对称同值
+MATCH  G12.crest1                    derived=53.776355  expected=53.776400  |Δ|=4.52e-5  x0+0.5·P·k
+FAIL   G12.pitchSpan                 derived=74.964860  expected=74.964800  |Δ|=6.02e-5  P·k
+MATCH  G12.label_d2                  derived="19.793"  expected="19.793"  d₂=19.79331286
+MATCH  G12.label_d1                  derived="18.632"  expected="18.632"  d₁=18.63162571
+MATCH  G12.label_P                   derived="P 1.814"  expected="P 1.814"  formatPitch 同式
+MATCH  Worm.k                        derived=12.732395  expected=12.732400  |Δ|=4.55e-6  min(200/15.7080, 96/4.4) 宽度约束
+MATCH  Worm.y_tip                    derived=38.535209  expected=38.535200  |Δ|=9.11e-6  64−m·k
+MATCH  Worm.y_ref                    derived=64.000000  expected=64.000000  |Δ|=0.00e+0  分度线在 cy
+MATCH  Worm.y_root                   derived=94.557749  expected=94.557700  |Δ|=4.91e-5  64+1.2m·k
+FAIL   Worm.crestPx                  derived=21.463148  expected=21.461600  |Δ|=1.55e-3  (px/2−2m·tan20°)·k
+FAIL   Worm.rootPx                   derived=17.755778  expected=17.755600  |Δ|=1.78e-4  (px/2−2.4m·tan20°)·k
+MATCH  Worm.pitchSpan                derived=80.000000  expected=80.000000  |Δ|=0.00e+0  px·k
+MATCH  Worm.label_px                 derived="6.283"  expected="6.283"  px=6.28318530…
+MATCH  Worm.label_h1                 derived="4.400"  expected="4.400"  h₁=2.2m
+MATCH  Seal.gauge_x                  derived=110.000000  expected=110.000000  |Δ|=0.00e+0  V4.9-02 基面竖虚线居中
+MATCH  Seal.gauge_y1                 derived=8.000000  expected=8.000000  |Δ|=0.00e+0  带顶外延 8
+MATCH  Seal.gauge_y2                 derived=119.000000  expected=119.000000  |Δ|=0.00e+0  带底外延 8，上限 119
+MATCH  Seal.gauge_label              derived="基面"  expected="基面"  V4.9-02
+MATCH  Alg.f60_crest                 derived=0.125011  expected=0.125011  |Δ|=1.61e-10  0.5−0.6495·tan30°（与 P/8 差 1.1e-5）
+FAIL   Alg.f60_root                  derived=0.749993  expected=0.249987  |Δ|=5.00e-1  0.5−0.433·tan30°（与 P/4 差 1.3e-5）
+MATCH  Alg.f55_crest                 derived=0.166681  expected=0.166681  |Δ|=8.25e-8  0.5−0.6403·tan27.5°（与 P/6 差 1.4e-5）
+FAIL   Alg.f55_root                  derived=0.833319  expected=0.166681  |Δ|=6.67e-1  55° 对称
+MATCH  Alg.f30_crest                 derived=0.366025  expected=0.366025  |Δ|=4.04e-7  0.5−0.5·tan15°（精确活算）
+MATCH  Alg.midTooth_P_half           derived=0.500000  expected=0.500000  |Δ|=0.00e+0  中径处牙厚恒 P/2（V4.9-02 定义）
+========================================================================================================================
+JUDGMENT: MATCH=41 FAIL=8
+REAL_EXIT=1
+```
+
+> 注①：另有一个脚本崩溃前置缺陷（wormGeom 返回对象漏 periodPx 致 TypeError、
+> 退出码 1）在首跑之前发现并修复，该次崩溃输出未成档（缺陷为脚本侧遗漏字段，
+> 与实现/测试无关）。
+> 注②：「测试按公式断言一致」的核实方式：test/thread-figure.test.ts 对这些锚的
+> expected 均为测试内公式活算（如 M10_CREST_PX=(1.5/2−(10−M10_D2)·T30)·M10_K），
+> 不存在被转录污染的字面断言；脚本修正 expected 后终跑全 MATCH 即为双盲合流。
