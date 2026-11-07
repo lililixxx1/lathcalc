@@ -13,12 +13,23 @@
  *   - 页面不做任何表值兜底 / 硬编码，查表失败时给输入区提示；
  *   - IT5–IT12 共 8 级（data/tolerance-it.json 全量等级）。
  *
+ * v0.6.2（WAVE-PLAN-V4.7，用户反馈 #4「公差配合没有示意图」）：公差带示意图
+ * 参数化——单带画当前 H{grade}/h{grade}，选中配合 chip 画 H7+轴带（V4.7-01 形值
+ * 同源）；图形零几何，坐标全来自 core/tolerance-figure；查表失败保上一帧
+ * （V4.7-04）。
+ *
  * 页面参数（README §5.3 登记）：`d`（基本尺寸 mm）、`grade`（IT 等级）。
  */
 import type { PageContext, PageModule } from '../router';
 import type { FitResult, ITTableRow, ToleranceResult } from '../../core/types';
 import { itToleranceMM } from '../../core/lookup';
 import { fitTolerance, toleranceCompose } from '../../core/tolerance';
+import {
+  TOL_FIGURE_VIEW,
+  buildToleranceFigure,
+  type TolBandInput,
+  type TolFigureView,
+} from '../../core/tolerance-figure';
 import {
   Accordion,
   Badge,
@@ -31,6 +42,7 @@ import {
   TopBar,
   createBody,
   createPage,
+  escapeHtml,
   injectStyle,
 } from '../components';
 import toleranceJson from '../../data/tolerance-it.json';
@@ -42,6 +54,9 @@ const CSS = `
 .rc-p08__presets { display: flex; flex-wrap: wrap; gap: 7px; }
 .rc-p08__fithead { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 4px; }
 .rc-p08__fitcard { margin-top: 6px; }
+/* V4.7 公差带示意图卡（同 p12 示意图卡布局） */
+.rc-p08__diagram { padding: 10px; display: grid; place-items: center; }
+.rc-p08__diagram svg { color: var(--la-ink-body); }
 /* W12 A4-W5：la-eyebrow 全局 text-transform:uppercase 会把配合代号 g6/k6/p6 显示成大写，
    GB/T 1800.1 轴公差带代号须小写——配合卡域内关闭大写变换 */
 .rc-p08__fitcard .la-eyebrow { text-transform: none; }
@@ -93,6 +108,36 @@ function signedUM(value: number): string {
 function formatNominal(value: number): string {
   const rounded = Number(value.toFixed(3));
   return String(rounded === 0 ? 0 : rounded);
+}
+
+/**
+ * 公差带示意图 SVG 装配（V4.7：零几何，坐标全来自 core/tolerance-figure）。
+ * 层序：零线（灰细）→ 公差带矩形（孔=墨、轴=橙墨）→ 标签；色值走 token。
+ */
+function parametricTolSVG(view: TolFigureView): string {
+  const n2 = (v: number): number => Math.round(v * 100) / 100;
+  const zero = `<path d="M${n2(view.zeroLine.x1)} ${n2(view.zeroLine.y)}L${n2(view.zeroLine.x2)} ${n2(view.zeroLine.y)}" stroke="var(--la-sub)" stroke-width="1.2"/>`;
+  const rects = view.bands
+    .map(
+      (b) =>
+        `<rect x="${n2(b.x0)}" y="${n2(b.yTop)}" width="${n2(b.x1 - b.x0)}" height="${n2(b.yBot - b.yTop)}" stroke="${b.kind === 'shaft' ? 'var(--la-accent-ink)' : 'currentColor'}"/>`,
+    )
+    .join('');
+  const labels = view.labels
+    .map((l) => {
+      const color =
+        l.role === 'unit'
+          ? 'var(--la-sub)'
+          : l.role === 'code' && l.text === l.text.toLowerCase()
+            ? 'var(--la-accent-ink)'
+            : l.role === 'code'
+              ? 'currentColor'
+              : 'var(--la-sub)';
+      const size = l.role === 'unit' ? 8 : 11;
+      return `<text x="${n2(l.x)}" y="${n2(l.y)}" font-size="${size}" fill="${color}" stroke="none" text-anchor="${l.anchor}">${escapeHtml(l.text)}</text>`;
+    })
+    .join('');
+  return `<svg viewBox="0 0 ${TOL_FIGURE_VIEW.width} ${TOL_FIGURE_VIEW.height}" width="100%" height="96" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true">${zero}${rects}${labels}</svg>`;
 }
 
 export const title = '公差配合';
@@ -151,6 +196,11 @@ const page: PageModule = {
 
     const statWrap = document.createElement('div');
     statWrap.className = 'rc-p08__stat';
+    // V4.7 公差带示意图卡：插在 IT 等级分段与三联卡之间（查表失败保上一帧）
+    const diagramCard = Card({
+      className: 'rc-p08__diagram',
+      ariaLabel: '公差带示意图（零线上正下负，偏差单位 μm）',
+    });
     const presetLabel = document.createElement('div');
     presetLabel.className = 'la-eyebrow rc-p08__presetlabel';
     const presetWrap = document.createElement('div');
@@ -278,6 +328,27 @@ const page: PageModule = {
       if (fit) renderFit(fit, nominal);
       else fitWrap.replaceChildren();
 
+      // V4.7-01 形值同源：选中配合画 H7+轴带（fitTolerance μm 整数），
+      // 否则画当前 H{grade}/h{grade} 单带（ToleranceResult mm ×1000 取整）。
+      const figureBands: TolBandInput[] = fit
+        ? [
+            { code: 'H7', kind: 'hole', lowerUM: fit.result.hole.lowerUM, upperUM: fit.result.hole.upperUM },
+            { code: fit.preset.band, kind: 'shaft', lowerUM: fit.result.shaft.lowerUM, upperUM: fit.result.shaft.upperUM },
+          ]
+        : [
+            {
+              code: `${fundamental}${grade}`,
+              kind: 'single',
+              lowerUM: Math.round(result.lower * 1000),
+              upperUM: Math.round(result.upper * 1000),
+            },
+          ];
+      try {
+        diagramCard.innerHTML = parametricTolSVG(buildToleranceFigure(figureBands));
+      } catch {
+        /* 退化防御：保上一帧（提示已在输入区） */
+      }
+
       statWrap.replaceChildren(
         StatTriple({
           ariaLabel: '极限偏差与公差',
@@ -325,7 +396,7 @@ const page: PageModule = {
     }
 
     paint();
-    body.append(inputRow, holeSeg, gradeSeg, statWrap, presetLabel, presetWrap, fitWrap, accWrap);
+    body.append(inputRow, holeSeg, gradeSeg, diagramCard, statWrap, presetLabel, presetWrap, fitWrap, accWrap);
 
     ctx.root.append(
       createPage({

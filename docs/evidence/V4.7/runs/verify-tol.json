@@ -1,0 +1,111 @@
+{
+  "ok": true,
+  "ms": 1303,
+  "budgetMs": 120000,
+  "shots": [
+    "p08-tol-default-390x844",
+    "p08-tol-d18-390x844",
+    "p08-tol-it8-390x844",
+    "p08-tol-h7-390x844",
+    "p08-tol-g6-390x844",
+    "p08-tol-k6-390x844",
+    "p08-tol-p6-390x844",
+    "p08-tol-keepframe-390x844"
+  ],
+  "labelChecks": [
+    {
+      "id": "default",
+      "texts": [
+        "μm",
+        "H7",
+        "+25",
+        "0"
+      ],
+      "keptFrame": false
+    },
+    {
+      "id": "d18",
+      "texts": [
+        "μm",
+        "H7",
+        "+18",
+        "0"
+      ],
+      "keptFrame": false
+    },
+    {
+      "id": "it8",
+      "texts": [
+        "μm",
+        "H8",
+        "+39",
+        "0"
+      ],
+      "keptFrame": false
+    },
+    {
+      "id": "h7",
+      "texts": [
+        "μm",
+        "h7",
+        "0",
+        "−25"
+      ],
+      "keptFrame": false
+    },
+    {
+      "id": "g6",
+      "texts": [
+        "μm",
+        "H7",
+        "+25",
+        "0",
+        "g6",
+        "−9",
+        "−25"
+      ],
+      "keptFrame": false
+    },
+    {
+      "id": "k6",
+      "texts": [
+        "μm",
+        "H7",
+        "+25",
+        "0",
+        "k6",
+        "+18",
+        "+2"
+      ],
+      "keptFrame": false
+    },
+    {
+      "id": "p6",
+      "texts": [
+        "μm",
+        "H7",
+        "+25",
+        "0",
+        "p6",
+        "+42",
+        "+26"
+      ],
+      "keptFrame": false
+    },
+    {
+      "id": "out-of-range",
+      "texts": [
+        "μm",
+        "H7",
+        "+25",
+        "0",
+        "p6",
+        "+42",
+        "+26"
+      ],
+      "keptFrame": true
+    }
+  ],
+  "exceptions": 0,
+  "consoleErrors": 0
+}

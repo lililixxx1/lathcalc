@@ -284,3 +284,62 @@ describe('p08 公差配合', () => {
     expect(fitChip('g6').disabled).toBe(false);
   });
 });
+
+// V4.7 公差带示意图参数化（WAVE-PLAN-V4.7 §4 A2）：图随输入/配合 chip 重建，
+// 超范围保上一帧。期望值同前：Ø40 (30,50] IT7=25/IT6=16、g=−9/k=+2/p=+26；
+// Ø18 (10,18] IT7=18（μm）。
+describe('p08 公差带示意图（V4.7）', () => {
+  function diagramTexts(): string[] {
+    return [...currentPage().querySelectorAll<HTMLElement>('.rc-p08__diagram svg text')].map(
+      (el) => el.textContent ?? '',
+    );
+  }
+
+  function diagramRectCount(): number {
+    return currentPage().querySelectorAll('.rc-p08__diagram svg rect').length;
+  }
+
+  it('默认 Ø40 IT7 H：单带帧（1 矩形）标签集 {μm, H7, +25, 0}', async () => {
+    await router.navigate('p08');
+    expect(diagramRectCount()).toBe(1);
+    expect(diagramTexts().sort()).toEqual(['+25', '0', 'H7', 'μm']);
+  });
+
+  it('图随输入重建：Ø18 → +18；IT8 → H8/+39；切轴 h → {h7, 0, −25}', async () => {
+    await router.navigate('p08');
+    setNominal('18');
+    expect(diagramTexts().sort()).toEqual(['+18', '0', 'H7', 'μm']);
+
+    setNominal('40');
+    clickSegItem('8');
+    expect(diagramTexts().sort()).toEqual(['+39', '0', 'H8', 'μm']);
+
+    clickSegItem('7');
+    clickSegItem('h');
+    expect(diagramTexts().sort()).toEqual(['0', 'h7', 'μm', '−25']);
+  });
+
+  it('配合 chip：g6 → 双带帧（2 矩形）{H7,g6,+25,0,−9,−25}；k6/p6 依次重建', async () => {
+    await router.navigate('p08');
+    clickFitChip('g6');
+    expect(diagramRectCount()).toBe(2);
+    expect(diagramTexts().sort()).toEqual(['+25', '0', 'H7', 'g6', 'μm', '−25', '−9']);
+
+    clickFitChip('k6');
+    // 默认字符串序：'+18' < '+2'（'1'<'2'）
+    expect(diagramTexts().sort()).toEqual(['+18', '+2', '+25', '0', 'H7', 'k6', 'μm']);
+
+    clickFitChip('p6');
+    expect(diagramTexts().sort()).toEqual(['+25', '+26', '+42', '0', 'H7', 'p6', 'μm']);
+  });
+
+  it('超范围输入保上一帧：hint 出现且示意图标签集不变（V4.7-04）', async () => {
+    await router.navigate('p08');
+    clickFitChip('g6');
+    const before = diagramTexts().sort().join('/');
+    setNominal('3150.001');
+    expect(currentPage().querySelector('.rc-p08__hint')).not.toBeNull();
+    expect(diagramRectCount()).toBe(2);
+    expect(diagramTexts().sort().join('/')).toBe(before);
+  });
+});
