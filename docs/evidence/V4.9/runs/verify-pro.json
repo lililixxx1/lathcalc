@@ -1,0 +1,210 @@
+{
+  "ok": true,
+  "ms": 1744,
+  "budgetMs": 180000,
+  "pages": [
+    "p03",
+    "p11",
+    "p09",
+    "p10"
+  ],
+  "shots": [
+    "p03-metric-390x844",
+    "p03-tr-390x844",
+    "p03-pipe55-390x844",
+    "p03-worm-390x844",
+    "p03-sealpipe-390x844",
+    "p03-noparams-390x844",
+    "p11-round-390x844",
+    "p11-hex-390x844",
+    "p11-pipe-390x844",
+    "p11-plate-390x844",
+    "p11-redraw-d80-390x844",
+    "p11-keepframe-t30-390x844",
+    "p09-default-390x844",
+    "p09-mode-vc-390x844",
+    "p09-redraw-d100-390x844",
+    "p10-static-390x844"
+  ],
+  "checks": [
+    {
+      "id": "p03-metric",
+      "texts": [
+        "d 10.000",
+        "d₂ 9.026",
+        "d₁ 8.376",
+        "P 1.5",
+        "α 60°"
+      ],
+      "textsEq": false,
+      "keptFrame": false,
+      "geoSame": false
+    },
+    {
+      "id": "p03-tr",
+      "texts": [
+        "d 40.000",
+        "d₂ 36.500",
+        "d₁ 32.000",
+        "P 7",
+        "α 30°"
+      ],
+      "textsEq": false,
+      "keptFrame": false,
+      "geoSame": false
+    },
+    {
+      "id": "p03-pipe55",
+      "texts": [
+        "d 20.955",
+        "d₂ 19.793",
+        "d₁ 18.632",
+        "P 1.814",
+        "α 55°"
+      ],
+      "textsEq": false,
+      "keptFrame": false,
+      "geoSame": false
+    },
+    {
+      "id": "p03-worm",
+      "texts": [
+        "齿顶 +m",
+        "分度线",
+        "h₁ 4.400",
+        "px 6.283",
+        "α 40°"
+      ],
+      "textsEq": false,
+      "keptFrame": false,
+      "geoSame": false
+    },
+    {
+      "id": "p03-sealpipe",
+      "texts": [
+        "d 20.955",
+        "d₂ 19.793",
+        "d₁ 18.632",
+        "P 1.814",
+        "α 55°",
+        "基面"
+      ],
+      "textsEq": false,
+      "keptFrame": false,
+      "geoSame": false
+    },
+    {
+      "id": "p03-noparams",
+      "absent": ".rc-p03__figure"
+    },
+    {
+      "id": "p11-round",
+      "texts": [
+        "D 50",
+        "L 100"
+      ],
+      "textsEq": true,
+      "keptFrame": false,
+      "geoSame": false
+    },
+    {
+      "id": "p11-hex",
+      "texts": [
+        "S 20",
+        "L 100"
+      ],
+      "textsEq": true,
+      "keptFrame": false,
+      "geoSame": false
+    },
+    {
+      "id": "p11-pipe",
+      "texts": [
+        "D 60",
+        "t 5",
+        "L 100"
+      ],
+      "textsEq": true,
+      "keptFrame": false,
+      "geoSame": false
+    },
+    {
+      "id": "p11-plate",
+      "texts": [
+        "W 100",
+        "T 10",
+        "L 200"
+      ],
+      "textsEq": true,
+      "keptFrame": false,
+      "geoSame": false
+    },
+    {
+      "id": "p11-redraw",
+      "texts": [
+        "D 80",
+        "L 100"
+      ],
+      "textsEq": true,
+      "keptFrame": false,
+      "geoSame": false
+    },
+    {
+      "id": "p11-keepframe",
+      "texts": [
+        "D 60",
+        "t 5",
+        "L 100"
+      ],
+      "textsEq": false,
+      "keptFrame": true,
+      "geoSame": false
+    },
+    {
+      "id": "p09-default",
+      "texts": [
+        "⌀50",
+        "Vc 150",
+        "n 955 r/min"
+      ],
+      "textsEq": true,
+      "keptFrame": false,
+      "geoSame": false
+    },
+    {
+      "id": "p09-mode",
+      "texts": [
+        "⌀50",
+        "Vc 150.0",
+        "n 955 r/min"
+      ],
+      "textsEq": false,
+      "keptFrame": false,
+      "geoSame": true
+    },
+    {
+      "id": "p09-redraw",
+      "texts": [
+        "⌀100",
+        "Vc 300.0",
+        "n 955 r/min"
+      ],
+      "textsEq": true,
+      "keptFrame": false,
+      "geoSame": false
+    },
+    {
+      "id": "p10-static",
+      "texts": [
+        "Vc",
+        "ap",
+        "f"
+      ],
+      "textsEq": true,
+      "keptFrame": false,
+      "geoSame": false
+    }
+  ],
+  "exceptions": 0,
+  "consoleErrors": 0
+}

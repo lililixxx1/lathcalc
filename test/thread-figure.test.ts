@@ -6,7 +6,7 @@
  *   d₂/d₁ 内联复算（与 core/thread.ts PROFILE_CONSTANTS 同式）：60° d−0.6495P / d−1.0825P；
  *   55° d−0.6403P / d−1.2806P；30°Tr d−0.5P / d−P−2ac（ac=0.5，5<P≤12 档）；
  *   k = min(200/(2.5P), 96/(d−d₁))；蜗杆 k = min(200/(2.5px), 96/h₁)，px=π·m、h₁=2.2m；
- *   x0 = (220−2.5P·k)/2；牙顶线 y = 64−(d−d₁)/2·k（蜗杆 = 64−m·k）；
+ *   x0 = 10（V4.9-A4 勘正：带左对齐，原 (220−2.5P·k)/2 居中）；牙顶线 y = 64−(d−d₁)/2·k（蜗杆 = 64−m·k）；
  *   d₂ 线 y = 牙顶 + (d−d₂)·k（构造链，蜗杆分度线 = 64）；牙底线 y = 64+(d−d₁)/2·k
  *   （蜗杆 = 64+1.2m·k）；
  *   w_crest = P/2−(d−d₂)·tan(α/2)、w_root = P/2−(d₂−d₁)·tan(α/2)；蜗杆 px/2−2m·tan20°、
@@ -14,10 +14,13 @@
  *
  * 与计划 §3 字面锚的两处既知出入（派工单明示按实际入参/公式复算，证据档披露上报）：
  *   ① G1/2、sealpipe 入参取数据行真 pitch=25.4/14=1.8142857…（≠计划字面 1.814），
- *      k=41.3192（高度约束）、x0=16.2939、横向 187.4122u；
+ *      k=41.3192（高度约束）、x0=10（A4 勘正）、带右缘 bandRight=197.4122u；
  *   ② 计划 M10「d₂ 线 38.02」/ Tr「d₂ 线 44.00」与其自身牙顶/牙根值及构造链矛盾
  *      （半距误置）：构造链自洽值 M10=72.66、Tr=58.29（=牙顶+(d−d₂)·k，
  *      与计划自身牙顶 20.70/18.29、牙根 107.30/109.71 链内一致）。
+ *   ③ V4.9-A4 终轮勘正（Lead 集成期）：viewBox 220→262、带左对齐 x0=10、右侧标签列
+ *      x=254（vision 终轮 5 拍线穿字 FAIL：带满幅时右端牙侧斜线与右对齐 x=208 标签
+ *      必然相交）；k 式 200 预算与全部 y 锚不变，M10/Tr/worm 满幅案 x0 恰仍 =10。
  */
 import { describe, expect, it } from 'vitest';
 import {
@@ -28,8 +31,7 @@ import {
 } from '../src/core/thread-figure';
 
 const CY = 64; // 牙型带竖向居中 / 蜗杆分度线（V4.9-02）
-const W = 220;
-const BAND_W = 200; // 宽度预算 10..210
+const BAND_W = 200; // 宽度预算（带区 [10,210]，A4 勘正后 k 式分子不变）
 const BAND_H = 96; // 高度预算
 const T30 = Math.tan((30 * Math.PI) / 180);
 const T27_5 = Math.tan((27.5 * Math.PI) / 180);
@@ -58,7 +60,7 @@ const M10_D2 = 10 - 0.6495 * 1.5;
 const M10_D1 = 10 - 1.0825 * 1.5;
 // k = min(200/3.75, 96/1.62375) = min(53.3333, 59.1172) = 53.3333（宽度约束，恰满幅 10→210）
 const M10_K = Math.min(BAND_W / (2.5 * 1.5), BAND_H / (10 - M10_D1));
-const M10_X0 = (W - 2.5 * 1.5 * M10_K) / 2; // 10
+const M10_X0 = 10; // 带左对齐（A4 勘正；满幅时与原居中同值）
 const M10_Y_TOP = CY - ((10 - M10_D1) / 2) * M10_K; // 20.70
 const M10_Y_MID = M10_Y_TOP + (10 - M10_D2) * M10_K; // 72.66（构造链）
 const M10_Y_BOT = CY + ((10 - M10_D1) / 2) * M10_K; // 107.30
@@ -71,7 +73,7 @@ const TR_D2 = 40 - 0.5 * 7;
 const TR_D1 = 40 - 7 - 2 * 0.5;
 // k = min(200/17.5, 96/8) = min(11.4286, 12) = 11.4286（宽度约束）
 const TR_K = Math.min(BAND_W / (2.5 * 7), BAND_H / (40 - TR_D1));
-const TR_X0 = (W - 2.5 * 7 * TR_K) / 2; // 10
+const TR_X0 = 10; // 带左对齐（A4 勘正）
 const TR_Y_TOP = CY - ((40 - TR_D1) / 2) * TR_K; // 18.2857
 const TR_Y_MID = TR_Y_TOP + (40 - TR_D2) * TR_K; // 58.2857（构造链）
 const TR_Y_BOT = CY + ((40 - TR_D1) / 2) * TR_K; // 109.7143
@@ -85,7 +87,7 @@ const G_D2 = 20.955 - 0.6403 * G_P;
 const G_D1 = 20.955 - 1.2806 * G_P;
 // k = min(200/4.5357, 96/2.32337) = min(44.0945, 41.3192) = 41.3192（高度约束，横向不满幅）
 const G_K = Math.min(BAND_W / (2.5 * G_P), BAND_H / (20.955 - G_D1));
-const G_X0 = (W - 2.5 * G_P * G_K) / 2; // 16.2939
+const G_X0 = 10; // 带左对齐（A4 勘正；原居中值 16.2939）
 const G_Y_TOP = CY - ((20.955 - G_D1) / 2) * G_K; // 16.0000（高度约束恰满 96）
 const G_Y_MID = G_Y_TOP + (20.955 - G_D2) * G_K; // 64.0000（55°：d−d₂ = d₂−d₁ → d₂ 线恰在带中）
 const G_Y_BOT = CY + ((20.955 - G_D1) / 2) * G_K; // 112.0000
@@ -98,7 +100,7 @@ const W_PX = Math.PI * WM; // 6.2831853
 const W_H1 = 2.2 * WM; // 4.4
 // k = min(200/15.7080, 96/4.4) = min(12.7324, 21.8182) = 12.7324（宽度约束）
 const W_K = Math.min(BAND_W / (2.5 * W_PX), BAND_H / W_H1);
-const W_X0 = (W - 2.5 * W_PX * W_K) / 2; // 10
+const W_X0 = 10; // 带左对齐（A4 勘正）
 const W_Y_TIP = CY - WM * W_K; // 38.5352
 const W_Y_ROOT = CY + 1.2 * WM * W_K; // 94.5578（= 64+(h₁−m)·k 派生同值）
 const W_CREST_PX = (W_PX / 2 - 2 * WM * T20) * W_K; // 1.68571mm → 21.4631u
@@ -107,7 +109,7 @@ const W_ROOT_PX = (W_PX / 2 - 2.4 * WM * T20) * W_K; // 1.39454mm → 17.7558u
 describe('thread-figure §3 A 卡金锚', () => {
   it('M10×1.5（60°）：k=53.3333 宽度约束，三线/轮廓/宽度/标注逐值', () => {
     const view = buildThreadFigure({ kind: 'thread', major: 10, pitch: 1.5, flankAngle: 60 });
-    expect(THREAD_FIGURE_VIEW).toEqual({ width: 220, height: 140 });
+    expect(THREAD_FIGURE_VIEW).toEqual({ width: 262, height: 140 }); // A4 勘正 220→262
     expect(view.profile).toHaveLength(12);
 
     // 三条直径线（d₂ 线按构造链 = 牙顶+(d−d₂)·k；计划字面 38.02 系半距误置，见头注②）
@@ -149,6 +151,8 @@ describe('thread-figure §3 A 卡金锚', () => {
     expect(view.pitchMark.label).toBe('P 1.5');
     expect(view.flankMark.label).toBe('α 60°');
     expect(view.gaugeLine).toBeNull();
+    // A4 勘正派生字段：满幅带右缘 = 10+200 = 210（标签列 [214.6,254] 净空 4.6u）
+    expectClose(view.bandRight, M10_X0 + 2.5 * 1.5 * M10_K);
   });
 
   it('Tr40×7（30°，ac=0.5）：k=11.4286 宽度约束，牙顶 29.28u/牙底 26.22u', () => {
@@ -172,7 +176,7 @@ describe('thread-figure §3 A 卡金锚', () => {
     expect(view.flankMark.label).toBe('α 30°');
   });
 
-  it('G1/2（55°，数据行真 pitch=25.4/14）：k=41.3192 高度约束不满幅，x0=16.2940', () => {
+  it('G1/2（55°，数据行真 pitch=25.4/14）：k=41.3192 高度约束不满幅，x0=10、bandRight=197.41（A4）', () => {
     const view = buildThreadFigure({
       kind: 'thread',
       major: 20.955,
@@ -187,8 +191,10 @@ describe('thread-figure §3 A 卡金锚', () => {
       'd₂ 19.793',
       'd₁ 18.632',
     ]);
-    // 高度约束生效：横向 187.4122u < 200，左缘 x0=16.2939 居中（如实呈现，V4.8-02 同规）
+    // 高度约束生效：横向 187.4122u < 200，A4 勘正后带左对齐 x0=10、右缘 bandRight=197.4122（标签列随之更宽）
     expectClose(G_K, 41.3192, 4);
+    expectClose(view.bandRight, G_X0 + 2.5 * G_P * G_K);
+    expectClose(view.bandRight, 197.4122, 4);
     expectClose(pt(view, 0).x, G_X0);
     expectClose(pt(view, 0).y, G_Y_BOT);
     expectClose(pt(view, 11).x, G_X0 + 2.5 * G_P * G_K);
@@ -224,6 +230,7 @@ describe('thread-figure §3 A 卡金锚', () => {
     expect(view.pitchMark.label).toBe('px 6.283');
     expect(view.flankMark.label).toBe('α 40°');
     expect(view.gaugeLine).toBeNull();
+    expectClose(view.bandRight, W_X0 + 2.5 * W_PX * W_K); // 满幅 210
   });
 
   it('sealpipe R1/2（55°+基面）：剖面同 55° 构造不画锥度，基面竖虚线 x=110 居中', () => {

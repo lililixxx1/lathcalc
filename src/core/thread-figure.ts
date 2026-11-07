@@ -6,9 +6,15 @@
  * 蜗杆 px/h₁/α 调 core/thread.wormGeometry——本模块只算布局几何（比例、坐标、标注位），
  * 禁止复写牙型常数（B.2「牙型角常数绑定」）。
  *
- * 布局（V4.9-02 冻结）：viewBox 220×140，牙型带 2 完整牙 + 两端半牙 = 2.5P 轴向跨度，
- * 等比 k = min(200/(2.5P), 96/(d−d₁))（宽度约束 vs 高度约束取小；高度约束生效时横向
- * 不满幅、居中 x0=(220−2.5P·k)/2 如实呈现，V4.8-02 cap 同规）；牙型带竖向居中 cy=64。
+ * 布局（V4.9-02 冻结 + V4.9-A4 终轮勘正）：viewBox 262×140，牙型带 2 完整牙 + 两端
+ * 半牙 = 2.5P 轴向跨度，等比 k = min(200/(2.5P), 96/(d−d₁))（宽度约束 vs 高度约束
+ * 取小，k 式不变）；牙型带竖向居中 cy=64。A4 勘正（vision 终轮 5 拍 FAIL 同模式：
+ * 宽度约束生效时带满幅 x∈[10,210]，右端上升牙侧斜线扫过 x≈170-210 的全带竖向区间，
+ * 与右对齐 x=208 悬浮的 d₂/d₁/蜗杆分度线标签几何必然相交——线穿字）：viewBox 加宽
+ * 220→262，带左对齐 x0=10（原居中），右侧 [≥214.6, 254] 为标签列（最长标签 8 西文
+ * ×4.93=39.44u，左缘 254−39.44=214.6，距带右缘 ≤210 净空 ≥4.6u）；UI 卡 viewport
+ * 326×140、viewBox 262×140 时 scale=1，字号物理尺寸不变（原 220 时居中留白改作
+ * 标注列）。高度约束生效案带更窄（bandRight<210）、标签列随之更宽。
  * 蜗杆（模数制，无 d）：轴向周期 px=π·m 替代 P（wormGeometry 活算）、高度预算按
  * 全齿高 h₁=2.2m（=96/h₁）、分度线替代中径线且分度线在 cy=64（齿顶 +m / 齿根 −1.2m，
  * 齿根偏移 = wholeDepth − m 派生，零新常数）。
@@ -25,10 +31,11 @@
  *   轮廓折线 12 点：左缘 x0 起于根线（左端半槽），交替 牙顶平/根平，收于右缘 x0+2.5P·k
  *   的牙顶线（右端半牙）；四族 w_crest/w_root 均为 P 的正比例常数因子，无退化形态。
  *
- * 标注（V4.9-02 + V4.7/V4.8 教训清单）：
- *   - diameterLines：d/d₂/d₁（蜗杆 齿顶/分度/齿根）三条水平虚线由 UI 画贯穿 [10,210]，
- *     标签线上右侧（UI 右对齐 x=208、基线 = 线 y−3，p16 双 tspan 先例）——基线恒在
- *     [12,128] 内由构造保证（高度预算 96 ⇒ 线 y ∈ [16,112] ⇒ 基线 ∈ [13,109]）；
+ * 标注（V4.9-02 + V4.7/V4.8 教训清单 + V4.9-A4 勘正）：
+ *   - diameterLines：d/d₂/d₁（蜗杆 齿顶/分度/齿根）三条水平虚线由 UI 画 [10, bandRight]
+ *     （A4 勘正：右端收至带右缘，不进入标签列），标签列右侧（UI 右对齐 x=254、基线 =
+ *     线 y−3，p16 双 tspan 先例）——基线恒在 [12,128] 内由构造保证（高度预算 96 ⇒
+ *     线 y ∈ [16,112] ⇒ 基线 ∈ [13,109]），标签区与牙型带水平错开 ≥4.6u 无相交；
  *     标签值 toFixed(3) 与页面 ResultCard 同源（蜗杆 h₁ 同源 wormGeometry.wholeDepth，
  *     标于齿根线=全齿高处；齿顶/分度线标构造语义 +m/分度线）。
  *   - pitchMark：P/px 双箭头置牙型带顶部首两相邻牙顶间（跨距 = P·k），箭头线 y =
@@ -36,7 +43,7 @@
  *     （Math.round(P×1000)/1000 去尾零，p03 formatPitch 同式）。
  *   - flankMark：`α 60°` 文字置首牙左侧（sub 色由 UI 定），不画角弧；位置
  *     x = x0+0.1·轴期像素、y = 牙顶线+8，经半宽夹持（V4.8-03 G2-C-01 兜底同款）：
- *     y∈[12,128]、x∈[半宽+2, 218−半宽]（半宽 0.58em×8.5≈4.93/字符西文、8.5 CJK）。
+ *     y∈[12,128]、x∈[半宽+2, W−2−半宽]（半宽 0.58em×8.5≈4.93/字符西文、8.5 CJK）。
  *   - gaugeLine：锥管族（sealpipe/npt）基面竖虚线 x=110（居中），剖面同 55°/60°
  *     构造不画锥度变形；y1/y2 = 牙型带上下各外延 8（夹持 [6,119]，UI 标签基线 y2+8 ≤ 127）。
  *     worm 族忽略该入参（模数制无基面语义）。
@@ -70,7 +77,7 @@ export interface ThreadFigurePoint {
 export interface ThreadFigureView {
   /** 牙型外轮廓折线（轴向剖面，屏幕坐标，单条 polyline，12 点） */
   profile: ReadonlyArray<ThreadFigurePoint>;
-  /** 径向标线（d/d₂/d₁ 或蜗杆 齿顶/分度/齿根），label 含值（UI 画贯穿 [10,210] 虚线 + 右侧标签） */
+  /** 径向标线（d/d₂/d₁ 或蜗杆 齿顶/分度/齿根），label 含值（UI 画 [10, bandRight] 虚线 + 右侧标签列） */
   diameterLines: ReadonlyArray<{ y: number; label: string }>;
   /** 螺距/轴向齿距双箭头标注（x1..x2 = 首两相邻牙顶中心，y = 箭头线） */
   pitchMark: { x1: number; x2: number; y: number; label: string };
@@ -78,13 +85,16 @@ export interface ThreadFigureView {
   flankMark: { x: number; y: number; label: string };
   /** 基面竖虚线（锥管族，x=110）；非锥管 / worm 恒 null */
   gaugeLine: { x: number; y1: number; y2: number; label: string } | null;
+  /** 牙型带右缘 x（= x0+2.5·轴期像素 ≤ 210；A4 勘正派生字段：UI 直径线右端与标签列起点依据） */
+  bandRight: number;
 }
 
-export const THREAD_FIGURE_VIEW = { width: 220, height: 140 } as const;
+export const THREAD_FIGURE_VIEW = { width: 262, height: 140 } as const;
 
 /** 布局冻结常数（V4.9-02；来源标注于各行）。 */
 const CY = 64; // 牙型带竖向居中基准（V4.9-02）
-const BAND_WIDTH_PX = 200; // 宽度预算：x ∈ [10, 210]（V4.9-02 k 式分子）
+const BAND_X0 = 10; // 带左缘（A4 勘正：左对齐固定，原 (W−带)/2 居中）
+const BAND_WIDTH_PX = 200; // 宽度预算：带区 x ∈ [10, 210]（V4.9-02 k 式分子，A4 勘正后数值不变）
 const BAND_HEIGHT_PX = 96; // 高度预算：带高像素上限（V4.9-02 k 式分子）
 const SPAN_PERIODS = 2.5; // 2 完整牙 + 两端半牙（V4.9-02）
 const PITCH_ARROW_DY = 7; // P/px 箭头线在牙顶线上方 7
@@ -97,7 +107,7 @@ const GAUGE_Y1_MIN = 6; // 基面线上端下限
 const GAUGE_Y2_MAX = 119; // 基面线下端上限（UI 标签基线 = y2+8 ≤ 127 ≤ 128）
 const LABEL_Y_MIN = 12; // 标签 y 硬夹持（V4.8-03 G2-C-01 同款）
 const LABEL_Y_MAX = 128;
-const CLAMP_PAD = 2; // x 夹持边距（x ∈ [半宽+2, 218−半宽]）
+const CLAMP_PAD = 2; // x 夹持边距（x ∈ [半宽+2, W−2−半宽]，A4 勘正后 W=262）
 const LATIN_CHAR_W = 4.93; // 0.58em × font 8.5（V4.9-02 半宽估算）
 const CJK_CHAR_W = 8.5; // CJK 每字符（V4.9-02）
 
@@ -108,7 +118,7 @@ function halfWidth(text: string): number {
   return units / 2;
 }
 
-/** x 夹持 [半宽+2, 218−半宽]，防贴缘标签出框。 */
+/** x 夹持 [半宽+2, W−2−半宽]，防贴缘标签出框。 */
 function clampX(x: number, text: string): number {
   const half = halfWidth(text);
   return Math.min(Math.max(x, half + CLAMP_PAD), THREAD_FIGURE_VIEW.width - CLAMP_PAD - half);
@@ -174,7 +184,7 @@ export function buildThreadFigure(input: ThreadFigureInput): ThreadFigureView {
     const botRadial = worm.wholeDepth - moduleMM; // 齿根 −1.2m = 全齿高 − 齿顶高（派生）
     const k = Math.min(BAND_WIDTH_PX / (SPAN_PERIODS * axialPitchMM), BAND_HEIGHT_PX / worm.wholeDepth);
     const periodPx = axialPitchMM * k;
-    const x0 = (THREAD_FIGURE_VIEW.width - SPAN_PERIODS * periodPx) / 2;
+    const x0 = BAND_X0; // A4 勘正：带左对齐（原 (W−带)/2 居中），右侧留标签列
     const yTop = CY - topRadial * k; // 分度线在 cy（V4.9-02），带不居中、分度线居中
     const yBot = CY + botRadial * k;
     const halfFlank = Math.tan((worm.flankAngle / 2) * (Math.PI / 180));
@@ -201,6 +211,7 @@ export function buildThreadFigure(input: ThreadFigureInput): ThreadFigureView {
         label: flankLabel,
       },
       gaugeLine: null,
+      bandRight: x0 + SPAN_PERIODS * periodPx,
     };
   }
 
@@ -227,7 +238,7 @@ export function buildThreadFigure(input: ThreadFigureInput): ThreadFigureView {
   const bandRadial = topRadial + botRadial; // = (d−d₁)/2
   const k = Math.min(BAND_WIDTH_PX / (SPAN_PERIODS * pitch), BAND_HEIGHT_PX / (2 * bandRadial));
   const periodPx = pitch * k;
-  const x0 = (THREAD_FIGURE_VIEW.width - SPAN_PERIODS * periodPx) / 2;
+  const x0 = BAND_X0; // A4 勘正：带左对齐（原 (W−带)/2 居中），右侧留标签列
   // 牙型带竖向居中 cy=64（V4.9-02）：d 顶在上、d₁ 底在下，d₂ 线按构造链
   // y_d2 = y_d + (d−d₂)·k（与牙顶/牙根两点自洽；计划 §3 M10「38.02」/Tr「44.00」
   // 与其自身牙顶/牙根值矛盾，系半距误置，实现按构造链取值并已在证据档披露上报）。
@@ -266,5 +277,6 @@ export function buildThreadFigure(input: ThreadFigureInput): ThreadFigureView {
           label: '基面',
         }
       : null,
+    bandRight: x0 + SPAN_PERIODS * periodPx,
   };
 }

@@ -266,8 +266,9 @@ function wormFormulaHtml(moduleMM: number): string {
 
 /**
  * 牙型剖面示意图 SVG 装配（WAVE-PLAN-V4.9 A 卡；零几何，坐标全来自 core/thread-figure 视图模型）：
- * 牙型折线实线 → d/d₂/d₁（蜗杆为 齿顶/分度/齿根）水平虚线贯穿 [10,210] + 线上右侧标签
- * （双 tspan：代号 sub + 值 currentColor 600，p16 先例；基线 = 线 y−3，core 保证 ≥12）→
+ * 牙型折线实线 → d/d₂/d₁（蜗杆为 齿顶/分度/齿根）水平虚线 [10, bandRight]（A4 勘正：
+ * 右端收至带右缘，不进入标签列）+ 带外右侧标签列（x=254 右对齐，双 tspan：代号 sub +
+ * 值 currentColor 600，p16 先例；基线 = 线 y−3，core 保证 ≥12，与牙型带水平错开 ≥4.6u）→
  * P/px 顶部双箭头 + 标签 → α 文字（sub 色，不画角弧）→ 锥管族基面竖虚线 + 「基面」标签。
  */
 function threadFigureSVG(view: ThreadFigureView): string {
@@ -280,8 +281,10 @@ function threadFigureSVG(view: ThreadFigureView): string {
     }
     return `<tspan fill="var(--la-sub)">${escapeHtml(label.slice(0, split))}</tspan> <tspan fill="currentColor" font-weight="600">${escapeHtml(label.slice(split + 1))}</tspan>`;
   };
+  // A4 勘正：标签列右锚（带右缘 ≤210 + 最长标签 39.44u + 净空；core 头注同款推导）
+  const LABEL_COL_X = 254;
   const lineLabel = (label: string, y: number): string =>
-    `<text x="${n2(208)}" y="${n2(Math.max(12, y - 3))}" font-size="8.5" text-anchor="end" stroke="none">${labelText(label)}</text>`;
+    `<text x="${n2(LABEL_COL_X)}" y="${n2(Math.max(12, y - 3))}" font-size="8.5" text-anchor="end" stroke="none">${labelText(label)}</text>`;
 
   const profile = `<polyline points="${view.profile
     .map((point) => `${n2(point.x)},${n2(point.y)}`)
@@ -290,7 +293,7 @@ function threadFigureSVG(view: ThreadFigureView): string {
   const diameterLines = view.diameterLines
     .map(
       (line) =>
-        `<line x1="10" y1="${n2(line.y)}" x2="210" y2="${n2(line.y)}" stroke="var(--la-sub)" stroke-width="0.8" stroke-dasharray="4 2.5"/>${lineLabel(line.label, line.y)}`,
+        `<line x1="10" y1="${n2(line.y)}" x2="${n2(view.bandRight)}" y2="${n2(line.y)}" stroke="var(--la-sub)" stroke-width="0.8" stroke-dasharray="4 2.5"/>${lineLabel(line.label, line.y)}`,
     )
     .join('');
 
