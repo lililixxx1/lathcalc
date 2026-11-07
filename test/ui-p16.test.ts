@@ -172,3 +172,94 @@ describe('p16 挂轮计算', () => {
     expect(PAGE_SOURCE).not.toMatch(/from '\.\.\/components\/[A-Za-z]+'/);
   });
 });
+
+// V4.8 挂轮系示意图（WAVE-PLAN-V4.8 §4 A2）：图随输入/选择重建，非法保帧。
+// 默认 top1（独立穷举复算，排序键 (errorPpm, Σz, 字典序)）：P=1.5/T=6 →
+// 20/40×20/40（Σ=120）；第 6 行 20/20×20/80；P=2/T=6（i=1/3）→ 20/30×20/40。
+describe('p16 挂轮系示意图（V4.8）', () => {
+  function diagramTexts(): string[] {
+    return [...currentPage().querySelectorAll<HTMLElement>('.rc-p16__diagram svg text')].map(
+      (el) => el.textContent ?? '',
+    );
+  }
+
+  function diagramShapeCount(): number {
+    return currentPage().querySelectorAll('.rc-p16__diagram svg circle').length;
+  }
+
+  function picks(): HTMLButtonElement[] {
+    return [...currentPage().querySelectorAll<HTMLButtonElement>('.rc-p16__pick')];
+  }
+
+  it('默认帧：4 齿轮签 + 3 轴注 + 6 圆（4 齿轮 + 2 啮合点），第 1 行选中', async () => {
+    await router.navigate('p16');
+    // 默认字符串序：拉丁签在前，CJK 按码元 丝(U+4E1D) < 中(U+4E2D) < 主(U+4E3B)
+    expect(diagramTexts().sort()).toEqual([
+      'a 20',
+      'b 40',
+      'c 20',
+      'd 40',
+      '丝杠',
+      '中间轴',
+      '主轴',
+    ]);
+    expect(diagramShapeCount()).toBe(6);
+    const pressed = picks().map((btn) => btn.getAttribute('aria-pressed'));
+    expect(pressed[0]).toBe('true');
+    expect(pressed.filter((value) => value === 'true')).toHaveLength(1);
+  });
+
+  it('点行 6（20/20 × 20/80）：图换 {a 20, b 20, c 20, d 80}，按钮态迁移', async () => {
+    await router.navigate('p16');
+    picks()[5]?.click();
+    expect(diagramTexts().sort()).toEqual([
+      'a 20',
+      'b 20',
+      'c 20',
+      'd 80',
+      '丝杠',
+      '中间轴',
+      '主轴',
+    ]);
+    expect(picks()[5]?.getAttribute('aria-pressed')).toBe('true');
+    expect(picks()[0]?.getAttribute('aria-pressed')).toBe('false');
+    // 挂轮格文案不因按钮化改变（既有行文案断言口径）
+    expect(rowTexts('.rc-p16__gear')[5]).toBe('20/20 × 20/80');
+  });
+
+  it('P→2 重建：图回第 1 行 {a 20, b 30, c 20, d 40}，选中态重置', async () => {
+    await router.navigate('p16');
+    picks()[5]?.click();
+    typeInto('p', '2');
+    // i = 2/6 = 1/3 → top1 20/30×20/40（穷举独立复算）
+    expect(diagramTexts().sort()).toEqual([
+      'a 20',
+      'b 30',
+      'c 20',
+      'd 40',
+      '丝杠',
+      '中间轴',
+      '主轴',
+    ]);
+    expect(picks()[0]?.getAttribute('aria-pressed')).toBe('true');
+  });
+
+  it('P 非法（0）：hint 出现且示意图保上一帧（V4.8-04）', async () => {
+    await router.navigate('p16');
+    const before = diagramTexts().sort().join('/');
+    typeInto('p', '0');
+    expect(currentPage().textContent).toContain('请输入大于 0 的工件螺距 P 与丝杠导程 T');
+    expect(diagramShapeCount()).toBe(6);
+    expect(diagramTexts().sort().join('/')).toBe(before);
+  });
+
+  it('齿数去重后 <4：提示且示意图保上一帧（V4.8-04）', async () => {
+    await router.navigate('p16');
+    const before = diagramTexts().sort().join('/');
+    typeInto('teeth', '20 25 30');
+    expect(currentPage().querySelector('.rc-p16__setinfo')?.textContent).toContain(
+      '自定义齿数去重后至少 4 个（当前 3 个）',
+    );
+    expect(diagramTexts().sort().join('/')).toBe(before);
+  });
+});

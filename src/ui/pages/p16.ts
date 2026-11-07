@@ -12,11 +12,20 @@
  *
  * 页面参数（README §5.2 冻结链路）：`p` 工件螺距 mm、`t` 丝杠导程 mm。
  *
+ * 挂轮系示意图（WAVE-PLAN-V4.8，用户反馈 #5）：core/gear-figure 三轴共线展开
+ * 画法（主轴 a — 中间轴 b·c — 丝杠 d，半径按齿数比例）；画当前选中行（默认
+ * 第 1 行），结果表挂轮格可点切换（V4.8-01）；非法输入保上一帧（V4.8-04）。
+ *
  * 视觉验收口径（V4.1 §4）：只拼既有组件与 tokens.css 变量，零新 CSS 变量、零内联色值。
  */
 import type { PageContext, PageModule } from '../router';
 import type { GearTrainSolution } from '../../core/types';
 import { solveGearTrain } from '../../core/gear';
+import {
+  GEAR_FIGURE_VIEW,
+  buildGearTrainFigure,
+  type GearFigureView,
+} from '../../core/gear-figure';
 import {
   Badge,
   Card,
@@ -26,6 +35,7 @@ import {
   TopBar,
   createBody,
   createPage,
+  escapeHtml,
   injectStyle,
 } from '../components';
 
@@ -33,7 +43,9 @@ const CSS = `
 .rc-p16__stack { display: flex; flex-direction: column; gap: 9px; }
 .rc-p16__teeth .rc-input__field { text-align: left; font-family: var(--la-font-mono); font-size: 13px; font-weight: 500; }
 .rc-p16__setinfo { font-size: 11.5px; color: var(--la-sub); padding: 2px 2px 0; line-height: 1.5; overflow-wrap: anywhere; }
-.rc-p16__hint { font-size: 12px; color: var(--la-accent-ink); padding: 2px; line-height: 1.5; }
+/* 存量修复（W11-B 起，A4-R1 发现）：SubText 基类 .rc-sub 同特异性灰注入在后，
+   橙色提示被级联压灰——提页面级特异性保橙。 */
+.la-page[data-page="p16"] .rc-p16__hint { font-size: 12px; color: var(--la-accent-ink); padding: 2px; line-height: 1.5; }
 .rc-p16__table { display: flex; flex-direction: column; }
 .rc-p16__head, .rc-p16__row { display: flex; align-items: center; gap: 8px; padding: 8px 0; }
 .rc-p16__head { border-bottom: 1px solid var(--la-border); }
@@ -44,6 +56,21 @@ const CSS = `
 .rc-p16__err { flex: 0 0 62px; text-align: right; font-size: 12.5px; font-weight: 600; }
 .rc-p16__tag { flex: 0 0 40px; display: flex; justify-content: flex-end; }
 .rc-p16__note { font-size: 11.5px; color: var(--la-sub); line-height: 1.5; padding: 0 2px; }
+.rc-p16__diagram { padding: 10px; display: grid; place-items: center; }
+.rc-p16__diagram svg { color: var(--la-ink-body); }
+.rc-p16__pick {
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+  overflow-wrap: anywhere;
+}
+.rc-p16__pick[aria-pressed="true"] { color: var(--la-accent-ink); }
 /* 结果 8 行 + 算式卡在 390×844 下超内容区高度：页面级开纵滚（同 p09 矮屏兜底口径）。 */
 .la-page[data-page="p16"] .la-body { overflow-y: auto; }
 `;
@@ -70,6 +97,43 @@ function formatNumber(value: number): string {
   return Number.isFinite(value) ? String(value) : '';
 }
 
+function n2(value: number): string {
+  return value.toFixed(2);
+}
+
+/**
+ * 挂轮系示意图 SVG 装配（零几何，几何全在 core/gear-figure）：
+ * 轴心线/中心线 dash-dot 灰 → 齿轮圆细线描边 → 啮合点实心 → 标签
+ * （齿轮签双 tspan：码 sub + 齿数 currentColor 600；轴注 sub）。
+ */
+function parametricGearSVG(view: GearFigureView): string {
+  const dashLine = (x1: number, y1: number, x2: number, y2: number): string =>
+    `<line x1="${n2(x1)}" y1="${n2(y1)}" x2="${n2(x2)}" y2="${n2(y2)}" stroke="var(--la-sub)" stroke-width="0.8" stroke-dasharray="5 2.5 1.2 2.5"/>`;
+  const axis = dashLine(view.axisLine.x1, view.axisLine.y, view.axisLine.x2, view.axisLine.y);
+  const centerlines = view.centerlines
+    .map((line) => dashLine(line.x, line.y1, line.x, line.y2))
+    .join('');
+  const circles = view.circles
+    .map((circle) => `<circle cx="${n2(circle.cx)}" cy="${n2(circle.cy)}" r="${n2(circle.r)}"/>`)
+    .join('');
+  const dots = view.meshDots
+    .map((dot) => `<circle cx="${n2(dot.x)}" cy="${n2(dot.y)}" r="1.6" fill="var(--la-sub)" stroke="none"/>`)
+    .join('');
+  const labels = view.labels
+    .map((label) => {
+      const anchor = `text-anchor="${label.anchor}"`;
+      if (label.role === 'shaft') {
+        return `<text x="${n2(label.x)}" y="${n2(label.y)}" font-size="8" fill="var(--la-sub)" stroke="none" ${anchor}>${escapeHtml(label.text)}</text>`;
+      }
+      const spaceIndex = label.text.indexOf(' ');
+      const code = label.text.slice(0, spaceIndex);
+      const teeth = label.text.slice(spaceIndex + 1);
+      return `<text x="${n2(label.x)}" y="${n2(label.y)}" font-size="9.5" stroke="none" ${anchor}><tspan fill="var(--la-sub)">${escapeHtml(code)}</tspan> <tspan fill="currentColor" font-weight="600">${escapeHtml(teeth)}</tspan></text>`;
+    })
+    .join('');
+  return `<svg viewBox="0 0 ${GEAR_FIGURE_VIEW.width} ${GEAR_FIGURE_VIEW.height}" width="100%" height="132" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">${axis}${centerlines}${circles}${dots}${labels}</svg>`;
+}
+
 export const title = '挂轮计算';
 
 const page: PageModule = {
@@ -83,11 +147,27 @@ const page: PageModule = {
       p: Number.isFinite(pParam) && pParam > 0 ? formatNumber(pParam) : '1.5',
       t: Number.isFinite(tParam) && tParam > 0 ? formatNumber(tParam) : '6',
       teeth: DEFAULT_TEETH,
+      /** 示意图所画行（0 基；输入变化重建结果表时重置回 0，V4.8-01）。 */
+      selected: 0,
     };
 
     const body = createBody({ className: 'rc-p16__body' });
     const resultsWrap = document.createElement('div');
     resultsWrap.className = 'rc-p16__results';
+
+    /** 挂轮系示意图卡（V4.8-02）：默认空，首次成功求解后填充；失败保上一帧。 */
+    const diagramCard = Card({
+      className: 'rc-p16__diagram',
+      ariaLabel: '挂轮系示意图（主轴 a — 中间轴 b·c — 丝杠 d，半径按齿数比例）',
+    });
+
+    function paintDiagram(solution: GearTrainSolution): void {
+      try {
+        diagramCard.innerHTML = parametricGearSVG(buildGearTrainFigure(solution));
+      } catch {
+        /* 退化防御：保上一帧（提示已在结果区） */
+      }
+    }
 
     const inputStack = document.createElement('div');
     inputStack.className = 'rc-p16__stack';
@@ -138,7 +218,12 @@ const page: PageModule = {
       return SubText(text, { className: 'rc-p16__hint' });
     }
 
-    function buildTable(solutions: readonly GearTrainSolution[]): HTMLElement {
+    /** 结果表（V4.8-01）：挂轮格为可点按钮选择示意图对象，选中行 aria-pressed。 */
+    function buildTable(
+      solutions: readonly GearTrainSolution[],
+      selectedIndex: number,
+      onPick: (index: number) => void,
+    ): HTMLElement {
       const table = document.createElement('div');
       table.className = 'rc-p16__table';
       table.setAttribute('role', 'table');
@@ -161,7 +246,7 @@ const page: PageModule = {
       }
       table.append(head);
 
-      for (const solution of solutions) {
+      solutions.forEach((solution, index) => {
         const row = document.createElement('div');
         row.className = 'rc-p16__row';
         row.setAttribute('role', 'row');
@@ -169,7 +254,18 @@ const page: PageModule = {
         const gear = document.createElement('span');
         gear.className = 'rc-p16__gear la-mono';
         gear.setAttribute('role', 'cell');
-        gear.textContent = `${solution.a}/${solution.b} × ${solution.c}/${solution.d}`;
+
+        const pick = document.createElement('button');
+        pick.type = 'button';
+        pick.className = 'rc-p16__pick';
+        pick.textContent = `${solution.a}/${solution.b} × ${solution.c}/${solution.d}`;
+        pick.setAttribute(
+          'aria-label',
+          `示意图切换到第 ${index + 1} 组：${pick.textContent ?? ''}`,
+        );
+        pick.setAttribute('aria-pressed', index === selectedIndex ? 'true' : 'false');
+        pick.addEventListener('click', () => onPick(index));
+        gear.append(pick);
 
         const ratio = document.createElement('span');
         ratio.className = 'rc-p16__ratio la-num';
@@ -188,7 +284,7 @@ const page: PageModule = {
 
         row.append(gear, ratio, error, tag);
         table.append(row);
-      }
+      });
 
       return table;
     }
@@ -242,8 +338,20 @@ const page: PageModule = {
         return;
       }
 
+      // 输入变化 → 结果表重建，选中态重置回第 1 行（V4.8-01）
+      state.selected = 0;
+      const onPick = (index: number): void => {
+        state.selected = index;
+        resultsWrap
+          .querySelectorAll('.rc-p16__pick')
+          .forEach((btn, i) => btn.setAttribute('aria-pressed', i === index ? 'true' : 'false'));
+        const current = solutions[index] ?? solutions[0];
+        if (current) paintDiagram(current);
+      };
+      const tableEl = buildTable(solutions, state.selected, onPick);
+
       resultsWrap.append(
-        Card({ tight: true, className: 'rc-p16__resultcard', children: [buildTable(solutions)] }),
+        Card({ tight: true, className: 'rc-p16__resultcard', children: [tableEl] }),
         SubText('同值齿数需两件齿轮：如 20/55 × 40/55 需 55 齿两件。', {
           className: 'rc-p16__note',
         }),
@@ -255,6 +363,8 @@ const page: PageModule = {
           ],
         }),
       );
+      const initial = solutions[state.selected] ?? solutions[0];
+      if (initial) paintDiagram(initial);
     }
 
     paintResults();
@@ -266,6 +376,7 @@ const page: PageModule = {
       Card({
         children: [Eyebrow('齿轮组（自定义）'), teethInput, setInfo],
       }),
+      diagramCard,
       resultsWrap,
     );
 
