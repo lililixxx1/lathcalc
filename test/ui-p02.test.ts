@@ -439,3 +439,52 @@ describe('p02 七签横滚渐隐指示（V4.10）', () => {
     expect(wrap?.classList.contains('rc-p02__segwrap--l')).toBe(true);
   });
 });
+
+// V4.11（车工走查①）：页签切换写 #/p02?family=… 但挂载不读 → 刷新/分享弹回普通 M。
+// 冷启动模拟 = 置 hash 后重建 router 再 start（非 navigate 路径，验 render 读 ctx.params）。
+// 预注册预期：恢复态与页签点击态逐项等价（徽标/高亮/行数/预览值/chips 禁用）。
+describe('p02 URL 族参冷启动（V4.11）', () => {
+  it('family=worm 直达：蜗杆页签高亮、GB/T 10087、15 行模数、粗牙禁用', async () => {
+    window.location.hash = '#/p02?family=worm';
+    router.destroy();
+    router = createRouter({ root: app });
+    await router.start();
+
+    expect(router.current()).toBe('p02');
+    expect(page().querySelector('.rc-topbar .la-badge')?.textContent).toBe('GB/T 10087');
+    expect(tabButton('蜗杆').classList.contains('on')).toBe(true);
+    expect(rows()).toHaveLength(15); // threads-worm.json：15 个标准模数（W8-A，同 :138）
+    expect(rowNames()[0]).toBe('m1');
+    // 轴向齿距 px = π·m = π×1 = 3.1416 → 3.142（wormGeometry，同 :7 头注口径）
+    expect(rows()[0]?.querySelector('.rc-lrow__value')?.textContent).toBe('3.142');
+    // 与点击切换等价：非米制族粗牙/细牙禁用（p02.ts metricOnly）
+    expect(filterChip('粗牙').disabled).toBe(true);
+    expect(filterChip('细牙').disabled).toBe(true);
+  });
+
+  it('family=trapezoid 直达：GB/T 5796、Tr8 × 1.5 首行 d₂ 7.250', async () => {
+    window.location.hash = '#/p02?family=trapezoid';
+    router.destroy();
+    router = createRouter({ root: app });
+    await router.start();
+
+    expect(page().querySelector('.rc-topbar .la-badge')?.textContent).toBe('GB/T 5796');
+    expect(tabButton('梯形 Tr').classList.contains('on')).toBe(true);
+    expect(rowNames()[0]).toBe('Tr8 × 1.5');
+    // d₂ = 8 − 0.5×1.5 = 7.25 → 7.250（GB/T 5796 基本牙型，与 :158 M30 同式）
+    expect(rows()[0]?.querySelector('.rc-lrow__value')?.textContent).toBe('7.250');
+  });
+
+  it('非法 family（pipe55，数据族键非路由键）静默回退普通 M', async () => {
+    window.location.hash = '#/p02?family=pipe55';
+    router.destroy();
+    router = createRouter({ root: app });
+    await router.start();
+
+    expect(router.current()).toBe('p02'); // 不报错、正常渲染
+    expect(page().querySelector('.rc-topbar .la-badge')?.textContent).toBe('GB/T 193');
+    expect(tabButton('普通 M').classList.contains('on')).toBe(true);
+    expect(rows()).toHaveLength(149); // threads-metric.json（同 :115）
+    expect(filterChip('粗牙').disabled).toBe(false);
+  });
+});

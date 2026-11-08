@@ -343,6 +343,7 @@ ensureBaseStyles()         // 基础样式 + #app 视口高度
 | p05 → p06 | `case` | 工况号 `AC01`–`AC12`（W4-C3 冻结；非法值由 p06 选择器兜底） | `#/p06?case=AC01` |
 | p15 模板直达 | `tpl` | 宏模板 `ellipse`（默认）\| `knurl` \| `oilslot` \| `groove`；缺省/非法回落 `ellipse`（W11-A；页面内切换不写回 hash） | `#/p15?tpl=ellipse` |
 | p16 挂轮直达 | `p` `t` | 工件螺距 P mm / 丝杠导程 T mm；缺省或非法回落 1.5 / 6（W11-B，V4.1 §3） | `#/p16?p=3.175&t=12` |
+| p02 族直达 | `family` | 七族页签值（口径同 p02→p03 行）；缺省/非法回落 `metric`（V4.11 车工走查①；页面内切页签不写回 hash，同 p15 `tpl` 先例） | `#/p02?family=worm` |
 
 推荐调用：
 

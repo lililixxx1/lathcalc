@@ -163,7 +163,13 @@ const page: PageModule = {
   render(ctx: PageContext): void {
     injectStyle('rc-p02-styles', CSS);
 
-    let family: RouteFamily = 'metric';
+    // V4.11 车工走查①：外链/书签 #/p02?family=… 冷挂载读参恢复（对齐 p03 直达口径）。
+    // 页签切换本身不写 URL（onChange 只改本地态，同 p15 tpl 先例），刷新落 metric
+    // 属预存行为（G2-V4.11 C-01 登记移交，本波不覆盖）；非法/缺省静默回退 metric
+    // （README §5.2 路由键口径：pipe 不是 pipe55）。
+    const requestedFamily = ctx.params.get('family');
+    let family: RouteFamily =
+      FAMILY_TABS.find((tab) => tab.value === requestedFamily)?.value ?? 'metric';
     let coarse: CoarseFilter = 'all';
     let query = '';
     let pitchMode = false;
@@ -417,10 +423,19 @@ const page: PageModule = {
     buildSearch();
     buildChips();
     renderCustom();
+    // V4.11：TopBar 徽标构造时写死 FAMILY_TABS[0]（GB/T 193），挂载必须按初始族同步
+    // ——此前恒从 metric 挂载故未暴露；URL 族参恢复非米制族时徽标与列表错位。
+    syncBadge();
     syncHint();
     renderList();
 
     ctx.root.append(createPage({ id: 'p02', top, body }));
+    // V4.11：URL 恢复的激活页签可能在横滚视口外（蜗杆 = 第 7 签），滚入视口再初判
+    // 渐隐（与 Segmented 点击自带 scrollIntoView 同款惯例，SegChip.ts:75）。
+    segmented.querySelector<HTMLElement>('.rc-seg__item.on')?.scrollIntoView({
+      inline: 'nearest',
+      block: 'nearest',
+    });
     syncSegFade(); // 挂载后布局就绪初判：390px 七签必溢出 → 挂 --r（右缘渐隐）
   },
 };
