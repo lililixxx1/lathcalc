@@ -1,0 +1,214 @@
+{
+  "site": "https://lathcalc-38ps.zai.site/",
+  "siteVersion": "线上 v0.7.0 (index-Bv3D52sa.js)",
+  "capturedAt": "2026-11-08T10:04+08:00",
+  "channel": "ZCode In-app Browser (agent.browsers iab 后端，经 node_repl browser-client bootstrap)",
+  "viewport": {
+    "requested": { "width": 390, "height": 844 },
+    "actualTabViewport": { "width": 390, "height": 844 },
+    "pageInnerWxH": { "width": 390, "height": 844 },
+    "screenshotPixelSize": "390x844 (DPR 1)",
+    "verification": "每页机检记录 innerW/innerH=390/844；全部 PNG IHDR 实测 390x844"
+  },
+  "captureMethod": "视口截图。说明：本站页面高度锁定 844，内容在内部容器（.la-body / .la-rowlist / rc-p15__scroll 等，overflow:hidden）内滚动，body 无滚动；尝试将内部容器临时展开后 fullPage 截图，IAB 截图通道 2 次均 30s 超时（不可用），故按派工单 fallback：整页可见的页面拍单张 full 视口图；内容被裁剪的页面拍 top（滚回顶）+ bottom（内部滚动器滚到底）两张。展开实验的样式均已还原。",
+  "machineCheck": {
+    "route": "document.querySelector('.la-page')?.dataset.page",
+    "title": ".la-page h1 innerText（截断 60 字符）",
+    "overflowX": "document.documentElement.scrollWidth - window.innerWidth",
+    "textLen": ".la-page innerText 去空白后长度",
+    "clipped": "scrollHeight > clientHeight+4 且 clientHeight>0 的元素（内部滚动/裁剪容器）"
+  },
+  "pages": [
+    {
+      "id": "p01", "name": "首页",
+      "url": "https://lathcalc-38ps.zai.site/#/p01",
+      "route": "p01", "routeOk": true,
+      "title": "车工算",
+      "overflowX": 0, "textLen": 212,
+      "clipped": [{ "cls": "la-body rc-body rc-home__body", "sh": 636, "ch": 615 }],
+      "scrollBottom": { "cls": "la-body rc-body rc-home__body", "max": 21, "got": 20.8 },
+      "files": ["p01-top.png", "p01-bottom.png"]
+    },
+    {
+      "id": "p02", "name": "螺纹·选型",
+      "url": "https://lathcalc-38ps.zai.site/#/p02",
+      "route": "p02", "routeOk": true,
+      "title": "螺纹 GB/T 193",
+      "overflowX": 0, "textLen": 1845,
+      "clipped": [{ "cls": "la-rowlist rc-rowlist", "sh": 6406, "ch": 469 }],
+      "scrollBottom": { "cls": "la-rowlist rc-rowlist", "max": 5937, "got": 5936.8 },
+      "files": ["p02-top.png", "p02-bottom.png"],
+      "note": "规格列表总高 6406px、视口内仅 469px，top/bottom 两张只覆盖首尾，中间约 12 屏未采（按派工单 fallback 约定）"
+    },
+    {
+      "id": "p03-metric", "name": "螺纹·结果（普通螺纹 M10）",
+      "url": "https://lathcalc-38ps.zai.site/#/p03?family=metric&spec=M10&d=10&p=1.5",
+      "route": "p03", "routeOk": true,
+      "title": "M10 GB/T 196",
+      "overflowX": 0, "textLen": 282,
+      "clipped": [{ "cls": "la-body rc-body rc-p03__body", "sh": 812, "ch": 727 }],
+      "scrollBottom": { "cls": "la-body rc-body rc-p03__body", "max": 85, "got": 84 },
+      "files": ["p03-metric-top.png", "p03-metric-bottom.png"]
+    },
+    {
+      "id": "p03-worm", "name": "螺纹·结果（蜗杆 m2）",
+      "url": "https://lathcalc-38ps.zai.site/#/p03?family=worm&spec=m2&d=2&p=2",
+      "route": "p03", "routeOk": true,
+      "title": "m2 GB/T 10087",
+      "overflowX": 0, "textLen": 190,
+      "clipped": [],
+      "files": ["p03-worm.png"],
+      "note": "内容整体 fit 844 视口，单张全页"
+    },
+    {
+      "id": "p03-sealpipe", "name": "螺纹·结果（密封管 R1/2）",
+      "url": "https://lathcalc-38ps.zai.site/#/p03?family=sealpipe&spec=R1%2F2&d=20.955&p=1.8142857142857143",
+      "route": "p03", "routeOk": true,
+      "title": "R1/2 GB/T 7306",
+      "overflowX": 0, "textLen": 358,
+      "clipped": [{ "cls": "la-body rc-body rc-p03__body", "sh": 860, "ch": 727 }],
+      "scrollBottom": { "cls": "la-body rc-body rc-p03__body", "max": 133, "got": 132 },
+      "files": ["p03-sealpipe-top.png", "p03-sealpipe-bottom.png"]
+    },
+    {
+      "id": "p04", "name": "G76 参考程序",
+      "url": "https://lathcalc-38ps.zai.site/#/p04?family=metric&spec=M10&d=10&p=1.5",
+      "route": "p04", "routeOk": true,
+      "title": "G76 参考程序 FANUC",
+      "overflowX": 0, "textLen": 268,
+      "clipped": [],
+      "files": ["p04.png"]
+    },
+    {
+      "id": "p05", "name": "圆弧切点·工况图库",
+      "url": "https://lathcalc-38ps.zai.site/#/p05",
+      "route": "p05", "routeOk": true,
+      "title": "圆弧切点",
+      "overflowX": 0, "textLen": 194,
+      "clipped": [],
+      "files": ["p05.png"]
+    },
+    {
+      "id": "p06", "name": "圆弧·切点计算（默认）",
+      "url": "https://lathcalc-38ps.zai.site/#/p06",
+      "route": "p06", "routeOk": true,
+      "title": "圆弧切点 选择工况",
+      "overflowX": 0, "textLen": 127,
+      "clipped": [],
+      "files": ["p06.png"],
+      "note": "默认落地态页头为「选择工况」（textLen 127），未见计算表单，机检事实如实记录，判定归判读员"
+    },
+    {
+      "id": "p07", "name": "锥度·莫氏",
+      "url": "https://lathcalc-38ps.zai.site/#/p07",
+      "route": "p07", "routeOk": true,
+      "title": "锥度 · 莫氏",
+      "overflowX": 0, "textLen": 81,
+      "clipped": [],
+      "files": ["p07.png"]
+    },
+    {
+      "id": "p08", "name": "公差配合（默认）",
+      "url": "https://lathcalc-38ps.zai.site/#/p08",
+      "route": "p08", "routeOk": true,
+      "title": "公差配合 GB/T 1800",
+      "overflowX": 0, "textLen": 127,
+      "clipped": [],
+      "files": ["p08.png"]
+    },
+    {
+      "id": "p09", "name": "转速·线速度（默认）",
+      "url": "https://lathcalc-38ps.zai.site/#/p09",
+      "route": "p09", "routeOk": true,
+      "title": "转速 · 线速度",
+      "overflowX": 0, "textLen": 111,
+      "clipped": [{ "cls": "la-body rc-body rc-p09__body", "sh": 745, "ch": 727 }],
+      "scrollBottom": { "cls": "la-body rc-body rc-p09__body", "max": 18, "got": 18.4 },
+      "files": ["p09-top.png", "p09-bottom.png"]
+    },
+    {
+      "id": "p10", "name": "切削参数（默认）",
+      "url": "https://lathcalc-38ps.zai.site/#/p10",
+      "route": "p10", "routeOk": true,
+      "title": "切削参数 示例数据",
+      "overflowX": 0, "textLen": 597,
+      "clipped": [{ "cls": "rc-p10__list", "sh": 689, "ch": 145 }],
+      "scrollBottom": { "cls": "rc-p10__list", "max": 544, "got": 544 },
+      "files": ["p10-top.png", "p10-bottom.png"],
+      "note": "裁剪发生在内层牌号列表 rc-p10__list（145→689px），top/bottom 即首屏与列表尾部"
+    },
+    {
+      "id": "p11", "name": "重量（默认圆钢）",
+      "url": "https://lathcalc-38ps.zai.site/#/p11",
+      "route": "p11", "routeOk": true,
+      "title": "重量",
+      "overflowX": 0, "textLen": 235,
+      "clipped": [],
+      "files": ["p11.png"]
+    },
+    {
+      "id": "p12", "name": "三角（默认）",
+      "url": "https://lathcalc-38ps.zai.site/#/p12",
+      "route": "p12", "routeOk": true,
+      "title": "三角",
+      "overflowX": 0, "textLen": 223,
+      "clipped": [{ "cls": "text (SVG text 元素)", "sh": 15, "ch": 9 }],
+      "scrollBottom": { "cls": "text", "max": 6, "got": 0 },
+      "files": ["p12-top.png", "p12-bottom.png"],
+      "note": "唯一「裁剪」元素是 SVG <text>（不可滚动，scrollTop 始终 0），页面实际整页可见；bottom 与 top 逐字节相同属预期"
+    },
+    {
+      "id": "p13", "name": "速查",
+      "url": "https://lathcalc-38ps.zai.site/#/p13",
+      "route": "p13", "routeOk": true,
+      "title": "速查",
+      "overflowX": 0, "textLen": 231,
+      "clipped": [],
+      "files": ["p13.png"]
+    },
+    {
+      "id": "p14", "name": "收藏·历史·分享",
+      "url": "https://lathcalc-38ps.zai.site/#/p14",
+      "route": "p14", "routeOk": true,
+      "title": "收藏",
+      "overflowX": 0, "textLen": 50,
+      "clipped": [],
+      "files": ["p14.png"],
+      "note": "匿名只读浏览，未登录无本地历史，textLen 50 为空态文案，属预期"
+    },
+    {
+      "id": "p15", "name": "宏程序库",
+      "url": "https://lathcalc-38ps.zai.site/#/p15",
+      "route": "p15", "routeOk": true,
+      "title": "宏程序库 FANUC B",
+      "overflowX": 0, "textLen": 244,
+      "clipped": [{ "cls": "rc-p15__scroll", "sh": 961, "ch": 665 }],
+      "scrollBottom": { "cls": "rc-p15__scroll", "max": 296, "got": 295.2 },
+      "files": ["p15-top.png", "p15-bottom.png"]
+    },
+    {
+      "id": "p16", "name": "挂轮计算（默认）",
+      "url": "https://lathcalc-38ps.zai.site/#/p16",
+      "route": "p16", "routeOk": true,
+      "title": "挂轮计算",
+      "overflowX": 0, "textLen": 403,
+      "clipped": [{ "cls": "la-body rc-body rc-p16__body", "sh": 922, "ch": 727 }],
+      "scrollBottom": { "cls": "la-body rc-body rc-p16__body", "max": 195, "got": 195.2 },
+      "files": ["p16-top.png", "p16-bottom.png"]
+    }
+  ],
+  "anomalies": [
+    "fullPage 整页截图不可用：站点为内部容器滚动布局（body 无滚动，.la-body 等 overflow:hidden 裁剪），直接 fullPage 只得 390x844 视口图；尝试临时展开容器后 fullPage，IAB 截图通道 2 次均 30s 超时，放弃（样式已全部还原）。改用派工单 fallback：整页可见页单张，裁剪页 top+bottom 两张。",
+    "截图通道间歇性 30s 超时（约 5 次：展开实验 2 次、p02-top 1 次、p03-metric 2 次 + clip 模式 1 次）：均与页面内容无关（同页重试即成功），疑为 IAB 截图 broker 间歇卡死。最终 18 页全部有有效截图。",
+    "document.visibilityState 全程报告 'hidden'，即使截图正常、IAB visibility capability 报 true——IAB 页面可见性上报与实际渲染不同步的表象，不影响结果。",
+    "p02 规格列表内部总高 6406px（视口内 469px），top/bottom 两张无法覆盖中间约 12 屏内容（fallback 方案固有限制，判读时须知）。",
+    "p12 唯一裁剪元素为 SVG <text>（sh 15 vs ch 9，不可滚动），bottom 与 top 逐字节相同，页面实际整页可见。",
+    "首轮采集的 p01/p02/p03-metric bottom 图因 evaluate 传参形式不被支持（滚动未执行）与 top 完全相同，已用修正后的滚动脚本重拍覆盖。",
+    "页面渲染无白屏：18 页 .la-page 均存在、route 全部命中、textLen 50-1845；无导航失败。"
+  ],
+  "fileSummary": {
+    "pngCount": 27,
+    "allPngSize": "390x844",
+    "totalBytes": 2924246
+  }
+}
