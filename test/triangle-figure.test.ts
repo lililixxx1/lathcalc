@@ -187,7 +187,8 @@ describe('triangle-figure · SSA 双解叠画（V4.5-04）', () => {
 describe('triangle-figure · 标签钳位入界（A4-R1/V4.5-08，V4.6-01 收紧）', () => {
   it('高瘦三角（10/10/2，顶点贴内框顶）顶部角标签被钳回字高界内', () => {
     // 独立复算：底 c=2、x=(100+4−100)/4=1、h=√99=9.9499 → s=72/9.9499（h 限制）
-    // → C=(110,16)；C 顶点标签未钳位 y=16−13+4=7.0（越字高界）→ 钳 9
+    // → C=(110,16)；C 顶点标签未钳位 y=16−17+4=3.0（越字高界）→ 钳 9
+    // （V4.10：VERTEX_OFFSET 13→17，未钳值 7.0→3.0 同步勘正）
     const fig = buildTriangleFigure({ a: 10, b: 10, c: 2, A: 84.26, B: 84.26, C: 11.48, area: 9.95, right: false });
     for (const l of fig.labels) {
       expect(l.x).toBeGreaterThanOrEqual(27);
@@ -202,8 +203,10 @@ describe('triangle-figure · 标签钳位入界（A4-R1/V4.5-08，V4.6-01 收紧
   it('扁宽三角（19/10/10）左侧 C 顶点与右侧角标签被钳回字宽界内', () => {
     // 独立复算：底 c=10、x=(100+100−361)/20=−8.05、h=√(100−64.8025)=5.9327；
     // 三顶点 x∈[−8.05,10] → w=18.05、s=188/18.05=10.4155 → 屏幕 A=(99.845,88)、
-    // B=(204,88)、C=(16,26.207)——左极点 (16,88) 是 C 不是 A。未钳位：C 标签
-    // x=4.447、B 标签 x=216.836、A 标签 y=104.350，均越界 → 全部钳回
+    // B=(204,88)、C=(16,26.207)——左极点 (16,88) 是 C 不是 A。未钳位（V4.10
+    // VERTEX_OFFSET 17，G2 勘正 0.9500 精度口径）：C 标签 x=0.89、B 标签
+    // x=220.79、A 标签 y=108.15（= 88+17×0.9500+4；旧锚 104.350=88+13×0.9500+4
+    // 反证分量取 0.9500），均越界 → 全部钳回
     const fig = buildTriangleFigure({ a: 19, b: 10, c: 10, A: 143.6, B: 18.2, C: 18.2, area: 29.66, right: false });
     for (const l of fig.labels) {
       expect(l.x).toBeGreaterThanOrEqual(27);
@@ -220,6 +223,34 @@ describe('triangle-figure · 标签钳位入界（A4-R1/V4.5-08，V4.6-01 收紧
     expect(a.x).toBeLessThanOrEqual(193);
     // 字宽保守估：0.58em×7×11=44.66 → 半宽 22.33；x=193 右缘 215.33 ≤218.5
     expect(a.x + (0.58 * 11 * 7) / 2).toBeLessThanOrEqual(218.5);
+  });
+});
+
+/* ============================================ V4.10 底边顶点标签净空（UI 审计 WARN-2） */
+
+describe('triangle-figure · 底边顶点标签净空（V4.10）', () => {
+  // 默认 30/40/50：底边贴底 y=88，A/B 顶点标签外角平分向下分量 = 17·sin(θ/2)
+  // （θ = 该顶点内角），基线 = 88 + 17·sin(θ/2) + 4（lift）；字顶净空 =
+  // 基线 − 8（字高 0.73em 保守口径）。13 时期 A/B 净空 0.11/1.82u（≈1–2px@2x
+  // 紧贴底边，UI 审计 WARN-2）；17 → A：88+17×0.316228+4 = 97.3759（净空 1.38u
+  // ≈ 4.2px@2x@390px）、B：88+17×0.447214+4 = 99.6026（净空 3.60u ≈ 11.0px@2x，
+  // G2 勘正：3.6026×scale1.5309×2=11.03）。
+  // sin 值来源：sin(36.87°/2)=0.316228、sin(53.13°/2)=0.447214（B/2=26.565°=atan0.5）。
+  const fig = buildTriangleFigure({
+    a: 30, b: 40, c: 50, A: 36.87, B: 53.13, C: 90, area: 600, right: true,
+  });
+
+  it('A/B 顶点标签基线 = 88+17·sin(θ/2)+4（净空 ≥1.37u），C 顶点仍钳位 y=9', () => {
+    const by = (t: string) => fig.labels.find((l) => l.text.startsWith(t))!;
+    expect(by('A').y).toBeCloseTo(88 + 17 * Math.sin(((36.87 / 2) * Math.PI) / 180) + 4, 3);
+    expect(by('A').y).toBeCloseTo(97.3759, 3);
+    expect(by('B').y).toBeCloseTo(88 + 17 * Math.sin(((53.13 / 2) * Math.PI) / 180) + 4, 3);
+    expect(by('B').y).toBeCloseTo(99.6026, 3);
+    // 净空判据：字顶（基线−8）距底边 88 ≥ 1.37u（V4.10 验收口径）
+    expect(by('A').y - 8 - 88).toBeGreaterThanOrEqual(1.37);
+    expect(by('B').y - 8 - 88).toBeGreaterThanOrEqual(1.37);
+    // C 顶点标签 offset 增量被钳位吸收：未钳 y=16−17×0.989949+4=3.17 → 钳 9（与 13 时期同值）
+    expect(by('C').y).toBe(9);
   });
 });
 

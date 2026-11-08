@@ -263,3 +263,26 @@ describe('p16 挂轮系示意图（V4.8）', () => {
     expect(diagramTexts().sort().join('/')).toBe(before);
   });
 });
+
+// V4.10（UI 审计 WARN-1）：可用齿数长串硬截断 → 溢出时右缘渐隐。
+// happy-dom 无布局（scrollWidth/clientWidth 双 0）→ 用 Object.defineProperty
+// 伪布局驱动 JS 挂摘逻辑（真实浏览器视觉由 A4 实拍复验）。
+describe('p16 可用齿数截断渐隐（V4.10）', () => {
+  it('溢出（scrollWidth>clientWidth）input 事件后挂 --clip；不溢出摘除', async () => {
+    await router.navigate('p16');
+    const field = inputField('teeth');
+    const wrap = currentPage().querySelector<HTMLElement>('.rc-p16__teeth');
+    expect(wrap).not.toBeNull();
+    // 无布局双 0：挂载后初判不挂
+    expect(wrap?.classList.contains('rc-p16__teeth--clip')).toBe(false);
+
+    Object.defineProperty(field, 'scrollWidth', { value: 500, configurable: true });
+    Object.defineProperty(field, 'clientWidth', { value: 200, configurable: true });
+    field.dispatchEvent(new Event('input', { bubbles: true }));
+    expect(wrap?.classList.contains('rc-p16__teeth--clip')).toBe(true);
+
+    Object.defineProperty(field, 'scrollWidth', { value: 200, configurable: true });
+    field.dispatchEvent(new Event('input', { bubbles: true }));
+    expect(wrap?.classList.contains('rc-p16__teeth--clip')).toBe(false);
+  });
+});

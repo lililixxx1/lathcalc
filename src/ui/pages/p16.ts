@@ -42,6 +42,13 @@ import {
 const CSS = `
 .rc-p16__stack { display: flex; flex-direction: column; gap: 9px; }
 .rc-p16__teeth .rc-input__field { text-align: left; font-family: var(--la-font-mono); font-size: 13px; font-weight: 500; }
+/* 长齿数串右缘渐隐（V4.10，UI 审计 WARN-1）：native input 值硬截无提示 → 溢出时
+   （--clip 由 JS 按 scrollWidth>clientWidth 挂摘）右缘加渐隐蒙层。右端 67px =
+   右 padding 13 + 单位列 46 + 列间 gap 8（InputRow.ts:9/12），恰齐输入区右缘；
+   蒙层底色 var(--la-card) 与输入行底同源融入。 */
+.rc-p16__teeth { position: relative; }
+.rc-p16__teeth::after { content: ''; position: absolute; top: 2px; bottom: 2px; right: 67px; width: 26px; background: linear-gradient(to right, transparent, var(--la-card)); opacity: 0; pointer-events: none; }
+.rc-p16__teeth--clip::after { opacity: 1; }
 .rc-p16__setinfo { font-size: 11.5px; color: var(--la-sub); padding: 2px 2px 0; line-height: 1.5; overflow-wrap: anywhere; }
 /* 存量修复（W11-B 起，A4-R1 发现）：SubText 基类 .rc-sub 同特异性灰注入在后，
    橙色提示被级联压灰——提页面级特异性保橙。 */
@@ -211,6 +218,19 @@ const page: PageModule = {
       },
     });
     teethInput.classList.add('rc-p16__teeth');
+
+    // 截断渐隐同步（V4.10，UI 审计 WARN-1）：溢出（scrollWidth>clientWidth）时挂
+    // --clip 显示右缘蒙层。happy-dom 无布局（双 0）恒不挂；真实浏览器由挂载后
+    // 初判 + input 事件驱动（齿数行是持久 DOM，输入只改值不重建）。
+    const teethField = teethInput.querySelector<HTMLInputElement>('.rc-input__field');
+    if (!teethField) throw new Error('rc-p16: 齿数输入框缺失');
+    const syncTeethFade = (): void => {
+      teethInput.classList.toggle(
+        'rc-p16__teeth--clip',
+        teethField.scrollWidth > teethField.clientWidth,
+      );
+    };
+    teethField.addEventListener('input', syncTeethFade);
 
     const resultLabel = Eyebrow('推荐挂轮（前 8 组）');
 
@@ -387,6 +407,8 @@ const page: PageModule = {
         body,
       }),
     );
+    // 挂载后布局就绪初判：默认 17 枚齿数串（20 … 100，68 字符）在 390px 必溢出
+    syncTeethFade();
   },
 };
 

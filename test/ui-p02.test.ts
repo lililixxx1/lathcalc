@@ -410,3 +410,32 @@ describe('p02 自定义规格输入（W6-C3 · V2-5/V2-8）', () => {
     expect(page().querySelector<HTMLElement>('.rc-p02__customerr')?.hidden).toBe(false);
   });
 });
+
+// V4.10（UI 审计 WARN-3）：七签横滚无指示 → segwrap 左右渐隐蒙层由滚动位置挂摘。
+// happy-dom 无布局（scrollWidth/clientWidth 双 0）→ 伪布局驱动 JS 挂摘逻辑
+// （真实浏览器视觉由 A4 实拍复验）。
+describe('p02 七签横滚渐隐指示（V4.10）', () => {
+  it('segwrap 存在；溢出挂 --r、滚到头摘 --r 挂 --l', async () => {
+    await router.navigate('p02');
+    const seg = page().querySelector<HTMLElement>('.rc-p02__segwrap .la-seg');
+    const wrap = page().querySelector<HTMLElement>('.rc-p02__segwrap');
+    expect(seg).not.toBeNull();
+    expect(wrap).not.toBeNull();
+    // 无布局双 0：挂载后初判无指示
+    expect(wrap?.classList.contains('rc-p02__segwrap--r')).toBe(false);
+
+    // 溢出 200u、scrollLeft=0 → 右侧还有内容，挂 --r 不挂 --l
+    Object.defineProperty(seg, 'scrollWidth', { value: 400, configurable: true });
+    Object.defineProperty(seg, 'clientWidth', { value: 200, configurable: true });
+    Object.defineProperty(seg, 'scrollLeft', { value: 0, configurable: true });
+    seg?.dispatchEvent(new Event('scroll'));
+    expect(wrap?.classList.contains('rc-p02__segwrap--r')).toBe(true);
+    expect(wrap?.classList.contains('rc-p02__segwrap--l')).toBe(false);
+
+    // 滚到头（scrollLeft=200=隐藏量）→ 摘 --r 挂 --l
+    Object.defineProperty(seg, 'scrollLeft', { value: 200, configurable: true });
+    seg?.dispatchEvent(new Event('scroll'));
+    expect(wrap?.classList.contains('rc-p02__segwrap--r')).toBe(false);
+    expect(wrap?.classList.contains('rc-p02__segwrap--l')).toBe(true);
+  });
+});

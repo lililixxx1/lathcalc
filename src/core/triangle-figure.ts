@@ -51,7 +51,12 @@ const IN_X1 = 204;
 const IN_Y0 = 16;
 const IN_Y1 = 88;
 const SIDE_OFFSET = 11; // 边标签外法向偏移（V4.5-07）
-const VERTEX_OFFSET = 13; // 顶点标签外角平分向偏移
+// 顶点标签外角平分向偏移（V4.10 UI 审计 WARN-2 勘正 13→17：底边顶点标签的
+// 向下分量 = offset·sin(θ/2)，字顶净空 = offset·sin(θ/2) + lift4 − 字高8；13 时
+// 默认 30/40/50 案 A/B 仅 0.11/1.82u（≈1–2px@2x 紧贴底边）；17 → A 1.38u / B 3.60u
+// （≈4.2/11.0px@2x@390px，字高 8 = 0.73em 保守口径；G2 勘正 B=3.6026×1.5309×2=11.03）；
+// C 顶点增量被钳位吸收（y=9 不变））
+const VERTEX_OFFSET = 17;
 const RIGHT_MARK = 7; // 直角小方块边长（屏幕 px）
 /** 直角判定容差（度），与 triangle.ts RIGHT_TOLERANCE_DEG 同值（单源注释互指） */
 const RIGHT_TOL = 0.01;

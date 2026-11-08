@@ -89,6 +89,16 @@ const CSS = `
 .rc-p02__body .la-seg { overflow-x: auto; scrollbar-width: none; }
 .rc-p02__body .la-seg::-webkit-scrollbar { display: none; }
 .rc-p02__body .la-seg > .rc-seg__item { flex: 0 0 auto; padding-left: 10px; padding-right: 10px; }
+/* 七签横滚左右缘渐隐指示（V4.10，UI 审计 WARN-3）：滚动元素自身的伪元素会随内容
+   滚走 → 外包不滚动 segwrap 承载蒙层；--r/--l 由 JS 按滚动位置挂摘（右滚到头摘
+   --r、回滚出左侧挂 --l、无溢出双摘）。渐隐目标色 = 页面底 var(--la-bg)
+   （页签条直接躺在 .la-body 上，PageShell.ts:23；seg 药丸底为 well-soft）。 */
+.rc-p02__segwrap { position: relative; }
+.rc-p02__segwrap::before, .rc-p02__segwrap::after { content: ''; position: absolute; top: 0; bottom: 0; width: 22px; pointer-events: none; opacity: 0; }
+.rc-p02__segwrap::after { right: 0; background: linear-gradient(to right, transparent, var(--la-bg)); }
+.rc-p02__segwrap--r::after { opacity: 1; }
+.rc-p02__segwrap::before { left: 0; background: linear-gradient(to left, transparent, var(--la-bg)); }
+.rc-p02__segwrap--l::before { opacity: 1; }
 .rc-p02__chips { display: flex; gap: 7px; flex: 0 0 auto; }
 
 .rc-p02__listcard { flex: 1 1 auto; min-height: 0; display: flex; }
@@ -391,7 +401,19 @@ const page: PageModule = {
       },
     });
 
-    body.append(segmented, searchWrap, chipsRow, listCard, customCard, hint);
+    // 横滚渐隐指示（V4.10，UI 审计 WARN-3）：seg 是持久 DOM（切族只换徽标/提示/
+    // 列表，不重建），监听挂一次全周期有效；--r/--l 挂在不滚动的 segwrap 上。
+    const segWrap = document.createElement('div');
+    segWrap.className = 'rc-p02__segwrap';
+    segWrap.append(segmented);
+    const syncSegFade = (): void => {
+      const hiddenRight = segmented.scrollWidth - segmented.clientWidth - segmented.scrollLeft;
+      segWrap.classList.toggle('rc-p02__segwrap--l', segmented.scrollLeft > 2);
+      segWrap.classList.toggle('rc-p02__segwrap--r', hiddenRight > 2);
+    };
+    segmented.addEventListener('scroll', () => syncSegFade(), { passive: true });
+
+    body.append(segWrap, searchWrap, chipsRow, listCard, customCard, hint);
     buildSearch();
     buildChips();
     renderCustom();
@@ -399,6 +421,7 @@ const page: PageModule = {
     renderList();
 
     ctx.root.append(createPage({ id: 'p02', top, body }));
+    syncSegFade(); // 挂载后布局就绪初判：390px 七签必溢出 → 挂 --r（右缘渐隐）
   },
 };
 
