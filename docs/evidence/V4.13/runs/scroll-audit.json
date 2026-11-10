@@ -1,0 +1,726 @@
+{
+  "when": "2026-11-10T16:04:37.842Z",
+  "url": "http://localhost:4173/",
+  "bundle": "/assets/index-C5x0qv1v.js",
+  "model": "#app 100dvh + .la-page/.la-body overflow:hidden（PageShell.ts:21-23），滚动须各页 opt-in",
+  "verdicts": [
+    {
+      "viewport": "390x844",
+      "page": "p01",
+      "verdict": "SCROLLABLE",
+      "bodyOverflowY": "auto",
+      "deepBottom": 816,
+      "clipBottom": 796,
+      "overflowPx": 20,
+      "triCard": {
+        "top": 614,
+        "bottom": 710
+      },
+      "inner": []
+    },
+    {
+      "viewport": "390x844",
+      "page": "p02",
+      "verdict": "SCROLLABLE",
+      "bodyOverflowY": "hidden",
+      "deepBottom": 6662,
+      "clipBottom": 824,
+      "overflowPx": 5838,
+      "triCard": null,
+      "inner": [
+        "la-rowlist rc-rowlist"
+      ]
+    },
+    {
+      "viewport": "390x844",
+      "page": "p03",
+      "verdict": "FITS",
+      "bodyOverflowY": "auto",
+      "deepBottom": 221,
+      "clipBottom": 824,
+      "overflowPx": -603,
+      "triCard": null,
+      "inner": []
+    },
+    {
+      "viewport": "390x844",
+      "page": "p04",
+      "verdict": "FITS",
+      "bodyOverflowY": "auto",
+      "deepBottom": 312,
+      "clipBottom": 824,
+      "overflowPx": -512,
+      "triCard": null,
+      "inner": []
+    },
+    {
+      "viewport": "390x844",
+      "page": "p05",
+      "verdict": "FITS",
+      "bodyOverflowY": "hidden",
+      "deepBottom": 545,
+      "clipBottom": 824,
+      "overflowPx": -279,
+      "triCard": null,
+      "inner": []
+    },
+    {
+      "viewport": "390x844",
+      "page": "p06",
+      "verdict": "FITS",
+      "bodyOverflowY": "auto",
+      "deepBottom": 400,
+      "clipBottom": 824,
+      "overflowPx": -424,
+      "triCard": null,
+      "inner": []
+    },
+    {
+      "viewport": "390x844",
+      "page": "p07",
+      "verdict": "FITS",
+      "bodyOverflowY": "auto",
+      "deepBottom": 597,
+      "clipBottom": 612,
+      "overflowPx": -15,
+      "triCard": null,
+      "inner": []
+    },
+    {
+      "viewport": "390x844",
+      "page": "p08",
+      "verdict": "FITS",
+      "bodyOverflowY": "auto",
+      "deepBottom": 583,
+      "clipBottom": 612,
+      "overflowPx": -29,
+      "triCard": null,
+      "inner": []
+    },
+    {
+      "viewport": "390x844",
+      "page": "p09",
+      "verdict": "SCROLLABLE",
+      "bodyOverflowY": "auto",
+      "deepBottom": 632,
+      "clipBottom": 612,
+      "overflowPx": 20,
+      "triCard": null,
+      "inner": []
+    },
+    {
+      "viewport": "390x844",
+      "page": "p10",
+      "verdict": "SCROLLABLE",
+      "bodyOverflowY": "hidden",
+      "deepBottom": 1339,
+      "clipBottom": 824,
+      "overflowPx": 515,
+      "triCard": null,
+      "inner": [
+        "rc-p10__list"
+      ]
+    },
+    {
+      "viewport": "390x844",
+      "page": "p11",
+      "verdict": "SCROLLABLE",
+      "bodyOverflowY": "auto",
+      "deepBottom": 759,
+      "clipBottom": 612,
+      "overflowPx": 147,
+      "triCard": null,
+      "inner": []
+    },
+    {
+      "viewport": "390x844",
+      "page": "p12",
+      "verdict": "SCROLLABLE",
+      "bodyOverflowY": "auto",
+      "deepBottom": 669,
+      "clipBottom": 612,
+      "overflowPx": 57,
+      "triCard": null,
+      "inner": []
+    },
+    {
+      "viewport": "390x844",
+      "page": "p13",
+      "verdict": "FITS",
+      "bodyOverflowY": "hidden",
+      "deepBottom": 814,
+      "clipBottom": 824,
+      "overflowPx": -10,
+      "triCard": null,
+      "inner": []
+    },
+    {
+      "viewport": "390x844",
+      "page": "p14",
+      "verdict": "FITS",
+      "bodyOverflowY": "hidden",
+      "deepBottom": 814,
+      "clipBottom": 824,
+      "overflowPx": -10,
+      "triCard": null,
+      "inner": []
+    },
+    {
+      "viewport": "390x844",
+      "page": "p15",
+      "verdict": "SCROLLABLE",
+      "bodyOverflowY": "hidden",
+      "deepBottom": 1108,
+      "clipBottom": 824,
+      "overflowPx": 284,
+      "triCard": null,
+      "inner": [
+        "rc-p15__scroll"
+      ]
+    },
+    {
+      "viewport": "390x844",
+      "page": "p16",
+      "verdict": "SCROLLABLE",
+      "bodyOverflowY": "auto",
+      "deepBottom": 1021,
+      "clipBottom": 612,
+      "overflowPx": 409,
+      "triCard": null,
+      "inner": []
+    },
+    {
+      "viewport": "390x844",
+      "page": "p03",
+      "verdict": "FITS",
+      "bodyOverflowY": "auto",
+      "deepBottom": 644,
+      "clipBottom": 824,
+      "overflowPx": -180,
+      "triCard": null,
+      "inner": []
+    },
+    {
+      "viewport": "390x844",
+      "page": "p03",
+      "verdict": "SCROLLABLE",
+      "bodyOverflowY": "auto",
+      "deepBottom": 995,
+      "clipBottom": 824,
+      "overflowPx": 171,
+      "triCard": null,
+      "inner": []
+    },
+    {
+      "viewport": "390x844",
+      "page": "p03",
+      "verdict": "SCROLLABLE",
+      "bodyOverflowY": "auto",
+      "deepBottom": 953,
+      "clipBottom": 824,
+      "overflowPx": 129,
+      "triCard": null,
+      "inner": []
+    },
+    {
+      "viewport": "390x844",
+      "page": "p04",
+      "verdict": "FITS",
+      "bodyOverflowY": "auto",
+      "deepBottom": 696,
+      "clipBottom": 824,
+      "overflowPx": -128,
+      "triCard": null,
+      "inner": []
+    },
+    {
+      "viewport": "390x740",
+      "page": "p01",
+      "verdict": "SCROLLABLE",
+      "bodyOverflowY": "auto",
+      "deepBottom": 816,
+      "clipBottom": 692,
+      "overflowPx": 124,
+      "triCard": {
+        "top": 614,
+        "bottom": 710
+      },
+      "inner": []
+    },
+    {
+      "viewport": "390x740",
+      "page": "p02",
+      "verdict": "SCROLLABLE",
+      "bodyOverflowY": "hidden",
+      "deepBottom": 6662,
+      "clipBottom": 720,
+      "overflowPx": 5942,
+      "triCard": null,
+      "inner": [
+        "la-rowlist rc-rowlist"
+      ]
+    },
+    {
+      "viewport": "390x740",
+      "page": "p03",
+      "verdict": "FITS",
+      "bodyOverflowY": "auto",
+      "deepBottom": 221,
+      "clipBottom": 720,
+      "overflowPx": -499,
+      "triCard": null,
+      "inner": []
+    },
+    {
+      "viewport": "390x740",
+      "page": "p04",
+      "verdict": "FITS",
+      "bodyOverflowY": "auto",
+      "deepBottom": 312,
+      "clipBottom": 720,
+      "overflowPx": -408,
+      "triCard": null,
+      "inner": []
+    },
+    {
+      "viewport": "390x740",
+      "page": "p05",
+      "verdict": "FITS",
+      "bodyOverflowY": "hidden",
+      "deepBottom": 545,
+      "clipBottom": 720,
+      "overflowPx": -175,
+      "triCard": null,
+      "inner": []
+    },
+    {
+      "viewport": "390x740",
+      "page": "p06",
+      "verdict": "FITS",
+      "bodyOverflowY": "auto",
+      "deepBottom": 400,
+      "clipBottom": 720,
+      "overflowPx": -320,
+      "triCard": null,
+      "inner": []
+    },
+    {
+      "viewport": "390x740",
+      "page": "p07",
+      "verdict": "SCROLLABLE",
+      "bodyOverflowY": "auto",
+      "deepBottom": 597,
+      "clipBottom": 508,
+      "overflowPx": 89,
+      "triCard": null,
+      "inner": []
+    },
+    {
+      "viewport": "390x740",
+      "page": "p08",
+      "verdict": "SCROLLABLE",
+      "bodyOverflowY": "auto",
+      "deepBottom": 583,
+      "clipBottom": 508,
+      "overflowPx": 75,
+      "triCard": null,
+      "inner": []
+    },
+    {
+      "viewport": "390x740",
+      "page": "p09",
+      "verdict": "SCROLLABLE",
+      "bodyOverflowY": "auto",
+      "deepBottom": 632,
+      "clipBottom": 508,
+      "overflowPx": 124,
+      "triCard": null,
+      "inner": []
+    },
+    {
+      "viewport": "390x740",
+      "page": "p10",
+      "verdict": "SCROLLABLE",
+      "bodyOverflowY": "hidden",
+      "deepBottom": 1339,
+      "clipBottom": 720,
+      "overflowPx": 619,
+      "triCard": null,
+      "inner": [
+        "rc-p10__list"
+      ]
+    },
+    {
+      "viewport": "390x740",
+      "page": "p11",
+      "verdict": "SCROLLABLE",
+      "bodyOverflowY": "auto",
+      "deepBottom": 759,
+      "clipBottom": 508,
+      "overflowPx": 251,
+      "triCard": null,
+      "inner": []
+    },
+    {
+      "viewport": "390x740",
+      "page": "p12",
+      "verdict": "SCROLLABLE",
+      "bodyOverflowY": "auto",
+      "deepBottom": 669,
+      "clipBottom": 508,
+      "overflowPx": 161,
+      "triCard": null,
+      "inner": []
+    },
+    {
+      "viewport": "390x740",
+      "page": "p13",
+      "verdict": "SCROLLABLE",
+      "bodyOverflowY": "hidden",
+      "deepBottom": 736,
+      "clipBottom": 720,
+      "overflowPx": 16,
+      "triCard": null,
+      "inner": [
+        "rc-p13__list"
+      ]
+    },
+    {
+      "viewport": "390x740",
+      "page": "p14",
+      "verdict": "FITS",
+      "bodyOverflowY": "hidden",
+      "deepBottom": 710,
+      "clipBottom": 720,
+      "overflowPx": -10,
+      "triCard": null,
+      "inner": []
+    },
+    {
+      "viewport": "390x740",
+      "page": "p15",
+      "verdict": "SCROLLABLE",
+      "bodyOverflowY": "hidden",
+      "deepBottom": 1108,
+      "clipBottom": 720,
+      "overflowPx": 388,
+      "triCard": null,
+      "inner": [
+        "rc-p15__scroll"
+      ]
+    },
+    {
+      "viewport": "390x740",
+      "page": "p16",
+      "verdict": "SCROLLABLE",
+      "bodyOverflowY": "auto",
+      "deepBottom": 1021,
+      "clipBottom": 508,
+      "overflowPx": 513,
+      "triCard": null,
+      "inner": []
+    },
+    {
+      "viewport": "390x740",
+      "page": "p03",
+      "verdict": "FITS",
+      "bodyOverflowY": "auto",
+      "deepBottom": 644,
+      "clipBottom": 720,
+      "overflowPx": -76,
+      "triCard": null,
+      "inner": []
+    },
+    {
+      "viewport": "390x740",
+      "page": "p03",
+      "verdict": "SCROLLABLE",
+      "bodyOverflowY": "auto",
+      "deepBottom": 995,
+      "clipBottom": 720,
+      "overflowPx": 275,
+      "triCard": null,
+      "inner": []
+    },
+    {
+      "viewport": "390x740",
+      "page": "p03",
+      "verdict": "SCROLLABLE",
+      "bodyOverflowY": "auto",
+      "deepBottom": 953,
+      "clipBottom": 720,
+      "overflowPx": 233,
+      "triCard": null,
+      "inner": []
+    },
+    {
+      "viewport": "390x740",
+      "page": "p04",
+      "verdict": "FITS",
+      "bodyOverflowY": "auto",
+      "deepBottom": 696,
+      "clipBottom": 720,
+      "overflowPx": -24,
+      "triCard": null,
+      "inner": []
+    },
+    {
+      "viewport": "390x680",
+      "page": "p01",
+      "verdict": "SCROLLABLE",
+      "bodyOverflowY": "auto",
+      "deepBottom": 816,
+      "clipBottom": 632,
+      "overflowPx": 184,
+      "triCard": {
+        "top": 614,
+        "bottom": 710
+      },
+      "inner": []
+    },
+    {
+      "viewport": "390x680",
+      "page": "p02",
+      "verdict": "SCROLLABLE",
+      "bodyOverflowY": "hidden",
+      "deepBottom": 6662,
+      "clipBottom": 660,
+      "overflowPx": 6002,
+      "triCard": null,
+      "inner": [
+        "la-rowlist rc-rowlist"
+      ]
+    },
+    {
+      "viewport": "390x680",
+      "page": "p03",
+      "verdict": "FITS",
+      "bodyOverflowY": "auto",
+      "deepBottom": 221,
+      "clipBottom": 660,
+      "overflowPx": -439,
+      "triCard": null,
+      "inner": []
+    },
+    {
+      "viewport": "390x680",
+      "page": "p04",
+      "verdict": "FITS",
+      "bodyOverflowY": "auto",
+      "deepBottom": 312,
+      "clipBottom": 660,
+      "overflowPx": -348,
+      "triCard": null,
+      "inner": []
+    },
+    {
+      "viewport": "390x680",
+      "page": "p05",
+      "verdict": "FITS",
+      "bodyOverflowY": "hidden",
+      "deepBottom": 545,
+      "clipBottom": 660,
+      "overflowPx": -115,
+      "triCard": null,
+      "inner": []
+    },
+    {
+      "viewport": "390x680",
+      "page": "p06",
+      "verdict": "FITS",
+      "bodyOverflowY": "auto",
+      "deepBottom": 400,
+      "clipBottom": 660,
+      "overflowPx": -260,
+      "triCard": null,
+      "inner": []
+    },
+    {
+      "viewport": "390x680",
+      "page": "p07",
+      "verdict": "SCROLLABLE",
+      "bodyOverflowY": "auto",
+      "deepBottom": 597,
+      "clipBottom": 448,
+      "overflowPx": 149,
+      "triCard": null,
+      "inner": []
+    },
+    {
+      "viewport": "390x680",
+      "page": "p08",
+      "verdict": "SCROLLABLE",
+      "bodyOverflowY": "auto",
+      "deepBottom": 583,
+      "clipBottom": 448,
+      "overflowPx": 135,
+      "triCard": null,
+      "inner": []
+    },
+    {
+      "viewport": "390x680",
+      "page": "p09",
+      "verdict": "SCROLLABLE",
+      "bodyOverflowY": "auto",
+      "deepBottom": 632,
+      "clipBottom": 448,
+      "overflowPx": 184,
+      "triCard": null,
+      "inner": []
+    },
+    {
+      "viewport": "390x680",
+      "page": "p10",
+      "verdict": "SCROLLABLE",
+      "bodyOverflowY": "hidden",
+      "deepBottom": 1339,
+      "clipBottom": 660,
+      "overflowPx": 679,
+      "triCard": null,
+      "inner": [
+        "rc-p10__list"
+      ]
+    },
+    {
+      "viewport": "390x680",
+      "page": "p11",
+      "verdict": "SCROLLABLE",
+      "bodyOverflowY": "auto",
+      "deepBottom": 759,
+      "clipBottom": 448,
+      "overflowPx": 311,
+      "triCard": null,
+      "inner": []
+    },
+    {
+      "viewport": "390x680",
+      "page": "p12",
+      "verdict": "SCROLLABLE",
+      "bodyOverflowY": "auto",
+      "deepBottom": 669,
+      "clipBottom": 448,
+      "overflowPx": 221,
+      "triCard": null,
+      "inner": []
+    },
+    {
+      "viewport": "390x680",
+      "page": "p13",
+      "verdict": "SCROLLABLE",
+      "bodyOverflowY": "hidden",
+      "deepBottom": 736,
+      "clipBottom": 660,
+      "overflowPx": 76,
+      "triCard": null,
+      "inner": [
+        "rc-p13__list"
+      ]
+    },
+    {
+      "viewport": "390x680",
+      "page": "p14",
+      "verdict": "FITS",
+      "bodyOverflowY": "hidden",
+      "deepBottom": 650,
+      "clipBottom": 660,
+      "overflowPx": -10,
+      "triCard": null,
+      "inner": []
+    },
+    {
+      "viewport": "390x680",
+      "page": "p15",
+      "verdict": "SCROLLABLE",
+      "bodyOverflowY": "hidden",
+      "deepBottom": 1108,
+      "clipBottom": 660,
+      "overflowPx": 448,
+      "triCard": null,
+      "inner": [
+        "rc-p15__scroll"
+      ]
+    },
+    {
+      "viewport": "390x680",
+      "page": "p16",
+      "verdict": "SCROLLABLE",
+      "bodyOverflowY": "auto",
+      "deepBottom": 1021,
+      "clipBottom": 448,
+      "overflowPx": 573,
+      "triCard": null,
+      "inner": []
+    },
+    {
+      "viewport": "390x680",
+      "page": "p03",
+      "verdict": "FITS",
+      "bodyOverflowY": "auto",
+      "deepBottom": 644,
+      "clipBottom": 660,
+      "overflowPx": -16,
+      "triCard": null,
+      "inner": []
+    },
+    {
+      "viewport": "390x680",
+      "page": "p03",
+      "verdict": "SCROLLABLE",
+      "bodyOverflowY": "auto",
+      "deepBottom": 995,
+      "clipBottom": 660,
+      "overflowPx": 335,
+      "triCard": null,
+      "inner": []
+    },
+    {
+      "viewport": "390x680",
+      "page": "p03",
+      "verdict": "SCROLLABLE",
+      "bodyOverflowY": "auto",
+      "deepBottom": 953,
+      "clipBottom": 660,
+      "overflowPx": 293,
+      "triCard": null,
+      "inner": []
+    },
+    {
+      "viewport": "390x680",
+      "page": "p04",
+      "verdict": "SCROLLABLE",
+      "bodyOverflowY": "auto",
+      "deepBottom": 696,
+      "clipBottom": 660,
+      "overflowPx": 36,
+      "triCard": null,
+      "inner": []
+    }
+  ],
+  "summary": {
+    "clipNoScroll": [],
+    "scrollableAt740": [
+      "p01",
+      "p02",
+      "p07",
+      "p08",
+      "p09",
+      "p10",
+      "p11",
+      "p12",
+      "p13",
+      "p15",
+      "p16",
+      "p03",
+      "p03"
+    ],
+    "fitsAt740": [
+      "p03",
+      "p04",
+      "p05",
+      "p06",
+      "p14",
+      "p03",
+      "p04"
+    ]
+  }
+}

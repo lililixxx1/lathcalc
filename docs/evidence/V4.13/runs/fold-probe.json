@@ -1,0 +1,17 @@
+{
+  "when": "2026-11-10T23:5x+08:00（V4.13 Lead 补位期）",
+  "command": "CHROME=\"...chrome.exe\" node /tmp/probe-fold.mjs（CDP Emulation 390x844@2x，#/p01 未滚动，SW 预清理）",
+  "bundle": "index-DvWGyMBY.js（折边 6px 分隔加入前的包；分隔后 body flex:1 收缩 6px，footer 文字带下移）",
+  "purpose": "I-02 补档：p01.ts:44-45 注释与 README §三 所引「footer.top == body 裁切缘（802==802 零间隙）」的机检实测值",
+  "result": {
+    "bodyClipBottom": 802,
+    "footerTop": 802,
+    "footerBottom": 824,
+    "lastTileBottom": 816,
+    "lastTile": "宏程序库（副标题下半 816>802 在折边裁掉）",
+    "footerOutsideBody": true,
+    "overlapImpossible": "footer.top >= body.clipBottom → 两带分离，overflow 裁切下不可相交",
+    "bodyScrollMax": 23
+  },
+  "note": "vision 首轮判「两层文字相交」由此档证伪（几何不可交）；零间隙相邻实存 → 补 6px 分隔带后复判 2/2 PASS"
+}
