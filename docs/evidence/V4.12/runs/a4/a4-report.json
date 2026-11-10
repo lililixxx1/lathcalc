@@ -1,0 +1,546 @@
+[
+  {
+    "id": "p06-ac01",
+    "url": "http://localhost:4173/#/p06?case=AC01",
+    "checks": {
+      "bundle": "/assets/index-BxeiV-3d.js",
+      "labels": {
+        "n": 3,
+        "pairs": [
+          {
+            "a": "R5",
+            "b": "α45°",
+            "gap": 7.32
+          },
+          {
+            "a": "R5",
+            "b": "Ø36",
+            "gap": 10.34
+          },
+          {
+            "a": "α45°",
+            "b": "Ø36",
+            "gap": 16.78
+          }
+        ],
+        "outside": [],
+        "vb": [
+          64,
+          34
+        ]
+      }
+    },
+    "status": "PASS"
+  },
+  {
+    "id": "p06-ac02",
+    "url": "http://localhost:4173/#/p06?case=AC02",
+    "checks": {
+      "bundle": "/assets/index-BxeiV-3d.js",
+      "labels": {
+        "n": 3,
+        "pairs": [
+          {
+            "a": "R1=10",
+            "b": "R2=15",
+            "gap": 24.14
+          },
+          {
+            "a": "R1=10",
+            "b": "dZ=15",
+            "gap": 9.87
+          },
+          {
+            "a": "R2=15",
+            "b": "dZ=15",
+            "gap": 16.45
+          }
+        ],
+        "outside": [],
+        "vb": [
+          64,
+          34
+        ]
+      }
+    },
+    "status": "PASS"
+  },
+  {
+    "id": "p06-ac03",
+    "url": "http://localhost:4173/#/p06?case=AC03",
+    "checks": {
+      "bundle": "/assets/index-BxeiV-3d.js",
+      "labels": {
+        "n": 3,
+        "pairs": [
+          {
+            "a": "R1=25",
+            "b": "R2=10",
+            "gap": 26.76
+          },
+          {
+            "a": "R1=25",
+            "b": "dZ=9",
+            "gap": 15.35
+          },
+          {
+            "a": "R2=10",
+            "b": "dZ=9",
+            "gap": 18.43
+          }
+        ],
+        "outside": [],
+        "vb": [
+          64,
+          34
+        ]
+      }
+    },
+    "status": "PASS"
+  },
+  {
+    "id": "p06-ac04",
+    "url": "http://localhost:4173/#/p06?case=AC04",
+    "checks": {
+      "bundle": "/assets/index-BxeiV-3d.js",
+      "labels": {
+        "n": 3,
+        "pairs": [
+          {
+            "a": "R1=5",
+            "b": "R2=3",
+            "gap": 18.23
+          },
+          {
+            "a": "R1=5",
+            "b": "α45°",
+            "gap": 10.14
+          },
+          {
+            "a": "R2=3",
+            "b": "α45°",
+            "gap": 10.55
+          }
+        ],
+        "outside": [],
+        "vb": [
+          64,
+          34
+        ]
+      }
+    },
+    "status": "PASS"
+  },
+  {
+    "id": "p06-ac05",
+    "url": "http://localhost:4173/#/p06?case=AC05",
+    "checks": {
+      "bundle": "/assets/index-BxeiV-3d.js",
+      "labels": {
+        "n": 3,
+        "pairs": [
+          {
+            "a": "R4",
+            "b": "Ø20",
+            "gap": 7.29
+          },
+          {
+            "a": "R4",
+            "b": "Z-10",
+            "gap": 22.33
+          },
+          {
+            "a": "Ø20",
+            "b": "Z-10",
+            "gap": 11.99
+          }
+        ],
+        "outside": [],
+        "vb": [
+          64,
+          34
+        ]
+      }
+    },
+    "status": "PASS"
+  },
+  {
+    "id": "p06-ac06",
+    "url": "http://localhost:4173/#/p06?case=AC06",
+    "checks": {
+      "bundle": "/assets/index-BxeiV-3d.js",
+      "labels": {
+        "n": 3,
+        "pairs": [
+          {
+            "a": "R10",
+            "b": "dX=12",
+            "gap": 14.65
+          },
+          {
+            "a": "R10",
+            "b": "dZ=8",
+            "gap": 3.35
+          },
+          {
+            "a": "dX=12",
+            "b": "dZ=8",
+            "gap": 22.25
+          }
+        ],
+        "outside": [],
+        "vb": [
+          64,
+          34
+        ]
+      }
+    },
+    "status": "PASS"
+  },
+  {
+    "id": "p06-ac07",
+    "url": "http://localhost:4173/#/p06?case=AC07",
+    "checks": {
+      "bundle": "/assets/index-BxeiV-3d.js",
+      "labels": {
+        "n": 3,
+        "pairs": [
+          {
+            "a": "R5",
+            "b": "Ø30",
+            "gap": 7.19
+          },
+          {
+            "a": "R5",
+            "b": "Z-30",
+            "gap": 19.45
+          },
+          {
+            "a": "Ø30",
+            "b": "Z-30",
+            "gap": 22.45
+          }
+        ],
+        "outside": [],
+        "vb": [
+          64,
+          34
+        ]
+      }
+    },
+    "status": "PASS"
+  },
+  {
+    "id": "p06-ac08",
+    "url": "http://localhost:4173/#/p06?case=AC08",
+    "checks": {
+      "bundle": "/assets/index-BxeiV-3d.js",
+      "labels": {
+        "n": 2,
+        "pairs": [
+          {
+            "a": "R6",
+            "b": "dZ=-4",
+            "gap": 4.4
+          }
+        ],
+        "outside": [],
+        "vb": [
+          64,
+          34
+        ]
+      }
+    },
+    "status": "PASS"
+  },
+  {
+    "id": "p06-ac09",
+    "url": "http://localhost:4173/#/p06?case=AC09",
+    "checks": {
+      "bundle": "/assets/index-BxeiV-3d.js",
+      "labels": {
+        "n": 2,
+        "pairs": [
+          {
+            "a": "R5",
+            "b": "α30°",
+            "gap": 5.51
+          }
+        ],
+        "outside": [],
+        "vb": [
+          64,
+          34
+        ]
+      }
+    },
+    "status": "PASS"
+  },
+  {
+    "id": "p06-ac10",
+    "url": "http://localhost:4173/#/p06?case=AC10",
+    "checks": {
+      "bundle": "/assets/index-BxeiV-3d.js",
+      "labels": {
+        "n": 2,
+        "pairs": [
+          {
+            "a": "R5",
+            "b": "lead=3.5",
+            "gap": 2.21
+          }
+        ],
+        "outside": [],
+        "vb": [
+          64,
+          34
+        ]
+      }
+    },
+    "status": "PASS"
+  },
+  {
+    "id": "p06-ac11",
+    "url": "http://localhost:4173/#/p06?case=AC11",
+    "checks": {
+      "bundle": "/assets/index-BxeiV-3d.js",
+      "labels": {
+        "n": 1,
+        "pairs": [],
+        "outside": [],
+        "vb": [
+          64,
+          34
+        ]
+      }
+    },
+    "status": "PASS"
+  },
+  {
+    "id": "p06-ac12",
+    "url": "http://localhost:4173/#/p06?case=AC12",
+    "checks": {
+      "bundle": "/assets/index-BxeiV-3d.js",
+      "labels": {
+        "n": 2,
+        "pairs": [
+          {
+            "a": "R3",
+            "b": "Ø20",
+            "gap": 6.08
+          }
+        ],
+        "outside": [],
+        "vb": [
+          64,
+          34
+        ]
+      }
+    },
+    "status": "PASS"
+  },
+  {
+    "id": "keypad-p06-ac05",
+    "url": "http://localhost:4173/#/p06?case=AC05",
+    "checks": {
+      "bundle": "/assets/index-BxeiV-3d.js",
+      "keypad": {
+        "count": 13,
+        "seq": [
+          "7",
+          "8",
+          "9",
+          "4",
+          "5",
+          "6",
+          "1",
+          "2",
+          "3",
+          "sign",
+          ".",
+          "0",
+          "del"
+        ],
+        "signDisabled": false
+      }
+    },
+    "status": "PASS"
+  },
+  {
+    "id": "keypad-p07",
+    "url": "http://localhost:4173/#/p07",
+    "checks": {
+      "bundle": "/assets/index-BxeiV-3d.js",
+      "keypad": {
+        "count": 13,
+        "seq": [
+          "7",
+          "8",
+          "9",
+          "4",
+          "5",
+          "6",
+          "1",
+          "2",
+          "3",
+          "sign",
+          ".",
+          "0",
+          "del"
+        ],
+        "signDisabled": true
+      }
+    },
+    "status": "PASS"
+  },
+  {
+    "id": "keypad-p08",
+    "url": "http://localhost:4173/#/p08",
+    "checks": {
+      "bundle": "/assets/index-BxeiV-3d.js",
+      "keypad": {
+        "count": 13,
+        "seq": [
+          "7",
+          "8",
+          "9",
+          "4",
+          "5",
+          "6",
+          "1",
+          "2",
+          "3",
+          "sign",
+          ".",
+          "0",
+          "del"
+        ],
+        "signDisabled": true
+      }
+    },
+    "status": "PASS"
+  },
+  {
+    "id": "keypad-p11",
+    "url": "http://localhost:4173/#/p11",
+    "checks": {
+      "bundle": "/assets/index-BxeiV-3d.js",
+      "keypad": {
+        "count": 13,
+        "seq": [
+          "7",
+          "8",
+          "9",
+          "4",
+          "5",
+          "6",
+          "1",
+          "2",
+          "3",
+          "sign",
+          ".",
+          "0",
+          "del"
+        ],
+        "signDisabled": true
+      }
+    },
+    "status": "PASS"
+  },
+  {
+    "id": "keypad-p12",
+    "url": "http://localhost:4173/#/p12",
+    "checks": {
+      "bundle": "/assets/index-BxeiV-3d.js",
+      "keypad": {
+        "count": 13,
+        "seq": [
+          "7",
+          "8",
+          "9",
+          "4",
+          "5",
+          "6",
+          "1",
+          "2",
+          "3",
+          "sign",
+          ".",
+          "0",
+          "del"
+        ],
+        "signDisabled": true
+      }
+    },
+    "status": "PASS"
+  },
+  {
+    "id": "keypad-p16",
+    "url": "http://localhost:4173/#/p16",
+    "checks": {
+      "bundle": "/assets/index-BxeiV-3d.js",
+      "keypad": {
+        "count": 13,
+        "seq": [
+          "7",
+          "8",
+          "9",
+          "4",
+          "5",
+          "6",
+          "1",
+          "2",
+          "3",
+          "sign",
+          ".",
+          "0",
+          "del"
+        ],
+        "signDisabled": true
+      }
+    },
+    "status": "PASS"
+  },
+  {
+    "id": "keypad-p09",
+    "url": "http://localhost:4173/#/p09",
+    "checks": {
+      "bundle": "/assets/index-BxeiV-3d.js",
+      "keypad": {
+        "count": 13,
+        "seq": [
+          "7",
+          "8",
+          "9",
+          "4",
+          "5",
+          "6",
+          "1",
+          "2",
+          "3",
+          "sign",
+          ".",
+          "0",
+          "del"
+        ],
+        "signDisabled": true
+      }
+    },
+    "status": "PASS"
+  },
+  {
+    "id": "p03-metric",
+    "url": "http://localhost:4173/#/p03?family=metric&spec=M30%C3%973.5&d=30&p=3.5",
+    "checks": {
+      "bundle": "/assets/index-BxeiV-3d.js",
+      "texts": [
+        "d 30.000",
+        "d₂ 27.727",
+        "d₁ 26.211",
+        "P 3.5",
+        "α 60°"
+      ]
+    },
+    "status": "PASS"
+  }
+]

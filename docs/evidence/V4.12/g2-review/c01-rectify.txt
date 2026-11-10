@@ -1,0 +1,12 @@
+C-01 整改回执（Lead，2026-11-10）
+=================================
+1. src/core/arc-figure-a2.ts:318-322 — AC04 α 注释算式勘正：
+   "= 5.5 − 5.09 = 0.41" → "= 5.5 − 4.43 = 1.07"（0.707×(3.71+2.56)=4.43，
+   α 盒 4 字宽半 3.71；初笔 5.09 误代 5 字半宽 4.64，勘正出处注记保留）。
+2. docs/evidence/V4.12/README.md §一 AC04 行 — 0.41 → 1.07（含勘正括注）。
+3. 门禁终态重捕（runs/*.txt 覆盖为 C-01 后终态）：
+   tsc REAL_EXIT=0；vitest 60 文件 781/781 REAL_EXIT=0；build REAL_EXIT=0
+   dist/index.html → index-BxeiV-3d.js（包哈希不变：纯注释级零产物影响，
+   V4.11 剥注释哈希不变结论再证）；eslint REAL_EXIT=0。
+4. G2 7 条 Minor + vision 幻觉疑点披露：全文归档于本目录 README.md，
+   不设条件，随波留痕。
