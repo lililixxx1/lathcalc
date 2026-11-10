@@ -286,3 +286,59 @@ describe('p16 可用齿数截断渐隐（V4.10）', () => {
     expect(wrap?.classList.contains('rc-p16__teeth--clip')).toBe(false);
   });
 });
+
+// V4.12-B · 底部数字键盘全站统一（用户指令 2026-11-10）：
+// 只接 p / t 两个数字框；teeth 齿数串（多值文本）白名单排除、不接键盘。
+describe('p16 底部数字键盘（V4.12-B）', () => {
+  function keypadButton(key: string): HTMLButtonElement {
+    const button = currentPage().querySelector<HTMLButtonElement>(
+      `.rc-keypad__key[data-key="${key}"]`,
+    );
+    if (!button) throw new Error(`键盘键 ${key} 不存在`);
+    return button;
+  }
+
+  it('13 键键盘存在；默认 active=p：del → 1. → teeth 不被键盘改写（不接键盘）', async () => {
+    await router.navigate('p16');
+    expect(currentPage().querySelector('.rc-keypad')).not.toBeNull();
+    expect(currentPage().querySelectorAll('.rc-keypad__key')).toHaveLength(13);
+
+    const teethBefore = inputField('teeth').value;
+    inputField('teeth').click(); // teeth 未 register：点击不产生键盘写入目标
+    keypadButton('del').click();
+    // del 打到默认 active p（'1.5' 截尾 → '1.'），teeth 值零扰动
+    expect(inputField('p').value).toBe('1.');
+    expect(inputField('teeth').value).toBe(teethBefore);
+    // i = 1/6 → 结果表仍可解且只由 p/t 驱动
+    expect(rows()).toHaveLength(8);
+  });
+
+  it('键盘写回 T：del 清空 → 提示不出表；键入 1/2 → t=12 → 8 行恢复', async () => {
+    await router.navigate('p16');
+    currentPage().querySelector<HTMLInputElement>('input[name="t"]')?.click();
+    keypadButton('del').click();
+    keypadButton('del').click();
+    expect(inputField('t').value).toBe('');
+    expect(rows()).toHaveLength(0);
+    expect(currentPage().textContent).toContain('请输入大于 0 的工件螺距 P 与丝杠导程 T');
+
+    keypadButton('1').click();
+    keypadButton('2').click();
+    expect(inputField('t').value).toBe('12');
+    expect(rows()).toHaveLength(8);
+    // i = 1.5/12 = 0.125 → 仍为无误差解（五倍组存在精确解，如 20/60×40/80）
+    expect(rowTexts('.rc-p16__err')[0]).toBe('0.00');
+  });
+
+  it('sign 键对 unsigned p/t 为 no-op（键序 ≥3 条副作用断言外的符号防线）', async () => {
+    await router.navigate('p16');
+    const signKey = currentPage().querySelector<HTMLButtonElement>(
+      '.rc-keypad__key[data-key="sign"]',
+    );
+    expect(signKey?.disabled).toBe(true); // unsigned 字段激活 → sign 置灰
+    signKey?.click();
+    expect(inputField('p').value).toBe('1.5');
+    expect(inputField('t').value).toBe('6');
+    expect(rows()).toHaveLength(8);
+  });
+});

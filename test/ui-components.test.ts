@@ -33,6 +33,7 @@ import {
   TopBar,
   WarnCard,
   codeCardText,
+  createKeypadController,
   resultCopyText,
 } from '../src/ui/components';
 
@@ -170,13 +171,13 @@ describe('SegChip', () => {
 });
 
 describe('Keypad', () => {
-  it('固定 12 键顺序，点击回传键值（含 del）', () => {
+  it('固定 13 键顺序（V4.12-B：九宫 7-9/4-6/1-3 + 功能行 ± . 0 ⌫），点击回传键值', () => {
     const keys: string[] = [];
     const pad = Keypad({ onKey: (key) => keys.push(key) });
     document.body.append(pad);
 
     const buttons = [...pad.querySelectorAll<HTMLButtonElement>('.rc-keypad__key')];
-    expect(buttons).toHaveLength(12);
+    expect(buttons).toHaveLength(13);
     expect(buttons.map((button) => button.dataset.key)).toEqual([
       '7',
       '8',
@@ -187,15 +188,131 @@ describe('Keypad', () => {
       '1',
       '2',
       '3',
+      'sign',
       '.',
       '0',
       'del',
     ]);
-    expect(buttons[11]?.getAttribute('aria-label')).toBe('退格');
+    expect(buttons[9]?.getAttribute('aria-label')).toBe('正负号');
+    expect(buttons[9]?.textContent).toBe('±');
+    expect(buttons[12]?.getAttribute('aria-label')).toBe('退格');
 
-    buttons[11]?.click();
+    buttons[12]?.click();
     buttons[0]?.click();
-    expect(keys).toEqual(['del', '7']);
+    buttons[9]?.click();
+    expect(keys).toEqual(['del', '7', 'sign']);
+  });
+
+  it('signDisabled 仅禁用 sign 键，其余键不受影响（V4.12-B）', () => {
+    const pad = Keypad({ signDisabled: true });
+    document.body.append(pad);
+
+    const buttons = [...pad.querySelectorAll<HTMLButtonElement>('.rc-keypad__key')];
+    expect(buttons[9]?.disabled).toBe(true); // sign
+    expect(buttons[0]?.disabled).toBe(false); // 7
+    expect(buttons[10]?.disabled).toBe(false); // .
+    expect(buttons[11]?.disabled).toBe(false); // 0
+    expect(buttons[12]?.disabled).toBe(false); // del
+  });
+});
+
+describe('KeypadController', () => {
+  it('keypadEl 幂等 + register/setActive 高亮 la-input--active + sign 键随 signed 刷新', () => {
+    const texts: Record<string, string> = { a: '-10', b: '5' };
+    const controller = createKeypadController({ texts, onChange: () => {} });
+    const rowA = InputRow({ label: 'A', value: texts.a ?? '', name: 'a' });
+    const rowB = InputRow({ label: 'B', value: texts.b ?? '', name: 'b' });
+    document.body.append(rowA, rowB, controller.keypadEl());
+    controller.register('a', rowA, { signed: true });
+    controller.register('b', rowB);
+
+    expect(controller.keypadEl()).toBe(controller.keypadEl()); // 幂等同一元素
+    expect(controller.keypadEl().classList.contains('rc-keypad')).toBe(true);
+
+    controller.setActive('a');
+    expect(rowA.classList.contains('la-input--active')).toBe(true);
+    expect(rowB.classList.contains('la-input--active')).toBe(false);
+    const signKey = () =>
+      controller.keypadEl().querySelector<HTMLButtonElement>('.rc-keypad__key[data-key="sign"]');
+    expect(signKey()?.disabled).toBe(false); // signed 字段激活 → sign 可用
+
+    controller.setActive('b');
+    expect(rowB.classList.contains('la-input--active')).toBe(true);
+    expect(rowA.classList.contains('la-input--active')).toBe(false);
+    expect(signKey()?.disabled).toBe(true); // 非 signed 字段 → sign 置灰
+    expect(controller.active()).toBe('b');
+  });
+
+  it('onKey 编辑语义：sign/数字/小数点/del/maxLen，同步 input.value 并回调 onChange', () => {
+    const texts: Record<string, string> = { a: '-10', b: '5' };
+    const changes: string[] = [];
+    const controller = createKeypadController({ texts, onChange: (field) => changes.push(field) });
+    const rowA = InputRow({ label: 'A', value: texts.a ?? '', name: 'a' });
+    const rowB = InputRow({ label: 'B', value: texts.b ?? '', name: 'b' });
+    document.body.append(rowA, rowB, controller.keypadEl());
+    controller.register('a', rowA, { signed: true });
+    controller.register('b', rowB);
+    controller.setActive('a');
+    const inputA = rowA.querySelector<HTMLInputElement>('input');
+
+    // sign：'-10' → '10'（副作用打到 input.value 与 onChange）
+    controller.onKey('sign');
+    expect(texts.a).toBe('10');
+    expect(inputA?.value).toBe('10');
+    expect(changes).toEqual(['a']);
+    // 数字追加：'10' + '2' → '102'
+    controller.onKey('2');
+    expect(texts.a).toBe('102');
+    expect(changes).toEqual(['a', 'a']);
+    // del 截尾：'102' → '10'
+    controller.onKey('del');
+    expect(texts.a).toBe('10');
+    expect(changes).toEqual(['a', 'a', 'a']); // sign / 数字 / del 各回调一次
+
+    controller.setActive('b');
+    // 非 signed 字段收到 sign 为 no-op
+    controller.onKey('sign');
+    expect(texts.b).toBe('5');
+    expect(changes).toEqual(['a', 'a', 'a']);
+    // '.'：'5' → '5.'；再按跳过
+    controller.onKey('.');
+    expect(texts.b).toBe('5.');
+    controller.onKey('.');
+    expect(texts.b).toBe('5.');
+    expect(changes).toEqual(['a', 'a', 'a', 'b']);
+  });
+
+  it('el 本身是 input 亦可 register（p12 分支）；maxLen 上限与空值补 0. 规则', () => {
+    const texts: Record<string, string> = { n: '', m: '99' };
+    const controller = createKeypadController({ texts, onChange: () => {}, maxLen: 2 });
+    const inputN = document.createElement('input');
+    inputN.type = 'text';
+    inputN.name = 'n';
+    const inputM = document.createElement('input');
+    inputM.type = 'text';
+    inputM.name = 'm';
+    document.body.append(inputN, inputM, controller.keypadEl());
+    controller.register('n', inputN); // el 本身是 input
+    controller.register('m', inputM);
+    controller.setActive('n');
+
+    // '' → '.' → '0.'（补零规则）
+    controller.onKey('.');
+    expect(texts.n).toBe('0.');
+    expect(inputN.value).toBe('0.'); // el 本身是 input 也同步
+    // maxLen=2：'0.'.length=2 → 数字跳过
+    controller.onKey('7');
+    expect(texts.n).toBe('0.');
+
+    // maxLen 边界：m='99' 已满 → no-op
+    controller.setActive('m');
+    controller.onKey('1');
+    expect(texts.m).toBe('99');
+
+    // 无 active 时按键 no-op（初始态防御：新控制器不写值）
+    const fresh = createKeypadController({ texts: {}, onChange: () => {} });
+    fresh.onKey('5');
+    expect(fresh.active()).toBeNull();
   });
 });
 

@@ -323,3 +323,59 @@ describe('p06 切点计算', () => {
     expect(app.querySelector('.la-page[data-page="p05"]')).not.toBeNull();
   });
 });
+
+// V4.12-B · 底部数字键盘全站统一（用户指令 2026-11-10）：
+// 键盘 13 键存在 + signed 字段（stepZ/dZ）± 键副作用打到具体值 + 无符号字段 sign no-op。
+describe('p06 底部数字键盘（V4.12-B）', () => {
+  function keypadButton(key: string): HTMLButtonElement {
+    const button = p06Page()?.querySelector<HTMLButtonElement>(
+      `.rc-keypad__key[data-key="${key}"]`,
+    );
+    if (!button) throw new Error(`键盘键 ${key} 不存在`);
+    return button;
+  }
+
+  it('工况表单页渲染 13 键键盘；无符号字段 AC01 R 收 sign 键为 no-op（R 仍 5）', async () => {
+    await router.navigate('p06', { case: 'AC01' });
+    expect(p06Page()?.querySelector('.rc-keypad')).not.toBeNull();
+    expect(p06Page()?.querySelectorAll('.rc-keypad__key')).toHaveLength(13);
+
+    inputEl('R').click(); // 点击输入行 → 键盘写入目标切到 R
+    keypadButton('sign').click();
+    expect(inputEl('R').value).toBe('5');
+    expect(codeLine()).toBe('G02 X36 Z0 R5.0'); // 值未变，结果区零扰动
+  });
+
+  it('AC05 signed stepZ：± 键 -10→10、再键入 2 → 102（副作用打到具体值）', async () => {
+    await router.navigate('p06', { case: 'AC05' });
+    expect(inputEl('stepZ').value).toBe('-10'); // 默认负值（DEFAULTS AC05）
+
+    inputEl('stepZ').click();
+    keypadButton('sign').click();
+    expect(inputEl('stepZ').value).toBe('10');
+
+    keypadButton('2').click();
+    expect(inputEl('stepZ').value).toBe('102');
+  });
+
+  it('AC05 sign 后输入即算：程序行随 stepZ=10 重算且与 core 逐字一致', async () => {
+    await router.navigate('p06', { case: 'AC05' });
+    const before = codeLine(); // stepZ=-10：'G03 X28 Z-10 R4.0'
+
+    inputEl('stepZ').click();
+    keypadButton('sign').click();
+    expect(codeLine()).not.toBe(before);
+    // core 对拍：stepZ 翻正后 solve 以 {R:4, stepX:20, stepZ:10} 实时重算
+    expect(codeLine()).toBe(coreSolver('AC05').solve({ R: 4, stepX: 20, stepZ: 10 }).gcodeLine);
+  });
+
+  it('AC07 signed dZ：± 键 -30→30，程序行与 core 逐字一致（dZ 默认负值源 AC07）', async () => {
+    await router.navigate('p06', { case: 'AC07' });
+    expect(inputEl('dZ').value).toBe('-30');
+
+    inputEl('dZ').click();
+    keypadButton('sign').click();
+    expect(inputEl('dZ').value).toBe('30');
+    expect(codeLine()).toBe(coreSolver('AC07').solve({ R: 5, dX: 30, dZ: 30 }).gcodeLine);
+  });
+});

@@ -260,12 +260,25 @@ export function figureAC10(input: Record<string, number>): FigureView {
     },
     (a) => {
       const cv = a.map.toView(C);
-      const tv = a.map.toView(T);
-      const ev = a.map.toView(E);
-      const mid = midView(tv, ev);
+      // V4.12 Lead 补位（A4-R 实拍 FAIL 重锚）：
+      //   R5：cv.y 即轴线 y（C.r=0），原 y=cv.y 锚的 est 盒 [23.89,27.61]×[14.44,17.8]
+      //   被灰色轴线（y=17）横穿 → 下移 2.86（= 0.3 漆半宽 + 2.56 字盒上高）到轴下，
+      //   盒顶距轴 0.3；x 不动（盒右缘 27.61 < 虚线整圆左缘 27.95，横向圆外）。
+      //   lead=3.5：原 mid(T,E)+3.5 锚的 est 盒 x∈[48.72,52.08] 段被虚线整圆与实弧
+      //   穿越 → 移到 R 标签同排左侧（轴下注记行）：x = R 盒左缘 − 1.6 − w/2，
+      //   与 R 盒净距 1.6 ≥1.5（label-sweep 阈）；盒 x∈[7.4,22.4] 全在虚线圆
+      //   x∈[27.95,54.95] 之左，横向圆外。
+      const rText = `R${fmtFigureValue(R)}`;
+      const leadText = `lead=${fmtFigureValue(lead)}`;
+      const wHalf = (text: string): number => (text.length * 0.58 * 3.2) / 2;
+      const rX = cv.x - (R * a.map.scale + 2.2);
       return [
-        valueLabel(`R${fmtFigureValue(R)}`, cv.x - (R * a.map.scale + 2.2), cv.y),
-        valueLabel(`lead=${fmtFigureValue(lead)}`, mid.x, mid.y + 3.5),
+        valueLabel(rText, rX, cv.y + 2.86),
+        valueLabel(
+          leadText,
+          Math.max(rX - wHalf(rText) - 1.6 - wHalf(leadText), 0.4 + wHalf(leadText)),
+          cv.y + 2.86,
+        ),
       ];
     },
   );

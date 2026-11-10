@@ -273,3 +273,77 @@ describe('p07 反推模式（W6-C4）', () => {
     expect(resultValues()).toEqual(['1 : 10', '2°51′45″', '2.5']);
   });
 });
+
+// V4.12-B · 底部数字键盘全站统一（用户指令 2026-11-10）：
+// 计算视图 big/small/length unsigned 全 unsigned；莫氏对照视图无输入字段，键盘按键 no-op；
+// 反推视图字段（taperC + 反推 D/d/L）写回独立 state 属性，与计算模式互不串值。
+describe('p07 底部数字键盘（V4.12-B）', () => {
+  function keypadButton(key: string): HTMLButtonElement {
+    const button = currentPage().querySelector<HTMLButtonElement>(
+      `.rc-keypad__key[data-key="${key}"]`,
+    );
+    if (!button) throw new Error(`键盘键 ${key} 不存在`);
+    return button;
+  }
+
+  it('计算视图：13 键键盘存在；del×2 清空 big → 不可解提示；键入 3/2 回填 32 → 黄金值复原', async () => {
+    await router.navigate('p07');
+    expect(currentPage().querySelector('.rc-keypad')).not.toBeNull();
+    expect(currentPage().querySelectorAll('.rc-keypad__key')).toHaveLength(13);
+
+    keypadButton('del').click();
+    keypadButton('del').click();
+    expect(currentPage().querySelector<HTMLInputElement>('input[name="big"]')?.value).toBe('');
+    expect(currentPage().querySelector('.rc-p07__hint')?.textContent).toContain('三值齐全');
+
+    keypadButton('3').click();
+    keypadButton('2').click();
+    expect(currentPage().querySelector<HTMLInputElement>('input[name="big"]')?.value).toBe('32');
+    expect(resultValues()).toEqual(['1 : 10', '2°51′45″', '2.5']); // 32/27/50 黄金值复原
+  });
+
+  it('计算视图数字追加打到 big 且小数点规则生效：328 → del → 32.5 与 core 一致', async () => {
+    await router.navigate('p07');
+    clickSegItem('calc'); // 确保在计算视图
+    keypadButton('8').click(); // big '32' → '328'
+    expect(currentPage().querySelector<HTMLInputElement>('input[name="big"]')?.value).toBe('328');
+    keypadButton('del').click(); // '328' → '32'
+    keypadButton('.').click(); // '32' → '32.'
+    keypadButton('5').click(); // '32.' → '32.5'
+    expect(currentPage().querySelector<HTMLInputElement>('input[name="big"]')?.value).toBe('32.5');
+    const core = taperCalc({ big: 32.5, small: 27, length: 50 });
+    // C = 5.5/50 = 0.11 → 1 : 9.091
+    expect(core.taperC).toBeCloseTo(0.11, 12);
+    expect(resultValues()[0]).toBe('1 : 9.091');
+  });
+
+  it('莫氏对照视图：无输入字段，键盘按键 no-op、无异常', async () => {
+    await router.navigate('p07', { mode: 'morse', morse: 4 });
+    expect(currentPage().querySelector('.rc-keypad')).not.toBeNull();
+    expect(currentPage().querySelectorAll('.rc-input')).toHaveLength(0);
+    expect(resultValues()).toEqual(['1:19.254', '1°29′15″']); // MT4 查表值（表值原样）
+
+    keypadButton('del').click();
+    keypadButton('7').click();
+    expect(resultValues()).toEqual(['1:19.254', '1°29′15″']); // 查表结果零扰动
+  });
+
+  it('反推视图：键盘写回独立 reverse 输入——MT4 填 C 后 del 截尾，结果随之变化', async () => {
+    await router.navigate('p07', { mode: 'reverse' });
+    expect(currentPage().querySelector('.rc-keypad')).not.toBeNull();
+
+    const chips = [...currentPage().querySelectorAll<HTMLButtonElement>('.rc-p07__chips .la-chip')];
+    chips[4]?.click(); // MT4 → C = 1/19.254
+    expect(resultValues()).toEqual(['96.27', '2.5', '1°29′15″']); // L = 5×19.254
+
+    keypadButton('del').click(); // 截尾 C 一位（莫氏快选态同步失效）
+    const cValue = currentPage().querySelector<HTMLInputElement>('input[name="taperC"]')?.value ?? '';
+    expect(cValue.length).toBeGreaterThan(0);
+    expect(Number(cValue)).toBeGreaterThan(0);
+    // C 截尾变小 → 反推锥长随之偏离 96.27（写回独立 state，且不串计算模式值）
+    expect(resultValues()[0]).not.toBe('96.27');
+
+    clickSegItem('calc');
+    expect(currentPage().querySelector<HTMLInputElement>('input[name="big"]')?.value).toBe('32'); // 计算模式值未被反推键盘污染
+  });
+});

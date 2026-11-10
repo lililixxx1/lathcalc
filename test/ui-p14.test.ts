@@ -29,6 +29,10 @@ import {
   type Canvas2DLike,
   type SharePalette,
 } from '../src/ui/pages/p14';
+import pkg from '../package.json';
+
+/** V4.12-C：分享长图页脚版本 = 构建期 __APP_VERSION__（源 package.json），对拍同源。 */
+const APP_VERSION: string = pkg.version;
 
 const NOW = 1_700_000_000_000;
 
@@ -282,7 +286,7 @@ describe('p14 分享长图（canvas 降级 + 纯函数）', () => {
     expect(texts).toContain('50');
     expect(texts).toContain('L');
     expect(texts).toContain('100');
-    expect(texts).toContain('完全离线 · 本机生成 · 车工算 v0.1');
+    expect(texts).toContain(`完全离线 · 本机生成 · 车工算 v${APP_VERSION}`);
     // rects：顶部橙条 + 参数区上分隔线 + 偶数行卡底 + 参数区下分隔线 + 页脚分隔线 = 5
     expect(layout.rects).toHaveLength(5);
     expect(layout.rects[0]).toMatchObject({ x: 0, y: 0, width: 600, height: 10, color: 'accent' });

@@ -37,6 +37,7 @@ import {
   SubText,
   TopBar,
   createBody,
+  createKeypadController,
   createPage,
   escapeHtml,
   injectStyle,
@@ -46,6 +47,7 @@ import morseJson from '../../data/morse.json';
 const MORSE_ROWS = morseJson as unknown as MorseRow[];
 
 const CSS = `
+.la-page[data-page="p07"] .la-body { overflow-y: auto; }
 .rc-p07__figure { padding: 10px; display: grid; place-items: center; }
 .rc-p07__svg { width: 100%; height: 90px; display: block; color: var(--la-ink-body); }
 .rc-p07__hint { font-size: 12px; line-height: 1.55; color: var(--la-accent-ink); padding: 0 2px; }
@@ -158,6 +160,38 @@ const page: PageModule = {
     let accordionOpen = false;
     let statOpen = false;
 
+    // V4.12-B：底部数字键盘（用户指令全站统一）。计算 / 反推两模式字段名共用
+    // big/small/length（+反推 taperC），但落到不同 state 属性 → 值字典按模式重映射：
+    // keypadTexts 是控制器直读写的唯一字典，模式切换 / 软键盘输入时双向同步；
+    // keypadApply 由当前视图装配，把控制器写回的值路由到对应 state 属性并重画。
+    const keypadTexts: Record<string, string> = {};
+    let keypadApply: (field: string) => void = () => {};
+
+    const keypadController = createKeypadController({
+      texts: keypadTexts,
+      onChange: (field) => keypadApply(field),
+      allowed: (field) =>
+        state.mode === 'calc'
+          ? field === 'big' || field === 'small' || field === 'length'
+          : state.mode === 'reverse'
+            ? field === 'taperC' || field === 'big' || field === 'small' || field === 'length'
+            : false,
+    });
+
+    const syncKeypadTexts = (): void => {
+      for (const key of Object.keys(keypadTexts)) delete keypadTexts[key];
+      if (state.mode === 'calc') {
+        keypadTexts.big = state.big;
+        keypadTexts.small = state.small;
+        keypadTexts.length = state.length;
+      } else if (state.mode === 'reverse') {
+        keypadTexts.taperC = state.taperC;
+        keypadTexts.big = state.reverseBig;
+        keypadTexts.small = state.reverseSmall;
+        keypadTexts.length = state.reverseLength;
+      }
+    };
+
     const body = createBody({ className: 'rc-p07__body' });
     const content = document.createElement('div');
     content.className = 'rc-p07__content';
@@ -242,6 +276,7 @@ const page: PageModule = {
         name: 'big',
         onInput: (value) => {
           state.big = value;
+          keypadTexts.big = value;
           paintFigure();
           paintOutcome();
         },
@@ -253,6 +288,7 @@ const page: PageModule = {
         name: 'small',
         onInput: (value) => {
           state.small = value;
+          keypadTexts.small = value;
           paintFigure();
           paintOutcome();
         },
@@ -264,10 +300,25 @@ const page: PageModule = {
         name: 'length',
         onInput: (value) => {
           state.length = value;
+          keypadTexts.length = value;
           paintFigure();
           paintOutcome();
         },
       });
+
+      // V4.12-B：键盘写回路由（键名 = 字典键名 → 计算 / 反推各自的 state 属性）。
+      keypadApply = (field) => {
+        if (field === 'big') state.big = keypadTexts.big ?? state.big;
+        else if (field === 'small') state.small = keypadTexts.small ?? state.small;
+        else if (field === 'length') state.length = keypadTexts.length ?? state.length;
+        paintFigure();
+        paintOutcome();
+      };
+      keypadController.register('big', inputBig);
+      keypadController.register('small', inputSmall);
+      keypadController.register('length', inputLength);
+      syncKeypadTexts();
+      keypadController.setActive('big');
 
       paintFigure();
       paintOutcome();
@@ -292,6 +343,7 @@ const page: PageModule = {
         ariaLabel: '锥比 C',
         onInput: (value) => {
           state.taperC = value;
+          keypadTexts.taperC = value;
           state.reverseMorse = null;
           paintChips();
           paintOutcome();
@@ -310,6 +362,7 @@ const page: PageModule = {
                 if (taperC === null) return;
                 state.reverseMorse = morse.number;
                 state.taperC = formatNumber(taperC, 6);
+                keypadTexts.taperC = state.taperC;
                 if (cField) cField.value = state.taperC;
                 paintChips();
                 paintOutcome();
@@ -388,6 +441,7 @@ const page: PageModule = {
         name: 'big',
         onInput: (value) => {
           state.reverseBig = value;
+          keypadTexts.big = value;
           paintOutcome();
         },
       });
@@ -398,6 +452,7 @@ const page: PageModule = {
         name: 'small',
         onInput: (value) => {
           state.reverseSmall = value;
+          keypadTexts.small = value;
           paintOutcome();
         },
       });
@@ -408,9 +463,29 @@ const page: PageModule = {
         name: 'length',
         onInput: (value) => {
           state.reverseLength = value;
+          keypadTexts.length = value;
           paintOutcome();
         },
       });
+
+      // V4.12-B：键盘写回路由（反推模式独立输入，与计算模式互不串值）。
+      keypadApply = (field) => {
+        if (field === 'taperC') {
+          state.taperC = keypadTexts.taperC ?? state.taperC;
+          state.reverseMorse = null;
+          paintChips();
+        } else if (field === 'big') state.reverseBig = keypadTexts.big ?? state.reverseBig;
+        else if (field === 'small') state.reverseSmall = keypadTexts.small ?? state.reverseSmall;
+        else if (field === 'length') state.reverseLength = keypadTexts.length ?? state.reverseLength;
+        paintOutcome();
+      };
+      keypadController.register('taperC', inputC);
+      keypadController.register('big', inputBig);
+      keypadController.register('small', inputSmall);
+      keypadController.register('length', inputLength);
+      syncKeypadTexts();
+      keypadController.setActive('taperC');
+
       view.append(inputC, chipWrap, inputBig, inputSmall, inputLength, outcome);
       return view;
     }
@@ -419,6 +494,8 @@ const page: PageModule = {
     function renderMorseView(): HTMLElement {
       const view = document.createElement('div');
       view.className = 'rc-p07__morse';
+      // 本视图无输入字段：键盘写回置空 + allowed 全屏蔽（控制器按键为 no-op）。
+      keypadApply = () => {};
       const chipWrap = document.createElement('div');
       chipWrap.className = 'rc-p07__chips';
       const resultWrap = document.createElement('div');
@@ -497,7 +574,10 @@ const page: PageModule = {
     );
 
     renderContent();
-    ctx.root.append(createPage({ id: 'p07', top: TopBar({ title }), body }));
+    // V4.12-B 补位：键盘走页级 footer 槽（.la-body 滚动区之外常显，见 CSS overflow-y 覆盖）
+    ctx.root.append(
+      createPage({ id: 'p07', top: TopBar({ title }), body, footer: keypadController.keypadEl() }),
+    );
   },
 };
 

@@ -32,14 +32,13 @@ import {
   makeMap,
   midView,
   mulP,
+  resolveLabelOverlaps,
   rotCcw,
   rotCw,
-  rotScreen,
   sampleArc,
   segView,
   solveFor,
   subP,
-  unitView,
 } from './arc-figure-kit';
 import { figureAC02, figureAC03, figureAC04, figureAC06 } from './arc-figure-a2';
 import { figureAC07, figureAC08, figureAC09, figureAC10, figureAC11, figureAC12 } from './arc-figure-b';
@@ -152,19 +151,29 @@ function figureAC01(input: Record<string, number>): FigureView {
 
   // 标签（§3 表 + R1：R 避让 2.2→3.0；α 用切线屏幕方向 (cosα,−sinα)；
   // Ø 在轴线下方切点 z 处）
-  const rDir = rotScreen(unitView({ x: Pv.x - Cv.x, y: Pv.y - Cv.y }));
-  const aDir = rotScreen({ x: Math.cos(alpha), y: -Math.sin(alpha) });
+  // V4.12 Lead 补位（A4-R 实拍 FAIL）：AC01 的 3.0·rDir 上偏锚恰落入 45° 切线斜线
+  // 带（斜线 y=47.70−x 穿 R 字上半部，est 盒 x∈[33.7,35.2] 段 y∈[12.5,14.4]）——
+  // 与 AC02/AC03 同款侧距锚：弧心正右（Cv.x + r·s + 0.6 + w/2），盒缘距弧右缘恒 0.6、
+  // 距两切线段横向/纵向 ≥1.1（AC05 另有函数，不受影响）。
+  const rText = `R${fmtFigureValue(R)}`;
+  const rLabel: ViewLabel = {
+    text: rText,
+    x: Cv.x + R * map.scale + 0.6 + (rText.length * 1.856) / 2,
+    y: Cv.y,
+    anchor: 'middle',
+  };
+  // V4.12 Lead 补位（续）：α 原公式位 Pv−2.2·aDir（45° 案 (30.44,14.15)）est 盒
+  // 右端 x∈[32.75,34.15] 段被切线斜线 y=47.70−x 穿越（此前靠 kit resolver 因 R 旧
+  // 盒重叠推走遮掩；R 重锚后 resolver 不再推、缺陷显形）。改切线法向上侧定距 d=5：
+  // 盒最近角（法向分量）距离 = 5 − 0.707·(w/2+2.56) = 5 − 4.43 = 0.57 ≥ 0.3（漆半宽；
+  // d 下界 0.707·(3.71+2.56)+0.3 ≈ 4.73）。
+  const up = { x: -Math.sin(alpha), y: -Math.cos(alpha) }; // 切线 (cosα,−sinα) 的法向上侧（y 分量负）
   const labels: ViewLabel[] = [
-    {
-      text: `R${fmtFigureValue(R)}`,
-      x: midView(Pv, Cv).x + 3 * rDir.x,
-      y: midView(Pv, Cv).y + 3 * rDir.y,
-      anchor: 'middle',
-    },
+    rLabel,
     {
       text: `α${fmtFigureValue(input.angle ?? Number.NaN)}°`,
-      x: Pv.x - 2.2 * aDir.x,
-      y: Pv.y - 2.2 * aDir.y,
+      x: Pv.x + 5 * up.x,
+      y: Pv.y + 5 * up.y,
       anchor: 'middle',
     },
     {
@@ -274,8 +283,15 @@ function figureAC05(input: Record<string, number>): FigureView {
   };
 }
 
-/** 参数化工况图形入口：全 12 案分发（V4.4 §2）；未实现案由桩上抛 */
+/** 参数化工况图形入口：全 12 案分发（V4.4 §2）；未实现案由桩上抛。
+ *  V4.12-A：出口统一标签防碰撞后处理（kit resolveLabelOverlaps，保序保文、零 DOM；
+ *  案内锚法不动，先者优先——详见 arc-figure-kit.ts 对应节注）。 */
 export function buildArcFigure(id: ParametricCaseId, input: Record<string, number>): FigureView {
+  const fig = figureOf(id, input);
+  return { ...fig, labels: resolveLabelOverlaps(fig.labels) };
+}
+
+function figureOf(id: ParametricCaseId, input: Record<string, number>): FigureView {
   switch (id) {
     case 'AC01':
       return figureAC01(input);

@@ -41,6 +41,7 @@ import {
   StatTriple,
   TopBar,
   createBody,
+  createKeypadController,
   createPage,
   escapeHtml,
   injectStyle,
@@ -50,6 +51,7 @@ import toleranceJson from '../../data/tolerance-it.json';
 const IT_ROWS = toleranceJson as unknown as ITTableRow[];
 
 const CSS = `
+.la-page[data-page="p08"] .la-body { overflow-y: auto; }
 .rc-p08__hint { font-size: 12px; line-height: 1.55; color: var(--la-accent-ink); padding: 0 2px; }
 .rc-p08__presets { display: flex; flex-wrap: wrap; gap: 7px; }
 .rc-p08__fithead { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 4px; }
@@ -158,6 +160,17 @@ const page: PageModule = {
 
     const body = createBody({ className: 'rc-p08__body' });
 
+    // V4.12-B：底部数字键盘（用户指令全站统一）。nominalText 为真值源，
+    // 软键盘输入 / 键盘写回两条路径都经 keypadTexts 同步。
+    const keypadTexts: Record<string, string> = { nominal: nominalText };
+    const keypadController = createKeypadController({
+      texts: keypadTexts,
+      onChange: (field) => {
+        if (field === 'nominal') nominalText = keypadTexts.nominal ?? nominalText;
+        paint();
+      },
+    });
+
     const inputRow = InputRow({
       label: '基本尺寸',
       value: nominalText,
@@ -165,9 +178,12 @@ const page: PageModule = {
       name: 'nominal',
       onInput: (value) => {
         nominalText = value;
+        keypadTexts.nominal = value;
         paint();
       },
     });
+    keypadController.register('nominal', inputRow);
+    keypadController.setActive('nominal');
 
     const holeSeg = Segmented({
       options: [
@@ -396,6 +412,7 @@ const page: PageModule = {
     }
 
     paint();
+    // V4.12-B 补位：键盘走页级 footer 槽（.la-body 滚动区之外常显，见 CSS overflow-y 覆盖）
     body.append(inputRow, holeSeg, gradeSeg, diagramCard, statWrap, presetLabel, presetWrap, fitWrap, accWrap);
 
     ctx.root.append(
@@ -403,6 +420,7 @@ const page: PageModule = {
         id: 'p08',
         top: TopBar({ title, badge: 'GB/T 1800' }),
         body,
+        footer: keypadController.keypadEl(),
       }),
     );
   },

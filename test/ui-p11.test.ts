@@ -255,3 +255,48 @@ describe('p11 料型示意图（V4.9-B）', () => {
     expect(figureTexts()).toEqual(['D 60', 'L 100', 't 5']);
   });
 });
+
+// V4.12-B · 底部数字键盘全站统一（用户指令 2026-11-10）：
+// 动态字段键集（D/L、S/L、D/t/L、W/T/L）全 unsigned；形状切换后键盘写回新字段集。
+describe('p11 底部数字键盘（V4.12-B）', () => {
+  function keypadButton(key: string): HTMLButtonElement {
+    const button = page().querySelector<HTMLButtonElement>(`.rc-keypad__key[data-key="${key}"]`);
+    if (!button) throw new Error(`键盘键 ${key} 不存在`);
+    return button;
+  }
+
+  it('13 键键盘存在；默认 active=D：del → 5 → 重量与 core 逐位一致（0.0154≥0.01 走 2 位小数）', () => {
+    expect(page().querySelector('.rc-keypad')).not.toBeNull();
+    expect(page().querySelectorAll('.rc-keypad__key')).toHaveLength(13);
+
+    keypadButton('del').click();
+    expect(page().querySelector<HTMLInputElement>('.rc-input__field[name="D"]')?.value).toBe('5');
+    // m = 7.85 × (π×5²/4×100)/1e6 = 0.015413 kg ≥ 0.01 → formatMass 走 toFixed(2)
+    const mass5 = barWeight({ shape: 'round', dims: { D: 5, L: 100 }, density: 7.85 }).massKg;
+    expect(statText()).toBe(`${mass5.toFixed(2)}kg`);
+  });
+
+  it('del 到空 → 「—」诚实提示；键入 3 → D=3 走 4 位小数分支（<0.01）', () => {
+    keypadButton('del').click();
+    keypadButton('del').click();
+    expect(page().querySelector<HTMLInputElement>('.rc-input__field[name="D"]')?.value).toBe('');
+    expect(statText()).toBe('—kg');
+
+    keypadButton('3').click();
+    expect(page().querySelector<HTMLInputElement>('.rc-input__field[name="D"]')?.value).toBe('3');
+    // m = 7.85 × (π×3²/4×100)/1e6 = 0.005549 kg < 0.01 → formatMass 走 toFixed(4)
+    const mass3 = barWeight({ shape: 'round', dims: { D: 3, L: 100 }, density: 7.85 }).massKg;
+    expect(statText()).toBe(`${mass3.toFixed(4)}kg`);
+  });
+
+  it('形状切换后键盘写回新字段集：钢管 D/t/L，del 只打到 active 首字段 D', () => {
+    clickSeg('钢管');
+    keypadButton('del').click();
+    expect(page().querySelector<HTMLInputElement>('.rc-input__field[name="D"]')?.value).toBe('6');
+    expect(page().querySelector<HTMLInputElement>('.rc-input__field[name="t"]')?.value).toBe('5');
+    expect(page().querySelector<HTMLInputElement>('.rc-input__field[name="L"]')?.value).toBe('100');
+    // sign 键对 unsigned 字段为 no-op
+    keypadButton('sign').click();
+    expect(page().querySelector<HTMLInputElement>('.rc-input__field[name="D"]')?.value).toBe('6');
+  });
+});

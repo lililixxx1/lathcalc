@@ -8,9 +8,13 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { addHistory } from '../src/ui/store';
 import { createRouter, type PageId, type Router } from '../src/ui/router';
+import pkg from '../package.json';
 
 let app: HTMLElement;
 let router: Router;
+
+/** V4.12-C：与构建期注入同源对拍（package.json version）。 */
+const APP_VERSION: string = pkg.version;
 
 const TILE_NAMES = [
   '螺纹',
@@ -138,8 +142,9 @@ describe('p01 结构保真', () => {
 
   it('离线声明与 Home 指示条存在，且 p01 无内联 style', () => {
     const page = currentPage();
+    // V4.12-C：页脚版本 = 构建期 __APP_VERSION__ 注入（源 package.json），对拍同源。
     expect(page.querySelector('.rc-home__footer')?.textContent).toBe(
-      '完全离线 · 无登录 · 无广告 · v0.1',
+      `完全离线 · 无登录 · 无广告 · v${APP_VERSION}`,
     );
     expect(page.querySelector('.la-home')).not.toBeNull();
     expect(page.querySelectorAll('[style]')).toHaveLength(0);

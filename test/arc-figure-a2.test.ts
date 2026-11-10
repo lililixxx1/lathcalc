@@ -324,11 +324,13 @@ describe('arc-figure-a2 · AC03 两圆弧内切', () => {
     expect(fig.arcs.map((a) => a.sweep)).toEqual([1, 1, 1, 1]);
   });
 
-  it('值标签集逐字断言：R1=25 / R2=10 / dZ=9（R2 置圆2内，A4 仲裁）', () => {
+  it('值标签集逐字断言：R1=25 / R2=10 / dZ=9（R2 圆外右侧 + 引线，V4.12 A4-R 整改）', () => {
     const fig = buildArcFigure('AC03', { R1: 25, R2: 10, dZ: 9 });
     expect(fig.labels.map((l) => l.text)).toEqual(['R1=25', 'R2=10', 'dZ=9']);
     expect(fig.labels.every((l) => l.anchor === 'middle')).toBe(true);
-    expect(fig.refDashes).toHaveLength(1);
+    // 圆内门限收紧（圆心点漆半径净距 DOT_CLEAR=3.36）后默认案直径 10.8 < 9.28+6.72
+    // → 走圆外引线支路：连心线 + 引线 = 2 条 refDash
+    expect(fig.refDashes).toHaveLength(2);
   });
 
   it('参数响应：第二组输入(20,8,6) 图变且标签随值', () => {
@@ -820,12 +822,36 @@ describe('V4.6 标签打磨：框距/避让（WAVE-PLAN-V4.6 §1 裁决）', () 
     expect(leader.x1).toBeCloseTo(c2.x + 5 * fig.scale, 6);
   });
 
-  it('AC03 默认 R2=10：圆内放得下 → 垂直居中、无引线（回归）', () => {
+  it('AC03 默认 R2=10：圆内放不下（V4.12 A4-R：圆心点叠字）→ 圆外右侧 + 引线；R2=20 圆内 → 圆心点下方', () => {
+    // 旧回归（圆内垂直居中 y=C2v.y+0.95）在 A4-R 实拍 FAIL：圆心点漆 (C2v) 叠字——
+    // 文字宽 9.28 vs 小圆直径 10.8 余量仅 1.52，居中偏移必叠点/切弧。门限收紧后默认案
+    // 走圆外引线（同 R2=5 支路）；圆内支路仅在直径 ≥ 字宽 + 2×DOT_CLEAR 时取点下方。
     const fig = buildArcFigure('AC03', { R1: 25, R2: 10, dZ: 9 });
     const c2 = fig.centerDots[1]!;
     const r2 = fig.labels[1]!;
-    expect(Math.abs(r2.y - 0.95 - c2.y)).toBeLessThanOrEqual(1.1);
-    expect(fig.refDashes).toHaveLength(1);
+    expect(fig.refDashes).toHaveLength(2); // 连心线 + 引线
+    expect(r2.y).toBeCloseTo(c2.y, 5); // 圆外右侧支路：与小圆心同高（引线水平）
+    const leader = fig.refDashes[1]!;
+    expect(leader.y1).toBeCloseTo(leader.y2, 9);
+
+    // 圆内支路换大门限输入（R2=20：直径视图 2×10.8 ≥ 9.28+6.72）→ 点下方 + 无引线
+    const big = buildArcFigure('AC03', { R1: 25, R2: 20, dZ: 3 });
+    const bc2 = big.centerDots[1]!;
+    const br2 = big.labels[1]!;
+    expect(big.refDashes).toHaveLength(1);
+    expect(br2.y).toBeCloseTo(bc2.y + 3.36, 5); // DOT_CLEAR = 0.5+0.3+0.8×3.2
+    // 字盒四角到圆心距 ≤ R2·s − 0.3（不切弧）
+    const w2 = br2.text.length * 0.58 * 3.2;
+    const corners = [
+      [br2.x - w2 / 2, br2.y - 0.8 * 3.2],
+      [br2.x + w2 / 2, br2.y - 0.8 * 3.2],
+      [br2.x - w2 / 2, br2.y + 0.25 * 3.2],
+      [br2.x + w2 / 2, br2.y + 0.25 * 3.2],
+    ];
+    for (const corner of corners) {
+      const [cx, cy] = corner as [number, number];
+      expect(Math.hypot(cx - bc2.x, cy - bc2.y)).toBeLessThanOrEqual(20 * big.scale - 0.3);
+    }
   });
 
   it('AC06 两输入：dX 标签框在出口端点右侧、与出口段横向间隙 ≥0.5（V4.6-04）', () => {

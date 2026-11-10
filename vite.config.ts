@@ -2,8 +2,18 @@
 import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import { fileURLToPath, URL } from 'node:url';
+import { readFileSync } from 'node:fs';
+
+// V4.12-C：构建期注入 package.json version → __APP_VERSION__
+//（消费方 p01 页脚 / p14 分享长图；声明见 src/vite-env.d.ts）。
+const pkg = JSON.parse(readFileSync(fileURLToPath(new URL('./package.json', import.meta.url)), 'utf8')) as {
+  version: string;
+};
 
 export default defineConfig({
+  define: {
+    __APP_VERSION__: JSON.stringify(pkg.version),
+  },
   resolve: {
     alias: {
       '@core': fileURLToPath(new URL('./src/core', import.meta.url)),

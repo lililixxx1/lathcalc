@@ -257,3 +257,149 @@ export function circleExtremes(center: WP, radius: number): WP[] {
     { z: center.z, r: center.r + radius },
   ];
 }
+
+/* ============ 标签防碰撞后处理（V4.12-A，Lead 定向修法） ============
+ * 修法（派工单 V4.12-A，禁改架构）：按 labels 数组序为优先级（先者不动），对每个与
+ * 前面任一标签 est. bbox 相交（含净距不足）的标签，沿预设候选偏移方向序列逐步 nudge
+ * 直至消解，最后按 viewBox 边界钳位；buildArcFigure 出口统一应用于全部 12 参数化案。
+ * 硬约束：① 输出保持数组顺序与 text 不变（test/ui-p06-param.test.ts:77-88 有序断言）；
+ *         ② 零 DOM（纯数字，与映射几何无关）。
+ * 判定口径（派工单预置，禁自选他套估宽）：
+ *  - 字号 3.2 view-unit（src/ui/pages/p05.ts:336 font-size="3.2" 渲染真值，同
+ *    arc-figure-a2.ts:53 现行推导）
+ *  - 估宽 1.856 u/西文字符（= 0.58×3.2，arc-figure-a2.ts:50-58）；CJK 字符 3.2 u（1em）
+ *  - 字高框 [y−2.56, y+0.8]（0.8em+0.25em 基线框，同源 a2:50-58）
+ *  - 净距 = 两框 axis-gap max（V4.6-02 boxesOverlap pad 同式，arc-figure-a2.ts:59-63）；
+ *    验收阈值 1.5 view-unit（1.5/1.856≈0.81 字符宽；较 V4.6 0.4u 净空先例收紧）
+ * 先例锚（G0 勘正版）：两两避让 = arc-figure-a2.ts:292/315（0.64/步对角避让、0.4 净空）；
+ * viewBox 钳位 = triangle-figure.ts:181-185（V4.6-01）。
+ * 实现细化（对修法「nudge→钳位」次序的保守化）：候选位 = 偏移后立即钳位再判冲突——
+ * 保证被钳回边界的候选不会重新引入相交；未冲突标签仅钳位（最小位移）。
+ */
+
+/** 标签字号（view-unit；p05.ts:336 font-size="3.2"） */
+const RESOLVE_FONT = 3.2;
+/** 西文字符估宽 u（0.58em，a2:50-58 现行推导） */
+const RESOLVE_CHAR_W = 0.58 * RESOLVE_FONT;
+/** CJK 字符估宽 u（1em；现 12 案标签实测 Latin/符号，防未来 CJK 静默错算） */
+const RESOLVE_CJK_W = RESOLVE_FONT;
+/** 基线上方字高（0.8em → 2.56）与下方（0.25em → 0.8），a2:50-58 */
+const RESOLVE_ASCENT = 0.8 * RESOLVE_FONT;
+const RESOLVE_DESCENT = 0.25 * RESOLVE_FONT;
+
+/** CJK 判定：CJK 部首/统一表意/兼容表意/全角形声（U+2E80–9FFF、F900–FAFF、FF00–FFEF） */
+const isCjkChar = (ch: string): boolean => {
+  const c = ch.codePointAt(0) ?? 0;
+  return (
+    (c >= 0x2e80 && c <= 0x9fff) || (c >= 0xf900 && c <= 0xfaff) || (c >= 0xff00 && c <= 0xffef)
+  );
+};
+
+/** est. 文本宽：逐码点累计（西文 1.856 / CJK 3.2） */
+const resolveTextWidth = (text: string): number =>
+  [...text].reduce((sum, ch) => sum + (isCjkChar(ch) ? RESOLVE_CJK_W : RESOLVE_CHAR_W), 0);
+
+/** est. bbox（口径：middle=中心、start=左缘起；anchor='end' 无估宽口径 → 立即上抛
+ *  防静默错算，现 12 案无 end 用例） */
+function resolveLabelBox(l: ViewLabel): { x0: number; x1: number; y0: number; y1: number } {
+  if (l.anchor === 'end') {
+    throw new Error(`arc-figure-kit: anchor="end" 标签估宽口径未定义（"${l.text}"）`);
+  }
+  const w = resolveTextWidth(l.text);
+  const x0 = l.anchor === 'middle' ? l.x - w / 2 : l.x;
+  return { x0, x1: x0 + w, y0: l.y - RESOLVE_ASCENT, y1: l.y + RESOLVE_DESCENT };
+}
+
+/** 两框净距（axis-gap max，负值 = 相交；V4.6-02 先例式 arc-figure-a2.ts:59-63） */
+function resolveBoxGap(
+  a: { x0: number; x1: number; y0: number; y1: number },
+  b: { x0: number; x1: number; y0: number; y1: number },
+): number {
+  return Math.max(b.x0 - a.x1, a.x0 - b.x1, b.y0 - a.y1, a.y0 - b.y1);
+}
+
+export interface ResolveLabelOverlapsOpts {
+  /** 验收净距阈值（view-unit，默认 1.5——派工单判定口径） */
+  minGap?: number;
+  /** 每步偏移量（view-unit，默认 0.64——先例 arc-figure-a2.ts:315 步长） */
+  step?: number;
+  /** 每方向最大步数（默认 8——先例 arc-figure-a2.ts:325 上限） */
+  maxSteps?: number;
+  /** viewBox 宽（默认 64） */
+  width?: number;
+  /** viewBox 高（默认 34） */
+  height?: number;
+}
+
+/** 预设候选偏移方向序列（确定性；首方向 = V4.6-02 先例对角右上，其后右/上/左上/左/下；
+ *  对角步长按先例取每分量 ±step（合 0.905），不归一化） */
+const RESOLVE_DIRS: readonly ViewPoint[] = [
+  { x: 1, y: -1 },
+  { x: 1, y: 0 },
+  { x: 0, y: -1 },
+  { x: -1, y: -1 },
+  { x: -1, y: 0 },
+  { x: 0, y: 1 },
+];
+
+/** 按 viewBox 边界钳位（est. bbox 整体落入 [0,width]×[0,height]；先例
+ *  triangle-figure.ts:181-185 按字宽收钳的推广：middle 保中心语义、start 保左缘语义） */
+function clampLabelIntoView(l: ViewLabel, width: number, height: number): ViewLabel {
+  const w = resolveTextWidth(l.text);
+  const xMin = l.anchor === 'middle' ? w / 2 : 0;
+  const xMax = width - (l.anchor === 'middle' ? w / 2 : w);
+  return {
+    text: l.text,
+    anchor: l.anchor,
+    x: Math.min(Math.max(l.x, xMin), Math.max(xMin, xMax)),
+    y: Math.min(Math.max(l.y, RESOLVE_ASCENT), height - RESOLVE_DESCENT),
+  };
+}
+
+/**
+ * 确定性标签防碰撞后处理：数组序 = 优先级（labels[0] 永不参与避让，仅钳位）；i>0 逐个
+ * 与前面已定标签判净距（< minGap 即冲突），冲突者沿 RESOLVE_DIRS×maxSteps 候选格
+ * （偏移后钳位）取首个无冲突位；全耗尽则落钳位兜底位（由扫查测试披露）。输出保序保文，
+ * 零 DOM，不改动其它 FigureView 实体。
+ */
+export function resolveLabelOverlaps(
+  labels: readonly ViewLabel[],
+  opts: ResolveLabelOverlapsOpts = {},
+): ViewLabel[] {
+  const { minGap = 1.5, step = 0.64, maxSteps = 8, width = 64, height = 34 } = opts;
+  // anchor='end' 估宽口径未定义 → 入口统一上抛（防未来静默错算；现 12 案无 end 用例）
+  for (const l of labels) {
+    if (l.anchor === 'end') {
+      throw new Error(`arc-figure-kit: anchor="end" 标签估宽口径未定义（"${l.text}"）`);
+    }
+  }
+  const resolved: ViewLabel[] = [];
+  const conflictsWith = (cand: ViewLabel): boolean => {
+    const cb = resolveLabelBox(cand);
+    return resolved.some((r) => resolveBoxGap(cb, resolveLabelBox(r)) < minGap);
+  };
+  for (let i = 0; i < labels.length; i += 1) {
+    const src = labels[i]!;
+    let chosen = clampLabelIntoView(src, width, height); // 未冲突 / 兜底：仅钳位
+    if (i > 0 && conflictsWith(chosen)) {
+      let settled = false;
+      for (const d of RESOLVE_DIRS) {
+        for (let k = 1; k <= maxSteps; k += 1) {
+          const cand = clampLabelIntoView(
+            { text: src.text, anchor: src.anchor, x: src.x + d.x * step * k, y: src.y + d.y * step * k },
+            width,
+            height,
+          );
+          if (!conflictsWith(cand)) {
+            chosen = cand;
+            settled = true;
+            break;
+          }
+        }
+        if (settled) break;
+      }
+    }
+    resolved.push(chosen);
+  }
+  return resolved;
+}

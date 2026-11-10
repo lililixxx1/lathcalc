@@ -8,6 +8,11 @@
  */
 import { describe, expect, it } from 'vitest';
 import { buildArcFigure, fmtFigureValue, PARAMETRIC_CASES } from '../src/core/arc-figure';
+import {
+  resolveLabelOverlaps,
+  type ParametricCaseId,
+  type ViewLabel,
+} from '../src/core/arc-figure-kit';
 
 const C45 = Math.cos(Math.PI / 4); // cos45° = 0.7071067811865476
 const S45 = Math.sin(Math.PI / 4);
@@ -214,5 +219,98 @@ describe('arc-figure · 契约面', () => {
     expect(fmtFigureValue(-10)).toBe('-10');
     expect(fmtFigureValue(3.14159)).toBe('3.142'); // Math.round(v·1000)/1000
     expect(fmtFigureValue(-0)).toBe('0');
+  });
+});
+
+describe('arc-figure · V4.12-A 标签防碰撞后处理契约（kit resolveLabelOverlaps）', () => {
+  // 判定口径（派工单预置）：font=3.2（p05.ts:336）；估宽 0.58em=1.856（a2:50-58）；
+  // 字高框 [y−2.56, y+0.8]；净距 = axis-gap max（a2:59-63 先例式）；阈值 1.5。
+  const FONT = 3.2;
+  const CHAR_W = 0.58 * FONT;
+  const box = (l: ViewLabel) => {
+    const w = l.text.length * CHAR_W;
+    const x0 = l.anchor === 'middle' ? l.x - w / 2 : l.x;
+    return { x0, x1: x0 + w, y0: l.y - 0.8 * FONT, y1: l.y + 0.25 * FONT };
+  };
+  const gap = (
+    a: { x0: number; x1: number; y0: number; y1: number },
+    b: { x0: number; x1: number; y0: number; y1: number },
+  ) => Math.max(b.x0 - a.x1, a.x0 - b.x1, b.y0 - a.y1, a.y0 - b.y1);
+
+  it('硬约束①：输出保序保文保锚（数组序与 text 不变，ui-p06-param.test.ts:77-88 有序断言前提）', () => {
+    // 合成三标签：前两框叠印（middle 同点位），第三框与前者 x 重叠
+    const src: ViewLabel[] = [
+      { text: 'R5', x: 30, y: 10, anchor: 'middle' },
+      { text: 'α45°', x: 30, y: 10, anchor: 'middle' },
+      { text: 'Ø36', x: 33, y: 33.5, anchor: 'middle' },
+    ];
+    const out = resolveLabelOverlaps(src);
+    expect(out.map((l) => l.text)).toEqual(['R5', 'α45°', 'Ø36']);
+    expect(out.map((l) => l.anchor)).toEqual(['middle', 'middle', 'middle']);
+    expect(out).toHaveLength(src.length);
+    // labels[0] 优先级最高：永不避让，仅钳位（本例在界内 → 原位不动）
+    expect(out[0]!.x).toBe(src[0]!.x);
+    expect(out[0]!.y).toBe(src[0]!.y);
+    // 输入对象不被原地改写（纯函数）
+    expect(src[1]!.x).toBe(30);
+    expect(src[1]!.y).toBe(10);
+  });
+
+  it('避让生效：冲突标签 nudge 后两两净距 ≥1.5u 且全部落 viewBox 64×34 内', () => {
+    const src: ViewLabel[] = [
+      { text: 'R5', x: 30, y: 10, anchor: 'middle' },
+      { text: 'α45°', x: 30, y: 10, anchor: 'middle' }, // 与 labels[0] 完全叠印
+      { text: 'Ø36', x: 33, y: 33.5, anchor: 'middle' }, // 降部 0.8 越下缘（33.5+0.8=34.3>34）
+    ];
+    const out = resolveLabelOverlaps(src);
+    const boxes = out.map(box);
+    for (let i = 0; i < boxes.length; i += 1) {
+      for (let j = i + 1; j < boxes.length; j += 1) {
+        expect(gap(boxes[i]!, boxes[j]!)).toBeGreaterThanOrEqual(1.5);
+      }
+      expect(boxes[i]!.x0).toBeGreaterThanOrEqual(0);
+      expect(boxes[i]!.x1).toBeLessThanOrEqual(64);
+      expect(boxes[i]!.y0).toBeGreaterThanOrEqual(0);
+      expect(boxes[i]!.y1).toBeLessThanOrEqual(34);
+    }
+    // 确定性：同输入两次调用逐位一致
+    expect(JSON.stringify(resolveLabelOverlaps(src))).toBe(JSON.stringify(out));
+  });
+
+  it('anchor="end" 立即上抛（估宽口径未定义，防未来静默错算——派工单口径）', () => {
+    expect(() =>
+      resolveLabelOverlaps([{ text: 'X', x: 10, y: 10, anchor: 'end' }]),
+    ).toThrow(/anchor="end"/);
+  });
+
+  it('buildArcFigure 出口已应用：12 案默认值 labels 两两净距 ≥1.5u 且锚点全界内（口径同 sweep）', () => {
+    // 默认值源 src/ui/pages/p06.ts:105-118（逐案 :行；与 test/label-sweep.test.ts 同源同值）
+    const defaults: Record<ParametricCaseId, Record<string, number>> = {
+      AC01: { R: 5, angle: 45, stepD: 36 }, // p06.ts:106
+      AC02: { R1: 10, R2: 15, dZ: 15 }, // p06.ts:107
+      AC03: { R1: 25, R2: 10, dZ: 9 }, // p06.ts:108
+      AC04: { R1: 5, R2: 3, angle: 45 }, // p06.ts:109
+      AC05: { R: 4, stepX: 20, stepZ: -10 }, // p06.ts:110
+      AC06: { R: 10, dX: 12, dZ: 8 }, // p06.ts:111
+      AC07: { R: 5, dX: 30, dZ: -30 }, // p06.ts:112
+      AC08: { R: 6, dZ: -4 }, // p06.ts:113
+      AC09: { R: 5, angle: 30 }, // p06.ts:114
+      AC10: { R: 5, lead: 3.5 }, // p06.ts:115
+      AC11: { R: 10 }, // p06.ts:116
+      AC12: { R: 3, boreD: 20 }, // p06.ts:117
+    };
+    for (const id of PARAMETRIC_CASES) {
+      const fig = buildArcFigure(id, defaults[id]!);
+      const boxes = fig.labels.map(box);
+      for (let i = 0; i < boxes.length; i += 1) {
+        for (let j = i + 1; j < boxes.length; j += 1) {
+          expect(gap(boxes[i]!, boxes[j]!)).toBeGreaterThanOrEqual(1.5);
+        }
+        expect(boxes[i]!.x0).toBeGreaterThanOrEqual(0);
+        expect(boxes[i]!.x1).toBeLessThanOrEqual(64);
+        expect(boxes[i]!.y0).toBeGreaterThanOrEqual(0);
+        expect(boxes[i]!.y1).toBeLessThanOrEqual(34);
+      }
+    }
   });
 });

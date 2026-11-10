@@ -34,6 +34,7 @@ import {
   SubText,
   TopBar,
   createBody,
+  createKeypadController,
   createPage,
   escapeHtml,
   injectStyle,
@@ -162,6 +163,19 @@ const page: PageModule = {
     const resultsWrap = document.createElement('div');
     resultsWrap.className = 'rc-p16__results';
 
+    // V4.12-B：底部数字键盘（用户指令全站统一）。只接 p / t 两个数字框；
+    // teeth 齿数串为多值文本（inputMode='text'），白名单排除、不接键盘。
+    const keypadTexts: Record<string, string> = { p: state.p, t: state.t };
+    const keypadController = createKeypadController({
+      texts: keypadTexts,
+      allowed: (field) => field === 'p' || field === 't',
+      onChange: (field) => {
+        if (field === 'p') state.p = keypadTexts.p ?? state.p;
+        else if (field === 't') state.t = keypadTexts.t ?? state.t;
+        paintResults();
+      },
+    });
+
     /** 挂轮系示意图卡（V4.8-02）：默认空，首次成功求解后填充；失败保上一帧。 */
     const diagramCard = Card({
       className: 'rc-p16__diagram',
@@ -178,30 +192,34 @@ const page: PageModule = {
 
     const inputStack = document.createElement('div');
     inputStack.className = 'rc-p16__stack';
-    inputStack.append(
-      InputRow({
-        label: '工件螺距 P',
-        value: state.p,
-        unit: 'mm',
-        name: 'p',
-        ariaLabel: '工件螺距 P（mm）',
-        onInput: (value) => {
-          state.p = value;
-          paintResults();
-        },
-      }),
-      InputRow({
-        label: '丝杠导程 T',
-        value: state.t,
-        unit: 'mm',
-        name: 't',
-        ariaLabel: '丝杠导程 T（mm）',
-        onInput: (value) => {
-          state.t = value;
-          paintResults();
-        },
-      }),
-    );
+    const pRow = InputRow({
+      label: '工件螺距 P',
+      value: state.p,
+      unit: 'mm',
+      name: 'p',
+      ariaLabel: '工件螺距 P（mm）',
+      onInput: (value) => {
+        state.p = value;
+        keypadTexts.p = value;
+        paintResults();
+      },
+    });
+    const tRow = InputRow({
+      label: '丝杠导程 T',
+      value: state.t,
+      unit: 'mm',
+      name: 't',
+      ariaLabel: '丝杠导程 T（mm）',
+      onInput: (value) => {
+        state.t = value;
+        keypadTexts.t = value;
+        paintResults();
+      },
+    });
+    keypadController.register('p', pRow);
+    keypadController.register('t', tRow);
+    keypadController.setActive('p');
+    inputStack.append(pRow, tRow);
 
     const setInfo = SubText('', { className: 'rc-p16__setinfo' });
     const teethInput = InputRow({
@@ -389,6 +407,7 @@ const page: PageModule = {
 
     paintResults();
 
+    // V4.12-B 补位：键盘走页级 footer 槽（.la-body 滚动区之外常显；p16 本有 overflow-y 覆盖）
     body.append(
       Card({
         children: [Eyebrow('工件 / 丝杠'), inputStack],
@@ -405,6 +424,7 @@ const page: PageModule = {
         id: 'p16',
         top: TopBar({ title }),
         body,
+        footer: keypadController.keypadEl(),
       }),
     );
     // 挂载后布局就绪初判：默认 17 枚齿数串（20 … 100，68 字符）在 390px 必溢出

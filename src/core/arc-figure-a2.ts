@@ -96,28 +96,35 @@ export function figureAC02(input: Record<string, number>): FigureView {
   const C1v = map.toView(C1);
   const C2v = map.toView(C2);
   const Tv = map.toView(T);
-  const e = unitView(subView(C2v, C1v)); // 连心线屏幕单位向量
   const s = map.scale;
 
-  // §3 标签锚法：R1 在 C1 外侧沿 −e；R2 在 C2 外侧沿 +e；dZ 在圆心中点下方
-  // （圆底屏幕 y = Cv.y + R·s，取两圆较大者 +3）
+  // §3 标签锚法（V4.12 Lead 补位，A4-R 实拍 FAIL 整改）：沿 ±e 逃逸 2.2 对 9.28 宽
+  // 字盒几何不可行——最近角到圆心距离恒 < 半径（默认案 R1 角距 4.01 < 6），标签
+  // 压小圆弧线。改侧距锚法（工程制图惯例）：R1 → C1 左侧中高、R2 → C2 右侧中高，
+  // 盒缘距圆弧恒 0.6（RIM_CLEAR）；dZ → 底行 y=34−0.8（AC07/08 金样同款约定）对齐
+  // C2 正下——对齐圆心中点则 C1 圆底点 (26,30.5) 距盒顶 30.64 仅 0.14 贴线，对齐
+  // C2 时 C1 弧线在盒左缘 x=30.36 处 y=28.61，净距 2.03。
+  const w = (text: string): number => text.length * LABEL_CHAR_W;
+  const r1Text = `R1=${fmtFigureValue(R1)}`;
+  const r2Text = `R2=${fmtFigureValue(R2)}`;
+  const RIM_CLEAR = 0.6; // 弧线漆半宽 0.3 + 视觉余量 0.3
   const labels: ViewLabel[] = [
     {
-      text: `R1=${fmtFigureValue(R1)}`,
-      x: C1v.x - (R1 * s + 2.2) * e.x,
-      y: C1v.y - (R1 * s + 2.2) * e.y,
+      text: r1Text,
+      x: Math.max(C1v.x - (R1 * s + RIM_CLEAR) - w(r1Text) / 2, 0.4 + w(r1Text) / 2),
+      y: C1v.y,
       anchor: 'middle',
     },
     {
-      text: `R2=${fmtFigureValue(R2)}`,
-      x: C2v.x + (R2 * s + 2.2) * e.x,
-      y: C2v.y + (R2 * s + 2.2) * e.y,
+      text: r2Text,
+      x: Math.min(C2v.x + R2 * s + RIM_CLEAR + w(r2Text) / 2, 63.6 - w(r2Text) / 2),
+      y: C2v.y,
       anchor: 'middle',
     },
     {
       text: `dZ=${fmtFigureValue(dZ)}`,
-      x: (C1v.x + C2v.x) / 2,
-      y: Math.max(C1v.y + R1 * s, C2v.y + R2 * s) + 3,
+      x: C2v.x,
+      y: 33.2, // viewBox 高 34 − 字盒下沉 0.8（kit labelBox y1 = y+0.8）
       anchor: 'middle',
     },
   ];
@@ -167,21 +174,25 @@ export function figureAC03(input: Record<string, number>): FigureView {
   const C1v = map.toView(C1);
   const C2v = map.toView(C2);
   const Tv = map.toView(T);
-  const e = unitView(subView(C2v, C1v));
   const s = map.scale;
 
-  // §3 标签锚法：R1 在 C1 外侧沿 −e；R2 圆内垂直居中（V4.6-03：原 +2.8 基线下沉，
-  // 小圆内文字框底边切弧）——但文字宽 > 小圆直径时圆内无论如何都压弧（A4-R1 FAIL：
-  // R2=5 时左右弧切 R/5 笔画 + 圆心点叠字）→ 改为**圆外右侧 + 水平虚线引线到小圆
-  // 右缘**（引线走 refDashes 层，p05 层序在实线之下）；dZ 在圆心中点下方（圆1 底 +3）
+  // §3 标签锚法（V4.12 Lead 补位）：R1 在 C1 外侧沿 −e —— 沿 −e 逃逸对宽字盒几何
+  // 不可行（同 AC02 勘误），改左侧中高侧距锚（盒缘距大圆弧 0.6）；R2 圆内置圆心点
+  // 下方（V4.6-03 圆内居中在 A4-R 实拍 FAIL：圆心点漆 (36.86,10.52) 叠字——文字宽
+  // 9.28 vs 小圆直径 10.8 余量仅 1.52，任何居中偏移必叠点或切弧，圆内仅在直径 ≥
+  // 字宽 + 2×DOT_CLEAR 时放点下方）；否则圆外右侧 + 水平虚线引线到小圆右缘（V4.6
+  // 机制原样，默认案 R2=10 即走此分支）；dZ 在圆心中点下方（圆1 底 +3，A4 实拍通过）
   const r2Text = `R2=${fmtFigureValue(R2)}`;
   const r2W = r2Text.length * LABEL_CHAR_W;
   const r2H = 1.05 * LABEL_FONT;
+  // 圆心点下方净放距：点漆半径 ≈0.5 + 余量 0.3 + 字盒上高 0.8×3.2 = 3.36
+  const DOT_CLEAR = 0.5 + 0.3 + 0.8 * LABEL_FONT;
   let r2Label: ViewLabel;
   let r2Leader: WSeg | null = null;
-  if (2 * R2 * s >= r2W + 1.0) {
-    // 圆内放得下（默认 R2=10：直径 10.8 > 字宽 7.42）→ 垂直居中
-    r2Label = { text: r2Text, x: C2v.x, y: C2v.y + 1.0, anchor: 'middle' };
+  if (2 * R2 * s >= r2W + 2 * DOT_CLEAR) {
+    // 圆内点下方放得下（直径 ≥ 字宽 + 2×净放距）：盒角到圆心距
+    // √((w/2)²+(DOT_CLEAR+0.8)²) ≤ R2·s − 0.3 恒成立（w/2 ≥1.3 时，代数可证）
+    r2Label = { text: r2Text, x: C2v.x, y: C2v.y + DOT_CLEAR, anchor: 'middle' };
   } else {
     // 圆外右侧：文字框整体推到外圆（C1,R1）之外，留 0.8 余量；右缘钳位 ≤59
     const dy = Math.max(0, Math.abs(C1v.y - C2v.y) - r2H / 2);
@@ -193,18 +204,32 @@ export function figureAC03(input: Record<string, number>): FigureView {
       to: { z: C2.z + (x - r2W / 2 - C2v.x) / s, r: C2.r }, // 标签左缘
     };
   }
+  // dZ 底行 x：盒顶距大圆底弧 ≥0.3（弧漆半宽）→ 盒左缘 ≥ C1v.x + √((R1·s)² − (盒顶−0.3−C1v.y)²)。
+  // 默认案：√(13.5²−13.34²)=2.07 → 盒左缘 ≥34.07，取 37.79（圆心中点 34.43 处弧底
+  // (32,30.5) 距盒顶 30.64 仅 0.14 压漆，label-sweep Lead 补位机检拦截）
+  const dzText = `dZ=${fmtFigureValue(dZ)}`;
+  const dzRowY = Math.min(C1v.y + R1 * s + 3, 34 - 0.8); // 底行钳位（kit labelBox 下沉 0.8）
+  const dzTop = dzRowY - 0.8 * LABEL_FONT;
+  const dzClearX =
+    C1v.x + Math.sqrt(Math.max(0, (R1 * s) ** 2 - (dzTop - 0.3 - C1v.y) ** 2));
   const labels: ViewLabel[] = [
     {
       text: `R1=${fmtFigureValue(R1)}`,
-      x: C1v.x - (R1 * s + 2.2) * e.x,
-      y: C1v.y - (R1 * s + 2.2) * e.y,
+      x: Math.max(
+        C1v.x - R1 * s - 0.6 - (`R1=${fmtFigureValue(R1)}`.length * LABEL_CHAR_W) / 2,
+        0.4 + (`R1=${fmtFigureValue(R1)}`.length * LABEL_CHAR_W) / 2,
+      ),
+      y: C1v.y,
       anchor: 'middle',
     },
     r2Label,
     {
-      text: `dZ=${fmtFigureValue(dZ)}`,
-      x: (C1v.x + C2v.x) / 2,
-      y: C1v.y + R1 * s + 3,
+      text: dzText,
+      x: Math.max(
+        (C1v.x + C2v.x) / 2,
+        dzClearX + (dzText.length * LABEL_CHAR_W) / 2 + 0.01,
+      ),
+      y: dzRowY,
       anchor: 'middle',
     },
   ];
@@ -284,32 +309,40 @@ export function figureAC04(input: Record<string, number>): FigureView {
   const C2v = map.toView(C2);
   const s = map.scale;
 
-  // §3 标签锚法：R1/R2 在虚半径中点沿 rotScreen(单位半径向量) 外移；V4.6-02b：
-  // 偏移 2.6 → 5.4——2.6 时字框被 C↔P 灰虚线穿过（A4-R1 WARN：R1=5 的 5 顶 /
-  // R1=4 的 =4 字隙），5.4 实测框线距离 0.91–0.97（两输入），仍在 64×34 内框内。
-  // α 用 V4.3 α 式（斜线屏幕方向 u_view=(cosα,−sinα)，标签在 P1 反向 −2.2）。
-  // V4.6-02：α 初位与 R1 标签框相交（两输入实测 ≈3.2×2.9 / 4.7×3.0 单位）——
-  // 按 0.64/步对角右上避让，直到与 R1/R2 框不重叠（留 0.4 净空）且字框不含圆心点
-  // （r=0.9 + 0.5 余量），上限 8 步；仍贴 P1 外侧上方，锚法语义不变。
+  // §3 标签锚法：R1 沿虚半径中点 rotScreen(单位半径向量) 外移 5.4（V4.6-02b 实拍
+  // 通过不动）。R2/α 在 V4.12 Lead 补位实拍 FAIL 重锚（A4-R 视觉终验）：
+  //   R2=3（默认案）：5.4·rDir 锚的 est 盒 [38.19,42.86]×[13.71,17.07] 含过渡弧2
+  //   下凸点 (42.0,16.74)（圆2 视图心 (42.0,10.12) r 6.62）→ 弧穿 R/2 字。改圆2
+  //   右侧侧距锚（同 AC02/AC03 款）：x = C2v.x + R2·s + 0.6 + w/2，y = C2v.y——
+  //   盒缘距虚线整圆2恒 0.6，距切线段/弧1 横向 ≥2.5（默认案实算）。
+//   α45°（默认案）：P1 反向 −2.2 锚的 est 盒落在虚线整圆1（r 11.03）径向穿越带
+//   [6.1,13.35] → 虚线穿 5 字。改斜线中点法向下侧距 d=5.5：45° 斜线到盒最近角
+//   （右上角）距离 = d − 0.707·(w/2 + 2.56) = 5.5 − 4.43 = 1.07 ≥ 0.3（漆半宽；
+//   0.707×(3.71+2.56)=4.43，α 盒 4 字宽半 3.71——V4.12 G2 C-01 勘正：初笔 5.09
+//   误代 5 字半宽 4.64）；d 下界同式 ≈ 4.73，取 5.5。
   const r1Dir = rotScreen(unitView(subView(P1v, C1v)));
-  const r2Dir = rotScreen(unitView(subView(P2v, C2v)));
-  const uView = rotScreen({ x: Math.cos(alpha), y: -Math.sin(alpha) });
   const r1Label: ViewLabel = {
     text: `R1=${fmtFigureValue(R1)}`,
     x: midView(C1v, P1v).x + 5.4 * r1Dir.x,
     y: midView(C1v, P1v).y + 5.4 * r1Dir.y,
     anchor: 'middle',
   };
+  const r2Text = `R2=${fmtFigureValue(R2)}`;
   const r2Label: ViewLabel = {
-    text: `R2=${fmtFigureValue(R2)}`,
-    x: midView(C2v, P2v).x + 5.4 * r2Dir.x,
-    y: midView(C2v, P2v).y + 5.4 * r2Dir.y,
+    text: r2Text,
+    x: C2v.x + R2 * s + 0.6 + (r2Text.length * LABEL_CHAR_W) / 2,
+    y: C2v.y,
     anchor: 'middle',
   };
+  // 斜线中点 + 法向下侧（屏幕 y 向下：取法向 y 分量为正的一侧）：
+  const mid = midView(P1v, P2v);
+  const segDir = unitView(subView(P2v, P1v));
+  const down =
+    segDir.x >= 0 ? { x: -segDir.y, y: segDir.x } : { x: segDir.y, y: -segDir.x };
   const alphaLabel: ViewLabel = {
     text: `α${fmtFigureValue(alphaDeg)}°`,
-    x: P1v.x - 2.2 * uView.x,
-    y: P1v.y - 2.2 * uView.y,
+    x: mid.x + 5.5 * down.x,
+    y: mid.y + 5.5 * down.y,
     anchor: 'middle',
   };
   // 按 0.64/步（对角 0.905）向右上避让，直到与 R1/R2 框不重叠（留 0.4 净空）

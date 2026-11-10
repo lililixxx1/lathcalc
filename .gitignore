@@ -17,3 +17,6 @@ Thumbs.db
 *.log
 .zcode-site/
 .zcode-site.json
+
+# V4.12 会话工具残留（video-agent-kit plugin_root 探测产物，与本仓无关）
+.video_agent/

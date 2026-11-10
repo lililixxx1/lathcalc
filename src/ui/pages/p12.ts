@@ -28,12 +28,14 @@ import {
   SubText,
   TopBar,
   createBody,
+  createKeypadController,
   createPage,
   escapeHtml,
   injectStyle,
 } from '../components';
 
 const CSS = `
+.la-page[data-page="p12"] .la-body { overflow-y: auto; }
 .rc-p12__diagram { padding: 10px; display: grid; place-items: center; }
 .rc-p12__diagram svg { color: var(--la-ink-body); }
 .rc-p12__params { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
@@ -192,10 +194,17 @@ const page: PageModule = {
   render(ctx: PageContext): void {
     injectStyle('rc-p12-styles', CSS);
 
-    const state: { mode: Mode; values: Record<FieldKey, string> } = {
+    const state: { mode: Mode; values: Record<FieldKey, string> & Record<string, string> } = {
       mode: modeFromParam(ctx.params.get('mode')),
       values: { a: '30', b: '40', c: '50', A: '', B: '', C: '' },
     };
+
+    // V4.12-B：底部数字键盘（用户指令全站统一）。texts 即 state.values（引用稳定）；
+    // 裸 input 直接 register（控制器「el 本身是 input」分支），键集随模式（SSS a/b/c 等）。
+    const keypadController = createKeypadController({
+      texts: state.values,
+      onChange: () => renderResult(),
+    });
 
     const diagramCard = Card({ className: 'rc-p12__diagram' });
     const paramsWrap = document.createElement('div');
@@ -369,9 +378,11 @@ const page: PageModule = {
             renderResult();
           });
           label.append(key, input);
+          keypadController.register(field.key, input);
           return label;
         }),
       );
+      keypadController.setActive(MODE_FIELDS[state.mode][0]?.key ?? '');
     }
 
     const segmented = Segmented({
@@ -390,6 +401,7 @@ const page: PageModule = {
     renderResult();
 
     const body = createBody({ className: 'rc-p12__body' });
+    // V4.12-B 补位：键盘走页级 footer 槽（.la-body 滚动区之外常显，见 CSS overflow-y 覆盖）
     body.append(segmented, diagramCard, paramsWrap, resultWrap, chipsWrap, accWrap);
 
     ctx.root.append(
@@ -397,6 +409,7 @@ const page: PageModule = {
         id: 'p12',
         top: TopBar({ title }),
         body,
+        footer: keypadController.keypadEl(),
       }),
     );
   },

@@ -35,12 +35,14 @@ import {
   StatBlock,
   TopBar,
   createBody,
+  createKeypadController,
   createPage,
   escapeHtml,
   injectStyle,
 } from '../components';
 
 const CSS = `
+.la-page[data-page="p11"] .la-body { overflow-y: auto; }
 .rc-p11__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .rc-p11__grid .la-input { min-width: 0; }
 .rc-p11__density { display: flex; flex-wrap: wrap; gap: 7px; }
@@ -225,6 +227,13 @@ const page: PageModule = {
       values: defaultValues('round'),
     };
 
+    // V4.12-B：底部数字键盘（用户指令全站统一）。texts 即 state.values（引用稳定，
+    // 形状切换只原地清空重填，见 renderSeg）；键集随形状动态（D/L、S/L、D/t/L、W/T/L）。
+    const keypadController = createKeypadController({
+      texts: state.values,
+      onChange: () => renderResult(),
+    });
+
     const segWrap = document.createElement('div');
     segWrap.className = 'rc-p11__seg';
     const inputsWrap = document.createElement('div');
@@ -310,7 +319,9 @@ const page: PageModule = {
           onChange: (value) => {
             if (!isWeightShape(value) || value === state.shape) return;
             state.shape = value;
-            state.values = defaultValues(value);
+            // V4.12-B：原地清空重填（state.values 引用 = 键盘控制器值字典，不可整体替换）
+            for (const key of Object.keys(state.values)) delete state.values[key];
+            Object.assign(state.values, defaultValues(value));
             renderSeg();
             renderInputs();
             renderResult();
@@ -320,8 +331,8 @@ const page: PageModule = {
     }
 
     function renderInputs(): void {
-      const nodes = SHAPE_FIELDS[state.shape].map((field) =>
-        InputRow({
+      const nodes = SHAPE_FIELDS[state.shape].map((field) => {
+        const row = InputRow({
           label: field.label,
           unit: field.unit,
           name: field.key,
@@ -331,9 +342,12 @@ const page: PageModule = {
             state.values[field.key] = value;
             renderResult();
           },
-        }),
-      );
+        });
+        keypadController.register(field.key, row);
+        return row;
+      });
       inputsWrap.replaceChildren(...nodes);
+      keypadController.setActive(SHAPE_FIELDS[state.shape][0]?.key ?? '');
     }
 
     function renderDensity(): void {
@@ -358,6 +372,7 @@ const page: PageModule = {
     renderResult();
 
     const body = createBody({ className: 'rc-p11__body' });
+    // V4.12-B 补位：键盘走页级 footer 槽（.la-body 滚动区之外常显，见 CSS overflow-y 覆盖）
     body.append(segWrap, inputsWrap, densityWrap, figureCard, resultWrap, accWrap);
 
     ctx.root.append(
@@ -365,6 +380,7 @@ const page: PageModule = {
         id: 'p11',
         top: TopBar({ title }),
         body,
+        footer: keypadController.keypadEl(),
       }),
     );
   },

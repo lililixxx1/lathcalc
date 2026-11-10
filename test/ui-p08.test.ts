@@ -343,3 +343,57 @@ describe('p08 公差带示意图（V4.7）', () => {
     expect(diagramTexts().sort().join('/')).toBe(before);
   });
 });
+
+// V4.12-B · 底部数字键盘全站统一（用户指令 2026-11-10）：
+// nominal 单框 unsigned；del 清空 → 提示帧；键入 1/8 → Ø18 黄金值（段 (10,18] IT7=18 μm）。
+describe('p08 底部数字键盘（V4.12-B）', () => {
+  function keypadButton(key: string): HTMLButtonElement {
+    const button = currentPage().querySelector<HTMLButtonElement>(
+      `.rc-keypad__key[data-key="${key}"]`,
+    );
+    if (!button) throw new Error(`键盘键 ${key} 不存在`);
+    return button;
+  }
+
+  it('13 键键盘存在；del×2 清空 nominal → 输入区提示帧', async () => {
+    await router.navigate('p08');
+    expect(currentPage().querySelector('.rc-keypad')).not.toBeNull();
+    expect(currentPage().querySelectorAll('.rc-keypad__key')).toHaveLength(13);
+
+    keypadButton('del').click();
+    keypadButton('del').click();
+    expect(currentPage().querySelector<HTMLInputElement>('input[name="nominal"]')?.value).toBe('');
+    expect(currentPage().querySelector('.rc-p08__hint')?.textContent).toContain('内置公差表范围');
+    expect(currentPage().querySelector('.rc-stattriple')).toBeNull();
+  });
+
+  it('空值后键入 1/8 → nominal=18 → statValues 黄金值（IT7=18 μm）+ 配合标头跟随', async () => {
+    await router.navigate('p08');
+    keypadButton('del').click(); // '40' → '4'
+    keypadButton('del').click(); // '4' → ''
+
+    keypadButton('1').click();
+    keypadButton('8').click();
+    expect(currentPage().querySelector<HTMLInputElement>('input[name="nominal"]')?.value).toBe(
+      '18',
+    );
+    // core 双路径：Ø18 落 (10,18] 闭端点，IT7=18 μm → +0.018/0.000/0.018
+    expect(statValues()).toEqual(['+0.018', '0.000', '0.018']);
+    expect(currentPage().querySelector('.rc-p08__presetlabel')?.textContent).toBe(
+      '常用配合（Ø18 H7 …）',
+    );
+  });
+
+  it('sign 键对 unsigned nominal 为 no-op（值 40 不变）', async () => {
+    await router.navigate('p08');
+    const signKey = currentPage().querySelector<HTMLButtonElement>(
+      '.rc-keypad__key[data-key="sign"]',
+    );
+    expect(signKey?.disabled).toBe(true); // unsigned 字段激活 → sign 置灰
+    signKey?.click();
+    expect(currentPage().querySelector<HTMLInputElement>('input[name="nominal"]')?.value).toBe(
+      '40',
+    );
+    expect(statValues()).toEqual(['+0.025', '0.000', '0.025']);
+  });
+});

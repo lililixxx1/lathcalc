@@ -11,7 +11,9 @@
  *   Vc = n·π·D / 1000             （surfaceSpeed 反解，DEFERRED #13 已 core 化）
  *   vf = f·n                      （feedRate；f 有效时在结果区追加进给卡）
  * 自绘键盘写入「当前高亮输入行」：默认在求转速模式下指向 Vc，在求线速度模式下指向 n；
- * 点击 / 聚焦任意输入行可切换写入目标（.rc-p09__input--active 高亮；f 行同样可写）。
+ * 点击 / 聚焦任意输入行可切换写入目标（.la-input--active 高亮；f 行同样可写）。
+ * V4.12-B：键盘与编辑规则重构到共用 KeypadController（components/Keypad.ts），
+ * 编辑语义零漂移（数字 / '.' / '0' / del / maxLen=10 与原 onKeypad 逐条一致）。
  *
  * 页面参数（README §5.2 冻结链路）：`d`（工件直径 mm）、`vc`（线速度 m·min⁻¹）、
  * `f`（每转进给 mm/r，可选；WAVE-PLAN-V2 §1 新增键）。
@@ -22,7 +24,6 @@
  * 图卡插在输入区之后、标尺/结果卡之前（派工单「输入后、结果前」原则）。
  */
 import type { PageContext, PageModule } from '../router';
-import type { KeypadKey } from '../components';
 import { feedRate, spindleSpeed, surfaceSpeed } from '../../core/speed';
 import {
   SPEED_FIGURE_VIEW,
@@ -33,13 +34,13 @@ import {
   Accordion,
   Card,
   InputRow,
-  Keypad,
   ResultCard,
   Scale,
   Segmented,
   StatBlock,
   TopBar,
   createBody,
+  createKeypadController,
   createPage,
   escapeHtml,
   injectStyle,
@@ -47,7 +48,6 @@ import {
 
 const CSS = `
 .rc-p09__inputs { display: flex; flex-direction: column; gap: 9px; }
-.rc-p09__input--active { border-color: var(--la-accent); }
 .rc-p09__hint { font-size: 12px; line-height: 1.55; color: var(--la-accent-ink); padding: 0 2px; }
 .rc-p09__result { display: flex; flex-direction: column; gap: 9px; }
 /* V4.9 切速示意图卡（同 p08/p16 示意图卡布局） */
@@ -68,12 +68,8 @@ const SCALE_MAX_RPM = 1500;
 type Mode = 'rpm' | 'vc';
 type Field = 'd' | 'vc' | 'rpm' | 'f';
 
-interface Texts {
-  d: string;
-  vc: string;
-  rpm: string;
-  f: string;
-}
+/** V4.12-B：值字典直传共用控制器，键集固定为 d/vc/rpm/f（原 Texts 接口收窄取消）。 */
+type Texts = Record<Field, string>;
 
 function parseNum(text: string): number | null {
   const trimmed = text.trim();
@@ -158,7 +154,7 @@ const page: PageModule = {
     const dParam = Number(ctx.params.get('d'));
     const vcParam = Number(ctx.params.get('vc'));
     const fParam = Number(ctx.params.get('f'));
-    const texts: Texts = {
+    const texts: Texts & Record<string, string> = {
       d: Number.isFinite(dParam) && dParam > 0 ? String(dParam) : '50',
       vc: Number.isFinite(vcParam) && vcParam > 0 ? String(vcParam) : '150',
       rpm: '',
@@ -178,8 +174,16 @@ const page: PageModule = {
     const accWrap = document.createElement('div');
     accWrap.className = 'rc-p09__acc';
 
-    const inputEls: Partial<Record<Field, HTMLInputElement>> = {};
-    const rowEls: Partial<Record<Field, HTMLElement>> = {};
+    // V4.12-B：共用键盘控制器。texts 即页面 Texts 对象；编辑语义与原 onKeypad 逐条一致
+    // （del 截尾 / '.' 单点 / 数字 maxLen=10 / '0' 替换），白名单沿用原 allowed 判定。
+    const keypadController = createKeypadController({
+      texts,
+      onChange: () => paintResult(),
+      allowed: (field) =>
+        field === 'd' ||
+        field === 'f' ||
+        (state.mode === 'rpm' ? field === 'vc' : field === 'rpm'),
+    });
 
     // V4.9 切速示意图卡：输入区之后、标尺/结果卡之前；非法输入保上一帧（V4.9-05）
     const figureCard = Card({
@@ -212,9 +216,7 @@ const page: PageModule = {
 
     function setActive(field: Field): void {
       state.active = field;
-      for (const [key, el] of Object.entries(rowEls)) {
-        if (el) el.classList.toggle('rc-p09__input--active', key === field);
-      }
+      keypadController.setActive(field);
     }
 
     function paintResult(): void {
@@ -329,17 +331,10 @@ const page: PageModule = {
 
     function renderInputs(): void {
       inputWrap.replaceChildren();
-      for (const key of Object.keys(inputEls) as Field[]) delete inputEls[key];
-      for (const key of Object.keys(rowEls) as Field[]) delete rowEls[key];
 
+      // V4.12-B：登记到共用控制器（focusin / click → setActive 由控制器挂接）。
       const register = (field: Field, row: HTMLElement): void => {
-        rowEls[field] = row;
-        const input = row.querySelector<HTMLInputElement>('input');
-        if (input) {
-          inputEls[field] = input;
-          input.addEventListener('focusin', () => setActive(field));
-        }
-        row.addEventListener('click', () => setActive(field));
+        keypadController.register(field, row);
       };
 
       const dRow = InputRow({
@@ -402,29 +397,8 @@ const page: PageModule = {
       setActive(state.active);
     }
 
-    function onKeypad(key: KeypadKey): void {
-      const field = state.active;
-      const allowed =
-        field === 'd' ||
-        field === 'f' ||
-        (state.mode === 'rpm' ? field === 'vc' : field === 'rpm');
-      if (!allowed) return;
-      const current = texts[field];
-      let next: string;
-      if (key === 'del') {
-        next = current.slice(0, -1);
-      } else if (key === '.') {
-        if (current.includes('.')) return;
-        next = current === '' ? '0.' : `${current}.`;
-      } else {
-        if (current.length >= 10) return;
-        next = current === '0' ? key : `${current}${key}`;
-      }
-      texts[field] = next;
-      const input = inputEls[field];
-      if (input) input.value = next;
-      paintResult();
-    }
+    // V4.12-B：原 onKeypad 编辑规则（p09.ts:405-427 现行）已迁入共用控制器，
+    // 数字 / '.' / del / maxLen 语义零漂移；sign 键因本页无 signed 字段恒置灰。
 
     const modeSeg = Segmented({
       options: [
@@ -452,17 +426,12 @@ const page: PageModule = {
 
     renderInputs();
     paintResult();
-    body.append(
-      modeSeg,
-      inputWrap,
-      figureCard,
-      scaleWrap,
-      resultWrap,
-      accWrap,
-      Keypad({ onKey: onKeypad, ariaLabel: '数字键盘：输入当前高亮字段' }),
-    );
+    // V4.12-B 补位：键盘走页级 footer 槽（.la-body 滚动区之外常显；p09 本有 overflow-y 覆盖）
+    body.append(modeSeg, inputWrap, figureCard, scaleWrap, resultWrap, accWrap);
 
-    ctx.root.append(createPage({ id: 'p09', top: TopBar({ title }), body }));
+    ctx.root.append(
+      createPage({ id: 'p09', top: TopBar({ title }), body, footer: keypadController.keypadEl() }),
+    );
   },
 };
 

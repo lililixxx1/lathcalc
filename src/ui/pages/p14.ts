@@ -305,7 +305,8 @@ export function buildShareLayout(entry: StoredEntry): ShareLayout {
   const footerTop = height - 104;
   rects.push({ x: SHARE_PADDING, y: footerTop, width: innerWidth, height: 1, color: 'border' });
   texts.push({
-    text: '完全离线 · 本机生成 · 车工算 v0.1',
+    // V4.12-C：版本号构建期注入（同 p01 页脚，消除 v0.1 硬编码陈旧）。
+    text: `完全离线 · 本机生成 · 车工算 v${__APP_VERSION__}`,
     x: SHARE_PADDING,
     y: footerTop + 32,
     size: 18,

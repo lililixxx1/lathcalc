@@ -333,3 +333,55 @@ describe('p12 多模式解算（W6-C4）', () => {
     expect(chipTexts()).toEqual(['直角三角形', '勾股校验通过']);
   });
 });
+
+// V4.12-B · 底部数字键盘全站统一（用户指令 2026-11-10）：
+// 裸 input 直接 register（控制器「el 本身是 input」分支）；模式切换后写回新字段集。
+describe('p12 底部数字键盘（V4.12-B）', () => {
+  function keypadButton(key: string): HTMLButtonElement {
+    const button = page().querySelector<HTMLButtonElement>(`.rc-keypad__key[data-key="${key}"]`);
+    if (!button) throw new Error(`键盘键 ${key} 不存在`);
+    return button;
+  }
+
+  function fieldValue(field: 'a' | 'b' | 'c' | 'A' | 'B' | 'C'): string {
+    return (
+      page().querySelector<HTMLInputElement>(`.rc-p12__field[data-field="${field}"]`)?.value ?? ''
+    );
+  }
+
+  it('13 键键盘存在；默认 active=a：del → 3 → 3/40/50 构不成三角形提示帧', () => {
+    expect(page().querySelector('.rc-keypad')).not.toBeNull();
+    expect(page().querySelectorAll('.rc-keypad__key')).toHaveLength(13);
+
+    keypadButton('del').click();
+    expect(fieldValue('a')).toBe('3');
+    // a=3, b=40, c=50：3+40 < 50 → 非法三角形
+    expect(page().querySelector('.rc-p12__hint')?.textContent).toBe('三边不能构成三角形');
+  });
+
+  it('再 del 到空 → 模式输入提示；键入 3/0 → a=30 黄金值 36.87°/53.13°/90.00° 复原', () => {
+    keypadButton('del').click();
+    keypadButton('del').click();
+    expect(fieldValue('a')).toBe('');
+    expect(page().querySelector('.rc-p12__hint')?.textContent).toBe('输入三边 a / b / c');
+
+    keypadButton('3').click();
+    keypadButton('0').click();
+    expect(fieldValue('a')).toBe('30');
+    expect(resultValue('∠A')).toBe('36.87°');
+    expect(resultValue('∠B')).toBe('53.13°');
+    expect(resultValue('∠C')).toBe('90.00°');
+  });
+
+  it('sign 键对 unsigned 字段为 no-op + 模式切换后写回新字段集（SAS del 只打到 b）', () => {
+    keypadButton('sign').click();
+    expect(fieldValue('a')).toBe('30'); // unsigned → no-op
+
+    clickSeg('sas');
+    expect(fieldKeys()).toEqual(['b', 'c', 'A']);
+    keypadButton('del').click();
+    expect(fieldValue('b')).toBe('4'); // b '40' 截尾
+    expect(fieldValue('c')).toBe('50');
+    expect(fieldValue('A')).toBe('');
+  });
+});

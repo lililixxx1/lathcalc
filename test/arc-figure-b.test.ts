@@ -128,9 +128,11 @@ describe('arc-figure-b · AC07 凸圆弧收尾', () => {
     // Ø 锚：圆柱中点线下 +3（A4-R1/V4.4-06：原上方−3 限高映射下溢出 viewBox 被裁）
     expect(fig.labels[1]!.x).toBeCloseTo(m.x((dZ - 2.8 * R + (dZ + R)) / 2), 6);
     expect(fig.labels[1]!.y).toBeCloseTo(m.y(dX / 2) + 3, 6);
-    // Z 锚：(map(dZ), y_axis+3)
+    // Z 锚：(map(dZ), y_axis+3)；V4.12-A 出口钳位（kit clampLabelIntoView）：
+    //   axis.y1 = 30.5（h 定界 y0=30.5）→ 原锚 y = 33.5，降部 0.25em×3.2 = 0.8 出
+    //   viewBox 下缘 34 → 基线钳至 34−0.8 = 33.2
     expect(fig.labels[2]!.x).toBeCloseTo(m.x(dZ), 6);
-    expect(fig.labels[2]!.y).toBeCloseTo(fig.axis.y1 + 3, 6);
+    expect(fig.labels[2]!.y).toBeCloseTo(Math.min(fig.axis.y1 + 3, 34 - 0.8), 6);
   });
 
   it('参数响应：第二组输入下 scale/轮廓/标签均变化', () => {
@@ -214,7 +216,9 @@ describe('arc-figure-b · AC08 端面切弧', () => {
   it('值标签集逐字：R6 / dZ=-4（§4 表；多字符键等号 V4.4-02）', () => {
     expect(fig.labels.map((l) => l.text)).toEqual(['R6', 'dZ=-4']);
     expect(fig.labels[1]!.x).toBeCloseTo(m.x(dZ), 6);
-    expect(fig.labels[1]!.y).toBeCloseTo(fig.axis.y1 + 3, 6);
+    // V4.12-A 出口钳位（kit clampLabelIntoView）：axis.y1 = 30.5（h 定界 y0=30.5）→
+    //   原锚 y = 33.5，降部 0.25em×3.2 = 0.8 出 viewBox 下缘 34 → 基线钳至 34−0.8 = 33.2
+    expect(fig.labels[1]!.y).toBeCloseTo(Math.min(fig.axis.y1 + 3, 34 - 0.8), 6);
   });
 
   it('参数响应：dZ=−4→+3 镜像且标签随值', () => {
@@ -384,12 +388,19 @@ describe('arc-figure-b · AC10 圆弧螺纹入口', () => {
 
   it('值标签集逐字：R5 / lead=3.5（§4 表；多字符键等号 V4.4-02）', () => {
     expect(fig.labels.map((l) => l.text)).toEqual(['R5', 'lead=3.5']);
-    // R 锚：Cv−(R·s+2.2)·(1,0)
+    // R 锚（V4.12 Lead 补位重锚）：x 同旧 Cv−(R·s+2.2)，y 下移 2.86 至轴线下方
+    //（= 0.3 漆半宽 + 2.56 字盒上高；旧 y=Cv.y 时 est 盒被轴线 y=17 横穿，A4-R FAIL）
     expect(fig.labels[0]!.x).toBeCloseTo(m.x(0) - (R * m.s + 2.2), 6);
-    expect(fig.labels[0]!.y).toBeCloseTo(m.y(0), 6);
-    // lead 锚：mid(Tv,Ev)+(0,3.5)
-    expect(fig.labels[1]!.x).toBeCloseTo((m.x(0) + m.x(lead)) / 2, 6);
-    expect(fig.labels[1]!.y).toBeCloseTo((m.y(R) + m.y(eR)) / 2 + 3.5, 6);
+    expect(fig.labels[0]!.y).toBeCloseTo(m.y(0) + 2.86, 6);
+    // lead 锚（同轮重锚）：R 标签同排左侧，与 R 盒净距 1.6（旧 mid(T,E)+3.5 锚 est 盒
+    // x∈[48.72,52.08] 段被虚线整圆与实弧穿越，A4-R FAIL）
+    const rHalf = (2 * 0.58 * 3.2) / 2; // "R5" 2 字符半宽
+    const leadHalf = (8 * 0.58 * 3.2) / 2; // "lead=3.5" 8 字符半宽
+    expect(fig.labels[1]!.x).toBeCloseTo(
+      m.x(0) - (R * m.s + 2.2) - rHalf - 1.6 - leadHalf,
+      6,
+    );
+    expect(fig.labels[1]!.y).toBeCloseTo(m.y(0) + 2.86, 6);
   });
 
   it('参数响应：R/lead 第二组输入下弧起位置/标签/scale 均变化', () => {

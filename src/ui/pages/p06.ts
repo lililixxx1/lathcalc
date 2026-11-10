@@ -40,6 +40,7 @@ import {
   TopBar,
   WarnCard,
   createBody,
+  createKeypadController,
   createPage,
   injectStyle,
 } from '../components';
@@ -49,6 +50,7 @@ import { arcCaseGraphic, arcCaseParametricSVG } from './p05';
 export const title = '圆弧 · 切点计算';
 
 const CSS = `
+.la-page[data-page="p06"] .la-body { overflow-y: auto; }
 .rc-p06__body { padding-top: 2px; gap: 8px; }
 .la-card.rc-p06__diagram-card { padding: 10px; display: grid; place-items: center; color: var(--la-ink-body); }
 .rc-p06__diagram { width: 100%; }
@@ -240,6 +242,13 @@ function renderCase(ctx: PageContext, arcCase: ArcCaseSolver): void {
     rear: false,
   };
 
+  // V4.12-B：底部数字键盘（用户指令全站统一）。texts 即 state.values；
+  // signed 规则 = 键名 stepZ / dZ（默认负值源 DEFAULTS AC05 :110 / AC07 :112 / AC08 :113）。
+  const keypadController = createKeypadController({
+    texts: state.values,
+    onChange: () => renderResult(),
+  });
+
   const body = createBody({ className: 'rc-p06__body' });
 
   const diagram = document.createElement('div');
@@ -273,19 +282,20 @@ function renderCase(ctx: PageContext, arcCase: ArcCaseSolver): void {
   form.className = 'rc-p06__form';
   for (const key of arcCase.inputs) {
     const meta = metaFor(arcCase.id, key);
-    form.append(
-      InputRow({
-        label: meta.label,
-        value: state.values[key] ?? '',
-        unit: meta.unit,
-        name: key,
-        onInput: (value) => {
-          state.values[key] = value;
-          renderResult();
-        },
-      }),
-    );
+    const row = InputRow({
+      label: meta.label,
+      value: state.values[key] ?? '',
+      unit: meta.unit,
+      name: key,
+      onInput: (value) => {
+        state.values[key] = value;
+        renderResult();
+      },
+    });
+    form.append(row);
+    keypadController.register(key, row, { signed: key === 'stepZ' || key === 'dZ' });
   }
+  keypadController.setActive(arcCase.inputs[0] ?? '');
 
   const resultHost = document.createElement('div');
   resultHost.className = 'rc-p06__result';
@@ -316,6 +326,9 @@ function renderCase(ctx: PageContext, arcCase: ArcCaseSolver): void {
   // 展开会超出 390×844（body overflow hidden），故默认收起，避免整页滚动或内容裁切。
   const accordion = Accordion({ open: false, content: formulaContent(arcCase.id) });
 
+  // V4.12-B 补位：键盘走页级 footer 槽（.la-body 之外）——body 是滚动容器
+  // （下方 overflow-y 覆盖），键盘沉在 body 末尾时长工况图首屏看不到（A4-R FAIL）；
+  // footer 槽固定于滚动区外，与 p09 同构，输入页键盘常显。
   body.append(diagramCard, form, resultHost, toolbar, accordion);
 
   /** 计算并重建结果区（输入即算；求解异常以 WarnCard 呈现，不冒泡）。 */
@@ -400,6 +413,7 @@ function renderCase(ctx: PageContext, arcCase: ArcCaseSolver): void {
         },
       }),
       body,
+      footer: keypadController.keypadEl(),
     }),
   );
 }

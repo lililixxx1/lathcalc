@@ -160,7 +160,9 @@ const page: PageModule = {
 
     const footer = document.createElement('div');
     footer.className = 'rc-home__footer';
-    footer.textContent = '完全离线 · 无登录 · 无广告 · v0.1';
+    // V4.12-C：版本号构建期注入（vite define __APP_VERSION__ ← package.json），
+    // 消除 v0.1 硬编码陈旧——用户可据此判断 SW 缓存是否已更新。
+    footer.textContent = `完全离线 · 无登录 · 无广告 · v${__APP_VERSION__}`;
 
     ctx.root.append(
       createPage({
