@@ -409,3 +409,12 @@ describe('p03 牙型剖面图（WAVE-PLAN-V4.9 A 卡）', () => {
     expect(page().querySelector('.rc-p03__figure')).toBeNull();
   });
 });
+
+
+describe('p03 滚动 opt-in（V4.13）', () => {
+  it('rc-p03-styles 注入含 .la-body overflow-y:auto（全站滚动审计缺陷页回归网）', async () => {
+    await router.navigate('p03');
+    const css = document.getElementById('rc-p03-styles')?.textContent ?? '';
+    expect(css).toContain('.la-page[data-page="p03"] .la-body { overflow-y: auto; }');
+  });
+});

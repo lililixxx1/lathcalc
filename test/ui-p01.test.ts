@@ -241,3 +241,13 @@ describe('p01 最近使用动态化（W5 集成，DEFERRED #9 落实）', () => 
     expect(chips[2]?.textContent).toBe('莫氏 4 号');
   });
 });
+
+describe('p01 滚动 opt-in（V4.13）', () => {
+  it('rc-p01-styles 注入含 .la-body overflow-y:auto（首页划不到底修复回归网）', async () => {
+    await router.navigate('p01');
+    const css = document.getElementById('rc-p01-styles')?.textContent ?? '';
+    expect(css).toContain('.la-page[data-page="p01"] .la-body { overflow-y: auto; }');
+    // scoped：不得误伤其他页
+    expect(css).not.toContain('[data-page="p02"]');
+  });
+});

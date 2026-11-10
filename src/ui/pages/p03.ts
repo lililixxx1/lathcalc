@@ -121,6 +121,13 @@ const CSS = `
 .rc-p03__body .la-formula { overflow-wrap: anywhere; }
 .rc-p03__figure { padding: 10px; display: grid; place-items: center; }
 .rc-p03__figure svg { color: var(--la-ink-body); }
+
+/* V4.13：滚动 opt-in（全站滚动审计坐实：重型族参数化态溢出且无滚动通道——
+   trapezoid Tr40x7 三视口裁 +171/+275/+335px、sealpipe R1/16 裁 +129/+233/+293px
+   （CLIP-NOSCROLL）；默认占位态恰好装得下故此前未暴露。滚动模型与 p01 同源取证
+   （#app 100dvh + .la-body 默认 hidden，见 components/base.ts:13 / PageShell.ts:21-23）。
+   证据：docs/evidence/V4.13/runs/scroll-audit.json） */
+.la-page[data-page="p03"] .la-body { overflow-y: auto; }
 `;
 
 function readFamily(value: string | null): RouteFamily | null {

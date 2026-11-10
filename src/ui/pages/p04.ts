@@ -157,7 +157,13 @@ const CSS = `
 .rc-p04__controls { display: flex; flex-direction: column; gap: 9px; flex: 0 0 auto; }
 /* 六格参数在 390px 下保持单行（设计稿 3 列紧凑排布） */
 .rc-p04__body .rc-param { padding: 7px 8px; gap: 4px; }
-/* W12 A4-W6：组件值格 overflow-wrap:anywhere 会在 KND 口径注（0.001mm）内部断词，
+
+/* V4.13：滚动 opt-in（全站滚动审计坐实：长程序态 sealpipe G76 在 390x680 裁 +36px
+   且无滚动通道（CLIP-NOSCROLL）；默认态 -128px 装得下故此前未暴露。同 p01/p03
+   取证与先例。证据：docs/evidence/V4.13/runs/scroll-audit.json） */
+.la-page[data-page="p04"] .la-body { overflow-y: auto; }
+/* W12 A4-W6（G2-V4.13 C-01 恢复——V4.13 初笔插入脚本误删此 3 行，git 对照 HEAD 复原）：
+   组件值格 overflow-wrap:anywhere 会在 KND 口径注（0.001mm）内部断词，
    p04 域内回落标准折行（全角括号前后可断、0.001mm 整词不断） */
 .rc-p04__body .rc-param__value { overflow-wrap: normal; }
 `;

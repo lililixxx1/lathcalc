@@ -717,3 +717,12 @@ describe('p03 → p04 锥管族跳转链路（W10-C；蜗杆行为不变）', ()
     );
   });
 });
+
+
+describe('p04 滚动 opt-in（V4.13）', () => {
+  it('rc-p04-styles 注入含 .la-body overflow-y:auto（全站滚动审计缺陷页回归网）', async () => {
+    await router.navigate('p04');
+    const css = document.getElementById('rc-p04-styles')?.textContent ?? '';
+    expect(css).toContain('.la-page[data-page="p04"] .la-body { overflow-y: auto; }');
+  });
+});

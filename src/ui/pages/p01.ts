@@ -32,6 +32,20 @@ const HOME_CSS = `
 .rc-home__chips { display: flex; gap: 7px; overflow: hidden; min-width: 0; }
 .rc-home__body { padding-top: 12px; }
 .rc-home__footer { text-align: center; font-size: 10.5px; color: var(--la-faint); padding: 0 0 6px; }
+
+/* V4.13：滚动 opt-in（用户反馈「首页划不到底，看不见三角卡片」。滚动模型取证：
+   #app 100dvh + .la-page/.la-body 默认 overflow:hidden（components/base.ts:13 /
+   PageShell.ts:21-23），滚动须各页自行开启——p01 此前无任何 opt-in：390x844 内容已
+   溢出裁切缘 +14px（12 卡恰贴边全见、页脚被裁），390x740 裁 +118px（三角卡
+   bottom=710 出局）、680 裁 +178px，整页无滚动通道（CLIP-NOSCROLL）。同 p06 等
+   12 页既有先例补 scoped 规则；内容装得下时 overflow-y:auto 零视觉变化。
+   证据：docs/evidence/V4.13/runs/scroll-audit.json） */
+.la-page[data-page="p01"] .la-body { overflow-y: auto; }
+/* V4.13（续）：折边分隔——footer 在 body 外独立 flex 带（PageShell），实测 footer.top ==
+   body 裁切缘（802==802，零间隙）：末排卡副标题下半在折边裁掉、页脚文字紧贴其下，
+   vision 误读为「两层文字相交」（几何不可交，但零间隙确易误读）。补 6px 分隔：
+   footer padding-top 6 → body flex:1 收缩 6px，折边与页脚文字带分离。 */
+.la-page[data-page="p01"] .rc-home__footer { padding-top: 6px; }
 `;
 
 interface HomeEntry {
