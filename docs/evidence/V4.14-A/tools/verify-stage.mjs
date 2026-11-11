@@ -3,8 +3,8 @@
  * 改自树内 docs/evidence/V4.14/baseline/tools/baseline-audit.mjs（同款 CDP WebSocket 骨架）。
  * 与基线工装差异：① 性能量测部分（PERF_INIT/PERF_READ/冷暖启循环/中位摘要）整体移除
  * ——量测独占窗口归 Lead 集成期（PROJECT-APPENDIX §A 量测条款），本工具只做几何断言；
- * ② 尺寸五档（+844×390 横屏，G0 I-03）；③ 断言改验收口径：≥560 pageW==540 / tileCols==3 /
- * appLeft==(winW−542)/2±2（542=540 内容+border 2，content-box），390 档与 baseline.json
+ * ② 尺寸五档（+844×390 横屏，G0 I-03）；③ 断言改验收口径：≥560 pageW==540 /
+ * tileCols 按冻结算式实宽推导（L1 裁决 2026-11-11，见下 judge 注）/
  * 同路由值对拍 ±1px（<560 零回归）；④ 保留 SW 预清理（V4.10 教训）+ bundle 对拍
  * （页面实跑 script[src] 哈希 == dist/assets/index-*.js 实际文件名）。
  *
@@ -42,7 +42,7 @@ const SIZES = [
   { id: '1920', w: 1920, h: 1080 },   // 全高清桌面（≥560 舞台档）
   { id: '844x390', w: 844, h: 390 },  // 横屏（G0 I-03，≥560 舞台档）
 ];
-const ROUTES = ['#/p01', '#/p02', '#/p06', '#/p09', '#/p12'];
+const ROUTES = ['#/p01', '#/p02', '#/p05', '#/p06', '#/p09', '#/p12'];
 
 /* 基线对拍值（docs/evidence/V4.14/baseline/baseline.json，2026-11-11 工装实测；
    无基线文件即抛错 fail-fast——缺基线不得判零回归） */
@@ -57,12 +57,14 @@ const PROBE = `(() => {
   const ar = appEl ? appEl.getBoundingClientRect() : null;
   const grid = document.querySelector('.la-grid2');
   let tileCols = null;
+  let gridW = null;
   if (grid) {
     const lefts = new Set();
     for (const child of grid.children) {
       lefts.add(Math.round(child.getBoundingClientRect().left * 10) / 10);
     }
     tileCols = lefts.size;
+    gridW = Math.round(grid.clientWidth);
   }
   const tile = document.querySelector('[class*=tile]');
   const input = document.querySelector('.la-input, .rc-param, [class*=input]');
@@ -72,7 +74,7 @@ const PROBE = `(() => {
     appW: ar ? Math.round(ar.width) : null,
     appLeft: ar ? Math.round(ar.left * 10) / 10 : null,
     hScroll: document.documentElement.scrollWidth > window.innerWidth + 1,
-    tileW: w(tile), inputW: w(input), tileCols,
+    tileW: w(tile), inputW: w(input), tileCols, gridW,
   };
 })()`;
 
@@ -118,7 +120,14 @@ function distIndexChunk() {
   return files[0];
 }
 
-/* 逐路由判定（派工单验收标准；返回 [断言名, 布尔] 数组） */
+/* 逐路由判定（派工单验收标准；返回 [断言名, 布尔] 数组）。
+   tileCols 断言口径（L1 裁决 2026-11-11，README「L1 裁决」节）：预期列数 = 冻结
+   163 算式按实测网格实宽推导 floor((gridW+9)/(163+9))——508→3 列（768/1280/1920
+   及真机横屏 overlay 滚动条）、493→2 列（844×390 桌面仿真经典滚动条 15px）、
+   358→2 列（390 竖屏）。同一公式自洽，不再按尺寸档写死。 */
+const GRID_MIN = 163;   // G0 C-01 冻结下限（WAVE-PLAN-V4.14.md §1.1）
+const GRID_GAP = 9;     // .la-grid2 gap（Tile.ts）
+const expectColsOf = (gridW) => Math.max(2, Math.floor((gridW + GRID_GAP) / (GRID_MIN + GRID_GAP)));
 function judge(size, pageId, v) {
   const checks = [];
   if (size.w >= STAGE_MIN) {
@@ -127,13 +136,17 @@ function judge(size, pageId, v) {
     const expectLeft = (size.w - (STAGE_W + STAGE_BORDER_TOTAL)) / 2;
     checks.push([`appLeft≈${expectLeft}±${TOL_LEFT}`,
       v.appLeft !== null && Math.abs(v.appLeft - expectLeft) <= TOL_LEFT]);
-    if (pageId === 'p01') checks.push(['tileCols==3', v.tileCols === 3]);
+    if (pageId === 'p01') {
+      const expectCols = v.gridW != null ? expectColsOf(v.gridW) : null;
+      checks.push([`tileCols==${expectCols}(式floor((${v.gridW}+9)/172)·L1口径)`, v.tileCols === expectCols && expectCols >= 2]);
+    }
   } else {
     const base = baselineOf(pageId);
     checks.push([`pageW==${size.w}`, v.pageW === size.w]);
     checks.push(['hScroll==false', v.hScroll === false]);
     if (pageId === 'p01') {
-      checks.push(['tileCols==2', v.tileCols === 2]);
+      const expectCols = v.gridW != null ? expectColsOf(v.gridW) : null;
+      checks.push([`tileCols==${expectCols}(式floor((${v.gridW}+9)/172)·L1口径)`, v.tileCols === expectCols && expectCols >= 2]);
       if (base?.tileW != null) {
         checks.push([`tileW≈基线${base.tileW}±${TOL_BASE}`,
           v.tileW != null && Math.abs(v.tileW - base.tileW) <= TOL_BASE]);
@@ -183,8 +196,8 @@ try {
       rows.push(row);
       console.log(`${pass ? 'PASS' : 'FAIL'}  ${s.w}x${s.h}  ${pageId}  pageW=${v.pageW} appW=${v.appW} appLeft=${v.appLeft} tileW=${v.tileW} inputW=${v.inputW} tileCols=${v.tileCols} hScroll=${v.hScroll} bundle=${bundleOk ? 'ok' : 'MISMATCH'}`);
       console.log(`       ${checks.map(([name, ok]) => `${ok ? 'ok' : 'NG'} ${name}`).join(' | ')}`);
-      // 截图留证：≥560 四档的 p01 与 p09（键盘页，验收风险项）
-      if (s.w >= STAGE_MIN && (pageId === 'p01' || pageId === 'p09')) {
+      // 截图留证：≥560 四档的 p01 与 p09（键盘页，验收风险项）与 p05（卡C hero 540 列适配拍证）
+      if (s.w >= STAGE_MIN && (pageId === 'p01' || pageId === 'p09' || pageId === 'p05')) {
         const shot = await client.send('Page.captureScreenshot', { format: 'png' });
         writeFileSync(join(OUT_DIR, `stage-${pageId}-${s.id}.png`), Buffer.from(shot.data, 'base64'));
       }

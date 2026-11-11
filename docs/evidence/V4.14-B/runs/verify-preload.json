@@ -1,27 +1,27 @@
 {
   "tool": "verify-preload.mjs",
-  "generatedAt": "2026-11-11T14:32:21.747Z",
+  "generatedAt": "2026-11-11T14:40:25.874Z",
   "injection": {
     "pass": true,
     "hasPreloadLink": true,
-    "href": "/assets/p01-DwgPbdlH.js",
-    "p01File": "p01-DwgPbdlH.js",
+    "href": "/assets/p01-CpxrjPA0.js",
+    "p01File": "p01-CpxrjPA0.js",
     "fileOnDisk": true
   },
   "revision": {
     "swEntryFound": true,
-    "swEntry": "{url:\"index.html\",revision:\"b45d30a16c97b8b32d9de6da27322d20\"",
-    "swRevision": "b45d30a16c97b8b32d9de6da27322d20",
-    "indexHtmlMd5": "b45d30a16c97b8b32d9de6da27322d20",
-    "indexHtmlSha256": "9091a1a6f464931bcd7632b7177e4f7ede367405935eeedc5871835566d59ac5",
+    "swEntry": "{url:\"index.html\",revision:\"46f0291f352a9a69196ef78a025bc8bc\"",
+    "swRevision": "46f0291f352a9a69196ef78a025bc8bc",
+    "indexHtmlMd5": "46f0291f352a9a69196ef78a025bc8bc",
+    "indexHtmlSha256": "e078fe0db510af2f17247f7c2573db7b1a6b7b1dc467763ffab7b2b81491aa60",
     "result": "MATCH(md5)"
   },
   "budget": {
-    "totalJsBytes": 270371,
+    "totalJsBytes": 272209,
     "jsFileCount": 37,
-    "indexChunkBytes": 12177,
+    "indexChunkBytes": 13307,
     "indexChunkFiles": [
-      "index-C5x0qv1v.js"
+      "index-DsdmcUIB.js"
     ],
     "routeChunkCount": 16,
     "routeChunkMin": 16,

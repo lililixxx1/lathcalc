@@ -51,8 +51,13 @@ vision 判读发现 p05 图库态页首无 hero；grep 坐实 hero 变体消费�
 - **vision 三轮**：舞台列 6/6 PASS（三窗 3 列一致/键盘卡片零越界/无重叠截断）；
   p06 hero 2/2 PASS（AC05 态等比完整/列内/两档一致）。不确定项机检补强：1px 边线
   存在性 = appW 542 全 30 格；色值 = ui-stage `var(--la-well)` 断言 + 相对判读；
-  ∅ 系冻结文案。探针两拍不稳即停（shot-p06-hero 直拍路径以 vision 收口，列几何有
-  首拍 pageLeft=114=(768−542)/2 留证）。
+  ∅ 系冻结文案。shot-p06-hero 探针两拍返回空（Runtime.evaluate 无返回值，疑似 SW
+  注销后导航未提交的竞态；两拍即停，根因未深挖）——该路径以 vision 收口，列几何以
+  runs/verify-stage.txt appLeft=113（=(768−542)/2，复算逐位）留证。
+- **机检复跑命令**（verify-stage.txt 档内命令行原文补记，G2 I-2）：
+  `npx vite preview --port 4173 --strictPort &` 前置，随后
+  `CHROME="C:\Program Files\Google\Chrome\Application\chrome.exe" CDP_PORT=9377 node docs/evidence/V4.14-A/tools/verify-stage.mjs http://localhost:4173/ docs/evidence/V4.14/runs`
+  （工作区/HEAD 同版，L1 口径 + p05 路由）。
 
 ## 六、G2 完整轮（plan-code-reviewer）
 
