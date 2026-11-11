@@ -1,0 +1,78 @@
+PASS  390x844  p01  pageW=390 appW=390 appLeft=0 tileW=175 inputW=null tileCols=2 hScroll=false bundle=ok
+       ok pageW==390 | ok hScroll==false | ok tileCols==2 | ok tileW≈基线175±1
+PASS  390x844  p02  pageW=390 appW=390 appLeft=0 tileW=null inputW=358 tileCols=null hScroll=false bundle=ok
+       ok pageW==390 | ok hScroll==false | ok inputW≈基线358±1
+PASS  390x844  p06  pageW=390 appW=390 appLeft=0 tileW=null inputW=null tileCols=null hScroll=false bundle=ok
+       ok pageW==390 | ok hScroll==false
+PASS  390x844  p09  pageW=390 appW=390 appLeft=0 tileW=null inputW=358 tileCols=null hScroll=false bundle=ok
+       ok pageW==390 | ok hScroll==false | ok inputW≈基线358±1
+PASS  390x844  p12  pageW=390 appW=390 appLeft=0 tileW=null inputW=82 tileCols=null hScroll=false bundle=ok
+       ok pageW==390 | ok hScroll==false | ok inputW≈基线82±1
+PASS  768x1024  p01  pageW=540 appW=542 appLeft=113 tileW=163 inputW=null tileCols=3 hScroll=false bundle=ok
+       ok pageW==540 | ok hScroll==false | ok appLeft≈113±2 | ok tileCols==3
+PASS  768x1024  p02  pageW=540 appW=542 appLeft=113 tileW=null inputW=508 tileCols=null hScroll=false bundle=ok
+       ok pageW==540 | ok hScroll==false | ok appLeft≈113±2
+PASS  768x1024  p06  pageW=540 appW=542 appLeft=113 tileW=null inputW=null tileCols=null hScroll=false bundle=ok
+       ok pageW==540 | ok hScroll==false | ok appLeft≈113±2
+PASS  768x1024  p09  pageW=540 appW=542 appLeft=113 tileW=null inputW=508 tileCols=null hScroll=false bundle=ok
+       ok pageW==540 | ok hScroll==false | ok appLeft≈113±2
+PASS  768x1024  p12  pageW=540 appW=542 appLeft=113 tileW=null inputW=132 tileCols=null hScroll=false bundle=ok
+       ok pageW==540 | ok hScroll==false | ok appLeft≈113±2
+PASS  1280x800  p01  pageW=540 appW=542 appLeft=369 tileW=163 inputW=null tileCols=3 hScroll=false bundle=ok
+       ok pageW==540 | ok hScroll==false | ok appLeft≈369±2 | ok tileCols==3
+PASS  1280x800  p02  pageW=540 appW=542 appLeft=369 tileW=null inputW=508 tileCols=null hScroll=false bundle=ok
+       ok pageW==540 | ok hScroll==false | ok appLeft≈369±2
+PASS  1280x800  p06  pageW=540 appW=542 appLeft=369 tileW=null inputW=null tileCols=null hScroll=false bundle=ok
+       ok pageW==540 | ok hScroll==false | ok appLeft≈369±2
+PASS  1280x800  p09  pageW=540 appW=542 appLeft=369 tileW=null inputW=493 tileCols=null hScroll=false bundle=ok
+       ok pageW==540 | ok hScroll==false | ok appLeft≈369±2
+PASS  1280x800  p12  pageW=540 appW=542 appLeft=369 tileW=null inputW=127 tileCols=null hScroll=false bundle=ok
+       ok pageW==540 | ok hScroll==false | ok appLeft≈369±2
+PASS  1920x1080  p01  pageW=540 appW=542 appLeft=689 tileW=163 inputW=null tileCols=3 hScroll=false bundle=ok
+       ok pageW==540 | ok hScroll==false | ok appLeft≈689±2 | ok tileCols==3
+PASS  1920x1080  p02  pageW=540 appW=542 appLeft=689 tileW=null inputW=508 tileCols=null hScroll=false bundle=ok
+       ok pageW==540 | ok hScroll==false | ok appLeft≈689±2
+PASS  1920x1080  p06  pageW=540 appW=542 appLeft=689 tileW=null inputW=null tileCols=null hScroll=false bundle=ok
+       ok pageW==540 | ok hScroll==false | ok appLeft≈689±2
+PASS  1920x1080  p09  pageW=540 appW=542 appLeft=689 tileW=null inputW=508 tileCols=null hScroll=false bundle=ok
+       ok pageW==540 | ok hScroll==false | ok appLeft≈689±2
+PASS  1920x1080  p12  pageW=540 appW=542 appLeft=689 tileW=null inputW=132 tileCols=null hScroll=false bundle=ok
+       ok pageW==540 | ok hScroll==false | ok appLeft≈689±2
+FAIL  844x390  p01  pageW=540 appW=542 appLeft=151 tileW=242 inputW=null tileCols=2 hScroll=false bundle=ok
+       ok pageW==540 | ok hScroll==false | ok appLeft≈151±2 | NG tileCols==3
+PASS  844x390  p02  pageW=540 appW=542 appLeft=151 tileW=null inputW=508 tileCols=null hScroll=false bundle=ok
+       ok pageW==540 | ok hScroll==false | ok appLeft≈151±2
+PASS  844x390  p06  pageW=540 appW=542 appLeft=151 tileW=null inputW=null tileCols=null hScroll=false bundle=ok
+       ok pageW==540 | ok hScroll==false | ok appLeft≈151±2
+PASS  844x390  p09  pageW=540 appW=542 appLeft=151 tileW=null inputW=493 tileCols=null hScroll=false bundle=ok
+       ok pageW==540 | ok hScroll==false | ok appLeft≈151±2
+PASS  844x390  p12  pageW=540 appW=542 appLeft=151 tileW=null inputW=127 tileCols=null hScroll=false bundle=ok
+       ok pageW==540 | ok hScroll==false | ok appLeft≈151±2
+== 判定行（脚本计算生成） ==
+PASS  390x844  p01
+PASS  390x844  p02
+PASS  390x844  p06
+PASS  390x844  p09
+PASS  390x844  p12
+PASS  768x1024  p01
+PASS  768x1024  p02
+PASS  768x1024  p06
+PASS  768x1024  p09
+PASS  768x1024  p12
+PASS  1280x800  p01
+PASS  1280x800  p02
+PASS  1280x800  p06
+PASS  1280x800  p09
+PASS  1280x800  p12
+PASS  1920x1080  p01
+PASS  1920x1080  p02
+PASS  1920x1080  p06
+PASS  1920x1080  p09
+PASS  1920x1080  p12
+FAIL  844x390  p01
+PASS  844x390  p02
+PASS  844x390  p06
+PASS  844x390  p09
+PASS  844x390  p12
+FAIL=1 / 25
+REAL_EXIT=1

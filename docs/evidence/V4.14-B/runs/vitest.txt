@@ -1,0 +1,129 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m<treeRoot>[39m
+
+ [32m✓[39m test/ui-p01.test.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 1130[2mms[22m[39m
+   [33m[2m✓[22m[39m p01 导航[2m > [22m10 个入口分别导航到 p02/p04/p05/p07/p08/p09/p10/p11/p12/p13 [33m 624[2mms[22m[39m
+ [32m✓[39m test/ui-p02.test.ts [2m([22m[2m23 tests[22m[2m)[22m[33m 1193[2mms[22m[39m
+ [32m✓[39m test/ui-p04.test.ts [2m([22m[2m44 tests[22m[2m)[22m[33m 606[2mms[22m[39m
+ [32m✓[39m test/ui-p16.test.ts [2m([22m[2m16 tests[22m[2m)[22m[33m 878[2mms[22m[39m
+ [32m✓[39m test/ui-p06.test.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 406[2mms[22m[39m
+ [32m✓[39m test/ui-p03.test.ts [2m([22m[2m21 tests[22m[2m)[22m[33m 321[2mms[22m[39m
+ [32m✓[39m test/ui-router.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 291[2mms[22m[39m
+ [32m✓[39m test/ui-p05.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 252[2mms[22m[39m
+ [32m✓[39m test/ui-p12.test.ts [2m([22m[2m23 tests[22m[2m)[22m[32m 261[2mms[22m[39m
+ [32m✓[39m test/ui-p08.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 261[2mms[22m[39m
+ [32m✓[39m test/ui-p11.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 224[2mms[22m[39m
+ [32m✓[39m test/ui-p07.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 234[2mms[22m[39m
+ [32m✓[39m test/ui-p09.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 188[2mms[22m[39m
+ [32m✓[39m test/ui-p13.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 172[2mms[22m[39m
+ [32m✓[39m test/ui-p15.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 129[2mms[22m[39m
+ [32m✓[39m test/ui-p14.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 156[2mms[22m[39m
+ [32m✓[39m test/ui-p10.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 113[2mms[22m[39m
+ [32m✓[39m test/ui-p06-param.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 86[2mms[22m[39m
+ [32m✓[39m test/ui-store.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m test/ui-components.test.ts [2m([22m[2m30 tests[22m[2m)[22m[32m 41[2mms[22m[39m
+ [32m✓[39m test/gear.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 169[2mms[22m[39m
+ [32m✓[39m test/arc-figure-a2.test.ts [2m([22m[2m28 tests[22m[2m)[22m[32m 22[2mms[22m[39m
+ [32m✓[39m test/ui-source.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 706[2mms[22m[39m
+   [33m[2m✓[22m[39m UI 源码契约[2m > [22m16 页 loader 在无 DOM 环境均可解析，且模块含 title/render [33m 686[2mms[22m[39m
+[90mstdout[2m | test/label-sweep.test.ts[2m > [22m[2mlabel-sweep · p06 圆弧工况图标签防重叠扫查（V4.12-A）[2m > [22m[2mAC01：默认值 + 边界输入 全部两两净距 ≥1.5u 且落 viewBox 内
+[22m[39m[sweep] AC01 {"R":5,"angle":45,"stepD":36} default p06.ts:106 labels=3 pairs=3 minGap=7.44 PASS | R5~α45°=7.44 R5~Ø36=11.23 α45°~Ø36=17.67
+[sweep] AC01 {"R":3,"angle":30,"stepD":20} arc-cases-a.test.ts:79 labels=3 pairs=3 minGap=6.93 PASS | R3~α30°=6.93 R3~Ø20=11.75 α30°~Ø20=20.44
+[sweep] AC01 {"R":12,"angle":30,"stepD":50} arc-figure.test.ts:110 labels=3 pairs=3 minGap=8.46 PASS | R12~α30°=10.03 R12~Ø50=8.46 α30°~Ø50=18.46
+[sweep] AC01 {"R":20,"angle":30,"stepD":20} arc-figure.test.ts:120 labels=3 pairs=3 minGap=8.99 PASS | R20~α30°=14.44 R20~Ø20=12.87 α30°~Ø20=8.99
+
+[90mstdout[2m | test/label-sweep.test.ts[2m > [22m[2mlabel-sweep · p06 圆弧工况图标签防重叠扫查（V4.12-A）[2m > [22m[2mAC02：默认值 + 边界输入 全部两两净距 ≥1.5u 且落 viewBox 内
+[22m[39m[sweep] AC02 {"R1":10,"R2":15,"dZ":15} default p06.ts:107 labels=3 pairs=3 minGap=10.96 PASS | R1=10~R2=15=25.20 R1=10~dZ=15=10.96 R2=15~dZ=15=17.34
+[sweep] AC02 {"R1":6,"R2":10,"dZ":8} arc-cases-a.test.ts:123 labels=3 pairs=3 minGap=9.55 PASS | R1=6~R2=10=22.90 R1=6~dZ=8=9.55 R2=10~dZ=8=17.30
+
+[90mstdout[2m | test/label-sweep.test.ts[2m > [22m[2mlabel-sweep · p06 圆弧工况图标签防重叠扫查（V4.12-A）[2m > [22m[2mAC03：默认值 + 边界输入 全部两两净距 ≥1.5u 且落 viewBox 内
+[22m[39m[sweep] AC03 {"R1":25,"R2":10,"dZ":9} default p06.ts:108 labels=3 pairs=3 minGap=16.18 PASS | R1=25~R2=10=27.57 R1=25~dZ=9=16.18 R2=10~dZ=9=19.32
+[sweep] AC03 {"R1":20,"R2":8,"dZ":6} arc-cases-a.test.ts:165 labels=3 pairs=3 minGap=16.18 PASS | R1=20~R2=8=27.37 R1=20~dZ=6=16.18 R2=8~dZ=6=19.85
+[sweep] AC03 {"R1":20,"R2":5,"dZ":6} arc-figure-a2.test.ts:804 labels=3 pairs=3 minGap=16.18 PASS | R1=20~R2=5=26.21 R1=20~dZ=6=16.18 R2=5~dZ=6=22.12
+
+[90mstdout[2m | test/label-sweep.test.ts[2m > [22m[2mlabel-sweep · p06 圆弧工况图标签防重叠扫查（V4.12-A）[2m > [22m[2mAC04：默认值 + 边界输入 全部两两净距 ≥1.5u 且落 viewBox 内
+[22m[39m[sweep] AC04 {"R1":5,"R2":3,"angle":45} default p06.ts:109 labels=3 pairs=3 minGap=10.42 PASS | R1=5~R2=3=19.02 R1=5~α45°=10.42 R2=3~α45°=11.45
+[sweep] AC04 {"R1":4,"R2":6,"angle":30} arc-cases-a.test.ts:215 labels=3 pairs=3 minGap=8.60 PASS | R1=4~R2=6=21.99 R1=4~α30°=8.60 R2=6~α30°=13.82
+
+[90mstdout[2m | test/label-sweep.test.ts[2m > [22m[2mlabel-sweep · p06 圆弧工况图标签防重叠扫查（V4.12-A）[2m > [22m[2mAC05：默认值 + 边界输入 全部两两净距 ≥1.5u 且落 viewBox 内
+[22m[39m[sweep] AC05 {"R":4,"stepX":20,"stepZ":-10} default p06.ts:110 labels=3 pairs=3 minGap=8.18 PASS | R4~Ø20=8.18 R4~Z-10=23.22 Ø20~Z-10=12.83
+[sweep] AC05 {"R":6,"stepX":40,"stepZ":-25} arc-cases-a.test.ts:255 labels=3 pairs=3 minGap=7.20 PASS | R6~Ø40=7.20 R6~Z-25=24.10 Ø40~Z-25=14.05
+[sweep] AC05 {"R":4,"stepX":20,"stepZ":-40} arc-figure.test.ts:186 labels=3 pairs=3 minGap=6.41 PASS | R4~Ø20=6.41 R4~Z-40=18.49 Ø20~Z-40=23.69
+[sweep] AC05 {"R":8,"stepX":50,"stepZ":-10} arc-figure.test.ts:198 labels=3 pairs=3 minGap=7.41 PASS | R8~Ø50=7.41 R8~Z-10=23.90 Ø50~Z-10=13.13
+
+[90mstdout[2m | test/label-sweep.test.ts[2m > [22m[2mlabel-sweep · p06 圆弧工况图标签防重叠扫查（V4.12-A）[2m > [22m[2mAC06：默认值 + 边界输入 全部两两净距 ≥1.5u 且落 viewBox 内
+[22m[39m[sweep] AC06 {"R":10,"dX":12,"dZ":8} default p06.ts:111 labels=3 pairs=3 minGap=4.24 PASS | R10~dX=12=15.54 R10~dZ=8=4.24 dX=12~dZ=8=23.14
+[sweep] AC06 {"R":13,"dX":10,"dZ":12} arc-cases-a.test.ts:310 labels=3 pairs=3 minGap=5.13 PASS | R13~dX=10=14.65 R13~dZ=12=5.13 dX=10~dZ=12=23.14
+[sweep] AC06 {"R":10,"dX":16,"dZ":6} arc-figure-a2.test.ts:710 labels=3 pairs=3 minGap=3.66 PASS | R10~dX=16=16.12 R10~dZ=6=3.66 dX=16~dZ=6=23.14
+[sweep] AC06 {"R":8,"dX":16,"dZ":9} arc-figure-a2.test.ts:833 labels=3 pairs=3 minGap=4.29 PASS | R8~dX=16=15.49 R8~dZ=9=4.29 dX=16~dZ=9=23.14
+
+[90mstdout[2m | test/label-sweep.test.ts[2m > [22m[2mlabel-sweep · p06 圆弧工况图标签防重叠扫查（V4.12-A）[2m > [22m[2mAC07：默认值 + 边界输入 全部两两净距 ≥1.5u 且落 viewBox 内
+[22m[39m[sweep] AC07 {"R":5,"dX":30,"dZ":-30} default p06.ts:112 labels=3 pairs=3 minGap=7.96 PASS | R5~Ø30=7.96 R5~Z-30=20.34 Ø30~Z-30=23.34
+[sweep] AC07 {"R":4,"dX":24,"dZ":-12} arc-cases-b.test.ts:88 labels=3 pairs=3 minGap=7.96 PASS | R4~Ø24=7.96 R4~Z-12=20.34 Ø24~Z-12=23.34
+
+[90mstdout[2m | test/label-sweep.test.ts[2m > [22m[2mlabel-sweep · p06 圆弧工况图标签防重叠扫查（V4.12-A）[2m > [22m[2mAC08：默认值 + 边界输入 全部两两净距 ≥1.5u 且落 viewBox 内
+[22m[39m[sweep] AC08 {"R":6,"dZ":-4} default p06.ts:113 labels=2 pairs=1 minGap=5.29 PASS | R6~dZ=-4=5.29
+[sweep] AC08 {"R":6,"dZ":3} arc-cases-b.test.ts:119 labels=2 pairs=1 minGap=10.79 PASS | R6~dZ=3=10.79
+[sweep] AC08 {"R":6,"dZ":-11.999999} arc-figure-b.test.ts:228 labels=2 pairs=1 minGap=6.54 PASS | R6~dZ=-12=6.54
+
+[90mstdout[2m | test/label-sweep.test.ts[2m > [22m[2mlabel-sweep · p06 圆弧工况图标签防重叠扫查（V4.12-A）[2m > [22m[2mAC09：默认值 + 边界输入 全部两两净距 ≥1.5u 且落 viewBox 内
+[22m[39m[sweep] AC09 {"R":5,"angle":30} default p06.ts:114 labels=2 pairs=1 minGap=5.51 PASS | R5~α30°=5.51
+[sweep] AC09 {"R":4,"angle":45} arc-cases-b.test.ts:153 labels=2 pairs=1 minGap=3.41 PASS | R4~α45°=3.41
+
+[90mstdout[2m | test/label-sweep.test.ts[2m > [22m[2mlabel-sweep · p06 圆弧工况图标签防重叠扫查（V4.12-A）[2m > [22m[2mAC10：默认值 + 边界输入 全部两两净距 ≥1.5u 且落 viewBox 内
+[22m[39m[sweep] AC10 {"R":5,"lead":3.5} default p06.ts:115 labels=2 pairs=1 minGap=1.60 PASS | R5~lead=3.5=1.60
+[sweep] AC10 {"R":8,"lead":4} arc-cases-b.test.ts:186 labels=2 pairs=1 minGap=1.60 PASS | R8~lead=4=1.60
+
+[90mstdout[2m | test/label-sweep.test.ts[2m > [22m[2mlabel-sweep · p06 圆弧工况图标签防重叠扫查（V4.12-A）[2m > [22m[2mAC11：默认值 + 边界输入 全部两两净距 ≥1.5u 且落 viewBox 内
+[22m[39m[sweep] AC11 {"R":10} default p06.ts:116 labels=1 pairs=0 minGap=n/a PASS
+[sweep] AC11 {"R":6.5} arc-cases-b.test.ts:216 labels=1 pairs=0 minGap=n/a PASS
+
+[90mstdout[2m | test/label-sweep.test.ts[2m > [22m[2mlabel-sweep · p06 圆弧工况图标签防重叠扫查（V4.12-A）[2m > [22m[2mAC12：默认值 + 边界输入 全部两两净距 ≥1.5u 且落 viewBox 内
+[22m[39m[sweep] AC12 {"R":3,"boreD":20} default p06.ts:117 labels=2 pairs=1 minGap=6.97 PASS | R3~Ø20=6.97
+[sweep] AC12 {"R":2.5,"boreD":16} arc-cases-b.test.ts:245 labels=2 pairs=1 minGap=7.07 PASS | R2.5~Ø16=7.07
+
+ [32m✓[39m test/label-sweep.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m test/data-it.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m test/arc-figure-b.test.ts [2m([22m[2m32 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m test/arc-figure.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m test/data-gcode-ref.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m test/gcode.test.ts [2m([22m[2m44 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m test/triangle-figure.test.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m test/macro.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m test/tolerance-figure.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m test/thread-figure.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m test/data-trapezoid.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m test/ref-tables.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m test/data-materials.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m test/arc-cases-a.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m test/arc-cases-b.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m test/triangle.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m test/stock-figure.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m test/gear-figure.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m test/data-unified.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m test/data-fundamental-deviations.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m test/thread.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m test/fit-tolerance.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [2m[90m↓[39m[22m test/perf-budget.test.ts [2m([22m[2m4 tests[22m[2m | [22m[33m4 skipped[39m[2m)[22m
+ [32m✓[39m test/speed-figure.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m test/data-pipe.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m test/data-metric.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m test/taper.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m test/data-npt.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m test/data-sealpipe.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m test/data-worm.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m test/data-morse.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m test/sw-update.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m test/lookup.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m test/tolerance.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m test/data-densities.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m test/speed.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m test/weight.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 2[2mms[22m[39m
+ [32m✓[39m test/arc.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 2[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m60 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (61)[39m
+[2m      Tests [22m [1m[32m784 passed[39m[22m[2m | [22m[33m4 skipped[39m[90m (788)[39m
+[2m   Start at [22m 22:25:54
+[2m   Duration [22m 17.40s[2m (transform 1.14s, setup 0ms, collect 1.62s, tests 8.10s, environment 9.21s, prepare 5.44s)[22m
+
+REAL_EXIT=0

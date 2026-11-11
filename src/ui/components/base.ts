@@ -29,6 +29,25 @@ const BASE_CSS = `
 
 /* 键盘可达性：统一焦点环 */
 :where(.la-page) :focus-visible { outline: 2px solid var(--la-accent); outline-offset: 2px; }
+
+/* V4.14 宽窗舞台列（docs/plan/WAVE-PLAN-V4.14.md §1.1，G0 冻结 7e32b10）：
+   ≥560px 起整页居中成 540 列；<560 零变化（正向 min-width 启用，不写 max 侧守卫）。
+   540 = 390 设计基线 + 150px 呼吸（input 行 508px / p01 3 列 tile 163.33px/卡 均在
+   已验证宽度带内，计划 §1.1）。背景须 html,body 同改（tokens.css:48 双声明同源；
+   只改 body 会在移动端 overscroll 橡皮筋瞬间露 html 底色——G0 M-03）。
+   边框依赖全仓 content-box（src/ 零 box-sizing 声明，2026-11-11 Lead 核查）：
+   border-inline 不占 540 内容宽，163 网格算式成立；若未来引入 border-box reset 须重算。
+   派工单 CSS 原文 token --la-line 实读 tokens.css 不存在，按派工单授权取语义最贴近
+   既有边线 token --la-border（tokens.css:10「边线」，禁新色值字面量）。 */
+@media (min-width: 560px) {
+  html, body { background: var(--la-well); }
+  #app {
+    max-width: 540px;
+    margin-inline: auto;
+    border-inline: 1px solid var(--la-border);
+    box-shadow: 0 0 24px rgba(0, 0, 0, 0.06);
+  }
+}
 `;
 
 /** 向 document.head 注入一次性样式（同 id 只注入一次）。Node 环境（无 document）静默跳过。 */

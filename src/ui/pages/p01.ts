@@ -46,6 +46,16 @@ const HOME_CSS = `
    vision 误读为「两层文字相交」（几何不可交，但零间隙确易误读）。补 6px 分隔：
    footer padding-top 6 → body flex:1 收缩 6px，折边与页脚文字带分离。 */
 .la-page[data-page="p01"] .rc-home__footer { padding-top: 6px; }
+/* V4.14 §1.1（G0 C-01/C-02）：scoped 到 p01——.la-grid2 类与 p05 工况图库共享
+   （p05.ts:384 经 TileGrid() 产出 .la-grid2，compact 磁贴），类级改动会波及 p05。
+   auto-fill 下限 163 推导：540 列内容宽 = 540 − .la-body padding 16×2（PageShell.ts:23）
+   = 508px，3 列需 (508 − gap 9×2)/3 = 163.33 → 取 163；
+   390 视口内容宽 = 390 − 32 = 358px，floor((358+9)/(163+9)) = floor(367/172) = 2 列
+   （实宽 (358−9)/2 = 174.5 ≈ 基线 175px，零回归；基线档
+   docs/evidence/V4.14/baseline/baseline.json tileW=175）。 */
+.la-page[data-page="p01"] .la-grid2 {
+  grid-template-columns: repeat(auto-fill, minmax(163px, 1fr));
+}
 `;
 
 interface HomeEntry {

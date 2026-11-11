@@ -1,0 +1,32 @@
+{
+  "tool": "verify-preload.mjs",
+  "generatedAt": "2026-11-11T14:32:21.747Z",
+  "injection": {
+    "pass": true,
+    "hasPreloadLink": true,
+    "href": "/assets/p01-DwgPbdlH.js",
+    "p01File": "p01-DwgPbdlH.js",
+    "fileOnDisk": true
+  },
+  "revision": {
+    "swEntryFound": true,
+    "swEntry": "{url:\"index.html\",revision:\"b45d30a16c97b8b32d9de6da27322d20\"",
+    "swRevision": "b45d30a16c97b8b32d9de6da27322d20",
+    "indexHtmlMd5": "b45d30a16c97b8b32d9de6da27322d20",
+    "indexHtmlSha256": "9091a1a6f464931bcd7632b7177e4f7ede367405935eeedc5871835566d59ac5",
+    "result": "MATCH(md5)"
+  },
+  "budget": {
+    "totalJsBytes": 270371,
+    "jsFileCount": 37,
+    "indexChunkBytes": 12177,
+    "indexChunkFiles": [
+      "index-C5x0qv1v.js"
+    ],
+    "routeChunkCount": 16,
+    "routeChunkMin": 16,
+    "caliber": "uncompressed-bytes"
+  }
+}
+[verify-preload] 写出 docs/evidence/V4.14-B/runs/verify-preload.json
+REAL_EXIT=0
