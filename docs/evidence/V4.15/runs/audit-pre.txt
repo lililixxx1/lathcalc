@@ -1,0 +1,75 @@
+== 全死符号 17 个（候选删除） ==
+src/core/arc.ts :: perpendicularFoot  ← 全死(自身文件内零引用)
+src/core/types.ts :: DegToDMS  ← 全死(自身文件内零引用)
+src/core/types.ts :: ThreadDimensionsFn  ← 全死(自身文件内零引用)
+src/core/types.ts :: ThreeWireMFn  ← 全死(自身文件内零引用)
+src/core/types.ts :: SpindleSpeedFn  ← 全死(自身文件内零引用)
+src/core/types.ts :: SurfaceSpeedFn  ← 全死(自身文件内零引用)
+src/core/types.ts :: FeedRateFn  ← 全死(自身文件内零引用)
+src/core/types.ts :: TaperCalcFn  ← 全死(自身文件内零引用)
+src/core/types.ts :: TaperReverseFn  ← 全死(自身文件内零引用)
+src/core/types.ts :: ToleranceComposeFn  ← 全死(自身文件内零引用)
+src/core/types.ts :: SolveTriangleFn  ← 全死(自身文件内零引用)
+src/core/types.ts :: BarWeightFn  ← 全死(自身文件内零引用)
+src/core/types.ts :: FanucG76Fn  ← 全死(自身文件内零引用)
+src/core/types.ts :: G76DialectFn  ← 全死(自身文件内零引用)
+src/core/types.ts :: G92CycleFn  ← 全死(自身文件内零引用)
+src/core/types.ts :: FitToleranceFn  ← 全死(自身文件内零引用)
+src/ui/components/icons.ts :: ICON_NAMES  ← 全死(自身文件内零引用)
+
+== 仅 export 关键字死 54 个（符号本体自身文件内使用，候选取 export） ==
+src/core/arc-figure-kit.ts :: ResolveLabelOverlapsOpts
+src/core/gear-figure.ts :: GearCircle
+src/core/gear-figure.ts :: GearCenterline
+src/core/speed-figure.ts :: SpeedFigureInput
+src/core/speed-figure.ts :: SpeedLine
+src/core/stock-figure.ts :: StockFigureInput
+src/core/stock-figure.ts :: StockSectionCircle
+src/core/stock-figure.ts :: StockSectionRing
+src/core/stock-figure.ts :: StockCenterlines
+src/core/thread-figure.ts :: ThreadFigurePoint
+src/core/tolerance-figure.ts :: TolBandRect
+src/core/triangle-figure.ts :: TriSeg
+src/core/triangle-figure.ts :: TriLabel
+src/ui/components/Accordion.ts :: AccordionProps
+src/ui/components/Card.ts :: SubTextOptions
+src/ui/components/Card.ts :: BadgeOptions
+src/ui/components/CodeCard.ts :: CodeCardProps
+src/ui/components/IconButton.ts :: IconButtonProps
+src/ui/components/InputRow.ts :: InputMode
+src/ui/components/InputRow.ts :: InputRowProps
+src/ui/components/Keypad.ts :: KeypadKey
+src/ui/components/Keypad.ts :: KeypadProps
+src/ui/components/Keypad.ts :: KeypadControllerOptions
+src/ui/components/ListRow.ts :: ListRowProps
+src/ui/components/PageShell.ts :: PageShellProps
+src/ui/components/PageShell.ts :: BodyOptions
+src/ui/components/PageShell.ts :: PlaceholderOptions
+src/ui/components/PageShell.ts :: renderPlaceholder
+src/ui/components/ParamGrid.ts :: ParamGridProps
+src/ui/components/ResultCard.ts :: ResultItem
+src/ui/components/ResultCard.ts :: ResultCardProps
+src/ui/components/Scale.ts :: ScaleProps
+src/ui/components/SegChip.ts :: SegmentedOption
+src/ui/components/SegChip.ts :: SegmentedProps
+src/ui/components/SegChip.ts :: ChipProps
+src/ui/components/StatBlock.ts :: StatBlockProps
+src/ui/components/StatBlock.ts :: StatTripleItem
+src/ui/components/StatBlock.ts :: StatTripleProps
+src/ui/components/Tile.ts :: TileProps
+src/ui/components/TopBar.ts :: TopBarProps
+src/ui/components/TopBar.ts :: HomeHeaderProps
+src/ui/components/WarnCard.ts :: WarnCardProps
+src/ui/pages/p14.ts :: ShareColorKey
+src/ui/pages/p14.ts :: ShareTextBlock
+src/ui/pages/p14.ts :: ShareRect
+src/ui/pages/p14.ts :: resolveSharePalette
+src/ui/router.ts :: ParsedRoute
+src/ui/router.ts :: RouterOptions
+src/ui/store.ts :: StoredEntryInput
+src/ui/store.ts :: SaveEventDetail
+src/ui/store.ts :: STORAGE_PREFIX
+src/ui/store.ts :: HISTORY_LIMIT
+src/ui/store.ts :: FAVORITES_LIMIT
+src/ui/sw-update.ts :: InstallUpdateReloadOptions
+REAL_EXIT=0
