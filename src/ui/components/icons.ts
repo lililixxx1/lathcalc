@@ -34,5 +34,3 @@ export type IconName = keyof typeof ICON_PATHS;
 export function icon(name: IconName, size = 20, strokeWidth = 1.7): string {
   return `<svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="none" stroke="currentColor" stroke-width="${strokeWidth}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON_PATHS[name]}</svg>`;
 }
-
-export const ICON_NAMES = Object.keys(ICON_PATHS) as IconName[];

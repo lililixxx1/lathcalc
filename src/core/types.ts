@@ -14,9 +14,6 @@ export interface Vec2 {
   z: number;
 }
 
-/** 度 → 度分秒字符串（如 2.862405 → "2°51′45″"，秒四舍五入） */
-export type DegToDMS = (deg: number) => string;
-
 // ===== 螺纹（W2-C2 实现） =====
 export type ThreadFamily = 'metric' | 'trapezoid' | 'pipe55' | 'unified' | 'sealpipe' | 'npt' | 'worm';
 export type FlankAngle = 60 | 55 | 30 | 40;
@@ -44,12 +41,6 @@ export interface ThreadDimensions {
   /** 三针最佳针径 d0（60°/55°：0.57735P / 0.56371P≈P/√3 按牙型角） */
   bestWire: number;
 }
-
-/** 螺纹尺寸计算（含 60°/55°/30°Tr 三族） */
-export type ThreadDimensionsFn = (spec: ThreadSpec) => ThreadDimensions;
-
-/** 三针测量跨距 M = d2 + k1·d0 − k2·P（k1/k2 按牙型角：60° 3/0.866；55° 3.1657/0.9605；30°Tr 另表） */
-export type ThreeWireMFn = (spec: ThreadSpec, wireDiameter: number) => number;
 
 /** 螺纹数据表行（W3 录入，schema 冻结） */
 export interface ThreadRow {
@@ -88,14 +79,6 @@ export interface SpeedResult {
   ra?: number;
 }
 
-export type SpindleSpeedFn = (input: SpeedInput) => SpeedResult;
-
-// ===== 转速反向（WAVE-PLAN-V2 §1，W6-C3 实现；DEFERRED #13 收账） =====
-/** Vc = n·π·D/1000 [m/min]，返回标量（G0-B1：不滥用 SpeedResult） */
-export type SurfaceSpeedFn = (input: { d: number; n: number }) => number;
-/** vf = f·n [mm/min]（WAVE-PLAN-V2 F6） */
-export type FeedRateFn = (f: number, n: number) => number;
-
 // ===== 锥度（W2-C3 实现） =====
 /** 三值互算：big/small/length 任给其三（缺项传 undefined），求缺项 + 锥度 C + 半角 */
 export interface TaperInput {
@@ -115,8 +98,6 @@ export interface TaperResult {
   halfAngleDMS: string;
 }
 
-export type TaperCalcFn = (input: TaperInput) => TaperResult;
-
 // ===== 锥度反推（WAVE-PLAN-V2 §1，W6-C4 实现；DEFERRED #8） =====
 export interface TaperReverseInput extends TaperInput {
   /** 外部给定锥比 C（莫氏预设如 1/19.254 或自定义值）；必须 > 0 */
@@ -129,12 +110,6 @@ export interface TaperReverseResult extends TaperResult {
   /** (D − d)/2 [mm]，由未舍入值计算（G0-I4 钉路径） */
   halfDiffMM: number;
 }
-
-/**
- * taperC(>0) + big/small/length 恰两值 → 解第三值；缺/多值或 taperC≤0 抛错（不臆造）。
- * missing = 反推所得第三值的数值。
- */
-export type TaperReverseFn = (input: TaperReverseInput) => TaperReverseResult;
 
 // ===== 公差（W2-C3 合成 / W3-C4 录表） =====
 export interface ToleranceInput {
@@ -154,9 +129,6 @@ export interface ToleranceResult {
   /** 公差带宽度 mm（= IT 值） */
   tolerance: number;
 }
-
-/** 偏差合成：给定 IT 公差值与基本偏差（表值由 lookup 提供，本函数做合成） */
-export type ToleranceComposeFn = (input: ToleranceInput, itValueMM: number, fundamentalOffsetMM: number) => ToleranceResult;
 
 /** IT 公差表行（GB/T 1800.1，W3-C4 录入） */
 export interface ITTableRow {
@@ -190,8 +162,6 @@ export interface TriangleResult {
   right: boolean;
 }
 
-export type SolveTriangleFn = (input: TriangleInput) => TriangleResult;
-
 // ===== 三角多模式（WAVE-PLAN-V2 §1，W6-C4 实现；DEFERRED #7） =====
 /** SSA 双解时两解并列、锐角解在前（V2-3） */
 export interface TriangleSolveOutput {
@@ -223,8 +193,6 @@ export interface WeightResult {
   /** 单件重量 kg */
   massKg: number;
 }
-
-export type BarWeightFn = (input: WeightInput) => WeightResult;
 
 /** 密度表行（W3-C5 录入） */
 export interface DensityRow {
@@ -292,14 +260,8 @@ export interface G76Program {
   disclaimer: string;
 }
 
-export type FanucG76Fn = (p: G76Params) => G76Program;
-
 // ===== 方言与 G92（WAVE-PLAN-V2 §1，W6-C2 实现；DEFERRED #1/#2b） =====
 export type CncSystem = 'fanuc' | 'gsk' | 'knd' | 'hnc';
-/** 语义待 W6-C1 双源调研冻结（docs/research/g76-dialects.md）；恒等式 g76Dialect(p,'fanuc') ≡ fanucG76(p) */
-export type G76DialectFn = (p: G76Params, system: CncSystem, gskModel?: GskModel) => G76Program;
-/** FANUC 车螺纹单行程循环，单行输出（G0-B2 冻结行数）；system='hnc' → G82 单循环（WAVE-PLAN-V3 G4） */
-export type G92CycleFn = (p: G76Params, system?: CncSystem) => G76Program;
 
 // ===== GSK 型号细分（WAVE-PLAN-V3 §1，W8-B 实现；DEFERRED #16） =====
 /** 988TA=P/Q/R 均 mm（半径，小数）；980TDc=P/Q/Δdmin 为 0.0001mm 增量（№.182.7）、R 保持 mm */
@@ -330,7 +292,6 @@ export interface FitResult {
   minUM: number;
   maxUM: number;
 }
-export type FitToleranceFn = (input: FitInput) => FitResult;
 
 // ===== 材料 / 莫氏 / 速查（W3-C5 录入） =====
 /** 切削参数区间 [min,max] */

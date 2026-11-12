@@ -1,0 +1,935 @@
+{
+  "when": "2026-11-12T01:54:01.323Z",
+  "url": "http://localhost:4173/",
+  "chrome": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+  "cdpPort": 9377,
+  "stage": {
+    "minWidth": 560,
+    "columnWidth": 540,
+    "borderTotal": 2,
+    "expectLeftFormula": "(winW-542)/2",
+    "tolLeft": 2,
+    "tolBaseline": 1
+  },
+  "bundle": {
+    "distIndexChunk": "index-JWvOMOJ3.js",
+    "allMatch": true
+  },
+  "total": 30,
+  "pass": 30,
+  "fail": 0,
+  "rows": [
+    {
+      "size": "390x844",
+      "page": "p01",
+      "winW": 390,
+      "pageW": 390,
+      "appW": 390,
+      "appLeft": 0,
+      "hScroll": false,
+      "tileW": 175,
+      "inputW": null,
+      "tileCols": 2,
+      "gridW": 358,
+      "pageScript": "index-JWvOMOJ3.js",
+      "expectDist": "index-JWvOMOJ3.js",
+      "checks": [
+        [
+          "pageW==390",
+          true
+        ],
+        [
+          "hScroll==false",
+          true
+        ],
+        [
+          "tileCols==2(式floor((358+9)/172)·L1口径)",
+          true
+        ],
+        [
+          "tileW≈基线175±1",
+          true
+        ]
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "size": "390x844",
+      "page": "p02",
+      "winW": 390,
+      "pageW": 390,
+      "appW": 390,
+      "appLeft": 0,
+      "hScroll": false,
+      "tileW": null,
+      "inputW": 358,
+      "tileCols": null,
+      "gridW": null,
+      "pageScript": "index-JWvOMOJ3.js",
+      "expectDist": "index-JWvOMOJ3.js",
+      "checks": [
+        [
+          "pageW==390",
+          true
+        ],
+        [
+          "hScroll==false",
+          true
+        ],
+        [
+          "inputW≈基线358±1",
+          true
+        ]
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "size": "390x844",
+      "page": "p05",
+      "winW": 390,
+      "pageW": 390,
+      "appW": 390,
+      "appLeft": 0,
+      "hScroll": false,
+      "tileW": 175,
+      "inputW": null,
+      "tileCols": 2,
+      "gridW": 358,
+      "pageScript": "index-JWvOMOJ3.js",
+      "expectDist": "index-JWvOMOJ3.js",
+      "checks": [
+        [
+          "pageW==390",
+          true
+        ],
+        [
+          "hScroll==false",
+          true
+        ]
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "size": "390x844",
+      "page": "p06",
+      "winW": 390,
+      "pageW": 390,
+      "appW": 390,
+      "appLeft": 0,
+      "hScroll": false,
+      "tileW": null,
+      "inputW": null,
+      "tileCols": null,
+      "gridW": null,
+      "pageScript": "index-JWvOMOJ3.js",
+      "expectDist": "index-JWvOMOJ3.js",
+      "checks": [
+        [
+          "pageW==390",
+          true
+        ],
+        [
+          "hScroll==false",
+          true
+        ]
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "size": "390x844",
+      "page": "p09",
+      "winW": 390,
+      "pageW": 390,
+      "appW": 390,
+      "appLeft": 0,
+      "hScroll": false,
+      "tileW": null,
+      "inputW": 358,
+      "tileCols": null,
+      "gridW": null,
+      "pageScript": "index-JWvOMOJ3.js",
+      "expectDist": "index-JWvOMOJ3.js",
+      "checks": [
+        [
+          "pageW==390",
+          true
+        ],
+        [
+          "hScroll==false",
+          true
+        ],
+        [
+          "inputW≈基线358±1",
+          true
+        ]
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "size": "390x844",
+      "page": "p12",
+      "winW": 390,
+      "pageW": 390,
+      "appW": 390,
+      "appLeft": 0,
+      "hScroll": false,
+      "tileW": null,
+      "inputW": 82,
+      "tileCols": null,
+      "gridW": null,
+      "pageScript": "index-JWvOMOJ3.js",
+      "expectDist": "index-JWvOMOJ3.js",
+      "checks": [
+        [
+          "pageW==390",
+          true
+        ],
+        [
+          "hScroll==false",
+          true
+        ],
+        [
+          "inputW≈基线82±1",
+          true
+        ]
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "size": "768x1024",
+      "page": "p01",
+      "winW": 768,
+      "pageW": 540,
+      "appW": 542,
+      "appLeft": 113,
+      "hScroll": false,
+      "tileW": 163,
+      "inputW": null,
+      "tileCols": 3,
+      "gridW": 508,
+      "pageScript": "index-JWvOMOJ3.js",
+      "expectDist": "index-JWvOMOJ3.js",
+      "checks": [
+        [
+          "pageW==540",
+          true
+        ],
+        [
+          "hScroll==false",
+          true
+        ],
+        [
+          "appLeft≈113±2",
+          true
+        ],
+        [
+          "tileCols==3(式floor((508+9)/172)·L1口径)",
+          true
+        ]
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "size": "768x1024",
+      "page": "p02",
+      "winW": 768,
+      "pageW": 540,
+      "appW": 542,
+      "appLeft": 113,
+      "hScroll": false,
+      "tileW": null,
+      "inputW": 508,
+      "tileCols": null,
+      "gridW": null,
+      "pageScript": "index-JWvOMOJ3.js",
+      "expectDist": "index-JWvOMOJ3.js",
+      "checks": [
+        [
+          "pageW==540",
+          true
+        ],
+        [
+          "hScroll==false",
+          true
+        ],
+        [
+          "appLeft≈113±2",
+          true
+        ]
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "size": "768x1024",
+      "page": "p05",
+      "winW": 768,
+      "pageW": 540,
+      "appW": 542,
+      "appLeft": 113,
+      "hScroll": false,
+      "tileW": 250,
+      "inputW": null,
+      "tileCols": 2,
+      "gridW": 508,
+      "pageScript": "index-JWvOMOJ3.js",
+      "expectDist": "index-JWvOMOJ3.js",
+      "checks": [
+        [
+          "pageW==540",
+          true
+        ],
+        [
+          "hScroll==false",
+          true
+        ],
+        [
+          "appLeft≈113±2",
+          true
+        ]
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "size": "768x1024",
+      "page": "p06",
+      "winW": 768,
+      "pageW": 540,
+      "appW": 542,
+      "appLeft": 113,
+      "hScroll": false,
+      "tileW": null,
+      "inputW": null,
+      "tileCols": null,
+      "gridW": null,
+      "pageScript": "index-JWvOMOJ3.js",
+      "expectDist": "index-JWvOMOJ3.js",
+      "checks": [
+        [
+          "pageW==540",
+          true
+        ],
+        [
+          "hScroll==false",
+          true
+        ],
+        [
+          "appLeft≈113±2",
+          true
+        ]
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "size": "768x1024",
+      "page": "p09",
+      "winW": 768,
+      "pageW": 540,
+      "appW": 542,
+      "appLeft": 113,
+      "hScroll": false,
+      "tileW": null,
+      "inputW": 508,
+      "tileCols": null,
+      "gridW": null,
+      "pageScript": "index-JWvOMOJ3.js",
+      "expectDist": "index-JWvOMOJ3.js",
+      "checks": [
+        [
+          "pageW==540",
+          true
+        ],
+        [
+          "hScroll==false",
+          true
+        ],
+        [
+          "appLeft≈113±2",
+          true
+        ]
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "size": "768x1024",
+      "page": "p12",
+      "winW": 768,
+      "pageW": 540,
+      "appW": 542,
+      "appLeft": 113,
+      "hScroll": false,
+      "tileW": null,
+      "inputW": 132,
+      "tileCols": null,
+      "gridW": null,
+      "pageScript": "index-JWvOMOJ3.js",
+      "expectDist": "index-JWvOMOJ3.js",
+      "checks": [
+        [
+          "pageW==540",
+          true
+        ],
+        [
+          "hScroll==false",
+          true
+        ],
+        [
+          "appLeft≈113±2",
+          true
+        ]
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "size": "1280x800",
+      "page": "p01",
+      "winW": 1280,
+      "pageW": 540,
+      "appW": 542,
+      "appLeft": 369,
+      "hScroll": false,
+      "tileW": 163,
+      "inputW": null,
+      "tileCols": 3,
+      "gridW": 508,
+      "pageScript": "index-JWvOMOJ3.js",
+      "expectDist": "index-JWvOMOJ3.js",
+      "checks": [
+        [
+          "pageW==540",
+          true
+        ],
+        [
+          "hScroll==false",
+          true
+        ],
+        [
+          "appLeft≈369±2",
+          true
+        ],
+        [
+          "tileCols==3(式floor((508+9)/172)·L1口径)",
+          true
+        ]
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "size": "1280x800",
+      "page": "p02",
+      "winW": 1280,
+      "pageW": 540,
+      "appW": 542,
+      "appLeft": 369,
+      "hScroll": false,
+      "tileW": null,
+      "inputW": 508,
+      "tileCols": null,
+      "gridW": null,
+      "pageScript": "index-JWvOMOJ3.js",
+      "expectDist": "index-JWvOMOJ3.js",
+      "checks": [
+        [
+          "pageW==540",
+          true
+        ],
+        [
+          "hScroll==false",
+          true
+        ],
+        [
+          "appLeft≈369±2",
+          true
+        ]
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "size": "1280x800",
+      "page": "p05",
+      "winW": 1280,
+      "pageW": 540,
+      "appW": 542,
+      "appLeft": 369,
+      "hScroll": false,
+      "tileW": 250,
+      "inputW": null,
+      "tileCols": 2,
+      "gridW": 508,
+      "pageScript": "index-JWvOMOJ3.js",
+      "expectDist": "index-JWvOMOJ3.js",
+      "checks": [
+        [
+          "pageW==540",
+          true
+        ],
+        [
+          "hScroll==false",
+          true
+        ],
+        [
+          "appLeft≈369±2",
+          true
+        ]
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "size": "1280x800",
+      "page": "p06",
+      "winW": 1280,
+      "pageW": 540,
+      "appW": 542,
+      "appLeft": 369,
+      "hScroll": false,
+      "tileW": null,
+      "inputW": null,
+      "tileCols": null,
+      "gridW": null,
+      "pageScript": "index-JWvOMOJ3.js",
+      "expectDist": "index-JWvOMOJ3.js",
+      "checks": [
+        [
+          "pageW==540",
+          true
+        ],
+        [
+          "hScroll==false",
+          true
+        ],
+        [
+          "appLeft≈369±2",
+          true
+        ]
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "size": "1280x800",
+      "page": "p09",
+      "winW": 1280,
+      "pageW": 540,
+      "appW": 542,
+      "appLeft": 369,
+      "hScroll": false,
+      "tileW": null,
+      "inputW": 493,
+      "tileCols": null,
+      "gridW": null,
+      "pageScript": "index-JWvOMOJ3.js",
+      "expectDist": "index-JWvOMOJ3.js",
+      "checks": [
+        [
+          "pageW==540",
+          true
+        ],
+        [
+          "hScroll==false",
+          true
+        ],
+        [
+          "appLeft≈369±2",
+          true
+        ]
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "size": "1280x800",
+      "page": "p12",
+      "winW": 1280,
+      "pageW": 540,
+      "appW": 542,
+      "appLeft": 369,
+      "hScroll": false,
+      "tileW": null,
+      "inputW": 127,
+      "tileCols": null,
+      "gridW": null,
+      "pageScript": "index-JWvOMOJ3.js",
+      "expectDist": "index-JWvOMOJ3.js",
+      "checks": [
+        [
+          "pageW==540",
+          true
+        ],
+        [
+          "hScroll==false",
+          true
+        ],
+        [
+          "appLeft≈369±2",
+          true
+        ]
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "size": "1920x1080",
+      "page": "p01",
+      "winW": 1920,
+      "pageW": 540,
+      "appW": 542,
+      "appLeft": 689,
+      "hScroll": false,
+      "tileW": 163,
+      "inputW": null,
+      "tileCols": 3,
+      "gridW": 508,
+      "pageScript": "index-JWvOMOJ3.js",
+      "expectDist": "index-JWvOMOJ3.js",
+      "checks": [
+        [
+          "pageW==540",
+          true
+        ],
+        [
+          "hScroll==false",
+          true
+        ],
+        [
+          "appLeft≈689±2",
+          true
+        ],
+        [
+          "tileCols==3(式floor((508+9)/172)·L1口径)",
+          true
+        ]
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "size": "1920x1080",
+      "page": "p02",
+      "winW": 1920,
+      "pageW": 540,
+      "appW": 542,
+      "appLeft": 689,
+      "hScroll": false,
+      "tileW": null,
+      "inputW": 508,
+      "tileCols": null,
+      "gridW": null,
+      "pageScript": "index-JWvOMOJ3.js",
+      "expectDist": "index-JWvOMOJ3.js",
+      "checks": [
+        [
+          "pageW==540",
+          true
+        ],
+        [
+          "hScroll==false",
+          true
+        ],
+        [
+          "appLeft≈689±2",
+          true
+        ]
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "size": "1920x1080",
+      "page": "p05",
+      "winW": 1920,
+      "pageW": 540,
+      "appW": 542,
+      "appLeft": 689,
+      "hScroll": false,
+      "tileW": 250,
+      "inputW": null,
+      "tileCols": 2,
+      "gridW": 508,
+      "pageScript": "index-JWvOMOJ3.js",
+      "expectDist": "index-JWvOMOJ3.js",
+      "checks": [
+        [
+          "pageW==540",
+          true
+        ],
+        [
+          "hScroll==false",
+          true
+        ],
+        [
+          "appLeft≈689±2",
+          true
+        ]
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "size": "1920x1080",
+      "page": "p06",
+      "winW": 1920,
+      "pageW": 540,
+      "appW": 542,
+      "appLeft": 689,
+      "hScroll": false,
+      "tileW": null,
+      "inputW": null,
+      "tileCols": null,
+      "gridW": null,
+      "pageScript": "index-JWvOMOJ3.js",
+      "expectDist": "index-JWvOMOJ3.js",
+      "checks": [
+        [
+          "pageW==540",
+          true
+        ],
+        [
+          "hScroll==false",
+          true
+        ],
+        [
+          "appLeft≈689±2",
+          true
+        ]
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "size": "1920x1080",
+      "page": "p09",
+      "winW": 1920,
+      "pageW": 540,
+      "appW": 542,
+      "appLeft": 689,
+      "hScroll": false,
+      "tileW": null,
+      "inputW": 508,
+      "tileCols": null,
+      "gridW": null,
+      "pageScript": "index-JWvOMOJ3.js",
+      "expectDist": "index-JWvOMOJ3.js",
+      "checks": [
+        [
+          "pageW==540",
+          true
+        ],
+        [
+          "hScroll==false",
+          true
+        ],
+        [
+          "appLeft≈689±2",
+          true
+        ]
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "size": "1920x1080",
+      "page": "p12",
+      "winW": 1920,
+      "pageW": 540,
+      "appW": 542,
+      "appLeft": 689,
+      "hScroll": false,
+      "tileW": null,
+      "inputW": 132,
+      "tileCols": null,
+      "gridW": null,
+      "pageScript": "index-JWvOMOJ3.js",
+      "expectDist": "index-JWvOMOJ3.js",
+      "checks": [
+        [
+          "pageW==540",
+          true
+        ],
+        [
+          "hScroll==false",
+          true
+        ],
+        [
+          "appLeft≈689±2",
+          true
+        ]
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "size": "844x390",
+      "page": "p01",
+      "winW": 844,
+      "pageW": 540,
+      "appW": 542,
+      "appLeft": 151,
+      "hScroll": false,
+      "tileW": 242,
+      "inputW": null,
+      "tileCols": 2,
+      "gridW": 493,
+      "pageScript": "index-JWvOMOJ3.js",
+      "expectDist": "index-JWvOMOJ3.js",
+      "checks": [
+        [
+          "pageW==540",
+          true
+        ],
+        [
+          "hScroll==false",
+          true
+        ],
+        [
+          "appLeft≈151±2",
+          true
+        ],
+        [
+          "tileCols==2(式floor((493+9)/172)·L1口径)",
+          true
+        ]
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "size": "844x390",
+      "page": "p02",
+      "winW": 844,
+      "pageW": 540,
+      "appW": 542,
+      "appLeft": 151,
+      "hScroll": false,
+      "tileW": null,
+      "inputW": 508,
+      "tileCols": null,
+      "gridW": null,
+      "pageScript": "index-JWvOMOJ3.js",
+      "expectDist": "index-JWvOMOJ3.js",
+      "checks": [
+        [
+          "pageW==540",
+          true
+        ],
+        [
+          "hScroll==false",
+          true
+        ],
+        [
+          "appLeft≈151±2",
+          true
+        ]
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "size": "844x390",
+      "page": "p05",
+      "winW": 844,
+      "pageW": 540,
+      "appW": 542,
+      "appLeft": 151,
+      "hScroll": false,
+      "tileW": 250,
+      "inputW": null,
+      "tileCols": 2,
+      "gridW": 508,
+      "pageScript": "index-JWvOMOJ3.js",
+      "expectDist": "index-JWvOMOJ3.js",
+      "checks": [
+        [
+          "pageW==540",
+          true
+        ],
+        [
+          "hScroll==false",
+          true
+        ],
+        [
+          "appLeft≈151±2",
+          true
+        ]
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "size": "844x390",
+      "page": "p06",
+      "winW": 844,
+      "pageW": 540,
+      "appW": 542,
+      "appLeft": 151,
+      "hScroll": false,
+      "tileW": null,
+      "inputW": null,
+      "tileCols": null,
+      "gridW": null,
+      "pageScript": "index-JWvOMOJ3.js",
+      "expectDist": "index-JWvOMOJ3.js",
+      "checks": [
+        [
+          "pageW==540",
+          true
+        ],
+        [
+          "hScroll==false",
+          true
+        ],
+        [
+          "appLeft≈151±2",
+          true
+        ]
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "size": "844x390",
+      "page": "p09",
+      "winW": 844,
+      "pageW": 540,
+      "appW": 542,
+      "appLeft": 151,
+      "hScroll": false,
+      "tileW": null,
+      "inputW": 493,
+      "tileCols": null,
+      "gridW": null,
+      "pageScript": "index-JWvOMOJ3.js",
+      "expectDist": "index-JWvOMOJ3.js",
+      "checks": [
+        [
+          "pageW==540",
+          true
+        ],
+        [
+          "hScroll==false",
+          true
+        ],
+        [
+          "appLeft≈151±2",
+          true
+        ]
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "size": "844x390",
+      "page": "p12",
+      "winW": 844,
+      "pageW": 540,
+      "appW": 542,
+      "appLeft": 151,
+      "hScroll": false,
+      "tileW": null,
+      "inputW": 127,
+      "tileCols": null,
+      "gridW": null,
+      "pageScript": "index-JWvOMOJ3.js",
+      "expectDist": "index-JWvOMOJ3.js",
+      "checks": [
+        [
+          "pageW==540",
+          true
+        ],
+        [
+          "hScroll==false",
+          true
+        ],
+        [
+          "appLeft≈151±2",
+          true
+        ]
+      ],
+      "verdict": "PASS"
+    }
+  ]
+}

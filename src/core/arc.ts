@@ -9,12 +9,6 @@ export function dist(a: Vec2, b: Vec2): number {
   return Math.hypot(a.x - b.x, a.z - b.z);
 }
 
-/** 点 P 到直线（过点 L、方向单位向量 d）的垂足 */
-export function perpendicularFoot(p: Vec2, linePoint: Vec2, dirUnit: Vec2): Vec2 {
-  const t = (p.x - linePoint.x) * dirUnit.x + (p.z - linePoint.z) * dirUnit.z;
-  return { x: linePoint.x + t * dirUnit.x, z: linePoint.z + t * dirUnit.z };
-}
-
 /** 单位向量 */
 export function unit(dx: number, dz: number): Vec2 {
   const len = Math.hypot(dx, dz);

@@ -28,7 +28,7 @@ import {
   wrapText,
   type Canvas2DLike,
   type SharePalette,
-} from '../src/ui/pages/p14';
+} from '../src/core/share-image';
 import pkg from '../package.json';
 
 /** V4.12-C：分享长图页脚版本 = 构建期 __APP_VERSION__（源 package.json），对拍同源。 */

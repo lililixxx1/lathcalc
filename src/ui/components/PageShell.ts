@@ -9,21 +9,17 @@
  *     ├─ footer（可选）
  *     └─ HomeIndicator（可选，默认渲染）
  *
- * p02–p14 占位骨架使用 renderPlaceholder；后续卡整段替换 render() 即可，骨架约定不变。
+ * p02–p14 曾用「建设中」占位骨架（W4-C1）；16 页已全部实现，
+ * 占位渲染与独占参数接口已随 V4.15-W2 退役，页面骨架约定不变。
  */
 import { ensureBaseStyles, injectStyle } from './base';
-import { Card, Eyebrow, SubText } from './Card';
 import { HomeIndicator } from './HomeIndicator';
 import { StatusBar } from './StatusBar';
-import { TopBar } from './TopBar';
 
 const CSS = `
 .la-page { width: 100%; height: 100%; background: var(--la-bg); color: var(--la-ink); font-family: var(--la-font); font-size: 15px; line-height: 1.5; display: flex; flex-direction: column; overflow: hidden; }
 .la-page b { font-weight: 700; }
 .la-body { flex: 1 1 auto; min-height: 0; padding: 4px 16px 10px; display: flex; flex-direction: column; gap: 9px; overflow: hidden; }
-.rc-placeholder { display: flex; flex-direction: column; gap: 6px; }
-.rc-placeholder__title { font-size: 18px; font-weight: 700; letter-spacing: -0.01em; }
-.rc-placeholder__route { color: var(--la-faint); }
 `;
 
 export interface PageShellProps {
@@ -77,53 +73,4 @@ export function createBody(options: BodyOptions = {}): HTMLElement {
   el.className = options.className ? `la-body rc-body ${options.className}` : 'la-body rc-body';
   if (options.ariaLabel) el.setAttribute('aria-label', options.ariaLabel);
   return el;
-}
-
-export interface PlaceholderOptions {
-  /** 页面 ID（p02–p14） */
-  id: string;
-  /** 页面标题,同时用于顶栏与占位卡 */
-  title: string;
-  badge?: string;
-  badgeGray?: boolean;
-  /** 后续实现卡号，如 "W4-C2" */
-  plannedBy?: string;
-}
-
-/**
- * 渲染「建设中」占位页（p02–p14 的 W4-C1 骨架）。
- * 后续卡实现时：保留本文件导出与页面 title，替换 render() 内部为真实 createPage 组合即可。
- */
-export function renderPlaceholder(
-  ctx: { root: HTMLElement },
-  options: PlaceholderOptions,
-): void {
-  const body = createBody();
-  const card = Card({
-    className: 'rc-placeholder',
-    children: [
-      Eyebrow(`建设中 · ${options.plannedBy ?? 'W4 后续卡'}`),
-      (() => {
-        const title = document.createElement('div');
-        title.className = 'rc-placeholder__title';
-        title.textContent = options.title;
-        return title;
-      })(),
-      SubText('本页为 W4-C1 冻结骨架，render() 内容由后续卡整段替换。'),
-      SubText(`路由：#/${options.id}`, { className: 'rc-placeholder__route' }),
-    ],
-  });
-  body.append(card);
-
-  ctx.root.append(
-    createPage({
-      id: options.id,
-      top: TopBar({
-        title: options.title,
-        ...(options.badge ? { badge: options.badge } : {}),
-        ...(options.badgeGray ? { badgeGray: true } : {}),
-      }),
-      body,
-    }),
-  );
 }
