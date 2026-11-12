@@ -20,8 +20,8 @@ LATIN_CHAR_W 随 V4.9 Imp-1 / eslint 不动 / CSS 不并 / JSON 不懒载）。
 
 | 卡 | 内容 | 量化 |
 | --- | --- | --- |
-| W1 | 全死 17 符号删：arc.ts `perpendicularFoot`、icons.ts `ICON_NAMES`、types.ts 15 别名（`DegToDMS`+14 个 `*Fn`，W2 契约期预置的实现签名注册表从未被消费；G0 C-03 勘正计数） | 三文件 −112 行净 |
-| W2 | 占位脚手架退役：`renderPlaceholder` + 独占接口 `PlaceholderOptions`（G0 C-01 连带）+ 4 个孤儿 import（Card/Eyebrow/SubText/TopBar）+ 3 行死 CSS（.rc-placeholder*）+ 头注释改已完成时态 | PageShell 129→84 行 |
+| W1 | 全死 17 符号删：arc.ts `perpendicularFoot`、icons.ts `ICON_NAMES`、types.ts 15 别名（`DegToDMS`+14 个 `*Fn`，W2 契约期预置的实现签名注册表从未被消费；G0 C-03 勘正计数） | 三文件 −47 行净（numstat 0/6+0/2+0/39；行数 59→53、38→36、426→387） |
+| W2 | 占位脚手架退役：`renderPlaceholder` + 独占接口 `PlaceholderOptions`（G0 C-01 连带）+ 4 个孤儿 import（Card/Eyebrow/SubText/TopBar）+ 3 行死 CSS（.rc-placeholder*）+ 头注释改已完成时态 | PageShell 129→76 行（numstat +2/−55） |
 | W3 | p14 引擎抽取 `src/core/share-image.ts`（对齐 core/*-figure 惯例）：接口 6 + 常量 2 + 纯函数 8 原样搬移；**新增仅 ShareEntry 结构接口**（引擎实读 5 字段 id/kind/title/params/ts，grep 全集）+ buildShareLayout/shareFileName 签名 StoredEntry→ShareEntry；`resolveSharePalette`（读 DOM）留 p14 转私有；`paramsMeta` 留装配层（G0 C-02 钉死）；`__APP_VERSION__` 经 src/vite-env.d.ts 项目级 ambient 在 core 可用（vite define 全模块替换） | p14 692→**400 行**；share-image 319 行 |
 
 ## 三、验收（runs/，退出码逐档）
@@ -52,6 +52,12 @@ core 既有输入接口导出惯例同族（StockFigureInput/SpeedFigureInput/Ge
 均在同一 52 清单，§6.1 已裁定保留），share-image 输入契约文档价值一致。冻结
 计划 §三.3 差集表述未含此条，以本节披露为准（V4.14「冻结计划不动、README
 勘正披露」先例）。
+
+**G2 C-V415-01 勘正披露（2026-11-12）**：① §二两量化列原系手算错值，已按
+G2 独立复算勘正（numstat 实测，旧值见 2b91a1b diff 留痕）；② 冻结计划 §五
+L110 残留「删 16 个」系 C-03 漏勘正处（正确计数 15=
+DegToDMS+14*Fn，台账 DEVIATIONS:225 实文已正确），冻结件不动，以本行披露
+为准（V4.14 先例）。教训：汇总量化列一律粘贴命令输出，禁手算。
 
 ## 五、G2 完整轮（g2-review/）
 
