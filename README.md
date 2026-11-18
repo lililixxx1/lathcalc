@@ -3,6 +3,10 @@
 开源免费、**完全离线**的中文车工计算器 PWA。为数控车工师傅做一个揣在兜里的算料工具：
 查螺纹、出 G76、算切点、配公差、量重量——不联网、不注册、不要钱。
 
+**在线使用：<https://lathcalc-38ps.zai.site>**（打开后可「添加到主屏幕」当 App 用，之后完全离线）
+
+<p><img src="docs/qr-site.png" alt="扫码直接用" width="140"></p>
+
 ## 功能（16 页）
 
 | 页 | 功能 | 说明 |
@@ -29,7 +33,7 @@
 ```bash
 npm install
 npm run dev      # 开发
-npm test         # 732 项测试（vitest）
+npm test         # 787 项测试（vitest）
 npm run lint     # eslint（0 error）
 npm run build    # 生产构建（PWA，dist/）
 npm run preview  # 本地预览构建产物
