@@ -1,0 +1,27 @@
+# CI · 五步门禁（本地同款，绿了才算过）
+# 口径与命令解释见 CONTRIBUTING.md；perf-budget 断言依赖 dist/（build 后跑）。
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  gates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build
+      - name: perf budget（PERF_BUDGET 环境闸门开启）
+        run: npx vitest run test/perf-budget.test.ts --maxWorkers=2
+        env:
+          PERF_BUDGET: '1'
