@@ -1,24 +1,28 @@
 # AGENTS.md · 车工算 LathCalc
 
-开源免费、完全离线的中文车工计算器 PWA（Vite + TypeScript + vitest）。
+开源免费、完全离线的中文车工计算器 PWA（Vite + TypeScript + vitest，零运行时依赖）。
 
-## 团队协议常驻指针（每次波次起 / 上下文压缩后续跑，先执行）
+## 先读
 
-Read `C:\Users\Administrator\.zcode\skills\team-lead\references\TEAM_PROMPT.md` 全文。
+- [`CONTRIBUTING.md`](CONTRIBUTING.md) — 变更分级（L0/L1/L2）、门禁、数值纪律。**任何改动动手前先过一遍。**
+- [`docs/车工计算App-调研报告.md`](docs/车工计算App-调研报告.md) — 需求 / 公式 / 验收基线（冻结参考件，缺陷只登记不修复）
+- [`docs/车工计算App-无限画布.html`](docs/车工计算App-无限画布.html) — 14 页 UI 与设计 token 唯一视觉依据（冻结参考件）
+- `docs/plan/WAVE-PLAN-*.md` — 历史波次计划（冻结件，波后不改写）
 
-项目态纪律（环境 / 门禁 / 误报 / 台账）见
-`C:\Users\Administrator\Desktop\ccc\q-novel\CNC Machinist Calculator\team-prompt\PROJECT-APPENDIX.md`，
-按派工单「环境条款引用」的节号只读该节。
+## 变更分级（详表见 CONTRIBUTING.md）
 
-## 冻结参考件（只读）
+| 档 | 范围 | 流程 |
+| --- | --- | --- |
+| L0 常规 | 样式 / 文案 / 重构 / 删死码 / 工具脚本 | 改 → CI 绿 → 合并 |
+| L1 功能 | 新页面 / 新图形 / 新交互 | 半页 issue 写验收标准 → CI + 一次 review |
+| L2 正确性红线 | 标准数据表 / 计算公式 / G 代码方言输出 | 双源取证 + PROVENANCE + 例题对拍 + 独立复核 |
 
-- `docs/车工计算App-调研报告.md` — 需求 / 公式 / 验收基线
-- `docs/车工计算App-无限画布.html` — 14 页 UI 与设计 token 唯一视觉依据
-- `docs/plan/WAVE-PLAN.md` — 冻结波次计划
+## 硬约束
 
-## 硬约束（与协议一致，此处为提醒）
-
-- worker 禁止直写主仓，产出只落自己的隔离树。
-- 冻结参考件缺陷只登记不修复（格式见附录 C）。
 - 数值纪律禁裸值：期望值 / 常量必须附算式 + 来源（报告:行 / 标准号）。
-- 本仓绝对路径含空格，shell 引用一律加引号。
+- `src/core/` 纯函数零 DOM、零 ui import；页面零几何计算（几何在 core 的 `*-figure.ts`）。
+- 锚点数值断言（金值）不随重构漂移；改数值 = L2。
+- 全仓零 box-sizing 声明（content-box），`#app` 540 舞台列宽度依赖它——引入 border-box 前必须重算网格。
+- 用户可见文案不写开发过程编号（波次号 / 审查编号 / 裁决名），那些信息只留在 git 历史。
+- 仓库绝对路径含空格的环境里 shell 引用一律加引号。
+- 多人/多代理协作时：执行者不直写主分支，产出走隔离树或 PR；冻结参考件只登记不修复。

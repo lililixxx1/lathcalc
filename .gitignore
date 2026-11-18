@@ -20,3 +20,6 @@ Thumbs.db
 
 # V4.12 会话工具残留（video-agent-kit plugin_root 探测产物，与本仓无关）
 .video_agent/
+
+# 证据截图不再入库（历史提交里的保留；新截图/工装产物走 CI 日志或 Release 附件）
+docs/evidence/**/*.png
