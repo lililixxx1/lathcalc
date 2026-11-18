@@ -70,7 +70,7 @@ interface HomeEntry {
 const HOME_ENTRIES: readonly HomeEntry[] = [
   { icon: 'thread', name: '螺纹', sub: '底孔 · 三针 · 尺寸表', page: 'p02' },
   { icon: 'gcode', name: 'G76 程序', sub: '参考程序 · 免费生成', page: 'p04' },
-  { icon: 'arc', name: '圆弧切点', sub: '工况图库 · 刀补', page: 'p05' },
+  { icon: 'arc', name: '圆弧切点', sub: '工况图库 · 前后刀架判向', page: 'p05' },
   { icon: 'taper', name: '锥度 · 莫氏', sub: '半角 · 查表', page: 'p07' },
   { icon: 'tol', name: '公差配合', sub: 'GB/T 1800 偏差', page: 'p08' },
   { icon: 'speed', name: '转速 · 线速度', sub: '输入即算', page: 'p09' },

@@ -642,10 +642,10 @@ describe('p04 锥管族 W10-C · R1/16 金值锚点', () => {
       expect(codeLines()).toEqual(['G92 X6.561 Z-9.6 R-0.3 F0.907']);
       const comment = page().querySelector('.rc-codecard__comment')?.textContent ?? '';
       if (system === 'fanuc') {
-        // 仅 FANUC 系先例外推；GSK/KND 的 G92 R 格式手册明载（g76-dialects.md §1 行2/行6）
-        expect(comment).toContain('FANUC R 位系 W6 三系统同串先例外推');
+        // 仅 FANUC 系先例推定；GSK/KND 的 G92 R 格式手册明载（g76-dialects.md §1 行2/行6）
+        expect(comment).toContain('FANUC 锥螺纹 G92 的 R 位系三系统同串先例推定');
       } else {
-        expect(comment).not.toContain('先例外推');
+        expect(comment).not.toContain('先例推定');
       }
     }
   });
@@ -659,7 +659,7 @@ describe('p04 锥管族 W10-C · R1/16 金值锚点', () => {
     ]);
     const comment = page().querySelector('.rc-codecard__comment')?.textContent ?? '';
     expect(comment).toContain('按 KND-1000T 口径（P/Q/R=0.001mm）');
-    expect(comment).toContain('R(i) 按 KND 全 P/Q/R 0.001mm 口径推定');
+    expect(comment).toContain('R(i) 单位按 KND 全 P/Q/R 0.001mm 口径推定，以机床手册为准');
     expect(page().querySelector('.rc-p04__tapernote')?.textContent).toContain(
       '程序写作 R-300（0.001mm 口径）',
     );

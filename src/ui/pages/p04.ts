@@ -316,16 +316,16 @@ function codeComment(
   const parts = [base];
   if (cycle === 'g76' && system === 'knd') {
     parts.push('按 KND-1000T 口径（P/Q/R=0.001mm）');
-    // 上报留痕（W10-C 上报条件①）：R(i) 单位无手册逐字单位句，按全 P/Q/R 口径推定
-    if (taper) parts.push('R(i) 按 KND 全 P/Q/R 0.001mm 口径推定');
+    // R(i) 单位无手册逐字单位句，按全 P/Q/R 口径推定
+    if (taper) parts.push('R(i) 单位按 KND 全 P/Q/R 0.001mm 口径推定，以机床手册为准');
   }
   if (cycle === 'g76' && system === 'gsk') {
     parts.push(GSK_MODEL_COMMENT[gskModel]);
   }
-  // G0-v0.3 复核观察 1（G2-W10 Minor-3 作用域精确化）：仅 FANUC 的 G92 R 位系三系统
-  // 同串先例外推；GSK/KND 的 G92 R 格式系手册明载（g76-dialects.md §1 行2/行6，非外推）
+  // 仅 FANUC 的 G92 R 位系三系统同串先例外推；GSK/KND 的 G92 R 格式系手册明载
+  // （g76-dialects.md §1 行2/行6，非外推）
   if (taper && cycle === 'g92' && system === 'fanuc') {
-    parts.push('FANUC R 位系 W6 三系统同串先例外推');
+    parts.push('FANUC 锥螺纹 G92 的 R 位系三系统同串先例推定，以机床手册为准');
   }
   return parts.join(' · ');
 }
